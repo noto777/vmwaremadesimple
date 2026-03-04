@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VMware Made Simple — Virtualization Guides, Tips & Migration Help</title>
+  <meta name="description" content="Practical VMware and vSphere guides for IT professionals. Honest advice on Broadcom licensing, migration alternatives, and home lab builds." />
+  <meta name="keywords" content="VMware, vSphere, Broadcom, virtualization, Proxmox migration, VMware alternative, vSAN, NSX, home lab" />
+  <link rel="canonical" href="https://vmwaremadesimple.com" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="VMware Made Simple" />
+  <meta property="og:description" content="Practical VMware guides for IT professionals. No fluff." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://vmwaremadesimple.com" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: '#1a73e8',
+            dark: '#0f172a',
+            card: '#1e293b',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .gradient-text {
+      background: linear-gradient(135deg, #1a73e8, #60a5fa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .card-hover { transition: transform 0.2s, box-shadow 0.2s; }
+    .card-hover:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
+  </style>
+</head>
+<body class="bg-dark text-slate-100">
+
+  <!-- Nav -->
+  <nav class="border-b border-slate-800 sticky top-0 z-50 bg-dark/95 backdrop-blur">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="/" class="text-xl font-bold text-white">
+        VMware<span class="gradient-text">MadeSimple</span>
+      </a>
+      <div class="hidden md:flex items-center gap-8 text-sm text-slate-400">
+        <a href="#articles" class="hover:text-white transition">Articles</a>
+        <a href="#broadcom" class="hover:text-white transition">Broadcom Guide</a>
+        <a href="#homelab" class="hover:text-white transition">Home Lab</a>
+        <a href="#newsletter" class="bg-brand text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition font-medium">
+          Get Updates
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="max-w-6xl mx-auto px-6 py-24 text-center">
+    <div class="inline-flex items-center gap-2 bg-blue-950 text-blue-400 text-sm px-4 py-2 rounded-full mb-8 border border-blue-800">
+      <span class="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></span>
+      Broadcom changed everything. Here's what to do.
+    </div>
+    <h1 class="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
+      VMware guidance that<br/><span class="gradient-text">actually makes sense</span>
+    </h1>
+    <p class="text-xl text-slate-400 max-w-2xl mx-auto mb-10">
+      Practical guides for IT professionals navigating vSphere, Broadcom licensing, migration options, and home lab builds. No vendor spin. No fluff.
+    </p>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <a href="#broadcom" class="bg-brand text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-blue-600 transition">
+        Broadcom Survival Guide →
+      </a>
+      <a href="#articles" class="border border-slate-700 text-slate-300 px-8 py-4 rounded-xl font-semibold text-lg hover:border-slate-500 hover:text-white transition">
+        Browse Articles
+      </a>
+    </div>
+  </section>
+
+  <!-- Stats bar -->
+  <div class="border-y border-slate-800 bg-card/50">
+    <div class="max-w-6xl mx-auto px-6 py-8 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+      <div>
+        <div class="text-3xl font-bold text-white">10+</div>
+        <div class="text-slate-400 text-sm mt-1">Years VMware Experience</div>
+      </div>
+      <div>
+        <div class="text-3xl font-bold text-white">VCP</div>
+        <div class="text-slate-400 text-sm mt-1">Certified Professional</div>
+      </div>
+      <div>
+        <div class="text-3xl font-bold text-white">100%</div>
+        <div class="text-slate-400 text-sm mt-1">Vendor Independent</div>
+      </div>
+      <div>
+        <div class="text-3xl font-bold text-white">Free</div>
+        <div class="text-slate-400 text-sm mt-1">Always Free to Read</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Featured: Broadcom Guide -->
+  <section id="broadcom" class="max-w-6xl mx-auto px-6 py-20">
+    <div class="bg-gradient-to-br from-blue-950 to-slate-900 border border-blue-800 rounded-2xl p-10">
+      <div class="inline-flex items-center gap-2 bg-blue-900 text-blue-300 text-xs px-3 py-1 rounded-full mb-6 font-medium uppercase tracking-wide">
+        🔥 Most Read
+      </div>
+      <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+        Broadcom Bought VMware. Now What?
+      </h2>
+      <p class="text-slate-300 text-lg mb-8 max-w-2xl">
+        Licensing costs jumped 10x overnight for thousands of organizations. Here's an honest breakdown of your options — stay, migrate, or negotiate — with no vendor bias.
+      </p>
+      <div class="grid md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-slate-900/60 rounded-xl p-6 border border-slate-700">
+          <div class="text-2xl mb-3">📋</div>
+          <h3 class="font-semibold text-white mb-2">Understand the New Licensing</h3>
+          <p class="text-slate-400 text-sm">VCF, vSphere Foundation, and what you're actually paying for now</p>
+        </div>
+        <div class="bg-slate-900/60 rounded-xl p-6 border border-slate-700">
+          <div class="text-2xl mb-3">🔄</div>
+          <h3 class="font-semibold text-white mb-2">Migration Options Compared</h3>
+          <p class="text-slate-400 text-sm">Proxmox, Nutanix, Hyper-V, and OpenStack — honest pros and cons</p>
+        </div>
+        <div class="bg-slate-900/60 rounded-xl p-6 border border-slate-700">
+          <div class="text-2xl mb-3">💰</div>
+          <h3 class="font-semibold text-white mb-2">Negotiation Tactics</h3>
+          <p class="text-slate-400 text-sm">How to push back on Broadcom and what actually works</p>
+        </div>
+      </div>
+      <a href="/articles/broadcom-vmware-licensing-breakdown.html" class="inline-block bg-brand text-white px-8 py-4 rounded-xl font-semibold hover:bg-blue-600 transition">
+        Read the Full Breakdown →
+      </a>
+    </div>
+  </section>
+
+  <!-- Articles -->
+  <section id="articles" class="max-w-6xl mx-auto px-6 py-10">
+    <div class="flex items-center justify-between mb-10">
+      <h2 class="text-3xl font-bold text-white">Latest Articles</h2>
+      <span class="text-slate-400 text-sm">New posts weekly</span>
+    </div>
+    <div class="grid md:grid-cols-3 gap-6">
+
+      <article class="bg-card border border-slate-700 rounded-xl p-6 card-hover">
+        <div class="text-xs text-blue-400 font-medium uppercase tracking-wide mb-3">Broadcom Licensing</div>
+        <h3 class="text-lg font-semibold text-white mb-3 leading-snug">
+          Broadcom VMware Licensing Breakdown: What You're Actually Paying For Now
+        </h3>
+        <p class="text-slate-400 text-sm mb-4">VCF vs VVF pricing, the 72-core minimum, real-world cost examples, and what your renewal quote actually means. Plain English, no vendor spin.</p>
+        <div class="flex items-center justify-between">
+          <span class="text-slate-500 text-xs">12 min read</span>
+          <a href="/articles/broadcom-vmware-licensing-breakdown.html" class="text-blue-400 text-sm hover:text-blue-300 font-medium">Read →</a>
+        </div>
+      </article>
+
+      <article class="bg-card border border-slate-700 rounded-xl p-6 card-hover">
+        <div class="text-xs text-green-400 font-medium uppercase tracking-wide mb-3">Migration Guide</div>
+        <h3 class="text-lg font-semibold text-white mb-3 leading-snug">
+          Migrating VMware VMs to Proxmox: A Real-World Walkthrough
+        </h3>
+        <p class="text-slate-400 text-sm mb-4">Step-by-step migration of production VMs from vSphere 8 to Proxmox VE 8.x, including pitfalls nobody tells you about.</p>
+        <div class="flex items-center justify-between">
+          <span class="text-slate-500 text-xs">12 min read</span>
+          <a href="#newsletter" class="text-blue-400 text-sm hover:text-blue-300 font-medium">Read →</a>
+        </div>
+      </article>
+
+      <article class="bg-card border border-slate-700 rounded-xl p-6 card-hover">
+        <div class="text-xs text-purple-400 font-medium uppercase tracking-wide mb-3">Home Lab</div>
+        <h3 class="text-lg font-semibold text-white mb-3 leading-snug">
+          Best Hardware for a vSphere 8 Home Lab in 2026 (Under $500)
+        </h3>
+        <p class="text-slate-400 text-sm mb-4">Mini PCs, used enterprise gear, and the sweet spots for RAM and storage. What I actually run and what I'd buy today.</p>
+        <div class="flex items-center justify-between">
+          <span class="text-slate-500 text-xs">6 min read</span>
+          <a href="#newsletter" class="text-blue-400 text-sm hover:text-blue-300 font-medium">Read →</a>
+        </div>
+      </article>
+
+      <article class="bg-card border border-slate-700 rounded-xl p-6 card-hover">
+        <div class="text-xs text-yellow-400 font-medium uppercase tracking-wide mb-3">vSphere Tips</div>
+        <h3 class="text-lg font-semibold text-white mb-3 leading-snug">
+          10 vSphere Performance Tuning Tweaks Most Admins Skip
+        </h3>
+        <p class="text-slate-400 text-sm mb-4">NUMA, CPU affinity, storage I/O control, and memory balloon tuning — the settings that actually move the needle.</p>
+        <div class="flex items-center justify-between">
+          <span class="text-slate-500 text-xs">10 min read</span>
+          <a href="#newsletter" class="text-blue-400 text-sm hover:text-blue-300 font-medium">Read →</a>
+        </div>
+      </article>
+
+      <article class="bg-card border border-slate-700 rounded-xl p-6 card-hover">
+        <div class="text-xs text-red-400 font-medium uppercase tracking-wide mb-3">Security</div>
+        <h3 class="text-lg font-semibold text-white mb-3 leading-snug">
+          Hardening vSphere 8: The Security Baseline Checklist
+        </h3>
+        <p class="text-slate-400 text-sm mb-4">VCSA lockdown mode, ESXi firewall rules, vSAN encryption, and certificate management. What the VMware Security Hardening Guide glosses over.</p>
+        <div class="flex items-center justify-between">
+          <span class="text-slate-500 text-xs">15 min read</span>
+          <a href="#newsletter" class="text-blue-400 text-sm hover:text-blue-300 font-medium">Read →</a>
+        </div>
+      </article>
+
+      <article class="bg-card border border-slate-700 rounded-xl p-6 card-hover">
+        <div class="text-xs text-orange-400 font-medium uppercase tracking-wide mb-3">Networking</div>
+        <h3 class="text-lg font-semibold text-white mb-3 leading-snug">
+          NSX vs Standard vSwitch: When the Complexity is Worth It
+        </h3>
+        <p class="text-slate-400 text-sm mb-4">NSX-T is powerful but overkill for most shops. Here's how to decide if you actually need it or if a well-configured VDS does the job.</p>
+        <div class="flex items-center justify-between">
+          <span class="text-slate-500 text-xs">9 min read</span>
+          <a href="#newsletter" class="text-blue-400 text-sm hover:text-blue-300 font-medium">Read →</a>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- Home Lab section -->
+  <section id="homelab" class="max-w-6xl mx-auto px-6 py-10">
+    <div class="bg-card border border-slate-700 rounded-2xl p-10">
+      <h2 class="text-3xl font-bold text-white mb-3">Build Your VMware Home Lab</h2>
+      <p class="text-slate-400 mb-8 max-w-xl">The fastest way to get certified and stay sharp. Here's the gear I recommend — tested in a real home lab.</p>
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="space-y-4">
+          <h3 class="font-semibold text-slate-300 text-sm uppercase tracking-wide">Recommended Hardware</h3>
+          <div class="flex items-center gap-4 bg-slate-900 rounded-lg p-4 border border-slate-700 card-hover">
+            <div class="text-2xl">🖥️</div>
+            <div class="flex-1">
+              <div class="text-white font-medium">Beelink EQR6 Mini PC</div>
+              <div class="text-slate-400 text-sm">AMD Ryzen 9 6900HX, 32GB RAM — best value ESXi host</div>
+            </div>
+            <a href="https://amzn.to/placeholder" class="text-blue-400 text-sm font-medium hover:text-blue-300">Amazon →</a>
+          </div>
+          <div class="flex items-center gap-4 bg-slate-900 rounded-lg p-4 border border-slate-700 card-hover">
+            <div class="text-2xl">💾</div>
+            <div class="flex-1">
+              <div class="text-white font-medium">Samsung 990 Pro NVMe</div>
+              <div class="text-slate-400 text-sm">2TB — fast enough for vSAN and VM datastores</div>
+            </div>
+            <a href="https://amzn.to/placeholder" class="text-blue-400 text-sm font-medium hover:text-blue-300">Amazon →</a>
+          </div>
+          <div class="flex items-center gap-4 bg-slate-900 rounded-lg p-4 border border-slate-700 card-hover">
+            <div class="text-2xl">🔌</div>
+            <div class="flex-1">
+              <div class="text-white font-medium">TP-Link TL-SG108E</div>
+              <div class="text-slate-400 text-sm">Managed 8-port switch — VLAN support for proper lab networking</div>
+            </div>
+            <a href="https://amzn.to/placeholder" class="text-blue-400 text-sm font-medium hover:text-blue-300">Amazon →</a>
+          </div>
+        </div>
+        <div class="space-y-4">
+          <h3 class="font-semibold text-slate-300 text-sm uppercase tracking-wide">Recommended Training</h3>
+          <div class="flex items-center gap-4 bg-slate-900 rounded-lg p-4 border border-slate-700 card-hover">
+            <div class="text-2xl">🎓</div>
+            <div class="flex-1">
+              <div class="text-white font-medium">VCP-DCV 2024 — Udemy</div>
+              <div class="text-slate-400 text-sm">Best value VMware cert prep. Regularly on sale for $15.</div>
+            </div>
+            <a href="#newsletter" class="text-blue-400 text-sm font-medium hover:text-blue-300">Link →</a>
+          </div>
+          <div class="flex items-center gap-4 bg-slate-900 rounded-lg p-4 border border-slate-700 card-hover">
+            <div class="text-2xl">📺</div>
+            <div class="flex-1">
+              <div class="text-white font-medium">CBT Nuggets VMware Track</div>
+              <div class="text-slate-400 text-sm">Best video quality for vSphere 8, NSX-T, and VCF.</div>
+            </div>
+            <a href="#newsletter" class="text-blue-400 text-sm font-medium hover:text-blue-300">Link →</a>
+          </div>
+          <div class="flex items-center gap-4 bg-slate-900 rounded-lg p-4 border border-slate-700 card-hover">
+            <div class="text-2xl">📚</div>
+            <div class="flex-1">
+              <div class="text-white font-medium">Mastering VMware vSphere 8</div>
+              <div class="text-slate-400 text-sm">Nick Marshall's book — the definitive reference.</div>
+            </div>
+            <a href="https://amzn.to/placeholder" class="text-blue-400 text-sm font-medium hover:text-blue-300">Amazon →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <section id="newsletter" class="max-w-6xl mx-auto px-6 py-20">
+    <div class="text-center max-w-2xl mx-auto">
+      <h2 class="text-4xl font-bold text-white mb-4">Stay ahead of VMware changes</h2>
+      <p class="text-slate-400 text-lg mb-8">New guides, licensing alerts, and home lab tips. No spam. Unsubscribe anytime.</p>
+      <form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" onsubmit="handleSubscribe(event)">
+        <input
+          type="email"
+          placeholder="your@email.com"
+          class="flex-1 bg-card border border-slate-700 text-white px-5 py-4 rounded-xl focus:outline-none focus:border-blue-500 placeholder-slate-500"
+          required
+        />
+        <button type="submit" class="bg-brand text-white px-8 py-4 rounded-xl font-semibold hover:bg-blue-600 transition whitespace-nowrap">
+          Subscribe Free
+        </button>
+      </form>
+      <p class="text-slate-500 text-sm mt-4">Join IT professionals keeping up with the VMware landscape.</p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800 mt-10">
+    <div class="max-w-6xl mx-auto px-6 py-10 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="text-slate-400 text-sm">
+        © 2026 VMwareMadeSimple.com — Independent. Not affiliated with VMware or Broadcom.
+      </div>
+      <div class="flex gap-6 text-slate-400 text-sm">
+        <a href="#articles" class="hover:text-white transition">Articles</a>
+        <a href="#homelab" class="hover:text-white transition">Home Lab</a>
+        <a href="#newsletter" class="hover:text-white transition">Newsletter</a>
+      </div>
+    </div>
+    <div class="max-w-6xl mx-auto px-6 pb-8 text-slate-600 text-xs">
+      Some links on this site are affiliate links. If you purchase through them, we may earn a small commission at no extra cost to you.
+    </div>
+  </footer>
+
+  <script>
+    function handleSubscribe(e) {
+      e.preventDefault();
+      const email = e.target.querySelector('input[type="email"]').value;
+      // TODO: wire to email provider (ConvertKit, Mailchimp, etc.)
+      alert('Thanks! We\\'ll be in touch soon.');
+      e.target.reset();
+    }
+  </script>
+
+</body>
+</html>
