@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Broadcom's VMware Licensing Changes in 2026: What Every Admin Needs to Know | VMware Made Simple</title>
+  <meta name="description" content="Broadcom rewrote the VMware licensing rulebook. Here's what changed, what it costs, and whether it's time to look elsewhere — from a senior engineer who's lived through it." />
+  <meta name="keywords" content="VMware licensing 2026, Broadcom VMware changes, vSphere Foundation pricing, VMware subscription cost, VMware alternatives 2026" />
+  <link rel="canonical" href="https://vmwaremadesimple.com/articles/broadcom-vmware-licensing-changes-2026.html" />
+
+  <!-- Google Analytics — replace G-XXXXXXXXXX with your measurement ID -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+
+  <meta property="og:title" content="Broadcom's VMware Licensing Changes in 2026: What Every Admin Needs to Know" />
+  <meta property="og:description" content="What changed, what it costs, and whether it's time to look elsewhere — from a senior engineer who's lived through it." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://vmwaremadesimple.com/articles/broadcom-vmware-licensing-changes-2026.html" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { colors: { brand: '#1a73e8', dark: '#0f172a', card: '#1e293b' } } }
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .gradient-text { background: linear-gradient(135deg, #1a73e8, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .prose h2 { margin-top: 2.5rem; margin-bottom: 1rem; }
+    .prose h3 { margin-top: 2rem; margin-bottom: 0.75rem; }
+    .prose p { margin-bottom: 1.25rem; line-height: 1.8; }
+    .prose table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+    .prose th { text-align: left; padding: 0.75rem 1rem; border-bottom: 2px solid #334155; color: #94a3b8; font-size: 0.875rem; text-transform: uppercase; }
+    .prose td { padding: 0.75rem 1rem; border-bottom: 1px solid #1e293b; }
+    .prose tr:hover { background: #1e293b40; }
+    .callout { background: #1e293b; border-left: 4px solid #f59e0b; padding: 1.25rem 1.5rem; border-radius: 0 0.5rem 0.5rem 0; margin: 1.5rem 0; }
+    .callout-red { border-left-color: #ef4444; }
+    .callout-green { border-left-color: #22c55e; }
+  </style>
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Broadcom's VMware Licensing Changes in 2026: What Every Admin Needs to Know",
+    "author": {"@type": "Person", "name": "Rob Notaro"},
+    "datePublished": "2026-03-04",
+    "publisher": {"@type": "Organization", "name": "VMware Made Simple"},
+    "description": "Broadcom rewrote the VMware licensing rulebook. Here's what changed, what it costs, and whether it's time to look elsewhere."
+  }
+  </script>
+</head>
+<body class="bg-dark text-slate-100">
+
+  <!-- Nav -->
+  <nav class="border-b border-slate-800 sticky top-0 z-50 bg-dark/95 backdrop-blur">
+    <div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="/" class="text-xl font-bold text-white">VMware<span class="gradient-text">MadeSimple</span></a>
+      <a href="/#newsletter" class="bg-brand text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition text-sm font-medium">Get Updates</a>
+    </div>
+  </nav>
+
+  <!-- Article -->
+  <article class="max-w-4xl mx-auto px-6 py-12 prose">
+
+    <!-- Breadcrumb -->
+    <div class="text-sm text-slate-500 mb-6">
+      <a href="/" class="hover:text-slate-300">Home</a> → <span class="text-slate-400">Broadcom Licensing</span>
+    </div>
+
+    <!-- Header -->
+    <div class="mb-10">
+      <div class="text-xs text-blue-400 font-medium uppercase tracking-wide mb-3">Broadcom Licensing</div>
+      <h1 class="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight" style="-webkit-text-fill-color: white;">
+        Broadcom's VMware Licensing Changes in 2026: What Every Admin Actually Needs to Know
+      </h1>
+      <p class="text-slate-400 text-lg">
+        By Rob Notaro · March 2026 · 14 min read
+      </p>
+    </div>
+
+    <!-- Intro -->
+    <p class="text-lg text-slate-300">
+      If you've been running VMware in production for any length of time, the last 18 months have been a gut punch. Broadcom completed its $69 billion acquisition of VMware in November 2023, and since then the licensing model has been dismantled and rebuilt from scratch — in Broadcom's favor.
+    </p>
+
+    <p>
+      I'm a senior infrastructure engineer. I've deployed vSphere, Horizon, and VCF environments for enterprise clients for over a decade. I've watched this unfold in real time, had the conversations with account reps, run the numbers on renewal quotes, and helped organizations figure out what to do next. This isn't a rehash of press releases. This is what's actually happening on the ground.
+    </p>
+
+    <!-- What Changed -->
+    <h2 class="text-2xl font-bold text-white">What Broadcom Changed (The Short Version)</h2>
+
+    <p>
+      Broadcom eliminated perpetual licensing for VMware products. Effective February 2024, everything moved to subscription-only, bundled SKUs. The old à la carte model — buy vSphere, add vCenter, tack on vSAN, license NSX separately — is gone.
+    </p>
+
+    <p>Here's what replaced it:</p>
+
+    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
+      <li><strong class="text-slate-200">VMware vSphere Foundation (VVF)</strong> — Per-core subscription. Replaces vSphere Standard/Enterprise Plus.</li>
+      <li><strong class="text-slate-200">VMware Cloud Foundation (VCF)</strong> — Full SDDC stack. Compute, networking (NSX), storage (vSAN), Aria Suite. The "premium" path.</li>
+      <li><strong class="text-slate-200">VMware vSphere Essentials Plus</strong> — Still exists, but only for small environments (3 hosts max, 96 cores).</li>
+    </ul>
+
+    <div class="callout-red callout">
+      <strong class="text-red-400">The bottom line:</strong> For most organizations, renewal quotes came back at <strong>2x to 5x</strong> what they were paying before. I've seen it firsthand. A customer paying $40,000/year for SnS on a 200-core estate came back with a VCF quote north of $180,000 annually.
+    </div>
+
+    <!-- Per-Core Pricing -->
+    <h2 class="text-2xl font-bold text-white">The New Licensing Model, Explained</h2>
+
+    <h3 class="text-xl font-semibold text-white">Per-Core Pricing</h3>
+
+    <p>
+      The single biggest operational change is the move to per-core licensing. This replaces per-CPU (socket) licensing.
+    </p>
+
+    <p>
+      Under the old model, a 2-socket server with 2x 16-core CPUs = 2 CPU licenses. Under VVF and VCF, every physical core must be licensed. Same server = 64 core licenses.
+    </p>
+
+    <div class="callout">
+      <strong class="text-yellow-400">Minimum:</strong> 16 cores per CPU, regardless of actual core count. A 2-socket server with 2x 8-core CPUs still requires 32 core licenses minimum.
+    </div>
+
+    <p>
+      This hits SMBs hardest. A small shop with 3 hosts, each with 2x 8-core processors, used to pay for 6 CPU licenses. Now they need a minimum of 96 core licenses. At VVF pricing (~$120-150/core/year), that's $11,500-14,400/year — before vCenter, before vSAN.
+    </p>
+
+    <!-- Bundle Structure -->
+    <h3 class="text-xl font-semibold text-white">The Bundle Structure</h3>
+
+    <p>Broadcom wants you in one of two places:</p>
+
+    <div class="bg-card rounded-xl p-6 border border-slate-700 mb-6">
+      <h4 class="text-lg font-semibold text-white mb-3">vSphere Foundation (VVF)</h4>
+      <ul class="list-disc list-inside text-slate-300 space-y-1">
+        <li>vSphere (compute hypervisor)</li>
+        <li>vCenter Server (management)</li>
+        <li>vSAN Foundation (basic storage)</li>
+        <li>Aria Suite Starter (formerly vRealize)</li>
+      </ul>
+    </div>
+
+    <div class="bg-card rounded-xl p-6 border border-slate-700 mb-6">
+      <h4 class="text-lg font-semibold text-white mb-3">VMware Cloud Foundation (VCF)</h4>
+      <p class="text-slate-400 text-sm mb-2">Everything in VVF plus:</p>
+      <ul class="list-disc list-inside text-slate-300 space-y-1">
+        <li>NSX (full networking/micro-segmentation)</li>
+        <li>vSAN Enterprise (advanced storage policies, stretched clusters)</li>
+        <li>Aria Suite Advanced</li>
+        <li>Tanzu Runtime (containers)</li>
+      </ul>
+    </div>
+
+    <p>
+      The catch: if you need NSX — and in any serious enterprise environment, you probably do — you're being pushed to VCF pricing, which is meaningfully more expensive.
+    </p>
+
+    <!-- Perpetual Customers -->
+    <h3 class="text-xl font-semibold text-white">What Happened to Perpetual Customers</h3>
+
+    <p>If you had perpetual licenses with active SnS:</p>
+
+    <ol class="list-decimal list-inside text-slate-300 space-y-2 mb-6">
+      <li>Your licenses still work until Broadcom's defined EOL dates for your product version.</li>
+      <li>SnS renewals are being offered at escalating prices to "encourage" subscription migration.</li>
+      <li>Some organizations are getting buy-down offers — essentially a credit against VCF if they migrate now.</li>
+    </ol>
+
+    <p>
+      Broadcom's explicit strategy is attrition. They're not blocking you from running perpetual. They're just making every renewal conversation a pricing shock designed to make the subscription seem inevitable.
+    </p>
+
+    <!-- VVF vs VCF -->
+    <h2 class="text-2xl font-bold text-white">VVF vs VCF: Which One Do You Actually Need?</h2>
+
+    <h3 class="text-xl font-semibold text-white">vSphere Foundation (VVF) Is Right For You If:</h3>
+
+    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
+      <li>You're running a straightforward compute virtualization environment</li>
+      <li>You're using third-party storage (NetApp, Pure, HPE) and don't need vSAN</li>
+      <li>You don't have NSX in your environment (or can live without it)</li>
+      <li>You have a smaller core count (VVF is roughly 30-40% less expensive per core than VCF)</li>
+      <li>You're an SMB or mid-market shop that doesn't need the full SDDC stack</li>
+    </ul>
+
+    <h3 class="text-xl font-semibold text-white">VMware Cloud Foundation (VCF) Is Right For You If:</h3>
+
+    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
+      <li>You're already running NSX and need to maintain that investment</li>
+      <li>You want Tanzu and container infrastructure integrated with your hypervisor</li>
+      <li>Your environment needs vSAN stretched clusters or advanced erasure coding</li>
+      <li>You're a large enterprise that can amortize the cost across 500+ cores</li>
+      <li>You care about the Aria Suite automation and operations tools at scale</li>
+    </ul>
+
+    <p>
+      I'll be direct: VCF is a solid product. The integration between vSphere, NSX, and vSAN at the VCF level is genuinely best-in-class for on-premises software-defined infrastructure. The problem isn't the product — it's the pricing model applied to organizations that used to pay a fraction of this for simpler workloads.
+    </p>
+
+    <!-- Math at Different Scales -->
+    <h3 class="text-xl font-semibold text-white">The Math at Different Scales</h3>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Environment</th>
+          <th>Cores</th>
+          <th>VVF/Year</th>
+          <th>VCF/Year</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="font-medium text-slate-300">Small (3 hosts, 2x8-core)</td>
+          <td>96 min</td>
+          <td>$11,500–$14,400</td>
+          <td>$17,000–$21,000</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">Mid-market (10 hosts, 2x16-core)</td>
+          <td>320</td>
+          <td>$38,400–$48,000</td>
+          <td>$57,000–$70,000</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">Enterprise (50 hosts, 2x32-core)</td>
+          <td>3,200</td>
+          <td>$384,000–$480,000</td>
+          <td>$576,000–$704,000</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="text-slate-400 text-sm">
+      Rough estimates — actual contract pricing varies based on deal size and Broadcom's discretion.
+    </p>
+
+    <!-- Field Reality -->
+    <h2 class="text-2xl font-bold text-white">How Broadcom's Pricing Is Playing Out in the Field</h2>
+
+    <p>Here's what I'm actually seeing, not what Broadcom's PR team says:</p>
+
+    <p>
+      <strong class="text-slate-200">The large enterprises are mostly staying.</strong> Not because they're happy, but because migration costs, retraining, and risk at scale make alternatives difficult to justify quickly. They're negotiating hard, taking multi-year deals, and gritting their teeth.
+    </p>
+
+    <p>
+      <strong class="text-slate-200">The mid-market is genuinely evaluating alternatives.</strong> I'm in conversations with organizations in the 100-500 core range who are running proof-of-concepts on Proxmox, Nutanix, and Microsoft's Azure Stack HCI. Some are well down the migration path.
+    </p>
+
+    <p>
+      <strong class="text-slate-200">SMBs are the most at risk of being priced out.</strong> A shop with 3-5 hosts that was paying $5,000-8,000/year for vSphere Essentials Plus is now looking at $12,000-15,000/year minimum for VVF.
+    </p>
+
+    <p>
+      <strong class="text-slate-200">Service providers are fleeing.</strong> The old VSPP was terminated. The replacement — VMware Cloud Service Provider (VCSP) — has pricing that's made many MSPs and hosters either pivot to alternative hypervisors or pass massive cost increases on to customers.
+    </p>
+
+    <!-- Products Killed -->
+    <h2 class="text-2xl font-bold text-white">The Products That Got Killed Entirely</h2>
+
+    <p>Broadcom didn't just reprice. They discontinued a significant portion of the VMware portfolio:</p>
+
+    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
+      <li><strong>vSphere Standard</strong> — Discontinued (replaced by VVF at higher price)</li>
+      <li><strong>vSphere Essentials</strong> — Discontinued (Essentials Plus still exists with 3-host cap)</li>
+      <li><strong>VMware Workstation / Fusion</strong> — Free personal, subscription-only commercial</li>
+      <li><strong>vSphere Desktop</strong> — Discontinued</li>
+      <li><strong>NSX-T as standalone</strong> — Absorbed into VCF</li>
+      <li><strong>vCloud Director (standalone)</strong> — Moved to VCSP program</li>
+      <li><strong>VMware Horizon perpetual</strong> — Now Omnissa (spun out to KKR in mid-2024)</li>
+    </ul>
+
+    <div class="callout">
+      <strong class="text-yellow-400">Important:</strong> <strong>Horizon — the VDI platform — is no longer a VMware/Broadcom product.</strong> Broadcom sold the EUC division to KKR in May 2024. It now operates as <strong>Omnissa</strong>. If you're running Horizon, your vendor is Omnissa, not Broadcom.
+    </div>
+
+    <!-- What Organizations Are Doing -->
+    <h2 class="text-2xl font-bold text-white">What Are Organizations Actually Doing?</h2>
+
+    <h3 class="text-xl font-semibold text-white">Option 1: Accept VVF/VCF and Renegotiate Hard</h3>
+
+    <p>For most enterprise environments, this is the realistic path for the next 1-3 years. Organizations choosing this path are:</p>
+
+    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
+      <li>Taking 3-year deals to lock in pricing</li>
+      <li>Right-sizing core counts aggressively (consolidating onto fewer, denser hosts)</li>
+      <li>Pushing back hard in negotiations — Broadcom is not immune to churn pressure</li>
+      <li>Evaluating true workload needs (do you really need VCF, or can VVF cover you?)</li>
+    </ul>
+
+    <h3 class="text-xl font-semibold text-white">Option 2: Migrate to Proxmox VE</h3>
+
+    <p>
+      Proxmox is the most common VMware alternative I'm seeing evaluated seriously. It's open-source (Debian-based), uses KVM for virtualization and LXC for containers, and has a subscription model for enterprise support that's dramatically less expensive than VMware.
+    </p>
+
+    <p>The challenges:</p>
+
+    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
+      <li>Feature parity gaps with NSX (Proxmox networking is SDN but not NSX-grade)</li>
+      <li>vSAN replacement requires rethinking storage (Ceph integration exists but is operationally different)</li>
+      <li>Automation and operations tooling needs rebuilding</li>
+      <li>Staff retraining is real — KVM is different from vSphere under the hood</li>
+    </ul>
+
+    <p>
+      Proxmox is a legitimate hypervisor for workloads that don't need the full VMware SDDC stack. For a 5-10 host environment running standard VMs, I'd take it seriously.
+    </p>
+
+    <h3 class="text-xl font-semibold text-white">Option 3: Microsoft Azure Stack HCI / Hyper-V</h3>
+
+    <p>
+      Microsoft's play is Azure Stack HCI, positioning as a hybrid on-premises/Azure option. If you're already a Microsoft shop with Azure commitments, this deserves a look.
+    </p>
+
+    <p>
+      The honest assessment: Hyper-V has always lagged VMware in enterprise adoption and ecosystem depth. Azure Stack HCI solves some of that but introduces cloud billing complexity. Right answer for some, not a universal replacement.
+    </p>
+
+    <h3 class="text-xl font-semibold text-white">Option 4: Nutanix</h3>
+
+    <p>
+      Nutanix has been the most aggressive in recruiting VMware refugees. Their AHV hypervisor is free with Nutanix software, and they've built migration tooling specifically targeting VMware environments.
+    </p>
+
+    <p>
+      Strong option if you're going hyper-converged and want an integrated stack without per-core pricing. Their node-based pricing is more predictable. The caveat: you're trading VMware lock-in for Nutanix lock-in. Not necessarily wrong, but eyes open.
+    </p>
+
+    <!-- Horizon / Omnissa -->
+    <h2 class="text-2xl font-bold text-white">Horizon Is Now Omnissa — What That Means</h2>
+
+    <p>
+      If you're running VMware Horizon for VDI or virtual apps, your product's ownership changed hands. Broadcom sold the EUC division to KKR in May 2024, and it's now Omnissa.
+    </p>
+
+    <p>For existing Horizon environments:</p>
+
+    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
+      <li>Existing licenses were converted/transitioned during the spinout</li>
+      <li>Omnissa uses a subscription model going forward</li>
+      <li>Horizon remains tightly integrated with vSphere (still requires VMware infrastructure underneath)</li>
+    </ul>
+
+    <p>
+      I'll cover the Omnissa transition in depth in a <a href="#" class="text-blue-400 hover:text-blue-300">dedicated article</a> — it deserves more space than a section here.
+    </p>
+
+    <!-- 2026 Reality Check -->
+    <h2 class="text-2xl font-bold text-white">The 2026 Reality Check</h2>
+
+    <p>Here's where things stand as of early 2026:</p>
+
+    <p>
+      <strong class="text-slate-200">The migration wave is real but slower than headlines suggest.</strong> Most organizations are 12-24 months into planning but not 12-24 months into executing. Production migrations of large VMware estates are long cycles.
+    </p>
+
+    <p>
+      <strong class="text-slate-200">Broadcom has made some concessions.</strong> They extended support windows for some perpetual license customers after significant pushback. They haven't reversed the subscription-only model, but the pressure is visible.
+    </p>
+
+    <p>
+      <strong class="text-slate-200">The alternatives are maturing.</strong> Proxmox 8.x, Nutanix AHV improvements, and OpenShift Virtualization have all gotten meaningfully better.
+    </p>
+
+    <p>
+      <strong class="text-slate-200">Broadcom is betting on the installed base.</strong> They paid $69B. They need returns. For large enterprises with complex NSX deployments, that math works. For smaller shops, the calculation is increasingly going the other way.
+    </p>
+
+    <!-- Action Items -->
+    <h2 class="text-2xl font-bold text-white">What Should You Do Right Now?</h2>
+
+    <ol class="list-decimal list-inside text-slate-300 space-y-3 mb-6">
+      <li><strong>Audit your core count.</strong> Know exactly how many physical cores you have licensed. This is your cost baseline.</li>
+      <li><strong>Map your real feature usage.</strong> Do you actually use NSX? vSAN? Aria? Many organizations are paying VCF prices for features they barely touch.</li>
+      <li><strong>Get a true VVF vs VCF comparison.</strong> If you're not using NSX at scale, VVF may be 30-40% cheaper with minimal capability loss.</li>
+      <li><strong>Talk to Broadcom's renewal team before your SnS expires.</strong> The quotes improve when they think you're serious about leaving.</li>
+      <li><strong>Run a Proxmox or Nutanix PoC if you're sub-500 cores.</strong> Not necessarily to migrate — just to have leverage in negotiations.</li>
+      <li><strong>Don't panic-migrate.</strong> Production migrations are risky. A bad migration is worse than a bad licensing deal. Take the time to do it right.</li>
+    </ol>
+
+    <!-- Bottom Line -->
+    <h2 class="text-2xl font-bold text-white">Bottom Line</h2>
+
+    <p>
+      Broadcom made a $69 billion bet that VMware's installed base would rather pay up than leave. For most large enterprises, that bet is probably right in the short term. The switching costs are real.
+    </p>
+
+    <p>
+      But for SMBs, mid-market shops, and organizations with simpler workloads, the pricing changes have crossed a threshold. The value equation no longer works at the rates Broadcom is charging for VCF on 50-100 cores.
+    </p>
+
+    <div class="callout-green callout">
+      <strong class="text-green-400">The next 12-24 months will be telling.</strong> If Broadcom continues to lose the mid-market and SMB tiers, it will either force a pricing reconsideration or accelerate the bifurcation into "enterprise VMware" and "everyone else on Proxmox/Nutanix."
+    </div>
+
+    <p>
+      I'll keep covering this as it evolves. If you're working through a licensing decision or migration planning, subscribe below for updates.
+    </p>
+
+    <!-- Newsletter CTA -->
+    <div class="mt-16 bg-card border border-slate-700 rounded-2xl p-10 text-center">
+      <h2 class="text-2xl font-bold text-white mb-3" style="-webkit-text-fill-color: white;">Stay ahead of the VMware changes</h2>
+      <p class="text-slate-400 mb-6">We're publishing detailed comparison guides, migration walkthroughs, and cost calculators. Get them in your inbox.</p>
+      <form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" onsubmit="handleSubscribe(event)">
+        <input type="email" placeholder="your@email.com" class="flex-1 bg-dark border border-slate-600 text-white px-5 py-3 rounded-xl focus:outline-none focus:border-blue-500 placeholder-slate-500" required />
+        <button type="submit" class="bg-brand text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-600 transition">Subscribe</button>
+      </form>
+    </div>
+
+    <!-- Author -->
+    <div class="mt-12 pt-8 border-t border-slate-800">
+      <div class="flex items-start gap-4">
+        <div class="w-12 h-12 bg-slate-700 rounded-full flex items-center justify-center text-xl">🖥️</div>
+        <div>
+          <p class="text-white font-semibold">Rob Notaro</p>
+          <p class="text-slate-400 text-sm mt-1">Senior infrastructure engineer specializing in virtualization, VDI, and enterprise end-user computing. Deploys Horizon and VCF environments across healthcare, financial services, and manufacturing.</p>
+        </div>
+      </div>
+    </div>
+
+  </article>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800 mt-10">
+    <div class="max-w-4xl mx-auto px-6 py-10 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="text-slate-400 text-sm">&copy; 2026 VMwareMadeSimple.com &mdash; Independent. Not affiliated with VMware or Broadcom.</div>
+      <div class="flex gap-6 text-slate-400 text-sm">
+        <a href="/" class="hover:text-white transition">Home</a>
+        <a href="/#articles" class="hover:text-white transition">Articles</a>
+        <a href="/#newsletter" class="hover:text-white transition">Newsletter</a>
+      </div>
+    </div>
+    <div class="max-w-4xl mx-auto px-6 pb-8 text-slate-600 text-xs">
+      Some links on this site are affiliate links. If you purchase through them, we may earn a small commission at no extra cost to you.
+    </div>
+  </footer>
+
+  <script>
+    function handleSubscribe(e) {
+      e.preventDefault();
+      alert('Thanks! We\'ll be in touch soon.');
+      e.target.reset();
+    }
+  </script>
+
+</body>
+</html>
