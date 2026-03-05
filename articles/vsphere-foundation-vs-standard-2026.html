@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>vSphere Foundation vs Standard 2026: What You Actually Need Now | VMware Made Simple</title>
+  <meta name="description" content="vSphere Standard is dead as of July 31, 2025. Here's the real comparison between vSphere Foundation (VVF) and what replaced Standard — plus who should actually pay for it and who should walk away." />
+  <meta name="keywords" content="vSphere Foundation vs Standard, VMware vSphere Foundation, VVF 2026, vSphere Standard EOS, Broadcom VMware licensing 2026, VMware Foundation pricing, vSphere 9 upgrade path, VMware alternatives 2026" />
+  <link rel="canonical" href="https://vmwaremadesimple.com/articles/vsphere-foundation-vs-standard-2026.html" />
+
+  <meta property="og:title" content="vSphere Foundation vs Standard 2026: What You Actually Need Now" />
+  <meta property="og:description" content="vSphere Standard is dead as of July 31, 2025. Here's the real comparison between vSphere Foundation (VVF) and what replaced Standard — plus who should actually pay for it and who should walk away." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://vmwaremadesimple.com/articles/vsphere-foundation-vs-standard-2026.html" />
+
+  <!-- Google Analytics — replace G-XXXXXXXXXX with your measurement ID -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "vSphere Foundation vs Standard 2026: What You Actually Need Now",
+    "description": "vSphere Standard is dead as of July 31, 2025. Here's the real comparison between vSphere Foundation (VVF) and what replaced Standard — plus who should actually pay for it and who should walk away.",
+    "author": { "@type": "Person", "name": "Rob Notaro" },
+    "publisher": { "@type": "Organization", "name": "VMware Made Simple" },
+    "datePublished": "2026-03-04",
+    "dateModified": "2026-03-04",
+    "mainEntityOfPage": "https://vmwaremadesimple.com/articles/vsphere-foundation-vs-standard-2026.html"
+  }
+  </script>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { colors: { brand: '#1a73e8', dark: '#0f172a', card: '#1e293b' } } }
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .gradient-text { background: linear-gradient(135deg, #1a73e8, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .prose h2 { margin-top: 2.5rem; margin-bottom: 1rem; }
+    .prose h3 { margin-top: 2rem; margin-bottom: 0.75rem; }
+    .prose p { margin-bottom: 1.25rem; line-height: 1.8; }
+    .prose table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+    .prose th { text-align: left; padding: 0.75rem 1rem; border-bottom: 2px solid #334155; color: #94a3b8; font-size: 0.875rem; text-transform: uppercase; }
+    .prose td { padding: 0.75rem 1rem; border-bottom: 1px solid #1e293b; }
+    .prose tr:hover { background: #1e293b40; }
+    .callout { background: #1e293b; border-left: 4px solid #f59e0b; padding: 1.25rem 1.5rem; border-radius: 0 0.5rem 0.5rem 0; margin: 1.5rem 0; }
+    .callout-red { border-left-color: #ef4444; }
+    .callout-green { border-left-color: #22c55e; }
+  </style>
+</head>
+<body class="bg-dark text-slate-100">
+
+  <!-- Nav -->
+  <nav class="border-b border-slate-800 sticky top-0 z-50 bg-dark/95 backdrop-blur">
+    <div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="/" class="text-xl font-bold text-white">VMware<span class="gradient-text">MadeSimple</span></a>
+      <a href="/#newsletter" class="bg-brand text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition text-sm font-medium">Get Updates</a>
+    </div>
+  </nav>
+
+  <!-- Article -->
+  <article class="max-w-4xl mx-auto px-6 py-12 prose">
+
+    <!-- Breadcrumb -->
+    <div class="text-sm text-slate-500 mb-6">
+      <a href="/" class="hover:text-slate-300">Home</a> → <span class="text-slate-400">VMware Licensing</span>
+    </div>
+
+    <!-- Header -->
+    <div class="mb-10">
+      <div class="text-xs text-blue-400 font-medium uppercase tracking-wide mb-3">VMware Licensing</div>
+      <h1 class="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight" style="-webkit-text-fill-color: white;">
+        vSphere Foundation vs Standard 2026: What You Actually Need Now
+      </h1>
+      <p class="text-slate-400 text-lg">
+        March 4, 2026 · 12 min read
+      </p>
+    </div>
+
+    <!-- Lead -->
+    <p>Let's get the uncomfortable part out of the way first: <strong class="text-slate-200">vSphere Standard is dead.</strong> As of July 31, 2025, Broadcom ended new sales and renewals for vSphere Standard. If your Standard subscription expires today, you can't renew it. The product that most SMBs and mid-market IT shops relied on for years — reliable, affordable, feature-complete enough for most workloads — is gone.</p>
+
+    <p>What replaced it is vSphere Foundation (VVF), a significantly more expensive bundle that includes a lot of things you may not need and a price tag that can genuinely shock people who've been running Standard for years. We're talking about a jump from $50/core/year to $190/core/year at MSRP. That's a 3.8× increase on paper, and it's driving real migrations to Proxmox, Nutanix AHV, and Microsoft Hyper-V.</p>
+
+    <p>But the story isn't as simple as "Broadcom is gouging everyone." For the right organization, VVF is actually a reasonable bundle. The math works — if you're the right customer. This guide breaks down exactly what's in each product, what the real costs look like at the numbers that matter to your infrastructure, and who should pay for VVF versus who should start evaluating alternatives.</p>
+
+    <div class="callout-red callout">
+      <strong class="text-red-400">Important:</strong> If you're currently on vSphere Standard and your subscription expires in 2025 or 2026, you cannot renew. Your only VMware path forward is vSphere Foundation (VVF) or VMware Cloud Foundation (VCF). vSphere 8's Standard branch reaches End of Life in October 2027 — so even if you extend, you have a hard deadline. Plan accordingly.
+    </div>
+
+    <!-- Section 1 -->
+    <h2 class="text-2xl font-bold text-white">The Short Version: What You Need to Know in 60 Seconds</h2>
+
+    <p>If you're looking for a quick orientation before diving into the details:</p>
+
+    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
+      <li><strong>vSphere Standard:</strong> End of Sale July 31, 2025. You cannot buy or renew it. It's effectively legacy software on a death march to October 2027 EOL.</li>
+      <li><strong>vSphere Foundation (VVF):</strong> The replacement. Includes Enterprise Plus hypervisor features, vCenter, vSAN, and Aria Operations bundled. Minimum purchase: 72 cores. MSRP: $190/core/year (1-year) or $150/core/year (multi-year).</li>
+      <li><strong>VMware Cloud Foundation (VCF):</strong> The full SDDC stack. Adds NSX, full Aria Suite, SDDC Manager. MSRP: $350/core/year. Required if you need NSX.</li>
+      <li><strong>vSphere 9:</strong> Only available to VVF and VCF customers. Standard users are permanently locked at vSphere 8.</li>
+      <li><strong>Perpetual license holders:</strong> Your licenses don't expire, but your support does. vSphere 6.x and 7.x are already out of general support as of October 2025.</li>
+    </ul>
+
+    <!-- Section 2 -->
+    <h2 class="text-2xl font-bold text-white">What vSphere Standard Actually Was</h2>
+
+    <p>Before we compare, it's worth being precise about what Standard included — because there are some commonly misunderstood gaps in it that matter when you're evaluating VVF.</p>
+
+    <p>Standard gave you a solid foundation: ESXi, vCenter Server Standard, vMotion, Storage vMotion, and High Availability (HA). For most small-to-mid deployments, that was enough. You could protect workloads with HA, migrate VMs between hosts with vMotion, and manage everything through vCenter.</p>
+
+    <p>But here's what Standard <em>didn't</em> include that surprises people:</p>
+
+    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
+      <li><strong>DRS (Distributed Resource Scheduler):</strong> No automatic load balancing across hosts. If you wanted workload distribution, you did it manually or upgraded to Enterprise Plus.</li>
+      <li><strong>Distributed Switch (vDS):</strong> You were limited to the standard vSwitch. vDS, which enables advanced networking features and simplifies large-scale network management, required Enterprise Plus.</li>
+      <li><strong>Fault Tolerance:</strong> Not included. HA would restart a failed VM; FT keeps a shadow VM running in lockstep. Enterprise Plus only.</li>
+      <li><strong>vSAN:</strong> Not bundled — sold separately at per-TiB pricing. Many Standard customers ran shared storage via iSCSI or NFS instead.</li>
+      <li><strong>Aria Operations (monitoring/analytics):</strong> Not included. You were flying somewhat blind compared to what VVF now bundles.</li>
+    </ul>
+
+    <p>A lot of Standard shops either lived without DRS and vDS, or they quietly upgraded to Enterprise Plus à la carte. Those customers had a different pricing reality — and VVF may actually make financial sense for them. More on that in the break-even analysis below.</p>
+
+    <!-- Section 3 -->
+    <h2 class="text-2xl font-bold text-white">What's Actually Inside vSphere Foundation (VVF)</h2>
+
+    <p>According to <a href="https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/vcenter-and-host-management/license-management-host-management/what-is-vmware-vsphere-foundation-vvf-solution-licensing-host-management.html" class="text-blue-400 hover:text-blue-300" target="_blank" rel="noopener">Broadcom's official VVF TechDocs</a> and confirmed by William Lam's detailed analysis (updated November 2025), VVF includes the following components in a single per-core subscription:</p>
+
+    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
+      <li><strong>ESXi Enterprise Plus tier</strong> — the full hypervisor, including DRS, Fault Tolerance, Distributed Switch, and all features that previously required Enterprise Plus licensing</li>
+      <li><strong>vCenter Server Standard</strong> — full vCenter, no restrictions</li>
+      <li><strong>vSphere Kubernetes Service (VKS / Tanzu)</strong> — integrated Kubernetes cluster management on vSphere</li>
+      <li><strong>vSAN Enterprise</strong> — 0.25 TiB (250 GiB) per core for new licenses (see note below)</li>
+      <li><strong>VCF Operations (Aria Operations) — Standard tier</strong> — performance monitoring, capacity management, workload optimization</li>
+      <li><strong>VCF Operations for Logs (Aria Ops for Logs)</strong> — centralized log management and analysis</li>
+      <li><strong>Aria Suite Lifecycle (Basic Aria Orchestrator)</strong> — lifecycle management for Aria components</li>
+    </ul>
+
+    <div class="callout">
+      <strong class="text-yellow-400">vSAN Entitlement Clarification:</strong> The 0.25 TiB (250 GiB) per core vSAN entitlement applies to <strong>new VVF licenses sold after December 2024</strong> and VVF 9. If you're on an older VVF 8.x agreement signed before December 2024, you may have 100 GiB/core until your renewal. <a href="https://msadvance.com/en/buy-vmware-vsphere-foundation-vvf-9-license-in-2025-per-core-vsan-included-0-25-tib-core-full-guide/" class="text-blue-400 hover:text-blue-300" target="_blank" rel="noopener">MSAdvance confirms</a> the 0.25 TiB figure for current VVF, and Broadcom KB 313548 documents the December 2024 increase from 100 GiB to 250 GiB. Check your specific agreement.
+    </div>
+
+    <p>What VVF does <em>not</em> include — and this is important if you're evaluating whether to go to VCF:</p>
+
+    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
+      <li><strong>NSX (network virtualization, micro-segmentation):</strong> VCF only. If you need NSX, your only path is VCF — there is no standalone NSX purchase path for new customers at reasonable scale.</li>
+      <li><strong>SDDC Manager:</strong> VCF only. The automated lifecycle management that makes VCF worth it at scale.</li>
+      <li><strong>Full Aria Suite Enterprise</strong> (Automation, Aria Networks, HCX, Tanzu Mission Control): VCF only.</li>
+      <li><strong>vSAN capacity beyond 0.25 TiB/core:</strong> Purchasable as an add-on at per-TiB pricing.</li>
+    </ul>
+
+    <!-- Section 4 -->
+    <h2 class="text-2xl font-bold text-white">Complete Feature Comparison: Standard vs VVF vs VCF</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>vSphere Standard</th>
+          <th>vSphere Foundation (VVF)</th>
+          <th>Cloud Foundation (VCF)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="font-medium text-slate-300">ESXi Tier</td>
+          <td>Standard</td>
+          <td>Enterprise Plus ✅</td>
+          <td>Enterprise Plus ✅</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">vCenter Server</td>
+          <td>✅ Included</td>
+          <td>✅ Included</td>
+          <td>✅ Included</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">vMotion</td>
+          <td>✅</td>
+          <td>✅</td>
+          <td>✅</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">Storage vMotion</td>
+          <td>✅</td>
+          <td>✅</td>
+          <td>✅</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">HA (High Availability)</td>
+          <td>✅</td>
+          <td>✅</td>
+          <td>✅</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">DRS (Load Balancing)</td>
+          <td>❌ No</td>
+          <td>✅ Yes</td>
+          <td>✅ Yes</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">Fault Tolerance</td>
+          <td>❌</td>
+          <td>✅</td>
+          <td>✅</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">Distributed Switch (vDS)</td>
+          <td>❌</td>
+          <td>✅</td>
+          <td>✅</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">vSAN Storage</td>
+          <td>❌ Add-on</td>
+          <td>✅ 0.25 TiB/core*</td>
+          <td>✅ ~1 TiB/core</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">NSX Networking</td>
+          <td>❌</td>
+          <td>❌</td>
+          <td>✅</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">Aria Operations (monitoring)</td>
+          <td>❌</td>
+          <td>✅ Standard</td>
+          <td>✅ Full Suite</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">Kubernetes / Tanzu</td>
+          <td>❌</td>
+          <td>✅</td>
+          <td>✅</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">SDDC Manager</td>
+          <td>❌</td>
+          <td>❌</td>
+          <td>✅</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">HCX Migration</td>
+          <td>❌</td>
+          <td>❌</td>
+          <td>✅</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">vSphere 9 Upgrade Path</td>
+          <td>❌ Locked at v8</td>
+          <td>✅ Yes</td>
+          <td>✅ Yes</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">Status (2026)</td>
+          <td>⛔ EOS Jul 2025</td>
+          <td>✅ Active</td>
+          <td>✅ Active</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">MSRP/core/year</td>
+          <td>$50 (historical)</td>
+          <td>$150–$190</td>
+          <td>$350</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="text-slate-500 text-sm">* vSAN entitlement: 0.25 TiB/core for new licenses sold after December 2024. Older VVF 8.x agreements may have 100 GiB/core. US MSRP shown; EMEA pricing differs — see pricing section below.</p>
+
+    <!-- Section 5 -->
+    <h2 class="text-2xl font-bold text-white">The Real Pricing: What You'll Actually Pay</h2>
+
+    <p>MSRP is a ceiling, not a floor — especially for larger deployments. But let's start with list pricing because it sets the anchors.</p>
+
+    <h3 class="text-xl font-semibold text-white">Official MSRP (US, Per Core Per Year)</h3>
+
+    <table>
+      <thead>
+        <tr>
+          <th>SKU</th>
+          <th>Description</th>
+          <th>MSRP/Core/Year</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="font-medium text-slate-300">VCF-VSP-STD-8</td>
+          <td>vSphere Standard 8 <em class="text-slate-500">(historical — EOS)</em></td>
+          <td>$50</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">VCF-VSP-FND-1Y</td>
+          <td>vSphere Foundation — 1-Year</td>
+          <td>$190</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">VCF-VSP-FND-8</td>
+          <td>vSphere Foundation — Multi-Year</td>
+          <td>$150</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">VCF-VSP-ENT-PLUS-1Y</td>
+          <td>vSphere Enterprise Plus — 1-Year</td>
+          <td>$150</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">VCF-VSP-ENT-PLUS</td>
+          <td>vSphere Enterprise Plus — Multi-Year</td>
+          <td>$120</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">VCF-CLD-FND-5</td>
+          <td>VMware Cloud Foundation 5</td>
+          <td>$350</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      <strong class="text-yellow-400">Wait — why is Enterprise Plus cheaper than VVF?</strong> Sharp-eyed readers will notice vSphere Enterprise Plus is $120–$150/core vs VVF at $150–$190/core. The difference is the bundle: VVF adds vSAN Enterprise (0.25 TiB/core), Aria Operations, and Aria Ops for Logs on top of the Enterprise Plus hypervisor. If you're already running vSAN and Aria, VVF is better value. If you want pure hypervisor with Distributed Switch and DRS but no HCI storage, standalone Enterprise Plus is an option. However — check availability with your reseller, as Broadcom has been quietly pushing customers toward the bundles.
+    </div>
+
+    <h3 class="text-xl font-semibold text-white">The 72-Core Minimum: Why SMBs Get Squeezed</h3>
+
+    <p>This is the single most impactful change for small and mid-size organizations, and it deserves a clear explanation because it's frequently misunderstood.</p>
+
+    <p>VVF has <strong class="text-slate-200">two separate minimums that both apply</strong>:</p>
+
+    <ol class="list-decimal list-inside text-slate-300 space-y-3 mb-6">
+      <li><strong>16 cores per physical CPU socket:</strong> Even if your CPU physically has 8 or 12 cores, you must license it as 16 cores minimum.</li>
+      <li><strong>72 cores minimum total purchase order:</strong> Regardless of how many sockets you have, your minimum order is 72 cores.</li>
+    </ol>
+
+    <p>In practice, the 72-core order minimum is what bites you most. Consider a common scenario: a small organization runs a 3-node ESXi cluster, each node with dual 12-core CPUs. That's 72 physical cores — right at the minimum. But if you have a 2-node cluster with dual 16-core CPUs, you have 64 physical cores — and you still have to buy 72. You're paying for capacity you don't have hardware to use.</p>
+
+    <p>Worse: the 16-core-per-socket rule means a single server with two 10-core CPUs (20 physical cores) must be licensed as 32 cores. The 72-core order minimum then applies on top. Effectively, even a single-server VMware deployment costs you 72 cores × $190 = <strong class="text-slate-200">$13,680/year at minimum</strong>.</p>
+
+    <p>According to community reports on r/vmware, this 72-core minimum was mandated in April 2025 and has been one of the primary drivers pushing SMBs toward Proxmox and other alternatives. As one commenter put it: <em>"Your absolute bare minimum is 72 cores of either flavor — even if your hardware is smaller than that."</em></p>
+
+    <h3 class="text-xl font-semibold text-white">Real Dollar Examples at the 72-Core Floor</h3>
+
+    <div class="bg-card rounded-xl p-6 border border-slate-700 mb-6">
+      <p class="text-slate-300 mb-2"><strong>Old vSphere Standard (72 cores):</strong> $50 × 72 = <span class="text-red-400 font-bold">$3,600/year</span> <em class="text-slate-500">(no longer purchasable)</em></p>
+      <p class="text-slate-300 mb-2"><strong>VVF 1-year (72 cores):</strong> $190 × 72 = <span class="text-yellow-400 font-bold">$13,680/year</span></p>
+      <p class="text-slate-300 mb-2"><strong>VVF multi-year (72 cores):</strong> $150 × 72 = <span class="text-yellow-400 font-bold">$10,800/year</span></p>
+      <p class="text-slate-300 mb-2"><strong>vSphere Enterprise Plus 1-year (72 cores):</strong> $150 × 72 = $10,800/year</p>
+      <p class="text-slate-300"><strong>VMware Cloud Foundation (72 cores):</strong> $350 × 72 = <span class="text-red-400 font-bold">$25,200/year</span></p>
+    </div>
+
+    <h3 class="text-xl font-semibold text-white">What the Community Is Actually Paying</h3>
+
+    <p>MSRP is a starting point. Based on r/vmware threads and partner-sourced data from late 2025:</p>
+
+    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
+      <li>VVF quotes from partners have been coming back at <strong>$195+/core</strong> even though MSRP shows $190 — Broadcom's pricing software can generate slightly different numbers.</li>
+      <li>One organization with a 192-core Standard renewal was quoted VCF at approximately <strong>6× their prior Standard cost</strong>.</li>
+      <li>A 96-core VCF quote shared in r/vmware: <strong>approximately $29,000 for one year</strong> (roughly 15% below MSRP — plausible for smaller deals).</li>
+      <li>Large enterprise deals (200+ cores): VCF has been negotiated down to <strong>~$225/core</strong> according to Redress Compliance case studies — vs $350 MSRP.</li>
+      <li>European customers in late 2025 reporting VVF at <strong>€50/core</strong> for 2025 terms, being warned prices would change in 2026.</li>
+    </ul>
+
+    <p>The bottom line from the r/vmware community: <em>"Broadcom likes the 'how much you got?' approach — MSRP isn't a thing anymore."</em> Get quotes from at least three resellers before agreeing to anything. For deals over 200 cores, expect meaningful room to negotiate. For 72-core minimum orders, you're likely paying closer to list.</p>
+
+    <div class="callout">
+      <strong class="text-yellow-400">EMEA Pricing Warning:</strong> The December 2025 Broadcom EMEA-Non-EEA price book reportedly removed vSphere Foundation and Enterprise Plus entirely from that regional catalog — leaving only vSphere Standard at $70/core and VCF at $400/core. If you're in an affected region, verify your options with your reseller directly. US pricing remains as listed above.
+    </div>
+
+    <!-- Section 6 -->
+    <h2 class="text-2xl font-bold text-white">The Break-Even Analysis: When VVF Actually Makes Sense</h2>
+
+    <p>The 3.8× price increase looks brutal in isolation. But it's the wrong way to evaluate VVF for shops that were already running à la carte Enterprise Plus, vSAN, and Aria. Let's do the math.</p>
+
+    <p>At the old à la carte pricing (approximate historical figures):</p>
+
+    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
+      <li>vSphere Enterprise Plus: ~$120/core/year</li>
+      <li>vSAN Enterprise: ~$100–150/core/year (sold per-core, per-TiB pricing varied)</li>
+      <li>Aria Operations: ~$30–60/core/year</li>
+    </ul>
+
+    <p>Stack those up and you were at $250–330/core before volume discounts — potentially <em>more expensive</em> than VVF's $190/core with everything bundled. For that kind of shop, VVF is genuinely the right product at a defensible price.</p>
+
+    <p>At 72 cores, VVF's vSAN entitlement gives you: 72 cores × 0.25 TiB/core = <strong class="text-slate-200">18 TiB of vSAN capacity</strong> (on new post-December 2024 licenses). If you needed that storage capacity and would have purchased vSAN anyway, the bundled economics work.</p>
+
+    <div class="callout-green callout">
+      <strong class="text-green-400">VVF makes financial sense if:</strong> You were previously licensing vSphere Enterprise Plus + vSAN + Aria Operations. The bundle consolidation is real value, not just Broadcom marketing. Compare your old à la carte spend to the new VVF quote before making a migration decision.
+    </div>
+
+    <div class="callout-red callout">
+      <strong class="text-red-400">VVF doesn't make sense if:</strong> You ran a simple 3-node vSphere Standard cluster with shared NFS/iSCSI storage and basic HA. You're paying $13,680/year for vSAN you can't use (no all-flash nodes) and Aria you don't need. This is exactly the profile that's migrating to Proxmox — and it's a reasonable call.
+    </div>
+
+    <!-- Section 7 -->
+    <h2 class="text-2xl font-bold text-white">vSphere 9 — The Fork in the Road</h2>
+
+    <p>This deserves its own section because it's Broadcom's forcing function — the thing that makes staying on vSphere Standard perpetually untenable even if you want to.</p>
+
+    <p>According to multiple resellers and confirmed by HBS Consulting's January 2026 analysis: <strong class="text-slate-200">vSphere 9 is only available to VVF and VCF customers.</strong> Standard stays on the vSphere 8 branch indefinitely, which reaches End of Life in October 2027.</p>
+
+    <p>If you're a Standard customer today, this is your timeline:</p>
+
+    <ol class="list-decimal list-inside text-slate-300 space-y-3 mb-6">
+      <li><strong>July 31, 2025:</strong> EOS — no new purchases or renewals.</li>
+      <li><strong>October 2027:</strong> vSphere 8 Standard EOL — no more patches, security updates, or support.</li>
+      <li><strong>vSphere 9:</strong> Not available to you at all.</li>
+    </ol>
+
+    <p>This is the same pattern Broadcom executed with vSphere 7, which ended general support in October 2025. The clock is ticking. Running vSphere 8 Standard on no support in 2028 in a regulated environment is a compliance and security problem, not just a technical inconvenience.</p>
+
+    <h3 class="text-xl font-semibold text-white">What's New in VVF for vSphere 9?</h3>
+
+    <p>William Lam's blog (updated November 2025 with VVF/VCF 9.x SKU details) confirms that VVF 9 maintains the same core bundle but introduces updated SKUs with the enhanced 0.25 TiB/core vSAN entitlement as a standard feature across all new agreements. VVF 9 is the version that will receive active development, new features, and security patching going forward. If you're on VVF and want to stay current, VVF 9 is your path. If you're on Standard — there's no VVF 9 for you; you'd need to purchase VVF first.</p>
+
+    <!-- Section 8 -->
+    <h2 class="text-2xl font-bold text-white">What About Perpetual License Holders?</h2>
+
+    <p>A lot of SMBs and homelabs are still running perpetual vSphere 6.x or 7.x licenses. Your licenses don't expire — but your support already has.</p>
+
+    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
+      <li><strong>vSphere 7:</strong> End of General Support October 2, 2025. No more patches or security updates. You're running unsupported software today.</li>
+      <li><strong>vSphere 6.x:</strong> Long out of support. Extended support ended years ago.</li>
+      <li><strong>The EOS/EOL rules don't apply to you differently</strong> — you were already outside the subscription model. But you're accumulating security debt at pace.</li>
+    </ul>
+
+    <p>If you're running perpetual vSphere 7 and have no plans to upgrade, your practical options are: migrate to Proxmox (free, active development, serious enterprise capabilities now), accept the risk of running on an unsupported hypervisor, or purchase VVF to get back into a supported path. For homelab users: Proxmox is the community answer and it's a genuinely good one. For production environments: running on unsupported software is a conversation you need to have with your security team.</p>
+
+    <!-- Section 9 -->
+    <h2 class="text-2xl font-bold text-white">Who Should Choose What: The 2026 Decision Tree</h2>
+
+    <h3 class="text-xl font-semibold text-white">Choose vSphere Foundation (VVF) if:</h3>
+    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
+      <li>You were previously running vSphere Enterprise Plus + vSAN + Aria — the bundle makes financial sense for you</li>
+      <li>You need a supported, forward-looking VMware path with a vSphere 9 upgrade runway</li>
+      <li>You have 3+ nodes suitable for vSAN HCI (all-flash or hybrid) and want to simplify your storage story</li>
+      <li>Your environment has 50+ VMs and you'd benefit from DRS load balancing and Aria Operations visibility</li>
+      <li>You don't need NSX — VVF is the right stopping point if micro-segmentation and SDN aren't on your roadmap</li>
+      <li>Minimum commitment you're willing to make: 72 cores × $190/year = ~$13,680/year</li>
+    </ul>
+
+    <h3 class="text-xl font-semibold text-white">Choose VMware Cloud Foundation (VCF) if:</h3>
+    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
+      <li>You need NSX — there's no other way to get it for new deployments at reasonable scale</li>
+      <li>You're building a full private cloud with automated lifecycle management (SDDC Manager)</li>
+      <li>You're at large scale (200+ cores) where the bundle economics of NSX + full Aria Suite + SDDC Manager add up</li>
+      <li>You're planning private AI workloads with NVIDIA GPU integration (Private AI Foundation SKU)</li>
+      <li>You have the budget: minimum ~$25,200/year at 72 cores, but VCF is designed for 200+ core deployments</li>
+    </ul>
+
+    <h3 class="text-xl font-semibold text-white">Seriously Consider Alternatives if:</h3>
+    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
+      <li>You ran a simple vSphere Standard cluster (NFS/iSCSI storage, basic HA, no DRS) and the $13,680/year minimum is hard to justify for your workload count</li>
+      <li>You're a small shop (1-3 servers, &lt;50 VMs) with no vSAN hardware and no need for Aria</li>
+      <li>You're in a homelab or development environment where paying for production VMware doesn't make sense</li>
+      <li>Your organization is actively evaluating infrastructure-as-code with tools like Terraform/Ansible — Proxmox has a much better open-source integration story</li>
+    </ul>
+
+    <p>The alternatives worth evaluating: <a href="#" class="text-blue-400 hover:text-blue-300">Proxmox VE</a> (free, genuinely mature, excellent for VMs and containers, growing enterprise traction), Nutanix AHV (strong HCI alternative, especially for shops already on Nutanix hardware), and Microsoft Azure Stack HCI (if you're a Microsoft-heavy shop and want cloud integration). We'll cover each in dedicated migration guides — starting with the VMware to Proxmox migration walkthrough coming next month.
+
+    <!-- AFFILIATE: CDW VVF licenses -->
+    <!-- AFFILIATE: Veeam Backup for vSphere VVF -->
+    <!-- AFFILIATE: Proxmox VE subscription -->
+
+    <!-- Section 10 -->
+    <h2 class="text-2xl font-bold text-white">Transitioning from vSphere Standard: Your Next Steps</h2>
+
+    <p>If you're currently on vSphere Standard and your subscription is expiring, here's the practical path forward:</p>
+
+    <ol class="list-decimal list-inside text-slate-300 space-y-3 mb-6">
+      <li><strong>Audit your current environment.</strong> Document: current core count per server, whether you're using vSAN or external shared storage, whether you're using Aria Operations (or just ignoring it), and your actual VM count and density. This determines whether VVF's bundle is value or waste for you.</li>
+      <li><strong>Get quotes from at least three resellers.</strong> Contact CDW, SHI, Insight, or MSAdvance. MSRP is a ceiling. Especially for multi-year VVF terms, there's typically room. Note: some resellers have reported difficulty getting multi-year VVF quotes — push back and try multiple channels.</li>
+      <li><strong>Run the break-even math.</strong> Add up what you'd pay à la carte for Enterprise Plus + vSAN (if needed) + Aria. Compare to VVF. If VVF wins, it's the right call. If you'd be paying for storage and monitoring you'll never use, that's your Proxmox signal.</li>
+      <li><strong>Set your deadline.</strong> If your Standard subscription expires in 2026, you're already at the wire. The vSphere 8 Standard EOL in October 2027 is your hard deadline even if you ride out your current term. Plan migration or upgrade now so you're not doing it under pressure.</li>
+      <li><strong>Evaluate your hardware.</strong> VVF's vSAN value assumes you have HCI-capable hardware. If you're running traditional servers with a SAN, vSAN won't help you until you refresh your nodes. Factor hardware refresh costs into the TCO calculation.</li>
+    </ol>
+
+    <div class="callout-green callout">
+      <strong class="text-green-400">Practical tip:</strong> If you're an existing VMware customer, contact your current reseller first and ask for a <strong>Standard-to-VVF upgrade quote</strong>. Broadcom has migration SKUs that may have different pricing than a fresh VVF purchase. Ask specifically about multi-year terms and any migration incentive programs — these have existed at various times and may be available depending on your contract history.
+    </div>
+
+    <!-- Section 11 -->
+    <h2 class="text-2xl font-bold text-white">The Bottom Line</h2>
+
+    <p>The comparison between vSphere Standard and vSphere Foundation is, in 2026, a comparison between a dead product and its much more expensive replacement. If you're a Standard customer who ran it as a minimal hypervisor layer with external shared storage, Broadcom hasn't built a product that cleanly replaces it at a similar price point — and the community is responding accordingly.</p>
+
+    <p>But if you were already a serious VMware shop running Enterprise Plus, vSAN, and Aria — or if you're building out HCI infrastructure and want a single vendor for hypervisor, storage, monitoring, and Kubernetes — VVF is a defensible product. The feature set is genuinely comprehensive and the vSphere 9 upgrade path is valuable for shops with a 3–5 year VMware horizon.</p>
+
+    <p>The honest advice: run the break-even math for your specific environment before deciding. Get real quotes, not MSRP estimates. And if the math doesn't work, don't feel obligated to pay for a bundle you can't use — Proxmox has matured significantly, and the migration path is more tractable than it was two years ago.</p>
+
+    <p>We'll be publishing a detailed <a href="#" class="text-blue-400 hover:text-blue-300">VMware to Proxmox migration guide</a> next, covering cluster evacuation, storage migration, and the networking translation from vDS to OVS. Subscribe below to get it when it's live.</p>
+
+    <div class="callout">
+      <strong class="text-yellow-400">Related reading:</strong> See our <a href="/articles/broadcom-vmware-licensing-changes-2026.html" class="text-blue-400 hover:text-blue-300">full breakdown of Broadcom's VMware licensing changes in 2026</a> for context on the broader portfolio shift. And if you're already evaluating exits, our <em>Best VMware Alternatives 2026</em> guide is coming shortly.
+    </div>
+
+    <!-- Newsletter CTA -->
+    <div class="mt-16 bg-card border border-slate-700 rounded-2xl p-10 text-center">
+      <h2 class="text-2xl font-bold text-white mb-3" style="-webkit-text-fill-color: white;">Stay ahead of the VMware changes</h2>
+      <p class="text-slate-400 mb-6">We're publishing detailed comparison guides, migration walkthroughs, and cost calculators. Get them in your inbox.</p>
+      <form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" onsubmit="handleSubscribe(event)">
+        <input type="email" placeholder="your@email.com" class="flex-1 bg-dark border border-slate-600 text-white px-5 py-3 rounded-xl focus:outline-none focus:border-blue-500 placeholder-slate-500" required />
+        <button type="submit" class="bg-brand text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-600 transition">Subscribe</button>
+      </form>
+    </div>
+
+    <!-- Author -->
+    <div class="mt-12 pt-8 border-t border-slate-800">
+      <div class="flex items-start gap-4">
+        <div class="w-12 h-12 bg-slate-700 rounded-full flex items-center justify-center text-xl">🖥️</div>
+        <div>
+          <p class="text-white font-semibold">Written by Rob Notaro</p>
+          <p class="text-slate-400 text-sm mt-1">Senior infrastructure engineer specializing in VMware, Horizon VDI, and enterprise virtualization. Currently deploying Horizon 2512 and VCF in production environments.</p>
+        </div>
+      </div>
+    </div>
+
+  </article>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800 mt-10">
+    <div class="max-w-4xl mx-auto px-6 py-10 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="text-slate-400 text-sm">© 2026 VMwareMadeSimple.com — Independent. Not affiliated with VMware or Broadcom.</div>
+      <div class="flex gap-6 text-slate-400 text-sm">
+        <a href="/" class="hover:text-white transition">Home</a>
+        <a href="/#articles" class="hover:text-white transition">Articles</a>
+        <a href="/#newsletter" class="hover:text-white transition">Newsletter</a>
+      </div>
+    </div>
+    <div class="max-w-4xl mx-auto px-6 pb-8 text-slate-600 text-xs">
+      Some links on this site are affiliate links. If you purchase through them, we may earn a small commission at no extra cost to you.
+    </div>
+  </footer>
+
+  <script>
+    function handleSubscribe(e) {
+      e.preventDefault();
+      alert('Thanks! We\'ll be in touch soon.');
+      e.target.reset();
+    }
+  </script>
+
+</body>
+</html>
