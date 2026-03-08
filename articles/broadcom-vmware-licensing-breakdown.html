@@ -147,7 +147,7 @@
     </ul>
 
     <div class="callout">
-      <strong class="text-yellow-400">Key detail:</strong> VCF 9 requires a minimum of <strong>4 hosts</strong> for a management cluster with vSAN, or as few as <strong>2 hosts</strong> with external storage (NFS/FC). That's still a significant commitment for small shops — if you're running 1-2 hosts, VVF or standalone vSphere Standard is the better fit.
+      <strong class="text-yellow-400">Key detail:</strong> VCF 9 reduced its hardware requirements significantly. The minimum is <strong>3 hosts</strong> with vSAN (OSA or ESA), or <strong>2 hosts</strong> with external storage (NFS/FC). Using a "Consolidated Architecture," management and workload VMs share the same cluster — no separate 4+3 domain split required. Still, if you're running 1-2 hosts, VVF or standalone vSphere Standard is the better fit.
     </div>
 
     <h3 class="text-xl font-semibold text-white">VMware vSphere Foundation (VVF) — $150–$250/core/year</h3>
