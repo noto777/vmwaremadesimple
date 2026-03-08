@@ -4,12 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Broadcom VMware Licensing Breakdown: What You're Actually Paying For Now | VMware Made Simple</title>
-  <meta name="description" content="A plain-English breakdown of VMware's new licensing under Broadcom. VCF vs VVF pricing, the 72-core minimum, what's included, and what your real costs look like in 2026." />
-  <meta name="keywords" content="VMware licensing 2026, Broadcom VMware pricing, VCF pricing, VVF pricing, VMware per core cost, VMware 72 core minimum, VMware alternatives" />
+  <meta name="description" content="A plain-English breakdown of VMware's new licensing under Broadcom. VCF vs VVF vs vSphere Standard pricing, what's included, and what your real costs look like in 2026." />
+  <meta name="keywords" content="VMware licensing 2026, Broadcom VMware pricing, VCF pricing, VVF pricing, vSphere Standard pricing, VMware per core cost, VMware alternatives" />
   <link rel="canonical" href="https://vmwaremadesimple.com/articles/broadcom-vmware-licensing-breakdown.html" />
 
   <meta property="og:title" content="Broadcom VMware Licensing Breakdown: What You're Actually Paying For Now" />
-  <meta property="og:description" content="VCF vs VVF pricing, the 72-core minimum, and what your renewal quote actually means." />
+  <meta property="og:description" content="VCF vs VVF vs vSphere Standard pricing, per-core minimums, and what your renewal quote actually means." />
   <meta property="og:type" content="article" />
   <meta property="og:url" content="https://vmwaremadesimple.com/articles/broadcom-vmware-licensing-breakdown.html" />
 
@@ -110,12 +110,12 @@
         <tr>
           <td class="font-medium text-slate-300">Minimum purchase</td>
           <td>No core minimum</td>
-          <td>72 cores per order (as of April 2025)</td>
+          <td>16 cores per CPU (minimum)</td>
         </tr>
         <tr>
           <td class="font-medium text-slate-300">Product choice</td>
           <td>Buy vSphere, vSAN, NSX, vCenter separately</td>
-          <td>Forced bundles: VCF or VVF</td>
+          <td>Subscription bundles: VCF, VVF, vSphere Standard, or vSphere Enterprise Plus</td>
         </tr>
         <tr>
           <td class="font-medium text-slate-300">If you stop paying</td>
@@ -169,19 +169,19 @@
       <strong class="text-slate-200">What's NOT included:</strong> No NSX, no SDDC Manager, no HCX. And the vSAN allocation is thin — a 32-core server only gets about 8 TB of vSAN capacity. You'll almost certainly need to buy additional vSAN capacity on top.
     </p>
 
-    <div class="callout-red callout">
-      <strong class="text-red-400">Important:</strong> As of late 2025, Broadcom has discontinued vSphere Standard and vSphere Enterprise Plus as standalone SKUs. VVF and VCF are the only options for new purchases. If a rep tells you that you can still buy standalone vSphere, they're working off old information.
+    <div class="callout callout">
+      <strong class="text-yellow-400">Update:</strong> Broadcom initially consolidated everything into VCF and VVF bundles only. After significant customer backlash, they expanded the portfolio back to four subscription tiers: <strong>VMware Cloud Foundation (VCF)</strong>, <strong>vSphere Foundation (VVF)</strong>, <strong>vSphere Standard</strong>, and <strong>vSphere Enterprise Plus</strong>. The standalone options are subscription-based (per core, per year) — not perpetual — but they do give smaller shops a path that doesn't require the full VCF/VVF stack.
     </div>
 
-    <!-- 72 Core Minimum -->
-    <h2 class="text-2xl font-bold text-white">The 72-Core Minimum</h2>
+    <!-- Per-Core Minimums -->
+    <h2 class="text-2xl font-bold text-white">The Per-Core Minimum (16 Cores per CPU)</h2>
 
     <p>
-      This is the change that has caused the most anger in the community. In April 2025, Broadcom raised the minimum purchase from 16 cores to <strong>72 cores per order</strong> — for all products.
+      In April 2025, Broadcom briefly introduced a 72-core minimum per license order — which would have devastated small shops. After <strong>massive industry backlash</strong>, they reversed course. The minimum is now <strong>16 cores per CPU socket</strong>, which is far more reasonable but still catches some configurations.
     </p>
 
     <p>
-      What this means in practice: even if your server only has 8 physical cores, you're paying for 72. Here's how that math works:
+      What this means: if your server has a CPU with fewer than 16 physical cores, you're billed for 16. Here's how that looks:
     </p>
 
     <table>
@@ -197,26 +197,26 @@
         <tr>
           <td>Single 8-core CPU</td>
           <td>8</td>
-          <td class="text-red-400 font-semibold">72</td>
-          <td>$13,680</td>
+          <td class="text-yellow-400 font-semibold">16</td>
+          <td>$3,040</td>
         </tr>
         <tr>
           <td>Single 16-core CPU</td>
           <td>16</td>
-          <td class="text-red-400 font-semibold">72</td>
-          <td>$13,680</td>
+          <td>16</td>
+          <td>$3,040</td>
         </tr>
         <tr>
           <td>Dual 16-core CPUs</td>
           <td>32</td>
-          <td class="text-red-400 font-semibold">72</td>
-          <td>$13,680</td>
+          <td>32</td>
+          <td>$6,080</td>
         </tr>
         <tr>
           <td>Dual 32-core CPUs</td>
           <td>64</td>
-          <td class="text-red-400 font-semibold">72</td>
-          <td>$13,680</td>
+          <td>64</td>
+          <td>$12,160</td>
         </tr>
         <tr>
           <td>Quad 32-core CPUs</td>
@@ -228,11 +228,11 @@
     </table>
 
     <p>
-      That's right — a single-socket server with 8 cores costs the same as a dual-socket with 64 cores. The 72-core minimum effectively creates a flat floor of <strong>$13,680 per year at VVF pricing</strong> regardless of your actual hardware.
+      The 16-core minimum mostly affects shops running older single-socket servers with 8 or 12 cores — you'll pay for 4-8 cores you're not using. For modern hardware with 16+ cores per socket, you pay for exactly what you have.
     </p>
 
     <p>
-      For small environments with 2-3 low-core-count hosts, you could be paying 4-9x more per core than the list price suggests. This is where the "10x price increase" reports come from — and they're not exaggerating.
+      The real sticker shock comes from the <strong>per-core subscription model itself</strong>, not the minimum. Moving from a $4,500 perpetual per-socket license to $190/core/year on a 32-core server means $6,080/year — every year, forever. That's where the "10x price increase" reports come from.
     </p>
 
     <!-- Real Cost Examples -->
@@ -246,8 +246,8 @@
     <div class="bg-card rounded-xl p-6 border border-slate-700 mb-6">
       <p class="text-slate-300 mb-2"><strong>Config:</strong> 3 servers, single socket, 16 cores each (48 total cores)</p>
       <p class="text-slate-300 mb-2"><strong>Old cost:</strong> 3 sockets × $4,500 perpetual = $13,500 one-time + ~$3,000/yr support = <strong>~$3,000/year ongoing</strong></p>
-      <p class="text-slate-300 mb-2"><strong>New cost (VVF):</strong> 72-core minimum × $190/core = <strong>$13,680/year</strong> (per order, need to verify if the 72 minimum applies per order or per server)</p>
-      <p class="text-red-400 font-semibold">Increase: ~4.5x the annual cost, and you no longer own the license</p>
+      <p class="text-slate-300 mb-2"><strong>New cost (VVF):</strong> 48 cores × $190/core = <strong>$9,120/year</strong> (16-core minimum per CPU met — 16 cores each, billed at actual)</p>
+      <p class="text-red-400 font-semibold">Increase: ~3x the annual cost, and you no longer own the license</p>
     </div>
 
     <h3 class="text-xl font-semibold text-white">Example 2: Mid-Market (9 Hosts)</h3>
@@ -266,7 +266,7 @@
     </div>
 
     <p>
-      AT&T, one of VMware's largest customers, alleged price increases of <strong>up to 1,050%</strong> in their lawsuit against Broadcom. Industry advisory firms report typical increases of 8x to 15x for customers who were on deeply discounted legacy agreements.
+      AT&T, one of VMware's largest customers, sued Broadcom alleging price increases of <strong>up to 1,050%</strong>. The lawsuit was <strong>settled out of court in December 2024</strong> — terms undisclosed, but the case highlighted how extreme the increases were for large customers on legacy deals. Industry advisory firms report typical increases of 8x to 15x for customers who were on deeply discounted legacy agreements.
     </p>
 
     <!-- What Happened to Perpetual Licenses -->
@@ -354,7 +354,7 @@
     <h2 class="text-2xl font-bold text-white">What You Should Do Right Now</h2>
 
     <ol class="list-decimal list-inside text-slate-300 space-y-3 mb-6">
-      <li><strong>Know your numbers.</strong> Count your physical cores across all hosts. Multiply by $190 (VVF) or $350 (VCF) to get your ballpark annual cost. If you have fewer than 72 cores total, multiply 72 × the per-core price instead.</li>
+      <li><strong>Know your numbers.</strong> Count your physical cores across all hosts — remember the 16-core minimum per CPU socket. Multiply by $190 (VVF) or $350 (VCF) to get your ballpark annual cost. Also check pricing for vSphere Standard and Enterprise Plus, which may be cheaper if you don't need vSAN.</li>
       <li><strong>Check your support contract expiry date.</strong> That's your deadline for making a decision.</li>
       <li><strong>Don't panic-sign a 3-year renewal.</strong> Broadcom is pushing multi-year commitments hard. Get quotes from alternatives first — you have leverage right now because every competitor is aggressively courting VMware refugees.</li>
       <li><strong>Start testing alternatives in a lab.</strong> Spin up Proxmox (free) or request a Nutanix trial. See what migration actually looks like for your workloads before you're under time pressure.</li>
