@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How to Migrate from VMware to Proxmox in 2026: The Complete Step-by-Step Guide | VMware Made Simple</title>
+  <meta name="description" content="A senior engineer's complete guide to migrating from VMware ESXi to Proxmox VE in 2026 — covering the Import Wizard method, Windows VM gotchas, real pricing data, and what you'll miss." />
+  <meta name="keywords" content="VMware to Proxmox migration, ESXi to Proxmox, migrate VMware VMs to Proxmox, Proxmox import wizard ESXi, Proxmox vs VMware 2026, VMware alternative, Broadcom pricing, Proxmox VE 9" />
+  <link rel="canonical" href="https://vmwaremadesimple.com/articles/vmware-to-proxmox-migration-guide.html" />
+
+  <meta property="og:title" content="How to Migrate from VMware to Proxmox in 2026: The Complete Step-by-Step Guide" />
+  <meta property="og:description" content="A senior engineer's complete guide to migrating from VMware ESXi to Proxmox VE in 2026 — covering the Import Wizard method, Windows VM gotchas, real pricing data, and what you'll miss." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://vmwaremadesimple.com/articles/vmware-to-proxmox-migration-guide.html" />
+
+  <!-- Google Analytics — replace G-2NDPP0ZTKC with your measurement ID -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-2NDPP0ZTKC"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-2NDPP0ZTKC');
+  </script>
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "How to Migrate from VMware to Proxmox in 2026: The Complete Step-by-Step Guide",
+    "description": "A senior engineer's complete guide to migrating from VMware ESXi to Proxmox VE in 2026 — covering the Import Wizard method, Windows VM gotchas, real pricing data, and what you'll miss.",
+    "author": { "@type": "Person", "name": "Rob Notaro" },
+    "publisher": { "@type": "Organization", "name": "VMware Made Simple" },
+    "datePublished": "2026-03-05",
+    "dateModified": "2026-03-05",
+    "mainEntityOfPage": "https://vmwaremadesimple.com/articles/vmware-to-proxmox-migration-guide.html"
+  }
+  </script>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { colors: { brand: '#1a73e8', dark: '#0f172a', card: '#1e293b' } } }
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .gradient-text { background: linear-gradient(135deg, #1a73e8, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .prose h2 { margin-top: 2.5rem; margin-bottom: 1rem; }
+    .prose h3 { margin-top: 2rem; margin-bottom: 0.75rem; }
+    .prose p { margin-bottom: 1.25rem; line-height: 1.8; }
+    .prose table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+    .prose th { text-align: left; padding: 0.75rem 1rem; border-bottom: 2px solid #334155; color: #94a3b8; font-size: 0.875rem; text-transform: uppercase; }
+    .prose td { padding: 0.75rem 1rem; border-bottom: 1px solid #1e293b; }
+    .prose tr:hover { background: #1e293b40; }
+    .callout { background: #1e293b; border-left: 4px solid #f59e0b; padding: 1.25rem 1.5rem; border-radius: 0 0.5rem 0.5rem 0; margin: 1.5rem 0; }
+    .callout-red { border-left-color: #ef4444; }
+    .callout-green { border-left-color: #22c55e; }
+  </style>
+</head>
+<body class="bg-dark text-slate-100">
+
+  <!-- Nav -->
+  <nav class="border-b border-slate-800 sticky top-0 z-50 bg-dark/95 backdrop-blur">
+    <div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="/" class="text-xl font-bold text-white">VMware<span class="gradient-text">MadeSimple</span></a>
+      <a href="/#newsletter" class="bg-brand text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition text-sm font-medium">Get Updates</a>
+    </div>
+  </nav>
+
+  <!-- Article -->
+  <article class="max-w-4xl mx-auto px-6 py-12 prose">
+
+    <!-- Breadcrumb -->
+    <div class="text-sm text-slate-500 mb-6">
+      <a href="/" class="hover:text-slate-300">Home</a> → <span class="text-slate-400">Migration Guides</span>
+    </div>
+
+    <!-- Header -->
+    <div class="mb-10">
+      <div class="text-xs text-blue-400 font-medium uppercase tracking-wide mb-3">Migration Guide</div>
+      <h1 class="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight" style="-webkit-text-fill-color: white;">
+        How to Migrate from VMware to Proxmox in 2026: The Complete Step-by-Step Guide
+      </h1>
+      <p class="text-slate-400 text-lg">
+        March 5, 2026 · 14 min read
+      </p>
+    </div>
+
+    <!-- ARTICLE BODY -->
+
+    <p>I've been watching engineers struggle with this migration for the past 18 months, and the pattern is always the same: they underestimate the Windows VM work, they get blindsided by ZFS and hardware RAID, and they somehow didn't know about the "remove snapshots first" rule until they're staring at a failed import at 11pm. This guide exists to prevent that.</p>
+
+    <p>But before we get into procedure, let's talk about why you're here.</p>
+
+    <h2 class="text-2xl font-bold text-white">Why Migrate in 2026? The Pricing Reality</h2>
+
+    <p>If you're still running VMware ESXi and haven't renewed your support contract yet, you're in for a shock. Broadcom's restructuring of VMware licensing has pushed prices to levels that are simply unworkable for many SMBs and mid-market shops. Here's what the numbers actually look like:</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Price (Per Core/Year)</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="font-medium text-slate-300">vSphere Foundation (VVF) — Multi-Year</td>
+          <td>$150/core</td>
+          <td>Multi-year subscription rate</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">vSphere Foundation (VVF) — 1-Year</td>
+          <td>$190/core</td>
+          <td>What most SMBs see at renewal</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">VMware Cloud Foundation (VCF)</td>
+          <td>$350/core</td>
+          <td>Confirmed via Broadcom exec interview</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">Minimum core commitment</td>
+          <td>72 cores</td>
+          <td>Enforced April 10, 2025 (up from 16)</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">Late renewal surcharge</td>
+          <td>+20% first year</td>
+          <td>If you miss your anniversary date</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout-red callout">
+      <strong class="text-red-400">Do the math:</strong> On a 3-host cluster with dual-socket servers (say, 2×20-core CPUs per host = 120 cores), you're looking at 120 cores × $190/core = <strong>$22,800/year</strong> for VVF at the 1-year rate. And that's if Broadcom accepts your core count — the 72-core minimum means you pay for 72 cores regardless.
+    </div>
+
+    <p>A Spiceworks thread from January 2026 captures the SMB experience perfectly: one user reported their VMware Essentials+ renewal went from approximately $1,900/year to over $14,000/year for the equivalent vSphere Foundation tier. That's not a price increase — that's a different product category entirely.</p>
+
+    <p>According to community estimates across Spiceworks, r/vmware, and r/sysadmin, effective price increases since the Broadcom acquisition have ranged from 150% to over 1,000% depending on org size, licensing tier, and whether you got grandfathered into older terms.</p>
+
+    <p>Meanwhile, vSphere Standard — the entry-level product many SMBs relied on — reached end-of-sale on July 31, 2025. Renewals are pushing customers toward VVF.</p>
+
+    <h2 class="text-2xl font-bold text-white">Is Proxmox Right for You? (Be Honest)</h2>
+
+    <p>Proxmox VE is excellent software. I'm not going to oversell it, and I'm not going to pretend it's a drop-in replacement for a full vSphere + vCenter stack. Here's the honest breakdown:</p>
+
+    <h3 class="text-xl font-semibold text-white">What Proxmox Does Well</h3>
+
+    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
+      <li><strong>Pricing model:</strong> Free to use with no feature limitations. Subscriptions (from €115/socket/year) add enterprise repo access and support tickets — but are entirely optional for production use.</li>
+      <li><strong>Stability:</strong> A year-long side-by-side comparison published by Virtualization Howto (December 2025) concluded: "Stability of Proxmox has been just as good as VMware... Proxmox let me forget the hypervisor exists."</li>
+      <li><strong>Hardware support:</strong> Native Intel and Realtek NIC support. Hybrid CPU architectures (Intel big.LITTLE) work without BIOS tweaks. VMware has removed native Realtek support.</li>
+      <li><strong>Proxmox Backup Server (PBS):</strong> A separate, free product that provides enterprise-grade VM backup with deduplication, compression, and off-site replication. This is a capability VMware charges significant money for. Worth its own evaluation.</li>
+      <li><strong>Clustering:</strong> Built-in Corosync-based cluster with shared-nothing HA, live migration, and a clean web UI for multi-node management.</li>
+    </ul>
+
+    <h3 class="text-xl font-semibold text-white">What You'll Miss (Real Gaps)</h3>
+
+    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
+      <li><strong>No native DRS equivalent:</strong> VMware's Distributed Resource Scheduler automatically rebalances VMs across hosts. Proxmox has no built-in equivalent — you manage VM placement manually or script it.</li>
+      <li><strong>DR orchestration must be rebuilt:</strong> If you're running Zerto, SRM, or Veeam Orchestrator for disaster recovery, none of those integrate with Proxmox. The CTO Advisor published a November 2025 piece warning that what organizations plan as a 6-month VMware migration routinely becomes a 24-month project once they scope the DR re-engineering work. That assessment is accurate.</li>
+      <li><strong>Less polished UI:</strong> The Proxmox web interface is functional and gets the job done. It is not vSphere Client. If your team is used to VMware's UI depth, there will be a learning curve.</li>
+      <li><strong>Monitoring re-integration:</strong> vROps, Aria Operations, and equivalent tools don't exist for Proxmox. You'll rebuild monitoring with Prometheus/Grafana or similar.</li>
+    </ul>
+
+    <div class="callout">
+      <strong class="text-yellow-400">My recommendation:</strong> If you're a homelab user, a startup, or an SMB running fewer than ~50 VMs without complex DR requirements, Proxmox is an excellent choice and the migration is manageable. If you're running a regulated environment with formal SLAs and existing Zerto/SRM DR runbooks, budget the time honestly — this is a multi-quarter project.
+    </div>
+
+    <h2 class="text-2xl font-bold text-white">Pre-Migration Checklist (Do This Before Anything)</h2>
+
+    <p>Every failed migration I've seen violated at least one item on this list. Burn it into your runbook.</p>
+
+    <ol class="list-decimal list-inside text-slate-300 space-y-3 mb-6">
+      <li><strong>Power off the VM.</strong> The Proxmox ESXi Import Wizard does not live-migrate running VMs. The VM must be shut down on the ESXi side before you trigger the import.</li>
+      <li><strong>Remove ALL snapshots.</strong> Snapshots are the single most common cause of import failures. Consolidate and delete every snapshot on every VM you plan to migrate, in the vSphere Client, before touching Proxmox.</li>
+      <li><strong>Uninstall VMware Tools (Windows VMs).</strong> Do this while the VM is still running on ESXi. You'll clean up leftover drivers and services before they become a post-migration headache. Linux VMs typically handle this automatically.</li>
+      <li><strong>Pre-install VirtIO drivers (Windows VMs).</strong> Download the VirtIO ISO from the Fedora project, attach it to your Windows VM while it's still on ESXi, and install the drivers — particularly the storage driver. You won't need to boot into SATA mode if you do this first. [AFFILIATE: VirtIO Windows Drivers ISO]</li>
+      <li><strong>Note all IP settings and MAC addresses.</strong> Proxmox uses Linux bridge names (vmbr0, vmbr1) instead of vSphere virtual switches. NIC renames are common. If you're static IP'd, consider temporarily switching to DHCP before migration to avoid losing access immediately after cutover.</li>
+      <li><strong>Map your virtual switch topology.</strong> Document every vSphere Standard Switch, Distributed Switch, and port group with its VLAN ID. You'll recreate these as Linux bridges in Proxmox before the VMs come online.</li>
+      <li><strong>Map your storage.</strong> VMFS, NFS, and vSAN datastores need to become ZFS pools, Ceph HCI, LVM volumes, or NFS directories on Proxmox. Know your target before you start.</li>
+      <li><strong>Decrypt BitLocker volumes.</strong> If any Windows VMs have BitLocker enabled, decrypt them before migration. Hardware changes during the import can trigger recovery mode, and recovering BitLocker after a migration is a genuinely bad time.</li>
+    </ol>
+
+    <div class="callout-red callout">
+      <strong class="text-red-400">ZFS + Hardware RAID: Pick One.</strong> This catches people who built hardware for VMware and are now repurposing it for Proxmox. ZFS requires direct disk access — it needs to manage its own redundancy. Hardware RAID controllers hide physical disks from the OS and present a virtual disk. Running ZFS on top of a hardware RAID volume eliminates most of ZFS's data integrity benefits. If you want ZFS (and you should — it's excellent), either put the controller in HBA/passthrough mode or replace it with an HBA. Reddit's r/Proxmox community thread on migration lessons learned is full of people who wish they'd known this before buying hardware.
+    </div>
+
+    <h2 class="text-2xl font-bold text-white">Method 1: ESXi Import Wizard (The Primary Path)</h2>
+
+    <p>Proxmox VE 8.2 introduced a built-in ESXi Import Wizard, and by Proxmox VE 9.x it's the recommended first-choice approach for most migrations. The process, as documented by Edy Werder's updated February 2026 guide and independently confirmed by the Hornetsecurity migration walkthrough, is genuinely three steps once your pre-migration checklist is complete.</p>
+
+    <h3 class="text-xl font-semibold text-white">Step 1: Add Your ESXi Host as a Storage Source</h3>
+
+    <p>In the Proxmox Datacenter Manager, navigate to: <strong>Datacenter → Storage → Add → ESXi</strong>. Enter the IP address or hostname of your ESXi host, your ESXi credentials, and click the "Skip Certificate Verification" checkbox if you're using self-signed certs (you are). Give it an ID name like <code>esxi-source</code>.</p>
+
+    <p><strong>Note on vCenter:</strong> You can point the wizard at a vCenter IP instead of a direct ESXi host. The wizard supports this, but community experience reports that vCenter-sourced migrations run slower. For most SMB environments, connecting directly to the ESXi host is faster and more predictable. For vCenter-managed clusters, test this in your environment before running production workloads through it.</p>
+
+    <h3 class="text-xl font-semibold text-white">Step 2: Browse the Datastore and Import</h3>
+
+    <p>Once the ESXi storage source is added, you'll see it in your storage list. Browse to your VMs, select the target VM, and click <strong>Import</strong>. The wizard will prompt you to:</p>
+
+    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
+      <li>Choose the target Proxmox node and storage pool for the disk image</li>
+      <li>Select disk format (qcow2 recommended for snapshots; raw for performance on SSDs)</li>
+      <li>Map the vSphere network adapter to a Proxmox Linux bridge (vmbr0, etc.)</li>
+      <li>Configure VM ID and other Proxmox-side settings</li>
+    </ul>
+
+    <div class="callout">
+      <strong class="text-yellow-400">"Start Migration" checkbox:</strong> The wizard presents a "Start Migration" option that boots the VM while disk data is still streaming. This is sometimes described as "live migration" in documentation — it is not live-migrating a running VM. It means Proxmox starts the VM before the full disk transfer is complete. <strong>Unless you've tested this in a lab with your specific workload, leave it unchecked.</strong> Let the full disk transfer complete before booting.
+    </div>
+
+    <h3 class="text-xl font-semibold text-white">Step 3: Boot and Validate</h3>
+
+    <p>Once the import completes, boot the VM in Proxmox and validate: network connectivity, service startup, application health. For Windows VMs, expect to do additional work (see the Windows Gotchas section below). For Linux VMs, the experience is typically clean — the VM boots, network comes up, and you're done.</p>
+
+    <h2 class="text-2xl font-bold text-white">Method 2: OVF/OVA Export and Import (The Fallback)</h2>
+
+    <p>If the Import Wizard isn't an option — you're on an older ESXi version, you're migrating from VMware Workstation, or you've hit a compatibility issue — the OVF/OVA path still works.</p>
+
+    <ol class="list-decimal list-inside text-slate-300 space-y-3 mb-6">
+      <li><strong>Export from vSphere Client:</strong> Right-click the VM → Export OVF Template. This exports a .ovf descriptor and .vmdk disk files (or a single .ova archive).</li>
+      <li><strong>Transfer to Proxmox:</strong> SCP the files to your Proxmox host's local storage path (e.g., <code>/var/lib/vz/template/</code> or your configured ISO/template directory).</li>
+      <li><strong>Import on Proxmox:</strong> Use <code>qm importovf &lt;vmid&gt; &lt;file.ovf&gt; &lt;storage-name&gt;</code> for OVF files, or <code>qm importdisk &lt;vmid&gt; &lt;file.vmdk&gt; &lt;storage-name&gt;</code> for raw VMDK disks.</li>
+    </ol>
+
+    <p>The VMDK-to-QCOW2 conversion happens automatically during import. This method is slower than the Import Wizard (you're doing a full export then a full import), but it's reliable and gives you an offline backup of the VM in OVF format as a byproduct.</p>
+
+    <h2 class="text-2xl font-bold text-white">Windows VM Gotchas (The Section Most Guides Skip)</h2>
+
+    <p>Linux VMs migrate cleanly the vast majority of the time. Windows VMs have a predictable set of issues, and if you know them in advance, none of them are serious. If you don't know them, you'll spend a frustrating afternoon Googling symptoms.</p>
+
+    <h3 class="text-xl font-semibold text-white">VirtIO Drivers: Install Before or After (But Install Them)</h3>
+
+    <p>Proxmox uses the VirtIO paravirtualized driver stack for storage and networking — the same driver model used by KVM/QEMU across the board. Windows doesn't ship with VirtIO drivers. If you didn't pre-install them while the VM was on ESXi (step 4 of the pre-migration checklist), here's how to handle it post-migration:</p>
+
+    <ol class="list-decimal list-inside text-slate-300 space-y-3 mb-6">
+      <li>In the Proxmox VM configuration, temporarily set the disk bus to <strong>SATA</strong> instead of VirtIO SCSI. This lets Windows boot without the VirtIO storage driver.</li>
+      <li>Boot the VM. Attach the VirtIO ISO as a virtual CD-ROM (download from <a href="https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/" target="_blank" rel="noopener" class="text-blue-400 hover:text-blue-300 underline">fedorapeople.org</a>). [AFFILIATE: VirtIO Windows Drivers]</li>
+      <li>Run the VirtIO installer or manually install drivers from the ISO via Device Manager.</li>
+      <li>Shut down, switch disk bus back to VirtIO SCSI in Proxmox config, and reboot. Performance will improve significantly.</li>
+    </ol>
+
+    <h3 class="text-xl font-semibold text-white">VMware Tools Cleanup</h3>
+
+    <p>If you didn't uninstall VMware Tools before migration, you'll have leftover services and drivers running in Windows. These won't necessarily crash the VM, but they'll generate event log noise and the services will fail to start. The Proxmox forums have a community PowerShell script for cleaning up VMware Tools remnants post-migration — search "remove VMware Tools after ESXi Proxmox migration Windows" on the official Proxmox forum for the current thread.</p>
+
+    <h3 class="text-xl font-semibold text-white">Windows License Reactivation</h3>
+
+    <p>Changing virtual hardware — which a migration to a different hypervisor absolutely does — can trigger Windows license reactivation. This is common, but the severity depends on your license type:</p>
+
+    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
+      <li><strong>Volume licenses (KMS/MAK):</strong> Typically reactivate automatically with your KMS server. Low friction.</li>
+      <li><strong>Retail licenses:</strong> May need manual reactivation. Call Microsoft's activation line — they're used to VM migration scenarios and typically handle this without issue.</li>
+      <li><strong>OEM licenses:</strong> Tied to hardware, not transferable. You may need a new license if the OEM key won't activate on the new virtual hardware profile.</li>
+    </ul>
+
+    <h3 class="text-xl font-semibold text-white">Install QEMU Guest Agent</h3>
+
+    <p>After migration, install the QEMU Guest Agent inside each migrated VM. On Windows, it's available on the VirtIO ISO. On Linux, install <code>qemu-guest-agent</code> via your package manager. This replaces VMware Tools' OS-aware functions: clean shutdown from the Proxmox UI, IP address reporting, filesystem freeze for consistent snapshots.</p>
+
+    <h2 class="text-2xl font-bold text-white">Proxmox Backup Server: The Hidden Win</h2>
+
+    <p>One piece of this migration that deserves its own callout: <strong>Proxmox Backup Server (PBS)</strong>. It's a separate, free product from Proxmox that provides enterprise-grade VM backup with:</p>
+
+    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
+      <li>Incremental, deduplicated backups — only changed blocks are transferred after the first backup</li>
+      <li>Encryption at rest (AES-256) and in transit</li>
+      <li>Tape backup support</li>
+      <li>Offsite replication to a second PBS instance</li>
+      <li>Granular file-level restore without restoring the full VM</li>
+    </ul>
+
+    <p>In the Virtualization Howto year-long comparison, PBS was described as "a totally free enterprise data protection solution that VMware doesn't have at this price point." VMware's equivalent backup capabilities require vSphere Data Protection or a third-party product like [AFFILIATE: Veeam Backup for Proxmox] — which is now a real product, with Veeam adding official Proxmox VE support in 2025.</p>
+
+    <div class="callout-green callout">
+      <strong class="text-green-400">Consider running PBS on a small dedicated box.</strong> An Intel N100 mini PC with 4–8 TB of storage makes an excellent PBS appliance for under $300. This gives you network-isolated backup infrastructure that's independent of your Proxmox cluster. [AFFILIATE: Beelink EQ12 mini PC]
+    </div>
+
+    <h2 class="text-2xl font-bold text-white">What Does Proxmox Actually Cost?</h2>
+
+    <p>Proxmox VE is free to download and use with no feature restrictions. The subscription tiers add access to the enterprise package repository (which gets tested, stable updates before the community repo) and varying levels of support. Pricing is per <strong>physical CPU socket</strong> — not per core, not per VM. All pricing sourced from <a href="https://www.proxmox.com/en/products/proxmox-virtual-environment/pricing" target="_blank" rel="noopener" class="text-blue-400 hover:text-blue-300 underline">proxmox.com/pricing</a>:</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Tier</th>
+          <th>Price (per socket/year)</th>
+          <th>Support</th>
+          <th>Best For</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="font-medium text-slate-300">Free (Community)</td>
+          <td>€0</td>
+          <td>Community forums only</td>
+          <td>Homelab, dev/test, cost-conscious production</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">Community Subscription</td>
+          <td>€115/socket/year</td>
+          <td>Enterprise repo access, no tickets</td>
+          <td>Production: stable updates without support calls</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">Basic Subscription</td>
+          <td>€355/socket/year</td>
+          <td>Enterprise repo + 3 tickets/year</td>
+          <td>SMB production with occasional support needs</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">Standard Subscription</td>
+          <td>€530/socket/year</td>
+          <td>Enterprise repo + more tickets</td>
+          <td>Mid-market environments</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">Premium Subscription</td>
+          <td>€1,060/socket/year</td>
+          <td>24/7 enterprise support</td>
+          <td>Enterprise with SLA requirements</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>Let's put that into a real comparison. Take a 3-host cluster, each with two physical CPU sockets (6 sockets total):</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Scenario</th>
+          <th>Annual Cost</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="font-medium text-slate-300">VMware VVF @ $190/core (1-yr), 72-core minimum</td>
+          <td>$13,680/year</td>
+          <td>Minimum order; 3 hosts at 72-core floor</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">VMware VVF @ $190/core, 3×2×20-core hosts (120 cores)</td>
+          <td>$22,800/year</td>
+          <td>Realistic dual-socket Xeon environment</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">Proxmox Community (free)</td>
+          <td>$0/year</td>
+          <td>Fully functional, community repo</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">Proxmox Community Subscription (6 sockets)</td>
+          <td>~$750/year</td>
+          <td>€115 × 6, enterprise repo, stable updates</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">Proxmox Basic Subscription (6 sockets)</td>
+          <td>~$2,300/year</td>
+          <td>€355 × 6, includes 18 support tickets/year</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">Proxmox Premium (6 sockets) — worst case</td>
+          <td>~$6,800/year</td>
+          <td>€1,060 × 6, full 24/7 enterprise support</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>Even at Proxmox's most expensive tier — Premium, with 24/7 enterprise support — you're looking at roughly a third of what VMware VVF costs at list price on a 1-year subscription. In practice, most SMBs will land somewhere between Community and Basic, making the cost delta even more dramatic.</p>
+
+    <h2 class="text-2xl font-bold text-white">Real-World Scale: What Others Have Done</h2>
+
+    <p>I want to give you some grounding from the community before you decide this is all theory.</p>
+
+    <p>A December 2024–February 2025 migration posted to r/Proxmox covered 65 VMs migrated from vSphere 7. The user characterized it as a 2-month project — not a weekend. Much of that time was spent on post-migration validation and application testing, not the actual import process.</p>
+
+    <p>A January 2026 Spiceworks discussion covered a 3-host Dell R640 environment with vCenter 8.03, 30 VMs on shared Synology iSCSI storage. The team was in evaluation, specifically comparing Proxmox against Hyper-V as VMware alternatives.</p>
+
+    <p>The CTO Advisor's November 2025 analysis deserves a direct quote: what organizations plan as a 6-month migration "just became 24 months" once they properly account for DR orchestration re-engineering, monitoring re-integration, and runbook rewrites. That's not a reason not to migrate — it's a reason to scope honestly and not tell your CIO it'll be done by Q2.</p>
+
+    <h2 class="text-2xl font-bold text-white">Proxmox VE 9.x: Current State (March 2026)</h2>
+
+    <p>Proxmox VE 9.0 was released August 5, 2025, with notable improvements relevant to ESXi migrants:</p>
+
+    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
+      <li>QEMU 10 — improved live migration performance and better NUMA awareness</li>
+      <li>ZFS 2.3.3 with RAIDZ expansion (you can add drives to an existing RAIDZ pool — finally)</li>
+      <li>Continued ESXi Import Wizard improvements through the 9.x series</li>
+    </ul>
+
+    <p>PVE 8.4 continues to receive security and critical patches through August 2026 for those who haven't upgraded yet. The community subscription tiers include enterprise repo access, which delivers tested, stable package updates before they hit the community repo.</p>
+
+    <div class="callout">
+      <strong class="text-yellow-400">ESXi Compatibility Note:</strong> The Import Wizard has been widely tested against ESXi 7.x and 8.x. ESXi 6.x compatibility is not well-documented in current sources — if you're running 6.x, test the wizard against a non-production VM before relying on it for your migration. The OVF/OVA method is a reliable fallback regardless of ESXi version.
+    </div>
+
+    <h2 class="text-2xl font-bold text-white">What to Do After Migration</h2>
+
+    <p>Once VMs are running on Proxmox, the work isn't quite done. Here's the post-migration checklist:</p>
+
+    <ol class="list-decimal list-inside text-slate-300 space-y-3 mb-6">
+      <li><strong>Install QEMU Guest Agent in every VM.</strong> Windows: use the VirtIO ISO installer. Linux: <code>apt install qemu-guest-agent</code> or equivalent. Enable it in the Proxmox VM Options panel.</li>
+      <li><strong>Switch Windows VMs to VirtIO SCSI and VirtIO Network.</strong> If you used SATA mode to get the VM booting, switch to VirtIO SCSI after drivers are installed for full performance.</li>
+      <li><strong>Set up Proxmox Backup Server.</strong> Don't leave freshly migrated VMs without backup coverage. PBS is free — deploy it.</li>
+      <li><strong>Rebuild your monitoring stack.</strong> Prometheus with the <code>pve-exporter</code> is the standard community approach. Grafana dashboards for Proxmox are widely available.</li>
+      <li><strong>Configure your VM placement and HA groups.</strong> Without DRS, you'll need to think about which hosts run which VMs for capacity balance. Set up HA groups for VMs that need automatic restart on host failure.</li>
+      <li><strong>Clean up the ESXi side.</strong> Once VMs are validated in Proxmox, reclaim the ESXi storage. Don't leave half-migrated datastores sitting around.</li>
+    </ol>
+
+    <h2 class="text-2xl font-bold text-white">The Honest Answer: What You'll Miss</h2>
+
+    <p>I'm not going to end this with "Proxmox is better in every way." It isn't. Here's what you'll genuinely miss from a mature vSphere environment:</p>
+
+    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
+      <li><strong>DRS:</strong> Automated workload balancing is genuinely useful in large environments. You'll feel its absence.</li>
+      <li><strong>vCenter depth:</strong> Tag-based policies, VM templates with content libraries, the full vSphere lifecycle manager ecosystem — mature tooling built over 20 years. Proxmox is good. It's not 20 years deep.</li>
+      <li><strong>Vendor ecosystem:</strong> Third-party integrations (storage, backup, networking) were built for VMware first. Proxmox support is growing but still secondary for many enterprise vendors.</li>
+      <li><strong>Support with a contract number:</strong> If you're on Proxmox Community tier, your support is the forums. That's genuinely good for most things. For midnight production outages, the Premium tier's 24/7 support is what you'd pay for.</li>
+    </ul>
+
+    <p>What you'll gain: a hypervisor with no per-core licensing, a backup product that genuinely competes with commercial offerings, and a community that's been growing rapidly since 2024 precisely because everyone is running this migration analysis right now.</p>
+
+    <div class="bg-card rounded-xl p-6 border border-slate-700 mb-6">
+      <p class="text-slate-300 mb-2"><strong class="text-white">Resources mentioned in this guide:</strong></p>
+      <ul class="list-disc list-inside text-slate-400 space-y-1">
+        <li><a href="https://www.proxmox.com/en/products/proxmox-virtual-environment/pricing" target="_blank" rel="noopener" class="text-blue-400 hover:text-blue-300">Proxmox VE official pricing — proxmox.com</a></li>
+        <li><a href="https://edywerder.ch/vmware-to-proxmox/" target="_blank" rel="noopener" class="text-blue-400 hover:text-blue-300">ESXi Import Wizard step-by-step — edywerder.ch (updated Feb 2026)</a></li>
+        <li><a href="https://www.hornetsecurity.com/en/blog/migrate-vmware-to-proxmox/" target="_blank" rel="noopener" class="text-blue-400 hover:text-blue-300">VMware to Proxmox migration guide — Hornetsecurity</a></li>
+        <li><a href="https://www.virtualizationhowto.com/2025/12/i-spent-a-year-running-proxmox-and-vmware-side-by-side-in-my-home-lab/" target="_blank" rel="noopener" class="text-blue-400 hover:text-blue-300">Year-long Proxmox vs VMware comparison — VirtualizationHowto (Dec 2025)</a></li>
+        <li><a href="https://thectoadvisor.com/blog/2025/11/24/the-vmware-migration-everyones-getting-wrong-why-your-6-month-project-just-became-24-months/" target="_blank" rel="noopener" class="text-blue-400 hover:text-blue-300">The VMware migration everyone's getting wrong — CTO Advisor (Nov 2025)</a></li>
+      </ul>
+    </div>
+
+    <!-- Newsletter CTA -->
+    <div class="mt-16 bg-card border border-slate-700 rounded-2xl p-10 text-center">
+      <h2 class="text-2xl font-bold text-white mb-3" style="-webkit-text-fill-color: white;">Stay ahead of the VMware changes</h2>
+      <p class="text-slate-400 mb-6">We're publishing detailed comparison guides, migration walkthroughs, and cost calculators. Get them in your inbox.</p>
+      <form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" onsubmit="handleSubscribe(event)">
+        <input type="email" placeholder="your@email.com" class="flex-1 bg-dark border border-slate-600 text-white px-5 py-3 rounded-xl focus:outline-none focus:border-blue-500 placeholder-slate-500" required />
+        <button type="submit" class="bg-brand text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-600 transition">Subscribe</button>
+      </form>
+    </div>
+
+    <!-- Author -->
+    <div class="mt-12 pt-8 border-t border-slate-800">
+      <div class="flex items-start gap-4">
+        <div class="w-12 h-12 bg-slate-700 rounded-full flex items-center justify-center text-xl">🖥️</div>
+        <div>
+          <p class="text-white font-semibold">Written by Rob Notaro</p>
+          <p class="text-slate-400 text-sm mt-1">Senior infrastructure engineer specializing in VMware, Horizon VDI, and enterprise virtualization. Currently deploying Horizon 2512 and VCF in production environments.</p>
+        </div>
+      </div>
+    </div>
+
+  </article>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800 mt-10">
+    <div class="max-w-4xl mx-auto px-6 py-10 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="text-slate-400 text-sm">© 2026 VMwareMadeSimple.com — Independent. Not affiliated with VMware or Broadcom.</div>
+      <div class="flex gap-6 text-slate-400 text-sm">
+        <a href="/" class="hover:text-white transition">Home</a>
+        <a href="/#articles" class="hover:text-white transition">Articles</a>
+        <a href="/#newsletter" class="hover:text-white transition">Newsletter</a>
+      </div>
+    </div>
+    <div class="max-w-4xl mx-auto px-6 pb-8 text-slate-600 text-xs">
+      Some links on this site are affiliate links. If you purchase through them, we may earn a small commission at no extra cost to you.
+    </div>
+  </footer>
+
+  <script>
+    function handleSubscribe(e) {
+      e.preventDefault();
+      alert('Thanks! We\'ll be in touch soon.');
+      e.target.reset();
+    }
+  </script>
+
+</body>
+</html>
