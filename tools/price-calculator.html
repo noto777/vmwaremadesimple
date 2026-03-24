@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VMware Price Comparison Calculator 2026 — VVF vs VCF vs Proxmox vs Nutanix vs Hyper-V</title>
+  <meta name="description" content="Free interactive calculator comparing real costs of VMware vSphere Foundation, VCF, Proxmox, Nutanix AHV, and Hyper-V. 72-core minimum enforcement, 3-year TCO, honest gotchas." />
+  <meta name="keywords" content="VMware pricing calculator, VCF cost, Proxmox vs VMware, Nutanix AHV pricing, Hyper-V cost, vSphere Foundation pricing, virtualization cost comparison 2026" />
+  <link rel="canonical" href="https://vmwaremadesimple.com/tools/price-calculator.html" />
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-2NDPP0ZTKC"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-2NDPP0ZTKC');
+  </script>
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="VMware Price Comparison Calculator 2026" />
+  <meta property="og:description" content="Compare real costs: VMware VVF, VCF, Proxmox, Nutanix AHV, and Hyper-V. 72-core minimum enforcement, 3-year TCO." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://vmwaremadesimple.com/tools/price-calculator.html" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { colors: { brand: '#1a73e8', dark: '#0f172a', card: '#1e293b' } } }
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .gradient-text { background: linear-gradient(135deg,#1a73e8,#60a5fa); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    .card-hover { transition: transform .2s, box-shadow .2s; }
+    .card-hover:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,.3); }
+
+    /* Tooltips */
+    .tip { position:relative; display:inline-flex; align-items:center; }
+    .tip-icon { display:inline-flex; align-items:center; justify-content:center; width:15px; height:15px; border-radius:50%; background:#334155; color:#94a3b8; font-size:9px; font-weight:700; cursor:help; margin-left:4px; flex-shrink:0; border:1px solid #475569; line-height:1; }
+    .tip-icon:hover,.tip:hover .tip-icon { background:#1a73e8; color:#fff; border-color:#1a73e8; }
+    .tip-box { position:absolute; bottom:calc(100% + 8px); left:50%; transform:translateX(-50%); background:#0f172a; border:1px solid #475569; color:#cbd5e1; font-size:11.5px; line-height:1.55; padding:10px 13px; border-radius:8px; width:260px; z-index:200; pointer-events:none; opacity:0; transition:opacity .15s; box-shadow:0 8px 24px rgba(0,0,0,.55); white-space:normal; }
+    .tip-box::after { content:''; position:absolute; top:100%; left:50%; transform:translateX(-50%); border:5px solid transparent; border-top-color:#475569; }
+    .tip:hover .tip-box { opacity:1; }
+
+    /* Range */
+    input[type=range] { -webkit-appearance:none; width:100%; height:5px; background:#334155; border-radius:3px; outline:none; cursor:pointer; }
+    input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:17px; height:17px; border-radius:50%; background:#1a73e8; border:2px solid #60a5fa; cursor:pointer; }
+    input[type=range]::-moz-range-thumb { width:17px; height:17px; border-radius:50%; background:#1a73e8; border:2px solid #60a5fa; cursor:pointer; }
+
+    /* Cost cards */
+    .cost-card { transition: box-shadow .3s, border-color .3s; }
+    .best-value { border-color:#22c55e !important; box-shadow:0 0 0 1px #22c55e,0 8px 28px rgba(34,197,94,.15); }
+
+    /* Badges */
+    .badge { display:inline-block; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; padding:2px 7px; border-radius:4px; }
+
+    /* Feature pills */
+    .f-yes { background:rgba(34,197,94,.13); color:#4ade80; border:1px solid rgba(34,197,94,.28); }
+    .f-no  { background:rgba(239,68,68,.1); color:#f87171; border:1px solid rgba(239,68,68,.22); }
+    .f-par { background:rgba(245,158,11,.13); color:#fbbf24; border:1px solid rgba(245,158,11,.28); }
+    .feat-pill { display:inline-flex; align-items:center; padding:2px 7px; border-radius:999px; font-size:10.5px; font-weight:500; }
+
+    /* Animate */
+    @keyframes fadeUp { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+    .fade-up { animation: fadeUp .32s ease forwards; }
+
+    /* Toggle button states */
+    .btn-active { background:#1e3a5f !important; border-color:#1a73e8 !important; color:#60a5fa !important; }
+    .btn-idle   { background:#1e293b !important; border-color:#334155 !important; color:#64748b !important; }
+
+    /* Warning strip */
+    .warn-strip { background:linear-gradient(135deg,#451a03,#78350f); border:1px solid #92400e; }
+
+    /* Sticky panel on large screens */
+    @media (min-width:1024px) { .sticky-panel { position:sticky; top:88px; } }
+
+    /* Responsive tooltip on mobile */
+    @media (max-width:640px) { .tip-box { left:0; transform:none; } .tip-box::after { left:12px; transform:none; } }
+  </style>
+</head>
+<body class="bg-dark text-slate-100 min-h-screen">
+
+<!-- ===== NAV ===== -->
+<nav class="border-b border-slate-800 sticky top-0 z-50 bg-dark/95 backdrop-blur">
+  <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+    <a href="/" class="text-xl font-bold text-white">VMware<span class="gradient-text">MadeSimple</span></a>
+    <div class="hidden md:flex items-center gap-8 text-sm text-slate-400">
+      <a href="/#articles" class="hover:text-white transition">Articles</a>
+      <a href="/#tools" class="hover:text-white transition">Tools</a>
+      <a href="/tools/price-calculator.html" class="text-blue-400 font-medium">Price Calculator</a>
+      <a href="/#newsletter" class="bg-brand text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition font-medium">Get Updates</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== HEADER ===== -->
+<div class="max-w-6xl mx-auto px-6 pt-10 pb-4">
+  <div class="flex items-center gap-2 text-sm text-slate-500 mb-4">
+    <a href="/" class="hover:text-slate-300 transition">Home</a> <span>›</span>
+    <a href="/#tools" class="hover:text-slate-300 transition">Tools</a> <span>›</span>
+    <span class="text-slate-400">Price Calculator</span>
+  </div>
+  <div class="inline-flex items-center gap-2 bg-blue-950 text-blue-400 text-sm px-4 py-2 rounded-full mb-5 border border-blue-800">
+    <span class="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></span> Pricing updated March 2026
+  </div>
+  <h1 class="text-4xl md:text-5xl font-bold text-white mb-3 leading-tight">
+    Virtualization <span class="gradient-text">Price Calculator</span>
+  </h1>
+  <p class="text-lg text-slate-400 max-w-3xl mb-8">
+    Enter your environment specs and see an honest side-by-side cost comparison across five platforms — including the 72-core minimum trap, 3-year TCO, and every hidden gotcha Broadcom doesn't advertise.
+  </p>
+</div>
+
+<!-- ===== MAIN LAYOUT ===== -->
+<div class="max-w-6xl mx-auto px-6 pb-20">
+  <div class="grid lg:grid-cols-[350px_1fr] gap-8 items-start">
+
+    <!-- ===== LEFT: INPUTS ===== -->
+    <div class="sticky-panel space-y-5">
+
+      <!-- Infrastructure -->
+      <div class="bg-card border border-slate-700 rounded-2xl p-6">
+        <h2 class="font-bold text-white text-base mb-5 flex items-center gap-2"><span class="text-xl">🖥️</span> Your Environment</h2>
+
+        <!-- Hosts slider -->
+        <div class="mb-6">
+          <div class="flex items-center justify-between mb-2.5">
+            <label class="text-sm font-medium text-slate-300 flex items-center">
+              Number of Hosts
+              <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Physical servers. VMware requires ≥3 hosts for vSAN and HA. Pricing is per physical core across all hosts. Home labs and edge sites can run 1-2 hosts but lose HA.</span></span>
+            </label>
+            <span class="text-blue-400 font-bold" id="hostsVal">4</span>
+          </div>
+          <input type="range" id="hostCount" min="1" max="20" value="4" oninput="document.getElementById('hostsVal').textContent=this.value;calculate()">
+          <div class="flex justify-between text-xs text-slate-600 mt-1"><span>1</span><span>20</span></div>
+        </div>
+
+        <!-- CPUs per host -->
+        <div class="mb-6">
+          <label class="text-sm font-medium text-slate-300 mb-2.5 flex items-center">
+            CPUs per Host (Sockets)
+            <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Physical CPU sockets. Most NUC/mini PCs are 1-socket. Rack servers are commonly 2-socket. Proxmox Standard subscription is per socket — 1P vs 2P makes a meaningful difference.</span></span>
+          </label>
+          <div class="flex gap-3">
+            <button id="cpu1btn" onclick="setCPU(1)" class="flex-1 py-3 rounded-xl font-semibold text-sm border transition btn-active">1 CPU</button>
+            <button id="cpu2btn" onclick="setCPU(2)" class="flex-1 py-3 rounded-xl font-semibold text-sm border transition btn-idle">2 CPUs</button>
+          </div>
+        </div>
+
+        <!-- Cores per CPU -->
+        <div class="mb-6">
+          <div class="flex items-center justify-between mb-2.5">
+            <label class="text-sm font-medium text-slate-300 flex items-center">
+              Cores per CPU
+              <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Physical cores per socket — NOT logical cores (hyperthreads). VMware licenses every physical core. An Intel Xeon Gold 6342 has 24 physical cores regardless of hyperthreading.</span></span>
+            </label>
+            <span class="text-blue-400 font-bold" id="coresVal">16</span>
+          </div>
+          <div class="grid grid-cols-3 gap-2" id="coreBtns"></div>
+        </div>
+
+        <!-- Storage slider -->
+        <div>
+          <div class="flex items-center justify-between mb-2.5">
+            <label class="text-sm font-medium text-slate-300 flex items-center">
+              Storage Needed (TB)
+              <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Total usable storage capacity. vSAN OSA entitlement is 0.25 TiB usable per licensed core (before FTT overhead). For FTT=1 (RAID-5 or mirroring), divide raw by ~1.33–2x to get usable.</span></span>
+            </label>
+            <span class="text-blue-400 font-bold" id="storageVal">10</span><span class="text-slate-500 text-sm ml-1">TB</span>
+          </div>
+          <input type="range" id="storageTB" min="1" max="300" value="10" oninput="document.getElementById('storageVal').textContent=this.value;calculate()">
+          <div class="flex justify-between text-xs text-slate-600 mt-1"><span>1 TB</span><span>300 TB</span></div>
+        </div>
+      </div>
+
+      <!-- Features -->
+      <div class="bg-card border border-slate-700 rounded-2xl p-6">
+        <h2 class="font-bold text-white text-base mb-5 flex items-center gap-2"><span class="text-xl">⚙️</span> Features Needed</h2>
+        <div class="space-y-4">
+
+          <label class="flex items-start gap-3 cursor-pointer">
+            <input type="checkbox" id="f_vsan" class="mt-0.5 w-4 h-4 cursor-pointer accent-blue-500" checked onchange="calculate()">
+            <div>
+              <div class="text-sm font-medium text-slate-200 flex items-center">
+                Shared / HCI Storage
+                <span class="tip"><span class="tip-icon">?</span><span class="tip-box">vSAN (VMware), Ceph (Proxmox), Nutanix DSF, Storage Spaces Direct (Hyper-V Datacenter only). All use local NVMe/SSDs on hosts to form a shared pool. If you have a SAN/NAS already, uncheck this.</span></span>
+              </div>
+              <div class="text-xs text-slate-500">vSAN, Ceph, S2D, Nutanix DSF</div>
+            </div>
+          </label>
+
+          <label class="flex items-start gap-3 cursor-pointer">
+            <input type="checkbox" id="f_drs" class="mt-0.5 w-4 h-4 cursor-pointer accent-blue-500" checked onchange="calculate()">
+            <div>
+              <div class="text-sm font-medium text-slate-200 flex items-center">
+                HA / DRS (Automatic Failover)
+                <span class="tip"><span class="tip-icon">?</span><span class="tip-box">VMware HA restarts VMs after host failure. DRS auto-balances load. Both require vCenter and 3+ hosts. Proxmox has basic HA. Nutanix has built-in HA. Hyper-V Failover Cluster is comparable.</span></span>
+              </div>
+              <div class="text-xs text-slate-500">Automatic VM restart, live migration on overload</div>
+            </div>
+          </label>
+
+          <label class="flex items-start gap-3 cursor-pointer">
+            <input type="checkbox" id="f_vcenter" class="mt-0.5 w-4 h-4 cursor-pointer accent-blue-500" checked onchange="calculate()">
+            <div>
+              <div class="text-sm font-medium text-slate-200 flex items-center">
+                Central Management UI
+                <span class="tip"><span class="tip-icon">?</span><span class="tip-box">VMware vCenter (1 included with VVF/VCF). Proxmox has built-in Datacenter web UI (free). Nutanix Prism Element is free; Prism Central/Pro is paid. Hyper-V uses WAC (free) or SCVMM ($1,323/OSE, optional).</span></span>
+              </div>
+              <div class="text-xs text-slate-500">Multi-host management console</div>
+            </div>
+          </label>
+
+          <label class="flex items-start gap-3 cursor-pointer">
+            <input type="checkbox" id="f_gpu" class="mt-0.5 w-4 h-4 cursor-pointer accent-blue-500" onchange="calculate()">
+            <div>
+              <div class="text-sm font-medium text-slate-200 flex items-center">
+                GPU Passthrough / vGPU
+                <span class="tip"><span class="tip-icon">?</span><span class="tip-box">⚠️ NVIDIA vGPU on VMware requires a separate NVIDIA AI Enterprise license (~$3,500/GPU/yr) ON TOP of vSphere costs. PCIe passthrough is free on all hypervisors but prevents live migration of that VM. Proxmox and Hyper-V support passthrough natively at no extra cost.</span></span>
+              </div>
+              <div class="text-xs text-slate-500">NVIDIA vGPU, AMD MxGPU, or PCIe passthrough</div>
+            </div>
+          </label>
+
+          <label class="flex items-start gap-3 cursor-pointer">
+            <input type="checkbox" id="f_k8s" class="mt-0.5 w-4 h-4 cursor-pointer accent-blue-500" onchange="calculate()">
+            <div>
+              <div class="text-sm font-medium text-slate-200 flex items-center">
+                Kubernetes / Containers
+                <span class="tip"><span class="tip-icon">?</span><span class="tip-box">VMware Tanzu is included in VCF only — it's a primary VCF differentiator. VVF doesn't include it. Nutanix has NKE (add-on). Proxmox and Hyper-V run any K8s on VMs. "Native" integrated K8s lifecycle management is a VCF-exclusive feature.</span></span>
+              </div>
+              <div class="text-xs text-slate-500">Tanzu, NKE, Rancher, vanilla K8s</div>
+            </div>
+          </label>
+
+        </div>
+      </div>
+
+      <!-- Summary box -->
+      <div class="bg-slate-900 border border-slate-700 rounded-2xl p-5">
+        <div class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Environment Summary</div>
+        <div id="summaryBox" class="space-y-1.5 text-sm text-slate-400"></div>
+      </div>
+    </div>
+
+    <!-- ===== RIGHT: RESULTS ===== -->
+    <div>
+
+      <!-- Disclaimer -->
+      <div class="warn-strip rounded-xl px-5 py-3 mb-5 text-sm text-amber-300 flex items-start gap-3">
+        <span class="flex-shrink-0 text-lg">⚠️</span>
+        <span><strong>Estimates only.</strong> Actual pricing varies by region, deal size, and reseller. Proxmox EUR prices converted at 1.08 USD/EUR. Always get a formal quote before budgeting.</span>
+      </div>
+
+      <!-- Cards grid -->
+      <div id="resultsGrid" class="grid md:grid-cols-2 xl:grid-cols-3 gap-5"></div>
+
+      <!-- Bar chart -->
+      <div id="chartSection" class="hidden mt-8 bg-card border border-slate-700 rounded-2xl p-6">
+        <h3 class="font-bold text-white mb-1">Annual Cost Comparison</h3>
+        <p class="text-xs text-slate-500 mb-5">Proxmox community = $0 (free). Hyper-V = Standard amortized cost. Nutanix = low-end estimate.</p>
+        <div id="chartBars" class="space-y-3"></div>
+      </div>
+
+      <!-- Recommendation -->
+      <div id="recSection" class="hidden mt-5 bg-gradient-to-br from-blue-950 to-slate-900 border border-blue-800 rounded-2xl p-6">
+        <h3 class="text-lg font-bold text-white mb-2">💡 Our Take</h3>
+        <div id="recText" class="text-slate-300 text-sm leading-relaxed"></div>
+      </div>
+
+      <!-- Pricing methodology -->
+      <div class="mt-5 bg-card border border-slate-700 rounded-2xl p-6">
+        <h3 class="font-bold text-white mb-3 text-sm uppercase tracking-wide">📌 Pricing Sources & Methodology</h3>
+        <div class="grid md:grid-cols-2 gap-4 text-xs text-slate-400 leading-relaxed">
+          <div><div class="text-slate-300 font-medium mb-1">VMware VVF / VCF</div>Broadcom list pricing via partner channel. VVF: $150–190/core/yr (shown at $170 mid-range). VCF: $350/core/yr. 72-core minimum enforced per Broadcom's Jan 2024 SKU restructuring. Annual subscription only — perpetual licensing is dead.</div>
+          <div><div class="text-slate-300 font-medium mb-1">Proxmox VE</div>Community edition: free (AGPL open source). Standard sub: €110/socket/yr (~$119 USD). Enterprise sub: €440/socket/yr (~$475 USD). No per-core or per-VM licensing. Ceph storage software is free; only hardware costs apply.</div>
+          <div><div class="text-slate-300 font-medium mb-1">Nutanix AHV</div>AHV hypervisor: free with any Nutanix license. NCI/NUS (enterprise features): ~$100–200/node/yr for small environments. Prism Pro: ~$100/node/yr add-on. Pricing is per-node, not per-core.</div>
+          <div><div class="text-slate-300 font-medium mb-1">Microsoft Hyper-V</div>WS2025 Standard: $1,069/2-core pack, min 16 cores/server. Datacenter: $7,407/16-core + $463/additional 2-core pack. Shown as 3-yr amortized. CALs ($38/user or $19/device) are NOT included but are required.</div>
+        </div>
+        <div class="mt-4 pt-4 border-t border-slate-700 text-xs text-slate-500">Last updated: March 2026. To update pricing, edit the <code class="bg-slate-900 px-1 py-0.5 rounded">PRICING</code> config object in the page source (top of the &lt;script&gt; block).</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer class="border-t border-slate-800 mt-10">
+  <div class="max-w-6xl mx-auto px-6 py-10 flex flex-col md:flex-row items-center justify-between gap-4">
+    <div class="text-slate-400 text-sm">© 2026 VMwareMadeSimple.com — Independent. Not affiliated with VMware or Broadcom.</div>
+    <div class="flex gap-6 text-slate-400 text-sm">
+      <a href="/#articles" class="hover:text-white transition">Articles</a>
+      <a href="/#tools" class="hover:text-white transition">Tools</a>
+      <a href="/#newsletter" class="hover:text-white transition">Newsletter</a>
+    </div>
+  </div>
+  <div class="max-w-6xl mx-auto px-6 pb-8 text-slate-600 text-xs">
+    Some links on this site are affiliate links. If you purchase through them, we may earn a small commission at no extra cost to you.
+  </div>
+</footer>
+
+<!-- ===== SCRIPT ===== -->
+<script>
+// ─────────────────────────────────────────────────────────────────
+// PRICING CONFIG — edit these when prices change (last: Mar 2026)
+// ─────────────────────────────────────────────────────────────────
+const PRICING = {
+  vvf: {
+    perCorePerYear:     170,   // list price mid-range ($150 volume / $190 small)
+    perCorePerYearLow:  150,
+    perCorePerYearHigh: 190,
+    coreMin:            72,    // Broadcom 72-core minimum (Jan 2024 SKU change)
+    vsanTiBPerCore:     0.25,  // vSAN OSA usable entitlement per licensed core
+  },
+  vcf: {
+    perCorePerYear:     350,   // full stack: vSphere + vSAN + NSX + Aria + Tanzu
+    coreMin:            72,
+    vsanTiBPerCore:     0.25,  // same entitlement as VVF
+  },
+  proxmox: {
+    communityPerYear:     0,
+    standardPerSocketPerYear:   119,  // €110 × 1.08 USD/EUR
+    enterprisePerSocketPerYear: 475,  // €440 × 1.08 USD/EUR
+  },
+  nutanix: {
+    ahvCost:                0,    // hypervisor is free
+    nciLowPerNodePerYear:   100,  // NCI Starter
+    nciHighPerNodePerYear:  200,  // NCI Pro / NUS
+    prismProPerNodePerYear: 100,  // Prism Pro (multi-host mgmt)
+  },
+  hyperv: {
+    std2CorePackPrice:      1069,  // WS2025 Standard, per 2-core pack
+    stdCoreMin:             16,    // must license min 16 cores/server
+    dc16CorePrice:          7407,  // WS2025 Datacenter base (16 cores)
+    dcAdd2CorePrice:        463,   // each additional 2-core pack above 16
+    calPerUser:             38,
+    calPerDevice:           19,
+    scvmmPerOSE:            1323,  // SCVMM (optional, not in calc)
+  },
+  nvidia: {
+    aiEnterprisePerGPUPerYear: 3500, // required for vGPU on VMware
+  },
+};
+
+// ─────────────────────────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────────────────────────
+let S = { hosts: 4, cpus: 1, cores: 16, storageTB: 10 };
+const CORE_OPTS = [8, 16, 24, 32, 48, 64];
+
+// ─────────────────────────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────────────────────────
+(function init() {
+  const c = document.getElementById('coreBtns');
+  CORE_OPTS.forEach(n => {
+    const b = document.createElement('button');
+    b.id = 'cb' + n;
+    b.textContent = n;
+    b.className = 'py-2.5 rounded-lg font-semibold text-sm border transition ' + (n === S.cores ? 'btn-active' : 'btn-idle');
+    b.onclick = () => { S.cores = n; refreshCoreBtns(n); calculate(); };
+    c.appendChild(b);
+  });
+  calculate();
+})();
+
+function refreshCoreBtns(sel) {
+  CORE_OPTS.forEach(n => {
+    const b = document.getElementById('cb'+n);
+    b.className = 'py-2.5 rounded-lg font-semibold text-sm border transition ' + (n === sel ? 'btn-active' : 'btn-idle');
+  });
+  document.getElementById('coresVal').textContent = sel;
+}
+
+function setCPU(n) {
+  S.cpus = n;
+  document.getElementById('cpu1btn').className = 'flex-1 py-3 rounded-xl font-semibold text-sm border transition ' + (n===1?'btn-active':'btn-idle');
+  document.getElementById('cpu2btn').className = 'flex-1 py-3 rounded-xl font-semibold text-sm border transition ' + (n===2?'btn-active':'btn-idle');
+  calculate();
+}
+
+// ─────────────────────────────────────────────────────────────────
+// CALCULATE
+// ─────────────────────────────────────────────────────────────────
+function calculate() {
+  S.hosts      = +document.getElementById('hostCount').value;
+  S.storageTB  = +document.getElementById('storageTB').value;
+  const feat = {
+    vsan:    document.getElementById('f_vsan').checked,
+    drs:     document.getElementById('f_drs').checked,
+    vcenter: document.getElementById('f_vcenter').checked,
+    gpu:     document.getElementById('f_gpu').checked,
+    k8s:     document.getElementById('f_k8s').checked,
+  };
+
+  const totalCores   = S.hosts * S.cpus * S.cores;
+  const totalSockets = S.hosts * S.cpus;
+
+  // ── VVF ──
+  const vvfBilled = Math.max(totalCores, PRICING.vvf.coreMin);
+  const vvfWasted = vvfBilled - totalCores;
+  const vvfAnnual = vvfBilled * PRICING.vvf.perCorePerYear;
+  const vvfVsanTiB = vvfBilled * PRICING.vvf.vsanTiBPerCore;
+  const vvfVsanOk  = vvfVsanTiB >= S.storageTB;
+
+  // ── VCF ──
+  const vcfBilled = Math.max(totalCores, PRICING.vcf.coreMin);
+  const vcfWasted = vcfBilled - totalCores;
+  const vcfAnnual = vcfBilled * PRICING.vcf.perCorePerYear;
+  const vcfVsanTiB = vcfBilled * PRICING.vcf.vsanTiBPerCore;
+  const vcfVsanOk  = vcfVsanTiB >= S.storageTB;
+
+  // ── Proxmox ──
+  const pxComm  = 0;
+  const pxStd   = totalSockets * PRICING.proxmox.standardPerSocketPerYear;
+  const pxEnt   = totalSockets * PRICING.proxmox.enterprisePerSocketPerYear;
+
+  // ── Nutanix ──
+  const needNCI  = feat.vsan || feat.drs || feat.vcenter;
+  const ntxLow   = S.hosts * (needNCI ? PRICING.nutanix.nciLowPerNodePerYear  : 0)
+                 + S.hosts * (feat.vcenter ? PRICING.nutanix.prismProPerNodePerYear : 0);
+  const ntxHigh  = S.hosts * (needNCI ? PRICING.nutanix.nciHighPerNodePerYear : 0)
+                 + S.hosts * (feat.vcenter ? PRICING.nutanix.prismProPerNodePerYear : 0);
+
+  // ── Hyper-V ──
+  const coresPerSrv     = S.cpus * S.cores;
+  const billedPerSrv    = Math.max(coresPerSrv, PRICING.hyperv.stdCoreMin);
+  const std2packs       = Math.ceil(billedPerSrv / 2);
+  const stdOneTimeSrv   = std2packs * PRICING.hyperv.std2CorePackPrice;
+  const stdTotal        = stdOneTimeSrv * S.hosts;
+
+  const dcExtraPacks    = Math.max(0, Math.ceil((billedPerSrv - 16) / 2));
+  const dcOneTimeSrv    = PRICING.hyperv.dc16CorePrice + dcExtraPacks * PRICING.hyperv.dcAdd2CorePrice;
+  const dcTotal         = dcOneTimeSrv * S.hosts;
+
+  const stdAnnual = stdTotal / 3;
+  const dcAnnual  = dcTotal  / 3;
+
+  // ─────────────────────────────────────────────────────────────
+  // BUILD CARD DATA
+  // ─────────────────────────────────────────────────────────────
+  const cards = [
+    {
+      id: 'vvf', name: 'VMware vSphere Foundation', abbr: 'VVF', icon: '🔵',
+      accent: '#3b82f6',
+      annualPrimary: vvfAnnual,
+      tco3yr: vvfAnnual * 3,
+      tcoLabel: '3-yr subscription',
+      sublines: [
+        { k:'Billed Cores', v:`${vvfBilled.toLocaleString()} (min 72)` },
+        vvfWasted > 0 ? { k:'⚠ Wasted Cores', v:`${vvfWasted} paid but unused`, warn:true } : null,
+        { k:'$/core/yr',    v:`$${PRICING.vvf.perCorePerYear}` },
+        feat.vsan ? {
+          k: 'vSAN Entitlement',
+          v: `${vvfVsanTiB.toFixed(1)} TiB included` + (vvfVsanOk ? ' ✓' : ` — ⚠ need ${S.storageTB} TB (shortfall)`),
+          warn: !vvfVsanOk
+        } : { k:'Storage', v:'External SAN/NAS (not included)' },
+        { k:'Includes', v:'vCenter, HA, DRS, vSAN' },
+        { k:'Not included', v:'NSX, Tanzu/K8s, Aria' },
+        feat.gpu ? { k:'⚠ GPU vGPU', v:'Requires NVIDIA AI Enterprise (~$3,500/GPU/yr extra)', warn:true } : null,
+      ].filter(Boolean),
+      features: {
+        'vSAN Storage':     feat.vsan ? (vvfVsanOk?'yes':'partial') : 'na',
+        'HA / DRS':         'yes',
+        'vCenter':          'yes',
+        'GPU (passthru)':   feat.gpu  ? 'partial' : 'na',
+        'Kubernetes':       feat.k8s  ? 'no'      : 'na',
+        'NSX Networking':   'no',
+      },
+      verdict: 'Best for organizations already on VMware that need vSAN but can\'t justify VCF pricing. The minimum viable Broadcom option.',
+      gotchas: [
+        '72-core minimum — if you have fewer cores, you pay for 72 anyway',
+        feat.vsan && !vvfVsanOk ? `⚠ vSAN entitlement only covers ${vvfVsanTiB.toFixed(1)} TiB of your ${S.storageTB} TB need — add-on costs extra` : null,
+        'No Tanzu/K8s — that\'s a VCF exclusive',
+        'No NSX (network virtualization) — separate purchase',
+        'Annual subscription only — perpetual licensing gone',
+        feat.gpu ? '⚠ NVIDIA AI Enterprise required for vGPU: ~$3,500/GPU/yr on top' : null,
+      ].filter(Boolean),
+    },
+    {
+      id: 'vcf', name: 'VMware Cloud Foundation', abbr: 'VCF', icon: '☁️',
+      accent: '#8b5cf6',
+      badge: '🌐 Full Stack',
+      annualPrimary: vcfAnnual,
+      tco3yr: vcfAnnual * 3,
+      tcoLabel: '3-yr subscription',
+      sublines: [
+        { k:'Billed Cores', v:`${vcfBilled.toLocaleString()} (min 72)` },
+        vcfWasted > 0 ? { k:'⚠ Wasted Cores', v:`${vcfWasted} paid but unused`, warn:true } : null,
+        { k:'$/core/yr',    v:`$${PRICING.vcf.perCorePerYear}` },
+        feat.vsan ? {
+          k: 'vSAN Entitlement',
+          v: `${vcfVsanTiB.toFixed(1)} TiB included` + (vcfVsanOk ? ' ✓' : ` — ⚠ need ${S.storageTB} TB (shortfall)`),
+          warn: !vcfVsanOk
+        } : { k:'Storage', v:'External SAN/NAS (not included)' },
+        { k:'Includes', v:'vCenter, vSAN, NSX, Aria, Tanzu' },
+        feat.gpu ? { k:'⚠ GPU vGPU', v:'Requires NVIDIA AI Enterprise (~$3,500/GPU/yr extra)', warn:true } : null,
+      ].filter(Boolean),
+      features: {
+        'vSAN Storage':     feat.vsan ? (vcfVsanOk?'yes':'partial') : 'na',
+        'HA / DRS':         'yes',
+        'vCenter':          'yes',
+        'GPU (passthru)':   feat.gpu  ? 'partial' : 'na',
+        'Kubernetes':       feat.k8s  ? 'yes'     : 'na',
+        'NSX Networking':   'yes',
+      },
+      verdict: 'Best for large enterprises that need the full VMware stack — vSphere + vSAN + NSX + Tanzu — and have budget to match. Overkill for most.',
+      gotchas: [
+        '72-core minimum at $350/core — small clusters get crushed by this',
+        `${S.hosts} hosts × ${vvfBilled} cores = $${vcfAnnual.toLocaleString()}/yr — that\'s real money`,
+        feat.vsan && !vcfVsanOk ? `⚠ vSAN storage entitlement still short: ${vcfVsanTiB.toFixed(1)} TiB vs ${S.storageTB} TB needed` : null,
+        'NSX adds significant complexity — team training required',
+        'Annual subscription only — no perpetual option',
+        feat.gpu ? '⚠ vGPU still needs NVIDIA AI Enterprise on top of VCF pricing' : null,
+      ].filter(Boolean),
+    },
+    {
+      id: 'proxmox', name: 'Proxmox VE', abbr: 'Proxmox', icon: '🟠',
+      accent: '#f97316',
+      badge: '🆓 Free Tier',
+      annualPrimary: pxComm,
+      annualAlt: pxStd,
+      annualAltLabel: 'w/ Standard subscription',
+      tco3yr: pxComm * 3,
+      tco3yrAlt: pxStd * 3,
+      tcoLabel: '3-yr community',
+      tcoAltLabel: '3-yr standard sub',
+      sublines: [
+        { k:'Community', v:'FREE — open source (AGPL)', highlight:true },
+        { k:'Standard Sub', v:`$${pxStd.toLocaleString()}/yr (€110/socket — ${totalSockets} sockets)` },
+        { k:'Enterprise Sub', v:`$${pxEnt.toLocaleString()}/yr (€440/socket)` },
+        { k:'Ceph Storage', v:'Included — software free, hardware cost only' },
+        { k:'No Core Min', v:'Pay for what you have — zero minimums' },
+        { k:'GPU Passthru', v: feat.gpu ? 'Native, no extra license' : 'Supported natively' },
+      ],
+      features: {
+        'Ceph Storage':   feat.vsan   ? 'yes'     : 'na',
+        'Basic HA':       'partial',
+        'Web UI':         'yes',
+        'GPU Passthru':   feat.gpu    ? 'yes'     : 'na',
+        'K8s (on VMs)':   feat.k8s   ? 'partial' : 'na',
+        'SDN':            'partial',
+      },
+      verdict: 'Best for cost-conscious orgs, MSPs, and VMware escapees. Massive savings, but factor in migration effort, training, and reduced enterprise support coverage.',
+      gotchas: [
+        'Community edition = community forums only, no SLA-backed support',
+        'Ceph requires ≥3 nodes, dedicated NICs, and careful tuning',
+        'No predictive DRS equivalent — manual or scripted balancing',
+        'Migration from VMware requires effort (Import Wizard helps, but not all VMs convert cleanly)',
+        'Smaller ecosystem: fewer backup vendor integrations vs VMware',
+        'Subscription per socket — 2P servers cost 2× — but still far cheaper than VMware',
+      ],
+    },
+    {
+      id: 'nutanix', name: 'Nutanix AHV', abbr: 'Nutanix', icon: '🟢',
+      accent: '#22c55e',
+      annualPrimary: ntxLow,
+      annualAlt: ntxHigh,
+      annualAltLabel: 'NCI Pro estimate',
+      tco3yr: ntxLow * 3,
+      tco3yrAlt: ntxHigh * 3,
+      tcoLabel: `3-yr NCI Starter (${S.hosts} nodes)`,
+      tcoAltLabel: '3-yr NCI Pro',
+      sublines: [
+        { k:'AHV Hypervisor', v:'Free with any Nutanix license', highlight:true },
+        { k:'NCI License',    v:`$${ntxLow.toLocaleString()}–$${ntxHigh.toLocaleString()}/yr (${S.hosts} nodes × $100–200)` },
+        { k:'Prism Pro',      v: feat.vcenter ? `$${PRICING.nutanix.prismProPerNodePerYear * S.hosts}/yr add-on (${S.hosts} nodes)` : 'Prism Element free' },
+        { k:'Storage',        v:'Nutanix DSF — HCI built-in, highly optimized' },
+        { k:'Pricing Model',  v:'Per node, NOT per core — predictable scaling' },
+      ],
+      features: {
+        'Nutanix DSF':    feat.vsan  ? 'yes'     : 'na',
+        'Built-in HA':    'yes',
+        'Prism Mgmt':     'yes',
+        'GPU Passthru':   feat.gpu   ? 'yes'     : 'na',
+        'NKE (K8s)':      feat.k8s   ? 'partial' : 'na',
+        'Flow SDN':       'partial',
+      },
+      verdict: 'Best for orgs buying new HCI hardware or those wanting a VMware-like experience with simpler, node-based pricing. Strongest enterprise support story after VMware.',
+      gotchas: [
+        'AHV is free but NCI is required for HA, snapshots, and enterprise features',
+        'Typically sold as validated hardware appliance — harder on commodity gear',
+        'Nutanix Kubernetes Engine (NKE) is an extra cost add-on',
+        'Flow networking (NSX equivalent) is also add-on',
+        'Fewer backup vendor integrations vs VMware vSphere',
+        'Scale-out pricing: more hosts = more NCI licenses at per-node rate',
+      ],
+    },
+    {
+      id: 'hyperv', name: 'Microsoft Hyper-V', abbr: 'Hyper-V', icon: '🪟',
+      accent: '#06b6d4',
+      annualPrimary: stdAnnual,
+      annualAlt: dcAnnual,
+      annualAltLabel: 'Datacenter edition',
+      tco3yr: stdTotal,
+      tco3yrAlt: dcTotal,
+      tcoLabel: `3-yr Standard perpetual (${S.hosts} hosts)`,
+      tcoAltLabel: '3-yr Datacenter perpetual',
+      sublines: [
+        { k:'Standard/yr',   v:`$${Math.round(stdAnnual).toLocaleString()} amortized ($${stdTotal.toLocaleString()} perpetual)` },
+        { k:'Datacenter/yr', v:`$${Math.round(dcAnnual).toLocaleString()} amortized ($${dcTotal.toLocaleString()} perpetual)` },
+        { k:'⚠ CALs EXTRA', v:`$38/user or $19/device — required, not included`, warn:true },
+        { k:'Storage (S2D)',  v: feat.vsan ? 'Datacenter only (Standard = external storage)' : 'External SAN/NAS' },
+        { k:'Management',    v:'Windows Admin Center (free) or SCVMM ($1,323/OSE)' },
+      ],
+      features: {
+        'S2D Storage':    feat.vsan ? 'partial' : 'na',
+        'Failover Cluster':'yes',
+        'WAC / SCVMM':    'yes',
+        'GPU Passthru':   feat.gpu  ? 'yes'     : 'na',
+        'K8s (on VMs)':   feat.k8s  ? 'partial' : 'na',
+        'SDN':            'partial',
+      },
+      verdict: 'Best for Microsoft shops with existing Windows EA agreements and Windows-fluent admins. Lowest learning curve if your team already knows Windows Server.',
+      gotchas: [
+        '⚠ CALs required for every user/device accessing VMs — easily doubles real cost for large user counts',
+        'Standard: only covers 2 Hyper-V VMs per license — need multiple licenses for dense VM environments',
+        'S2D (Storage Spaces Direct) requires Datacenter edition — not Standard',
+        'SCVMM needed for vCenter-like cross-host management ($1,323/OSE) — WAC is simpler',
+        'Hyper-V lacks predictive DRS, advanced storage policies, and NSX-T equivalent',
+        `Min 16 cores/server for licensing — ${billedPerSrv > coresPerSrv ? `your ${coresPerSrv}-core server still billed at 16` : 'your server meets the minimum'}`,
+      ],
+    },
+  ];
+
+  renderCards(cards, totalCores);
+  renderChart(cards);
+  renderSummary(totalCores, totalSockets);
+  renderRec(cards);
+}
+
+// ─────────────────────────────────────────────────────────────────
+// RENDER CARDS
+// ─────────────────────────────────────────────────────────────────
+function $m(n) {
+  if (n === null || n === undefined || isNaN(n)) return '—';
+  if (n === 0) return '<span class="text-green-400 font-bold text-3xl">FREE</span>';
+  return '$' + Math.round(n).toLocaleString();
+}
+function $ms(n) { // small money
+  if (!n || isNaN(n) || n === 0) return n === 0 ? '<span class="text-green-400 font-bold">FREE</span>' : '—';
+  return '$' + Math.round(n).toLocaleString();
+}
+
+function fpill(status) {
+  if (status === 'na') return '<span class="text-slate-700 text-xs">—</span>';
+  const map = {
+    yes:     ['f-yes', '✓ Included'],
+    no:      ['f-no',  '✗ Not incl.'],
+    partial: ['f-par', '~ Partial'],
+  };
+  const [cls, lbl] = map[status] || ['f-par', status];
+  return `<span class="feat-pill ${cls}">${lbl}</span>`;
+}
+
+function renderCards(cards, totalCores) {
+  const grid = document.getElementById('resultsGrid');
+  grid.innerHTML = '';
+
+  // Find cheapest non-zero
+  const nonZero = cards.map(c => c.annualPrimary).filter(v => v > 0);
+  const minCost = Math.min(...nonZero);
+
+  cards.forEach((c, i) => {
+    const isCheapest = c.annualPrimary > 0 && c.annualPrimary === minCost;
+    const isFree     = c.annualPrimary === 0;
+    const hasWasted  = c.sublines.some(s => s.warn && s.k.includes('Wasted'));
+    const hasVsanWarn = c.sublines.some(s => s.warn && s.k.includes('vSAN'));
+
+    const wastedBanner = hasWasted
+      ? `<div class="bg-amber-950 border border-amber-800 rounded-lg px-3 py-2 mb-3 text-xs text-amber-300 flex items-start gap-1.5"><span class="flex-shrink-0">⚠️</span><span>72-core minimum — paying for ${c.id==='vvf'?Math.max(totalCores,PRICING.vvf.coreMin)-totalCores:Math.max(totalCores,PRICING.vcf.coreMin)-totalCores} unused cores</span></div>`
+      : '';
+
+    const vsanWarnBanner = hasVsanWarn && !hasWasted
+      ? `<div class="bg-amber-950 border border-amber-800 rounded-lg px-3 py-2 mb-3 text-xs text-amber-300 flex items-start gap-1.5"><span>⚠️</span><span>vSAN entitlement insufficient — extra storage add-on costs apply</span></div>`
+      : '';
+
+    const altLine = c.annualAlt != null
+      ? `<div class="text-xs text-slate-400 mt-1">${c.annualAltLabel}: <span class="text-slate-200 font-semibold">${$ms(c.annualAlt)}/yr</span></div>`
+      : '';
+
+    const tcoAltLine = c.tco3yrAlt != null
+      ? `<div class="text-xs text-slate-500">${c.tcoAltLabel}: <span class="text-slate-300 font-medium">${$ms(c.tco3yrAlt)}</span></div>`
+      : '';
+
+    const sublineHTML = c.sublines.map(s =>
+      `<div class="flex gap-2 text-xs ${s.warn?'text-amber-400':s.highlight?'text-green-400':'text-slate-400'}">
+        <span class="font-medium flex-shrink-0 w-28">${s.k}:</span>
+        <span class="leading-relaxed">${s.v}</span>
+      </div>`
+    ).join('');
+
+    const featHTML = Object.entries(c.features)
+      .filter(([,v]) => v !== 'na')
+      .map(([k,v]) => `<div class="flex items-center justify-between py-1.5 border-b border-slate-800 last:border-0">
+        <span class="text-xs text-slate-400">${k}</span>${fpill(v)}</div>`)
+      .join('');
+
+    const gotchaHTML = c.gotchas.filter(Boolean).map(g =>
+      `<li class="flex items-start gap-1.5 text-xs text-slate-400"><span class="flex-shrink-0 text-slate-600 mt-0.5">•</span><span>${g}</span></li>`
+    ).join('');
+
+    const badgeHTML = [
+      isFree     ? `<span class="badge" style="background:rgba(34,197,94,.13);color:#4ade80;border:1px solid rgba(34,197,94,.28)">FREE</span>` : '',
+      isCheapest ? `<span class="badge" style="background:rgba(34,197,94,.13);color:#4ade80;border:1px solid rgba(34,197,94,.28)">💰 Best Price</span>` : '',
+      c.badge    ? `<span class="badge" style="background:rgba(139,92,246,.13);color:#a78bfa;border:1px solid rgba(139,92,246,.28)">${c.badge}</span>` : '',
+    ].filter(Boolean).join(' ');
+
+    const div = document.createElement('div');
+    div.className = `cost-card bg-card border border-slate-700 rounded-2xl p-5 flex flex-col gap-3 fade-up${isCheapest?' best-value':''}`;
+    div.style.animationDelay = `${i*55}ms`;
+
+    div.innerHTML = `
+      <div class="flex items-start justify-between">
+        <div class="flex items-center gap-2">
+          <span class="text-2xl">${c.icon}</span>
+          <div>
+            <div class="font-bold text-white text-sm leading-tight">${c.name}</div>
+            <div class="text-xs text-slate-500">${c.abbr}</div>
+          </div>
+        </div>
+        <div class="flex flex-col items-end gap-1">${badgeHTML}</div>
+      </div>
+
+      ${wastedBanner}${vsanWarnBanner}
+
+      <div class="bg-slate-900 rounded-xl p-4">
+        <div class="text-xs text-slate-500 uppercase tracking-wide mb-1">Annual Cost</div>
+        <div class="big-number leading-none" style="color:${c.accent}">${$m(c.annualPrimary)}</div>
+        ${altLine}
+        <div class="mt-3 pt-3 border-t border-slate-800">
+          <div class="text-xs text-slate-500 uppercase tracking-wide mb-1">3-Year TCO</div>
+          <div class="text-lg font-semibold text-slate-200">${$ms(c.tco3yr)}</div>
+          <div class="text-xs text-slate-500">${c.tcoLabel}</div>
+          ${tcoAltLine}
+        </div>
+      </div>
+
+      <div class="space-y-1.5">${sublineHTML}</div>
+
+      ${featHTML ? `<div class="border-t border-slate-800 pt-2">${featHTML}</div>` : ''}
+
+      <details class="group">
+        <summary class="text-xs text-slate-500 cursor-pointer hover:text-slate-300 transition select-none flex items-center gap-1.5">
+          <span class="inline-block transition-transform group-open:rotate-90">▶</span> Gotchas & fine print
+        </summary>
+        <ul class="mt-2 space-y-1.5 pl-1">${gotchaHTML}</ul>
+      </details>
+
+      <div class="bg-slate-900/70 rounded-lg px-3 py-2.5 text-xs text-slate-300 leading-relaxed border-l-2" style="border-color:${c.accent}">
+        ${c.verdict}
+      </div>
+    `;
+    grid.appendChild(div);
+  });
+}
+
+// ─────────────────────────────────────────────────────────────────
+// BAR CHART
+// ─────────────────────────────────────────────────────────────────
+function renderChart(cards) {
+  const section = document.getElementById('chartSection');
+  const container = document.getElementById('chartBars');
+  section.classList.remove('hidden');
+  container.innerHTML = '';
+
+  const items = cards.map(c => ({ name:c.abbr, cost:c.annualPrimary||0, color:c.accent, icon:c.icon }));
+  const maxCost = Math.max(...items.map(i => i.cost), 1);
+
+  items.forEach(item => {
+    const pct = item.cost === 0 ? 2 : Math.round((item.cost / maxCost) * 100);
+    const label = item.cost === 0 ? 'FREE' : '$' + Math.round(item.cost).toLocaleString() + '/yr';
+    const bar = document.createElement('div');
+    bar.className = 'flex items-center gap-3';
+    bar.innerHTML = `
+      <div class="w-20 text-xs text-slate-400 text-right flex-shrink-0">${item.icon} ${item.name}</div>
+      <div class="flex-1 bg-slate-800 rounded h-6 overflow-hidden relative">
+        <div class="h-full rounded transition-all duration-700" style="width:${pct}%;background:${item.color};opacity:0.85"></div>
+        <div class="absolute inset-0 flex items-center pl-3 text-xs font-bold" style="color:${item.cost===0?'#4ade80':'#f1f5f9'}">${label}</div>
+      </div>
+    `;
+    container.appendChild(bar);
+  });
+}
+
+// ─────────────────────────────────────────────────────────────────
+// SUMMARY BOX
+// ─────────────────────────────────────────────────────────────────
+function renderSummary(totalCores, totalSockets) {
+  const feat = {
+    vsan:    document.getElementById('f_vsan').checked,
+    drs:     document.getElementById('f_drs').checked,
+    vcenter: document.getElementById('f_vcenter').checked,
+    gpu:     document.getElementById('f_gpu').checked,
+    k8s:     document.getElementById('f_k8s').checked,
+  };
+  const featureList = Object.entries({
+    'vSAN/HCI': feat.vsan, 'HA/DRS': feat.drs, 'Mgmt UI': feat.vcenter,
+    'GPU': feat.gpu, 'K8s': feat.k8s,
+  }).filter(([,v])=>v).map(([k])=>k).join(', ') || 'None selected';
+
+  document.getElementById('summaryBox').innerHTML = `
+    <div class="flex justify-between"><span class="text-slate-500">Hosts:</span><span class="text-slate-200 font-medium">${S.hosts}</span></div>
+    <div class="flex justify-between"><span class="text-slate-500">CPUs/host:</span><span class="text-slate-200 font-medium">${S.cpus}</span></div>
+    <div class="flex justify-between"><span class="text-slate-500">Cores/CPU:</span><span class="text-slate-200 font-medium">${S.cores}</span></div>
+    <div class="flex justify-between"><span class="text-slate-500">Total cores:</span><span class="text-blue-400 font-bold">${totalCores.toLocaleString()}</span></div>
+    <div class="flex justify-between"><span class="text-slate-500">Total sockets:</span><span class="text-slate-200 font-medium">${totalSockets}</span></div>
+    <div class="flex justify-between"><span class="text-slate-500">Storage:</span><span class="text-slate-200 font-medium">${S.storageTB} TB</span></div>
+    <div class="flex justify-between"><span class="text-slate-500">Features:</span><span class="text-slate-200 font-medium text-right max-w-[140px]">${featureList}</span></div>
+    ${totalCores < 72 ? `<div class="text-xs text-amber-400 mt-1 pt-1 border-t border-slate-800">⚠ Below VMware 72-core min — you'll pay for ${72-totalCores} unused cores on VMware</div>` : ''}
+  `;
+}
+
+// ─────────────────────────────────────────────────────────────────
+// RECOMMENDATION
+// ─────────────────────────────────────────────────────────────────
+function renderRec(cards) {
+  const sec = document.getElementById('recSection');
+  const txt = document.getElementById('recText');
+  sec.classList.remove('hidden');
+
+  const feat = {
+    vsan:    document.getElementById('f_vsan').checked,
+    drs:     document.getElementById('f_drs').checked,
+    vcenter: document.getElementById('f_vcenter').checked,
+    gpu:     document.getElementById('f_gpu').checked,
+    k8s:     document.getElementById('f_k8s').checked,
+  };
+
+  const totalCores = S.hosts * S.cpus * S.cores;
+  const vvfAnnual  = Math.max(totalCores, PRICING.vvf.coreMin) * PRICING.vvf.perCorePerYear;
+  const vcfAnnual  = Math.max(totalCores, PRICING.vcf.coreMin) * PRICING.vcf.perCorePerYear;
+  const pxStd      = S.hosts * S.cpus * PRICING.proxmox.standardPerSocketPerYear;
+  const proxSavings = vvfAnnual;
+  const isTinyCluster = totalCores < 72;
+
+  let recs = [];
+
+  if (isTinyCluster) {
+    recs.push(`<strong>⚠️ 72-Core Minimum Alert:</strong> Your environment has ${totalCores} physical cores — below Broadcom's 72-core minimum. VMware charges for 72 cores regardless. You'd be paying for ${72 - totalCores} unused cores on both VVF and VCF.`);
+  }
+
+  if (feat.k8s && !feat.vsan) {
+    recs.push(`<strong>Kubernetes without shared storage:</strong> If you're running K8s workloads, you'll likely want persistent storage. Consider whether you need Ceph (Proxmox) or vSAN entitlements.`);
+  }
+
+  const proxmoxSavings3yr = (vvfAnnual * 3) - (pxStd * 3);
+  if (proxmoxSavings3yr > 10000) {
+    recs.push(`<strong>💰 Proxmox saves ~$${Math.round(proxmoxSavings3yr).toLocaleString()} over 3 years</strong> vs VMware VVF (Standard subscription). That's real money — enough to hire a migration consultant and still come out way ahead.`);
+  }
+
+  if (vcfAnnual > 50000) {
+    recs.push(`<strong>VCF at your scale:</strong> VCF costs ~$${Math.round(vcfAnnual).toLocaleString()}/yr for your environment. Unless you're actively using NSX, Tanzu, and Aria, you're paying for a lot of stack you may not use.`);
+  }
+
+  if (feat.gpu) {
+    recs.push(`<strong>GPU workloads:</strong> If you need vGPU (shared GPU across VMs), NVIDIA AI Enterprise adds ~$3,500/GPU/yr on VMware. Proxmox and Hyper-V support GPU passthrough natively at no extra license cost — worth considering if your GPU workload allows dedicated passthrough.`);
+  }
+
+  if (S.hosts < 3) {
+    recs.push(`<strong>Sub-3 host cluster:</strong> With ${S.hosts} host${S.hosts > 1 ? 's' : ''}, VMware HA and vSAN are technically unsupported (require ≥3 hosts for FTT=1). You can still run them but with reduced resiliency. Proxmox and Hyper-V have the same recommendation but are less strict.`);
+  }
+
+  if (!recs.length) {
+    recs.push(`For your environment (${totalCores} cores, ${S.hosts} hosts), compare the annual costs above carefully. If you're already deeply invested in VMware tooling, VVF is the pragmatic Broadcom path. If you're evaluating fresh, Proxmox VE with a support subscription offers enterprise features at a fraction of the cost.`);
+  }
+
+  txt.innerHTML = recs.map(r => `<p class="mb-2">${r}</p>`).join('');
+}
+</script>
+</body>
+</html>

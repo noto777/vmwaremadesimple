@@ -89,13 +89,13 @@
 
     <!-- ARTICLE BODY -->
 
-    <p>I've been watching engineers struggle with this migration for the past 18 months, and the pattern is always the same: they underestimate the Windows VM work, they get blindsided by ZFS and hardware RAID, and they somehow didn't know about the "remove snapshots first" rule until they're staring at a failed import at 11pm. This guide exists to prevent that.</p>
+    <p>The same three problems keep showing up in VMware-to-Proxmox migrations: underestimating the Windows VM post-migration work, getting blindsided by ZFS and hardware RAID incompatibility, and discovering the "remove snapshots first" requirement after a failed import at 11pm. This article covers all three, along with the full migration procedure.</p>
 
-    <p>But before we get into procedure, let's talk about why you're here.</p>
+    <p>First, the pricing context driving these migrations.</p>
 
     <h2 class="text-2xl font-bold text-white">Why Migrate in 2026? The Pricing Reality</h2>
 
-    <p>If you're still running VMware ESXi and haven't renewed your support contract yet, you're in for a shock. Broadcom's restructuring of VMware licensing has pushed prices to levels that are simply unworkable for many SMBs and mid-market shops. Here's what the numbers actually look like:</p>
+    <p>Broadcom's restructuring of VMware licensing has pushed prices to levels that are unworkable for many SMBs and mid-market shops. The current pricing landscape:</p>
 
     <table>
       <thead>
@@ -146,15 +146,15 @@
 
     <h2 class="text-2xl font-bold text-white">Is Proxmox Right for You? (Be Honest)</h2>
 
-    <p>Proxmox VE is excellent software. I'm not going to oversell it, and I'm not going to pretend it's a drop-in replacement for a full vSphere + vCenter stack. Here's the honest breakdown:</p>
+    <p>Proxmox VE is solid software, and it is not a drop-in replacement for a full vSphere + vCenter stack. The differences matter, and they should factor into your decision.</p>
 
     <h3 class="text-xl font-semibold text-white">What Proxmox Does Well</h3>
 
     <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
       <li><strong>Pricing model:</strong> Free to use with no feature limitations. Subscriptions (from €115/socket/year) add enterprise repo access and support tickets — but are entirely optional for production use.</li>
-      <li><strong>Stability:</strong> A year-long side-by-side comparison published by Virtualization Howto (December 2025) concluded: "Stability of Proxmox has been just as good as VMware... Proxmox let me forget the hypervisor exists."</li>
+      <li><strong>Stability:</strong> A year-long side-by-side comparison by Virtualization Howto (December 2025) concluded: "Stability of Proxmox has been just as good as VMware... Proxmox let me forget the hypervisor exists."</li>
       <li><strong>Hardware support:</strong> Native Intel and Realtek NIC support. Hybrid CPU architectures (Intel big.LITTLE) work without BIOS tweaks. VMware has removed native Realtek support.</li>
-      <li><strong>Proxmox Backup Server (PBS):</strong> A separate, free product that provides enterprise-grade VM backup with deduplication, compression, and off-site replication. This is a capability VMware charges significant money for. Worth its own evaluation.</li>
+      <li><strong>Proxmox Backup Server (PBS):</strong> A separate, free product that provides full-featured VM backup with deduplication, compression, and off-site replication. This is a capability VMware charges significant money for. Worth its own evaluation.</li>
       <li><strong>Clustering:</strong> Built-in Corosync-based cluster with shared-nothing HA, live migration, and a clean web UI for multi-node management.</li>
     </ul>
 
@@ -168,7 +168,7 @@
     </ul>
 
     <div class="callout">
-      <strong class="text-yellow-400">My recommendation:</strong> If you're a homelab user, a startup, or an SMB running fewer than ~50 VMs without complex DR requirements, Proxmox is an excellent choice and the migration is manageable. If you're running a regulated environment with formal SLAs and existing Zerto/SRM DR runbooks, budget the time honestly — this is a multi-quarter project.
+      <strong class="text-yellow-400">Assessment:</strong> Homelab users, startups, and SMBs running fewer than ~50 VMs without complex DR requirements are a good fit for Proxmox. Regulated environments with formal SLAs and existing Zerto/SRM DR runbooks need to budget honestly — this is a multi-quarter project, not a weekend cutover.
     </div>
 
     <h2 class="text-2xl font-bold text-white">Pre-Migration Checklist (Do This Before Anything)</h2>
@@ -177,13 +177,13 @@
 
     <ol class="list-decimal list-inside text-slate-300 space-y-3 mb-6">
       <li><strong>Power off the VM.</strong> The Proxmox ESXi Import Wizard does not live-migrate running VMs. The VM must be shut down on the ESXi side before you trigger the import.</li>
-      <li><strong>Remove ALL snapshots.</strong> Snapshots are the single most common cause of import failures. Consolidate and delete every snapshot on every VM you plan to migrate, in the vSphere Client, before touching Proxmox.</li>
+      <li><strong>Remove ALL snapshots.</strong> Unconsolidated snapshots cause import failures more often than any other pre-migration oversight. Consolidate and delete every snapshot on every VM you plan to migrate, in the vSphere Client, before touching Proxmox.</li>
       <li><strong>Uninstall VMware Tools (Windows VMs).</strong> Do this while the VM is still running on ESXi. You'll clean up leftover drivers and services before they become a post-migration headache. Linux VMs typically handle this automatically.</li>
       <li><strong>Pre-install VirtIO drivers (Windows VMs).</strong> Download the VirtIO ISO from the Fedora project, attach it to your Windows VM while it's still on ESXi, and install the drivers — particularly the storage driver. You won't need to boot into SATA mode if you do this first. [AFFILIATE: VirtIO Windows Drivers ISO]</li>
       <li><strong>Note all IP settings and MAC addresses.</strong> Proxmox uses Linux bridge names (vmbr0, vmbr1) instead of vSphere virtual switches. NIC renames are common. If you're static IP'd, consider temporarily switching to DHCP before migration to avoid losing access immediately after cutover.</li>
       <li><strong>Map your virtual switch topology.</strong> Document every vSphere Standard Switch, Distributed Switch, and port group with its VLAN ID. You'll recreate these as Linux bridges in Proxmox before the VMs come online.</li>
       <li><strong>Map your storage.</strong> VMFS, NFS, and vSAN datastores need to become ZFS pools, Ceph HCI, LVM volumes, or NFS directories on Proxmox. Know your target before you start.</li>
-      <li><strong>Decrypt BitLocker volumes.</strong> If any Windows VMs have BitLocker enabled, decrypt them before migration. Hardware changes during the import can trigger recovery mode, and recovering BitLocker after a migration is a genuinely bad time.</li>
+      <li><strong>Decrypt BitLocker volumes.</strong> If any Windows VMs have BitLocker enabled, decrypt them before migration. Hardware changes during the import can trigger recovery mode, and recovering BitLocker after a migration adds significant delay and complexity.</li>
     </ol>
 
     <div class="callout-red callout">
@@ -192,7 +192,7 @@
 
     <h2 class="text-2xl font-bold text-white">Method 1: ESXi Import Wizard (The Primary Path)</h2>
 
-    <p>Proxmox VE 8.2 introduced a built-in ESXi Import Wizard, and by Proxmox VE 9.x it's the recommended first-choice approach for most migrations. The process, as documented by Edy Werder's updated February 2026 guide and independently confirmed by the Hornetsecurity migration walkthrough, is genuinely three steps once your pre-migration checklist is complete.</p>
+    <p>Proxmox VE 8.2 introduced a built-in ESXi Import Wizard, and by Proxmox VE 9.x it's the recommended first-choice approach for most migrations. The process, as documented by Edy Werder's updated February 2026 guide and independently confirmed by the Hornetsecurity migration walkthrough, is three steps once your pre-migration checklist is complete.</p>
 
     <h3 class="text-xl font-semibold text-white">Step 1: Add Your ESXi Host as a Storage Source</h3>
 
@@ -237,7 +237,7 @@
 
     <h3 class="text-xl font-semibold text-white">VirtIO Drivers: Install Before or After (But Install Them)</h3>
 
-    <p>Proxmox uses the VirtIO paravirtualized driver stack for storage and networking — the same driver model used by KVM/QEMU across the board. Windows doesn't ship with VirtIO drivers. If you didn't pre-install them while the VM was on ESXi (step 4 of the pre-migration checklist), here's how to handle it post-migration:</p>
+    <p>Proxmox uses the VirtIO paravirtualized driver stack for storage and networking — the same driver model used by KVM/QEMU across the board. Windows doesn't ship with VirtIO drivers. If you didn't pre-install them while the VM was on ESXi (step 4 of the pre-migration checklist), the post-migration procedure is:</p>
 
     <ol class="list-decimal list-inside text-slate-300 space-y-3 mb-6">
       <li>In the Proxmox VM configuration, temporarily set the disk bus to <strong>SATA</strong> instead of VirtIO SCSI. This lets Windows boot without the VirtIO storage driver.</li>
@@ -266,7 +266,7 @@
 
     <h2 class="text-2xl font-bold text-white">Proxmox Backup Server: The Hidden Win</h2>
 
-    <p>One piece of this migration that deserves its own callout: <strong>Proxmox Backup Server (PBS)</strong>. It's a separate, free product from Proxmox that provides enterprise-grade VM backup with:</p>
+    <p>One piece of this migration that deserves its own callout: <strong>Proxmox Backup Server (PBS)</strong>. It's a separate, free product from Proxmox that provides full-featured VM backup with:</p>
 
     <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
       <li>Incremental, deduplicated backups — only changed blocks are transferred after the first backup</li>
@@ -377,7 +377,7 @@
 
     <h2 class="text-2xl font-bold text-white">Real-World Scale: What Others Have Done</h2>
 
-    <p>I want to give you some grounding from the community before you decide this is all theory.</p>
+    <p>Some documented examples from the community:</p>
 
     <p>A December 2024–February 2025 migration posted to r/Proxmox covered 65 VMs migrated from vSphere 7. The user characterized it as a 2-month project — not a weekend. Much of that time was spent on post-migration validation and application testing, not the actual import process.</p>
 
@@ -416,16 +416,16 @@
 
     <h2 class="text-2xl font-bold text-white">The Honest Answer: What You'll Miss</h2>
 
-    <p>I'm not going to end this with "Proxmox is better in every way." It isn't. Here's what you'll genuinely miss from a mature vSphere environment:</p>
+    <p>Proxmox is not better in every way. Specific capabilities you lose when leaving a vSphere environment:</p>
 
     <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
-      <li><strong>DRS:</strong> Automated workload balancing is genuinely useful in large environments. You'll feel its absence.</li>
-      <li><strong>vCenter depth:</strong> Tag-based policies, VM templates with content libraries, the full vSphere lifecycle manager ecosystem — mature tooling built over 20 years. Proxmox is good. It's not 20 years deep.</li>
+      <li><strong>DRS:</strong> Automated workload balancing matters in environments with 10+ hosts and variable load patterns. You'll feel its absence.</li>
+      <li><strong>vCenter depth:</strong> Tag-based policies, VM templates with content libraries, the full vSphere lifecycle manager ecosystem — tooling built and refined over 20 years. Proxmox's feature set is solid but shallower.</li>
       <li><strong>Vendor ecosystem:</strong> Third-party integrations (storage, backup, networking) were built for VMware first. Proxmox support is growing but still secondary for many enterprise vendors.</li>
-      <li><strong>Support with a contract number:</strong> If you're on Proxmox Community tier, your support is the forums. That's genuinely good for most things. For midnight production outages, the Premium tier's 24/7 support is what you'd pay for.</li>
+      <li><strong>Support with a contract number:</strong> If you're on Proxmox Community tier, your support is the forums. That works for configuration and troubleshooting questions. For midnight production outages, the Premium tier's 24/7 support is what you'd pay for.</li>
     </ul>
 
-    <p>What you'll gain: a hypervisor with no per-core licensing, a backup product that genuinely competes with commercial offerings, and a community that's been growing rapidly since 2024 precisely because everyone is running this migration analysis right now.</p>
+    <p>What you gain: a hypervisor with no per-core licensing, a backup product (PBS) that competes with commercial offerings on features if not on vendor support depth, and a community that has grown rapidly since 2024 as organizations evaluate VMware alternatives.</p>
 
     <div class="bg-card rounded-xl p-6 border border-slate-700 mb-6">
       <p class="text-slate-300 mb-2"><strong class="text-white">Resources mentioned in this guide:</strong></p>

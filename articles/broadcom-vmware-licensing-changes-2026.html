@@ -87,7 +87,7 @@
 
     <!-- Intro -->
     <p class="text-lg text-slate-300">
-      If you've been running VMware in production for any length of time, the last 18 months have been a gut punch. Broadcom completed its $69 billion acquisition of VMware in November 2023, and since then the licensing model has been dismantled and rebuilt from scratch — in Broadcom's favor.
+      The last 18 months have been a gut punch for VMware shops. Broadcom completed its $69 billion acquisition of VMware in November 2023, and since then the licensing model has been dismantled and rebuilt from scratch — in Broadcom's favor.
     </p>
 
     <p>
@@ -101,7 +101,7 @@
       Broadcom eliminated perpetual licensing for VMware products. Effective February 2024, everything moved to subscription-only, bundled SKUs. The old à la carte model — buy vSphere, add vCenter, tack on vSAN, license NSX separately — is gone.
     </p>
 
-    <p>Here's what replaced it:</p>
+    <p>The replacement structure:</p>
 
     <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
       <li><strong class="text-slate-200">VMware vSphere Foundation (VVF)</strong> — Per-core subscription. Replaces vSphere Standard/Enterprise Plus.</li>
@@ -110,7 +110,7 @@
     </ul>
 
     <div class="callout-red callout">
-      <strong class="text-red-400">The bottom line:</strong> For most organizations, renewal quotes came back at <strong>2x to 5x</strong> what they were paying before. I've seen it firsthand. A customer paying $40,000/year for SnS on a 200-core estate came back with a VCF quote north of $180,000 annually.
+      <strong class="text-red-400">The cost impact:</strong> Renewal quotes have widely come back at <strong>2x to 5x</strong> previous pricing. I've seen it firsthand. A customer paying $40,000/year for SnS on a 200-core estate came back with a VCF quote north of $180,000 annually.
     </div>
 
     <!-- Per-Core Pricing -->
@@ -119,7 +119,7 @@
     <h3 class="text-xl font-semibold text-white">Per-Core Pricing</h3>
 
     <p>
-      The single biggest operational change is the move to per-core licensing. This replaces per-CPU (socket) licensing.
+      The most consequential operational change is the move to per-core licensing, replacing per-CPU (socket) licensing.
     </p>
 
     <p>
@@ -161,7 +161,7 @@
     </div>
 
     <p>
-      The catch: if you need NSX — and in any serious enterprise environment, you probably do — you're being pushed to VCF pricing, which is meaningfully more expensive.
+      The constraint here: if you need NSX — and organizations running micro-segmentation or advanced east-west firewalling do — you're being pushed to VCF pricing, which is meaningfully more expensive.
     </p>
 
     <!-- Perpetual Customers -->
@@ -185,7 +185,7 @@
     <h3 class="text-xl font-semibold text-white">vSphere Foundation (VVF) Is Right For You If:</h3>
 
     <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
-      <li>You're running a straightforward compute virtualization environment</li>
+      <li>You're running compute virtualization without NSX or vSAN dependencies</li>
       <li>You're using third-party storage (NetApp, Pure, HPE) and don't need vSAN</li>
       <li>You don't have NSX in your environment (or can live without it)</li>
       <li>You have a smaller core count (VVF is roughly 30-40% less expensive per core than VCF)</li>
@@ -199,11 +199,11 @@
       <li>You want Tanzu and container infrastructure integrated with your hypervisor</li>
       <li>Your environment needs vSAN stretched clusters or advanced erasure coding</li>
       <li>You're a large enterprise that can amortize the cost across 500+ cores</li>
-      <li>You care about the Aria Suite automation and operations tools at scale</li>
+      <li>You need the full Aria Suite for automation and operations across your VMware estate</li>
     </ul>
 
     <p>
-      I'll be direct: VCF is a solid product. The integration between vSphere, NSX, and vSAN at the VCF level is genuinely best-in-class for on-premises software-defined infrastructure. The problem isn't the product — it's the pricing model applied to organizations that used to pay a fraction of this for simpler workloads.
+      VCF is a solid product. The integration between vSphere, NSX, and vSAN at the VCF level is tight — no competing on-premises SDDC stack ships with that level of component integration out of the box. The problem isn't the product — it's the pricing model applied to organizations that used to pay a fraction of this for simpler workloads.
     </p>
 
     <!-- Math at Different Scales -->
@@ -247,14 +247,14 @@
     <!-- Field Reality -->
     <h2 class="text-2xl font-bold text-white">How Broadcom's Pricing Is Playing Out in the Field</h2>
 
-    <p>Here's what I'm actually seeing, not what Broadcom's PR team says:</p>
+    <p>What I'm seeing across client engagements — not what Broadcom's PR team says:</p>
 
     <p>
-      <strong class="text-slate-200">The large enterprises are mostly staying.</strong> Not because they're happy, but because migration costs, retraining, and risk at scale make alternatives difficult to justify quickly. They're negotiating hard, taking multi-year deals, and gritting their teeth.
+      <strong class="text-slate-200">The large enterprises are mostly staying.</strong> Not because they're happy, but because migration costs, retraining, and the risk of moving 500+ VMs make alternatives difficult to justify on a short timeline. They're negotiating hard, taking multi-year deals, and gritting their teeth.
     </p>
 
     <p>
-      <strong class="text-slate-200">The mid-market is genuinely evaluating alternatives.</strong> I'm in conversations with organizations in the 100-500 core range who are running proof-of-concepts on Proxmox, Nutanix, and Microsoft's Azure Stack HCI. Some are well down the migration path.
+      <strong class="text-slate-200">The mid-market is actively evaluating alternatives.</strong> I'm in conversations with organizations in the 100-500 core range who are running proof-of-concepts on Proxmox, Nutanix, and Microsoft's Azure Stack HCI. Some are well down the migration path.
     </p>
 
     <p>
@@ -289,7 +289,7 @@
 
     <h3 class="text-xl font-semibold text-white">Option 1: Accept VVF/VCF and Renegotiate Hard</h3>
 
-    <p>For most enterprise environments, this is the realistic path for the next 1-3 years. Organizations choosing this path are:</p>
+    <p>For enterprise environments with large NSX or vSAN deployments, this is the realistic path for the next 1-3 years. Organizations choosing this path are:</p>
 
     <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
       <li>Taking 3-year deals to lock in pricing</li>
@@ -307,7 +307,7 @@
     <p>The challenges:</p>
 
     <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
-      <li>Feature parity gaps with NSX (Proxmox networking is SDN but not NSX-grade)</li>
+      <li>Feature parity gaps with NSX (Proxmox has SDN support but lacks micro-segmentation, distributed firewalling, and NSX's policy model)</li>
       <li>vSAN replacement requires rethinking storage (Ceph integration exists but is operationally different)</li>
       <li>Automation and operations tooling needs rebuilding</li>
       <li>Staff retraining is real — KVM is different from vSphere under the hood</li>
@@ -324,7 +324,7 @@
     </p>
 
     <p>
-      The honest assessment: Hyper-V has always lagged VMware in enterprise adoption and ecosystem depth. Azure Stack HCI solves some of that but introduces cloud billing complexity. Right answer for some, not a universal replacement.
+      Hyper-V has lagged VMware in enterprise adoption and third-party ecosystem depth — fewer storage vendors certify against it, and the management tooling is thinner outside the Microsoft ecosystem. Azure Stack HCI addresses some of those gaps but introduces Azure-style consumption billing, which adds its own complexity. Worth evaluating for Microsoft-centric shops; not a universal replacement.
     </p>
 
     <h3 class="text-xl font-semibold text-white">Option 4: Nutanix</h3>
@@ -359,7 +359,7 @@
     <!-- 2026 Reality Check -->
     <h2 class="text-2xl font-bold text-white">The 2026 Reality Check</h2>
 
-    <p>Here's where things stand as of early 2026:</p>
+    <p>As of early 2026:</p>
 
     <p>
       <strong class="text-slate-200">The migration wave is real but slower than headlines suggest.</strong> Most organizations are 12-24 months into planning but not 12-24 months into executing. Production migrations of large VMware estates are long cycles.
@@ -370,7 +370,7 @@
     </p>
 
     <p>
-      <strong class="text-slate-200">The alternatives are maturing.</strong> Proxmox 8.x, Nutanix AHV improvements, and OpenShift Virtualization have all gotten meaningfully better.
+      <strong class="text-slate-200">The alternatives have improved.</strong> Proxmox 8.x/9.x, Nutanix AHV, and OpenShift Virtualization have all shipped substantive feature updates since 2024.
     </p>
 
     <p>
@@ -383,7 +383,7 @@
     <ol class="list-decimal list-inside text-slate-300 space-y-3 mb-6">
       <li><strong>Audit your core count.</strong> Know exactly how many physical cores you have licensed. This is your cost baseline.</li>
       <li><strong>Map your real feature usage.</strong> Do you actually use NSX? vSAN? Aria? Many organizations are paying VCF prices for features they barely touch.</li>
-      <li><strong>Get a true VVF vs VCF comparison.</strong> If you're not using NSX at scale, VVF may be 30-40% cheaper with minimal capability loss.</li>
+      <li><strong>Get a true VVF vs VCF comparison.</strong> If you're not using NSX, VVF may be 30-40% cheaper with minimal capability loss for your workloads.</li>
       <li><strong>Talk to Broadcom's renewal team before your SnS expires.</strong> The quotes improve when they think you're serious about leaving.</li>
       <li><strong>Run a Proxmox or Nutanix PoC if you're sub-500 cores.</strong> Not necessarily to migrate — just to have leverage in negotiations.</li>
       <li><strong>Don't panic-migrate.</strong> Production migrations are risky. A bad migration is worse than a bad licensing deal. Take the time to do it right.</li>
@@ -393,11 +393,11 @@
     <h2 class="text-2xl font-bold text-white">Bottom Line</h2>
 
     <p>
-      Broadcom made a $69 billion bet that VMware's installed base would rather pay up than leave. For most large enterprises, that bet is probably right in the short term. The switching costs are real.
+      Broadcom made a $69 billion bet that VMware's installed base would rather pay up than leave. For large enterprises with deep NSX and vSAN investments, that bet is probably right in the short term. The switching costs are real.
     </p>
 
     <p>
-      But for SMBs, mid-market shops, and organizations with simpler workloads, the pricing changes have crossed a threshold. The value equation no longer works at the rates Broadcom is charging for VCF on 50-100 cores.
+      For SMBs, mid-market shops, and organizations with simpler workloads, the pricing changes have crossed a threshold. The value equation breaks down at VCF rates on 50-100 core deployments that don't use NSX or vSAN.
     </p>
 
     <div class="callout-green callout">

@@ -87,13 +87,13 @@
     </div>
 
     <!-- Lead -->
-    <p>If there was ever a year where running your own VMware home lab mattered, it's 2026. Broadcom killed vSphere Standard, pushed VVF pricing to $190/core/year with a 72-core minimum, and locked vSphere 9 behind the new subscriptions. If you're studying for your VCP, testing upgrade paths before touching production, or just trying to stay sharp on the platform you deploy professionally &mdash; you need a lab.</p>
+    <p>Broadcom killed vSphere Standard, pushed VVF pricing to $190/core/year with a 72-core minimum, and locked vSphere 9 behind the new subscriptions. A home lab has always been useful for VMware engineers. In 2026, it's close to essential — whether for VCP study, testing upgrade paths before production, or staying current on a platform that's changing fast.</p>
 
     <p>The good news: <strong class="text-slate-200">Broadcom brought back free ESXi.</strong> ESXi 8.0 Update 3e is available as a <a href="https://knowledge.broadcom.com/external/article/399823/vmware-esxi-80-update-3e-now-available-a.html" class="text-blue-400 hover:text-blue-300" target="_blank" rel="noopener">free download</a> with the license embedded in the ISO &mdash; no separate key needed. You get unlimited VMs (hardware-limited), up to 2 physical CPUs, and 8 vCPUs per VM. No vCenter, no vMotion, no HA &mdash; but for a single-host learning lab, it's everything you need at zero cost.</p>
 
-    <p>Meanwhile, the hardware market has never been better. Mini PCs with 8-16 core mobile Ryzen processors, 128GB DDR5 SO-DIMM support, and 2TB NVMe drives under $160 mean you can build a genuinely capable ESXi lab for under $500. William Lam &mdash; the VMware engineer who literally <a href="https://williamlam.com/home-lab" class="text-blue-400 hover:text-blue-300" target="_blank" rel="noopener">wrote the book on VMware home labs</a> &mdash; runs his entire VCF 9 lab on mini PCs. If it's good enough for his lab, it's good enough for yours.</p>
+    <p>Meanwhile, the hardware market has never been better. Mini PCs with 8-16 core mobile Ryzen processors, 128GB DDR5 SO-DIMM support, and 2TB NVMe drives under $160 mean you can build a capable ESXi lab for under $500. William Lam &mdash; the VMware engineer who literally <a href="https://williamlam.com/home-lab" class="text-blue-400 hover:text-blue-300" target="_blank" rel="noopener">wrote the book on VMware home labs</a> &mdash; runs his entire VCF 9 lab on mini PCs. If it's good enough for his lab, it's good enough for yours.</p>
 
-    <p>This guide covers exactly what to buy, what to avoid, and the compatibility gotchas that'll save you hours of troubleshooting. Every recommendation is based on hardware that's been validated by the VMware community with real ESXi installs.</p>
+    <p>Below: what to buy, what to avoid, and the compatibility issues that will save you hours of troubleshooting. Every recommendation is based on hardware validated by the VMware community with documented ESXi installs.</p>
 
     <!-- Section: What You Actually Need -->
     <h2 class="text-2xl font-bold text-white">What You Actually Need</h2>
@@ -216,7 +216,7 @@
 
     <h3 class="text-xl font-semibold text-white">Used Dell OptiPlex Micro ($150-200)</h3>
 
-    <p>You can find used Dell OptiPlex 7080/7090 Micro units on eBay with i7-10700T/11700T processors for $150-200. Legitimate 8-core machines with Intel NICs and excellent build quality. The catch: most max at 64GB DDR4, NVMe slots are sometimes M.2 2230 (limiting drive options), and you're on an older platform. Good for a budget second node, not my first choice for a primary host.</p>
+    <p>You can find used Dell OptiPlex 7080/7090 Micro units on eBay with i7-10700T/11700T processors for $150-200. Legitimate 8-core machines with Intel NICs and excellent build quality. Limitations: most max at 64GB DDR4, NVMe slots are sometimes M.2 2230 (limiting drive options), and you're on an older platform. Good for a budget second node, not my first choice for a primary host.</p>
 
     <h3 class="text-xl font-semibold text-white">What's Coming: CES 2026 Announcements</h3>
 
@@ -258,7 +258,7 @@
     <!-- Section: The RAM Question -->
     <h2 class="text-2xl font-bold text-white">The RAM Question</h2>
 
-    <p>RAM is the single biggest constraint in a mini PC home lab. Here's the breakdown:</p>
+    <p>RAM is the tightest constraint in a mini PC home lab. The tiers break down as follows:</p>
 
     <p><strong class="text-slate-200">32GB (2x16GB DDR5 SO-DIMM, ~$60-80):</strong> You can run ESXi and vCenter with a couple of lightweight VMs. Tight but functional for basic administration practice.</p>
 
@@ -273,9 +273,9 @@
     </div>
 
     <!-- Section: ESXi Compatibility Gotchas -->
-    <h2 class="text-2xl font-bold text-white">ESXi Compatibility Gotchas</h2>
+    <h2 class="text-2xl font-bold text-white">ESXi Compatibility Issues</h2>
 
-    <p>Mini PCs are not on VMware's HCL (Hardware Compatibility List), so you're in community-supported territory. That's fine &mdash; but know the pitfalls.</p>
+    <p>Mini PCs are not on VMware's HCL (Hardware Compatibility List), so you're in community-supported territory. That's fine for a lab — but the failure modes are specific and worth knowing before you start.</p>
 
     <h3 class="text-xl font-semibold text-white">The NIC Problem (And How to Solve It)</h3>
 
