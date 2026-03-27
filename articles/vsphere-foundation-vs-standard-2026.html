@@ -88,11 +88,11 @@
     </div>
 
     <!-- Lead -->
-    <p>Let's get the uncomfortable part out of the way first: <strong class="text-slate-200">vSphere Standard is dead.</strong> As of July 31, 2025, Broadcom ended new sales and renewals for vSphere Standard. If your Standard subscription expires today, you can't renew it. The product that most SMBs and mid-market IT shops relied on for years — reliable, affordable, feature-complete enough for most workloads — is gone.</p>
+    <p><strong class="text-slate-200">vSphere Standard is dead.</strong> End of Sale was July 31, 2025. If your Standard subscription expires now, there's no renewal path — Broadcom discontinued it. The replacement is vSphere Foundation (VVF) at nearly 4x the per-core price, and it includes a lot of things you may not need.</p>
 
-    <p>What replaced it is vSphere Foundation (VVF), a significantly more expensive bundle that includes a lot of things you may not need and a price tag that shocks people who've been running Standard for years. We're talking about a jump from $50/core/year to $190/core/year at MSRP. That's a 3.8× increase on paper, and it's driving real migrations to Proxmox, Nutanix AHV, and Microsoft Hyper-V.</p>
+    <p>The price delta: $50/core/year for Standard vs $190/core/year for VVF at MSRP. That's 3.8x on paper. Whether that math works for your shop depends on what you were running before.</p>
 
-    <p>The story is more complicated than "Broadcom is gouging everyone," though. For the right organization, VVF is actually a reasonable bundle. The math works — if you're the right customer. Below: what each product includes, what the costs look like at relevant infrastructure scales, and who should pay for VVF versus who should start evaluating alternatives.</p>
+    <p>For the right organization, VVF is a reasonable bundle. The math works — if you were already licensing Enterprise Plus, vSAN, and Aria separately. Below: what each product includes, what the costs look like at relevant infrastructure scales, and who should pay for VVF versus who should start evaluating alternatives.</p>
 
     <div class="callout-red callout">
       <strong class="text-red-400">Important:</strong> If you're currently on vSphere Standard and your subscription expires in 2025 or 2026, you cannot renew. Your only VMware path forward is vSphere Foundation (VVF) or VMware Cloud Foundation (VCF). vSphere 8's Standard branch reaches End of Life in October 2027 — so even if you extend, you have a hard deadline. Plan accordingly.
@@ -457,15 +457,15 @@
       <li>You have the budget: minimum ~$25,200/year at 72 cores, but VCF is designed for 200+ core deployments</li>
     </ul>
 
-    <h3 class="text-xl font-semibold text-white">Seriously Consider Alternatives if:</h3>
+    <h3 class="text-xl font-semibold text-white">Walk Away From VMware If:</h3>
     <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
-      <li>You ran a simple vSphere Standard cluster (NFS/iSCSI storage, basic HA, no DRS) and the $13,680/year minimum is hard to justify for your workload count</li>
-      <li>You're a small shop (1-3 servers, &lt;50 VMs) with no vSAN hardware and no need for Aria</li>
-      <li>You're in a homelab or development environment where paying for production VMware doesn't make sense</li>
-      <li>Your organization is actively evaluating infrastructure-as-code with tools like Terraform/Ansible — Proxmox has a much better open-source integration story</li>
+      <li>You ran Standard for basic HA and vMotion on NFS/iSCSI storage. VVF bundles vSAN and Aria you'll never touch — that's what the 3.8x price increase is paying for.</li>
+      <li>You're a small shop (1-3 servers, under 50 VMs) with no vSAN hardware and no need for Aria. The $13,680/year minimum is hard to justify for that workload count.</li>
+      <li>You're in a homelab or development environment. Paying for production VMware doesn't make sense here — Proxmox is free and runs the same workloads.</li>
+      <li>Your organization is moving toward infrastructure-as-code with Terraform/Ansible. Proxmox's open-source integration story is meaningfully better than VMware's at this point.</li>
     </ul>
 
-    <p>The alternatives worth evaluating: <a href="#" class="text-blue-400 hover:text-blue-300">Proxmox VE</a> (free, with growing enterprise adoption since 2024 and solid KVM/LXC support), Nutanix AHV (strong HCI alternative, especially for shops already on Nutanix hardware), and Microsoft Azure Stack HCI (if you're a Microsoft-heavy shop and want cloud integration). We'll cover each in dedicated migration guides — starting with the VMware to Proxmox migration walkthrough coming next month.
+    <p>The alternatives worth evaluating: <a href="/articles/vmware-to-proxmox-migration-guide.html" class="text-blue-400 hover:text-blue-300">Proxmox VE</a> (free, with growing enterprise adoption since 2024 and solid KVM/LXC support), Nutanix AHV (strong HCI alternative, especially for shops already on Nutanix hardware), and Microsoft Azure Stack HCI (if you're a Microsoft-heavy shop and want cloud integration). See the <a href="/articles/vmware-to-proxmox-migration-guide.html" class="text-blue-400 hover:text-blue-300">VMware to Proxmox migration guide</a> for the full walkthrough.
 
     <!-- AFFILIATE: CDW VVF licenses -->
     <!-- AFFILIATE: Veeam Backup for vSphere VVF -->
@@ -488,16 +488,13 @@
       <strong class="text-green-400">Practical tip:</strong> If you're an existing VMware customer, contact your current reseller first and ask for a <strong>Standard-to-VVF upgrade quote</strong>. Broadcom has migration SKUs that may have different pricing than a fresh VVF purchase. Ask specifically about multi-year terms and any migration incentive programs — these have existed at various times and may be available depending on your contract history.
     </div>
 
-    <!-- Section 11 -->
-    <h2 class="text-2xl font-bold text-white">The Bottom Line</h2>
-
     <p>The comparison between vSphere Standard and vSphere Foundation is, in 2026, a comparison between a dead product and its much more expensive replacement. If you're a Standard customer who ran it as a minimal hypervisor layer with external shared storage, Broadcom hasn't built a product that cleanly replaces it at a similar price point — and the community is responding accordingly.</p>
 
     <p>For shops already running Enterprise Plus, vSAN, and Aria — or building out HCI infrastructure with a single-vendor strategy for hypervisor, storage, monitoring, and Kubernetes — VVF is a defensible product. The feature set is comprehensive and the vSphere 9 upgrade path holds real value for organizations planning 3-5 years out on VMware.</p>
 
     <p>Run the break-even math for your specific environment before deciding. Get real quotes, not MSRP estimates. And if the math doesn't work, don't pay for a bundle that doesn't match your workloads — Proxmox has gained significant ground since 2024, and the migration path is more tractable than it was two years ago.</p>
 
-    <p>We'll be publishing a detailed <a href="#" class="text-blue-400 hover:text-blue-300">VMware to Proxmox migration guide</a> next, covering cluster evacuation, storage migration, and the networking translation from vDS to OVS. Subscribe below to get it when it's live.</p>
+    <p>The <a href="/articles/vmware-to-proxmox-migration-guide.html" class="text-blue-400 hover:text-blue-300">VMware to Proxmox migration guide</a> covers cluster evacuation, storage migration, and the networking translation from vDS to OVS.</p>
 
     <div class="callout">
       <strong class="text-yellow-400">Related reading:</strong> See our <a href="/articles/broadcom-vmware-licensing-changes-2026.html" class="text-blue-400 hover:text-blue-300">full breakdown of Broadcom's VMware licensing changes in 2026</a> for context on the broader portfolio shift. And if you're already evaluating exits, our <em>Best VMware Alternatives 2026</em> guide is coming shortly.

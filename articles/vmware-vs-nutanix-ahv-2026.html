@@ -95,7 +95,7 @@
     <!-- ARTICLE BODY -->
 
     <p>
-      Since Broadcom closed the VMware acquisition, Nutanix has been the most frequently cited alternative in enterprise renewal evaluations. The reason is direct: Broadcom's pricing changes hit hard, and Nutanix offers the closest architectural equivalent to a full VMware stack in a single vendor.
+      I've evaluated Nutanix as a VMware replacement for three different clients this year. In two cases the math worked. In one it didn't — because they had NSX deployed and nobody told the Nutanix sales rep. Here's the honest breakdown.
     </p>
 
     <p>
@@ -109,10 +109,6 @@
     <p>
       Nutanix sales teams position AHV as a full VMware replacement at lower cost. That is partially true — and partially not, depending on which VMware features are in use. Having deployed both platforms, I can identify where Nutanix has real advantages, where VMware retains a significant lead, and which organizations are good candidates for a switch versus which should stay put.
     </p>
-
-    <div class="callout">
-      <strong class="text-yellow-400">Scope:</strong> This article covers both platforms' documented capabilities and limitations with cited sources. Where I reference community data, I note the source and sample size.
-    </div>
 
     <!-- SECTION 1: ARCHITECTURE -->
     <h2 class="text-2xl font-bold text-white">Architecture: Two Fundamentally Different Approaches</h2>
@@ -399,6 +395,7 @@
     </p>
 
     <h3 class="text-xl font-semibold text-white">Good Nutanix migration candidates:</h3>
+    <!-- [AFFILIATE: Nutanix free trial / evaluation license] -->
     <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
       <li>Organizations running <strong>general-purpose compute workloads</strong> (app servers, file servers, databases) without heavy VDI or NSX dependencies.</li>
       <li>Shops on <strong>VVF or vSphere Enterprise Plus only</strong> — you're already not getting NSX or Aria Automation, so the capability gap is smaller.</li>

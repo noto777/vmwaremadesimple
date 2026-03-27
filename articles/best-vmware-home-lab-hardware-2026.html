@@ -142,6 +142,7 @@
       <li><strong>128GB RAM verified:</strong> William Lam tested 2x64GB DDR5 SO-DIMMs and confirmed full 128GB detected by ESXi. Most competitors in this price range max at 64GB.</li>
       <li><strong>2x M.2 NVMe Gen 4 slots:</strong> One for ESXi boot, one for your VM datastore &mdash; or both in a vSAN-like config.</li>
     </ul>
+    <!-- [AFFILIATE: GMKtec NucBox K11 Mini PC] -->
 
     <p>The K11 comes in barebones and pre-configured options. For a lab build, buy the cheapest config (usually with 16-32GB RAM and a small SSD) and swap in your own storage. Pricing runs <strong class="text-slate-200">$300-400</strong> depending on configuration.</p>
 
@@ -155,12 +156,14 @@
 
     <h3 class="text-xl font-semibold text-white">The Storage: Samsung 990 EVO 2TB</h3>
 
+    <!-- [AFFILIATE: Samsung 990 EVO 2TB NVMe SSD] -->
     <p>The <a href="https://www.amazon.com/s?k=Samsung+990+EVO+2TB+NVMe&tag=vmwaremadesim-20" target="_blank" rel="noopener sponsored" class="text-blue-400 hover:text-blue-300 underline">Samsung 990 EVO 2TB</a> at <strong class="text-slate-200">~$142</strong> is what William Lam uses for vSAN ESA storage in his VCF 9 lab. It's a PCIe Gen 4 drive with strong sequential performance and Samsung's reliability. For a home lab that gets hammered with VM deployments and snapshots, the endurance rating matters &mdash; and Samsung delivers.</p>
 
     <p>If you want the faster (and pricier) option, the <a href="https://www.amazon.com/s?k=Samsung+990+Pro+2TB+NVMe&tag=vmwaremadesim-20" target="_blank" rel="noopener sponsored" class="text-blue-400 hover:text-blue-300 underline">Samsung 990 Pro 2TB</a> at ~$160-180 bumps you to Gen 4x4 speeds (7,450 MB/s) with higher endurance (1,200 TBW). Both are excellent choices.</p>
 
     <h3 class="text-xl font-semibold text-white">The Switch: TP-Link TL-SG108E</h3>
 
+    <!-- [AFFILIATE: TP-Link TL-SG108E 8-Port Managed Switch] -->
     <p>The <a href="https://www.amazon.com/s?k=TP-Link+TL-SG108E+managed+switch&tag=vmwaremadesim-20" target="_blank" rel="noopener sponsored" class="text-blue-400 hover:text-blue-300 underline">TP-Link TL-SG108E</a> is an 8-port managed gigabit switch for <strong class="text-slate-200">~$30</strong>. It supports 802.1Q VLANs, port mirroring, and IGMP snooping &mdash; enough to practice vSwitch and port group configurations with real VLAN tagging. Fanless, draws 4W, and won't crash. That's all you need for a lab switch.</p>
 
     <h3 class="text-xl font-semibold text-white">The Total</h3>
@@ -199,6 +202,7 @@
 
     <div class="callout">
       <strong class="text-yellow-400">RAM upgrade:</strong> The K11 ships with 16-32GB depending on config. A 64GB upgrade (2x32GB DDR5 SO-DIMM) adds ~$120-150. If you want to go all-in, the <a href="https://www.amazon.com/s?k=Crucial+128GB+DDR5+SODIMM+CT2K64G56C46S5&tag=vmwaremadesim-20" target="_blank" rel="noopener sponsored" class="text-blue-400 hover:text-blue-300 underline">Crucial 128GB kit (2x64GB, ~$279)</a> has been verified by William Lam in multiple mini PCs including the K11.
+      <!-- [AFFILIATE: Crucial 128GB DDR5 SO-DIMM Kit CT2K64G56C46S5] -->
     </div>
 
     <!-- Section: If You Have More Budget -->
@@ -308,6 +312,7 @@
 
     <h3 class="text-xl font-semibold text-white">ESXi 9 Requires a Subscription</h3>
 
+    <!-- [AFFILIATE: VMUG Advantage Membership] -->
     <p>Free ESXi is version 8.0U3e only. <strong class="text-slate-200">ESXi 9.0 requires an active VVF or VCF subscription</strong> to download. If you want ESXi 9 for your lab, a <a href="https://www.vmug.com/membership/vmug-advantage-membership/" class="text-blue-400 hover:text-blue-300" target="_blank" rel="noopener">VMUG Advantage membership ($200/year)</a> gives you personal-use licenses for the entire VMware portfolio. It also qualifies you to access the nested ESXi 9.0 virtual appliance from the <a href="https://williamlam.com/2025/08/updated-nested-esxi-8-x-9-0-virtual-appliance.html" class="text-blue-400 hover:text-blue-300" target="_blank" rel="noopener">Flings</a>.</p>
 
     <!-- Section: Nested Virtualization -->
@@ -324,6 +329,8 @@
     </div>
 
     <p>The tradeoff: lower performance than bare metal, no GPU passthrough, and some features like Fault Tolerance behave differently. For learning vSphere administration, networking, storage, and lifecycle management, nested is perfectly adequate.</p>
+
+    <p>If you want to test Horizon in a home lab, run it nested — I deploy Horizon Connection Server and Enrollment Service as nested VMs on my Ryzen 9900X all the time. Works fine for learning the platform without dedicating physical hardware to it.</p>
 
     <!-- Section: Skip These -->
     <h2 class="text-2xl font-bold text-white">Skip These</h2>

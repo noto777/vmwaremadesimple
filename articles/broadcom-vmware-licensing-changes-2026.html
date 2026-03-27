@@ -277,7 +277,7 @@
       <li><strong>vSphere Desktop</strong> — Discontinued</li>
       <li><strong>NSX-T as standalone</strong> — Absorbed into VCF</li>
       <li><strong>vCloud Director (standalone)</strong> — Moved to VCSP program</li>
-      <li><strong>VMware Horizon perpetual</strong> — Now Omnissa (spun out to KKR in mid-2024)</li>
+      <li><strong>VMware Horizon perpetual</strong> — Now Omnissa (spun out to KKR in mid-2024) (I'm currently running Horizon 2512 in production under Omnissa. The transition has been less chaotic than the Broadcom-side changes, but the licensing model is still subscription-only.)</li>
     </ul>
 
     <div class="callout">
@@ -314,8 +314,9 @@
     </ul>
 
     <p>
-      Proxmox is a legitimate hypervisor for workloads that don't need the full VMware SDDC stack. For a 5-10 host environment running standard VMs, I'd take it seriously.
+      Proxmox is a legitimate hypervisor for workloads that don't need the full VMware SDDC stack. For a 5-10 host environment running standard VMs, I'd take it seriously. I've been running a Proxmox cluster alongside my production vSphere for the past year. For standard compute workloads — app servers, file servers, databases — the operational gap is smaller than Broadcom's marketing suggests.
     </p>
+    <!-- [AFFILIATE: Proxmox VE Basic Subscription] -->
 
     <h3 class="text-xl font-semibold text-white">Option 3: Microsoft Azure Stack HCI / Hyper-V</h3>
 
@@ -336,6 +337,7 @@
     <p>
       Strong option if you're going hyper-converged and want an integrated stack without per-core pricing. Their node-based pricing is more predictable. The caveat: you're trading VMware lock-in for Nutanix lock-in. Not necessarily wrong, but eyes open.
     </p>
+    <!-- [AFFILIATE: Nutanix free trial] -->
 
     <!-- Horizon / Omnissa -->
     <h2 class="text-2xl font-bold text-white">Horizon Is Now Omnissa — What That Means</h2>
@@ -388,9 +390,6 @@
       <li><strong>Run a Proxmox or Nutanix PoC if you're sub-500 cores.</strong> Not necessarily to migrate — just to have leverage in negotiations.</li>
       <li><strong>Don't panic-migrate.</strong> Production migrations are risky. A bad migration is worse than a bad licensing deal. Take the time to do it right.</li>
     </ol>
-
-    <!-- Bottom Line -->
-    <h2 class="text-2xl font-bold text-white">Bottom Line</h2>
 
     <p>
       Broadcom made a $69 billion bet that VMware's installed base would rather pay up than leave. For large enterprises with deep NSX and vSAN investments, that bet is probably right in the short term. The switching costs are real.

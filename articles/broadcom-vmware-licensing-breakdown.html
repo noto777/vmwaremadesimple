@@ -65,15 +65,11 @@
 
     <!-- Intro -->
     <p class="text-lg text-slate-300">
-      Broadcom completed its $61 billion acquisition of VMware in November 2023 and overhauled the licensing model from the ground up. Perpetual licenses are dead, per-socket pricing is gone, and everything is now subscription-based, priced per physical core.
-    </p>
-
-    <p>
-      Below: what the new licensing looks like, what each tier includes, and what it costs for specific environment sizes with cited sources.
+      My last renewal conversation with a Broadcom rep was enlightening. Their quote came back at 3.5x the prior year. Here's the actual breakdown of what changed, what it costs, and how to calculate your number.
     </p>
 
     <div class="callout-red callout">
-      <strong class="text-red-400">Summary:</strong> Reported price increases range from 150% to over 1,000% depending on configuration and prior discounting (source: ColocationPlus, June 2025; AT&T federal court filing, 2024). Existing perpetual license support contracts expire by October 2027, after which the choice is: subscribe at the new pricing, or migrate off VMware.
+      <strong class="text-red-400">The short version:</strong> Reported price increases range from 150% to over 1,000% depending on configuration and prior discounting (source: ColocationPlus, June 2025; AT&T federal court filing, 2024). Existing perpetual license support contracts expire by October 2027, after which the choice is: subscribe at the new pricing, or migrate off VMware.
     </div>
 
     <!-- What Changed -->
@@ -325,6 +321,7 @@
           <td>€0–€1,060/socket/yr</td>
           <td>Cost-conscious, Linux-comfortable teams</td>
         </tr>
+        <!-- [AFFILIATE: Proxmox VE Community Subscription] -->
         <tr>
           <td class="font-medium text-slate-300">Nutanix AHV</td>
           <td>Per core/year</td>
@@ -354,15 +351,15 @@
     <h2 class="text-2xl font-bold text-white">What You Should Do Right Now</h2>
 
     <ol class="list-decimal list-inside text-slate-300 space-y-3 mb-6">
-      <li><strong>Know your numbers.</strong> Count your physical cores across all hosts — remember the 16-core minimum per CPU socket. Multiply by $190 (VVF) or $350 (VCF) to get your ballpark annual cost. Also check pricing for vSphere Standard and Enterprise Plus, which may be cheaper if you don't need vSAN.</li>
-      <li><strong>Check your support contract expiry date.</strong> That's your deadline for making a decision.</li>
-      <li><strong>Get competing quotes before signing a multi-year renewal.</strong> Broadcom is pushing multi-year commitments. Every competitor is aggressively targeting organizations on expiring VMware contracts, which creates negotiating leverage — use it.</li>
-      <li><strong>Start testing alternatives in a lab.</strong> Spin up Proxmox (free) or request a Nutanix trial. See what migration actually looks like for your workloads before you're under time pressure.</li>
-      <li><strong>Talk to your Nutanix rep about the migration promotion.</strong> They're offering one year of free licensing (up to 1,000 cores) for VMware customers through July 2026. Even if you don't switch, having a competing quote strengthens your negotiation position with Broadcom.</li>
+      <li><strong>Run the math now.</strong> Count physical cores per server, apply the 16-core minimum per CPU socket, multiply by $190 for VVF.</li>
+      <li><strong>Find your contract expiry date.</strong> That's your decision deadline — not Broadcom's.</li>
+      <li><strong>Get quotes from Proxmox, Nutanix, and Hyper-V before you sign anything multi-year.</strong> Broadcom negotiates when they think you'll leave.</li>
+      <li><strong>Spin up Proxmox in a lab today.</strong> It's free and takes 20 minutes. Know what migration actually looks like before you're under renewal pressure.</li>
+      <li><strong>Call your Nutanix rep.</strong> Their migration promotion (one free year, up to 1,000 cores, through July 2026) is real leverage even if you don't switch.</li>
     </ol>
 
     <div class="callout-green callout">
-      <strong class="text-green-400">On alternatives:</strong> The VMware alternatives market is more competitive than it has been in a decade — Proxmox, Nutanix, Microsoft, and XCP-ng are all actively courting VMware customers with migration promotions and aggressive pricing. That competition is leverage whether the plan is to stay, switch, or negotiate.
+      <strong class="text-green-400">My take on timing:</strong> The VMware alternatives market is more competitive than it has been in a decade — Proxmox, Nutanix, Microsoft, and XCP-ng are all actively courting VMware customers with migration promotions and aggressive pricing. That competition is leverage whether the plan is to stay, switch, or negotiate.
     </div>
 
     <!-- Newsletter CTA -->
@@ -380,8 +377,8 @@
       <div class="flex items-start gap-4">
         <div class="w-12 h-12 bg-slate-700 rounded-full flex items-center justify-center text-xl">🖥️</div>
         <div>
-          <p class="text-white font-semibold">Written by the VMware Made Simple team</p>
-          <p class="text-slate-400 text-sm mt-1">20+ years in enterprise IT. VCP-DCV certified. Managed environments with 500+ hosts across healthcare and financial services. Vendor independent — we don't sell VMware or any of its alternatives.</p>
+          <p class="text-white font-semibold">Written by Rob Notaro</p>
+          <p class="text-slate-400 text-sm mt-1">Rob Notaro is a senior VMware/Horizon engineer with 10+ years deploying vSphere and VCF in production. VCP-DCV certified. Currently running vSphere 9.</p>
         </div>
       </div>
     </div>
