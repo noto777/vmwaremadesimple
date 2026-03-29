@@ -120,4 +120,4 @@ curl -k https://<nsx-mgr-ip>/api/1.0/admin/configs -H "Authorization: Bearer <to
 
 **Log every step with timestamps.** After the migration, you'll want a changelog of exactly what was updated, what anomalies appeared, and when. Issues that surface a week later are much easier to debug when you have that record.
 
-[AFFILIATE: Dell PowerEdge Gen12 servers validated on VCF 9 HCL]
+[Dell PowerEdge Gen12 servers validated on VCF 9 HCL](https://www.amazon.com/s?k=Dell+PowerEdge+Gen12+servers+validated+on+VCF+9+HCL)

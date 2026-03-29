@@ -23,10 +23,10 @@ Get-CimInstance Win32_PhysicalMemory | Measure-Object Capacity -Sum | Select-Obj
 
 **Hardware I'd actually recommend for a budget build (2026):**
 
-- [AFFILIATE: Intel NUC 13 Pro] — 4-core, supports up to 64 GB DDR4, fanless-ish, passable for single-host vCenter + 3-4 VMs
-- [AFFILIATE: Used Dell OptiPlex 7080 or 9020 SFF] — under $200 refurbished, 32 GB RAM upgradeable, solid ESXi hardware support
-- [AFFILIATE: Crucial 32 GB DDR4 SO-DIMM] — RAM upgrade for NUC-style systems
-- [AFFILIATE: Samsung 990 Pro 2TB NVMe] — fast enough that your VMs feel like real hardware
+- [Intel NUC 13 Pro](https://www.amazon.com/s?k=Intel+NUC+13+Pro) — 4-core, supports up to 64 GB DDR4, fanless-ish, passable for single-host vCenter + 3-4 VMs
+- [Used Dell OptiPlex 7080 or 9020 SFF](https://www.amazon.com/s?k=Used+Dell+OptiPlex+7080+or+9020+SFF) — under $200 refurbished, 32 GB RAM upgradeable, solid ESXi hardware support
+- [Crucial 32 GB DDR4 SO-DIMM](https://www.amazon.com/s?k=Crucial+32+GB+DDR4+SO-DIMM) — RAM upgrade for NUC-style systems
+- [Samsung 990 Pro 2TB NVMe](https://www.amazon.com/s?k=Samsung+990+Pro+2TB+NVMe) — fast enough that your VMs feel like real hardware
 
 If you want a multi-host setup on a real budget, two used Dell OptiPlexes or HP EliteDesk minis with 32 GB RAM each will cost you under $400 total on eBay and give you actual vMotion and HA to test with.
 
@@ -38,8 +38,7 @@ As of 2024, Broadcom removed the standalone free ESXi license. You now need eith
 
 For personal lab use where you're not licensing production workloads, VMUG Advantage is the only legitimate path to ESXi + vCenter without a commercial subscription. At $200/year it's easily worth it if you're studying for VCP or running active lab environments.
 
-[AFFILIATE: VMUG Advantage membership]
-
+[VMUG Advantage membership](https://www.amazon.com/s?k=VMUG+Advantage+membership)
 ### Guest Operating Systems
 
 **Windows Server:** Microsoft offers 180-day evaluation ISOs for Windows Server 2019 and 2022 — free to download from the Microsoft Evaluation Center. Install, study, rebuild when it expires. The evaluation watermark is cosmetic and doesn't break functionality.
@@ -64,8 +63,7 @@ sudo tcpdump -i eth0 -w /tmp/capture.pcap -c 100
 
 **ESXi (bare-metal, requires VMUG Advantage):** Best option for realistic VMware skill-building. Installs directly on hardware, near-native performance. You lose the ability to dual-boot unless you install ESXi on a dedicated USB SSD.
 
-**VMware Workstation Pro ($):** Runs ESXi nested inside a Windows host. Slower than bare-metal but easier to get started. Good for quick testing on a laptop. [AFFILIATE: VMware Workstation Pro]
-
+**VMware Workstation Pro ($):** Runs ESXi nested inside a Windows host. Slower than bare-metal but easier to get started. Good for quick testing on a laptop. [VMware Workstation Pro](https://www.amazon.com/s?k=VMware+Workstation+Pro)
 **Proxmox VE (free):** Debian-based, KVM/QEMU, excellent for home labs if you're OK learning a different management interface. Can import OVF/OVA files. Doesn't give you real VMware CLI experience for VCP prep, but it's a solid alternative for general virtualization learning.
 
 I run both — Proxmox on one box for general stuff, ESXi on another specifically for VMware skill work.
@@ -117,5 +115,5 @@ The "Windows Server Evaluation" watermark appears after 180 days. Your VMs will 
 
 The whole point of a lab is to fail without consequences. Do that early and often.
 
-[AFFILIATE: Kingston 64GB DDR4 ECC RDIMM for mini-server builds]
-[AFFILIATE: Sabrent Rocket 4 Plus 2TB NVMe]
+[Kingston 64GB DDR4 ECC RDIMM for mini-server builds](https://www.amazon.com/s?k=Kingston+64GB+DDR4+ECC+RDIMM+for+mini-server+builds)
+[Sabrent Rocket 4 Plus 2TB NVMe](https://www.amazon.com/s?k=Sabrent+Rocket+4+Plus+2TB+NVMe)

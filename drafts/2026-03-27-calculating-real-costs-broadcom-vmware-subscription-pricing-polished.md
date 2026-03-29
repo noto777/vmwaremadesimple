@@ -267,8 +267,7 @@ The 72-core minimum and late-renewal penalties make staying painful. A full migr
 6. **Get VAR quotes, not just list prices** — negotiated rates can be 20–40% below list for larger deployments
 7. **Evaluate VMUG Advantage** if you run a home lab or dev environment — $200/year for lab access to the full VMware suite
 
-For hardware supporting your VMware environment, see our [home lab hardware guide](/how-to-build-a-vmware-home-lab-on-a-budget) for current picks on budget-friendly validated platforms. [AFFILIATE: Dell PowerEdge R650xs — VCF 9 HCL validated, dual Xeon Silver]
-
+For hardware supporting your VMware environment, see our [home lab hardware guide](/how-to-build-a-vmware-home-lab-on-a-budget) for current picks on budget-friendly validated platforms. [Dell PowerEdge R650xs — VCF 9 HCL validated, dual Xeon Silver](https://www.amazon.com/s?k=Dell+PowerEdge+R650xs+—+VCF+9+HCL+validated,+dual+Xeon+Silver)
 ---
 
 ## Sources

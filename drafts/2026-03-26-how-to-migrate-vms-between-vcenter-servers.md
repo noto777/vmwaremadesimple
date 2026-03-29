@@ -39,8 +39,7 @@ No exceptions on this. Network blips, storage overflows, and unexpected power ev
 
 ### Method A: VMware vCenter Converter Standalone (Free)
 
-[AFFILIATE: VMware vCenter Converter Standalone — free download via Broadcom Customer Portal]
-
+[VMware vCenter Converter Standalone — free download via Broadcom Customer Portal](https://www.amazon.com/s?k=VMware+vCenter+Converter+Standalone+—+free+download+via+Broadcom+Customer+Portal)
 Converter Standalone is the right tool for most cross-vCenter migrations, especially between disconnected environments. It acts as an intermediary: connects to the source ESXi host, pulls virtual disk data, and creates a new VM definition on the destination ESXi host registered to the destination vCenter.
 
 Works for hot (powered-on) and cold (powered-off) migrations. Can convert between different hypervisors. Handles thick-to-thin disk conversion during the move.

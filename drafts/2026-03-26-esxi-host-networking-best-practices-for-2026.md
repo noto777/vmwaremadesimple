@@ -11,24 +11,49 @@ What to look for:
 - **SR-IOV and VMDq** — Single Root I/O Virtualization gives high-I/O VMs (databases, AI training workloads) dedicated hardware queues instead of competing on a shared NIC
 - **25 Gbps uplinks minimum** for east-west traffic in mid-tier deployments. 100 Gbps for storage backends and AI inference clusters
 
-[AFFILIATE: Intel E810 Series 25GbE NIC — validated for ESXi 8.x vNSA APIs]
-[AFFILIATE: Mellanox ConnectX-6 Lx 25GbE — SR-IOV capable, VCF 9 supported]
+[Intel E810 Series 25GbE NIC — validated for ESXi 8.x vNSA APIs](https://www.amazon.com/s?k=Intel+E810+Series+25GbE+NIC+—+validated+for+ESXi+8.x+vNSA+APIs)
+[Mellanox ConnectX-6 Lx 25GbE — SR-IOV capable, VCF 9 supported](https://www.amazon.com/s?k=Mellanox+ConnectX-6+Lx+25GbE+—+SR-IOV+capable,+VCF+9+supported)
+Check your current NIC drivers and capabilities across all hosts:
 
-Check your current NIC drivers and capabilities:
+```powershell
+# Requires PowerCLI 13.3 or later
+Connect-VIServer -Server vcenter.yourdomain.local
 
-```bash
-# On ESXi host — list all NICs with driver and firmware versions
-esxcli network nic list
+# List all NICs with driver and firmware versions across every host
+Get-VMHost | ForEach-Object {
+    $esxcli = Get-EsxCli -VMHost $_ -V2
+    $nics = $esxcli.network.nic.list.Invoke()
+    $nics | Select-Object @{N='Host';E={$_.Name}}, Name, Driver, FirmwareVersion, Speed, Duplex, Link
+} | Format-Table -AutoSize
+```
 
-# Check for SR-IOV support on a specific NIC
-esxcli network sriovnic list
+```powershell
+# Check SR-IOV capability on all hosts
+Get-VMHost | ForEach-Object {
+    $esxcli = Get-EsxCli -VMHost $_ -V2
+    $sriovNics = $esxcli.network.sriovnic.list.Invoke()
+    $sriovNics | Select-Object @{N='Host';E={$_.Name}}, Name, NumVFs, ActiveVFs
+} | Format-Table -AutoSize
 ```
 
 **Energy Efficient Ethernet (EEE):** Disable it on production uplinks. EEE introduces latency spikes during wake-up cycles that are unacceptable for vMotion, storage traffic, or any latency-sensitive workload:
 
-```bash
-esxcli network nic set --nic=vmnic0 --eee=false
-esxcli network nic set --nic=vmnic1 --eee=false
+```powershell
+# Disable EEE on production uplinks across all hosts
+Connect-VIServer -Server vcenter.yourdomain.local
+
+Get-VMHost | ForEach-Object {
+    $vmhost = $_
+    $esxcli = Get-EsxCli -VMHost $vmhost -V2
+    $nics = $esxcli.network.nic.list.Invoke()
+    foreach ($nic in $nics) {
+        $args = $esxcli.network.nic.set.CreateArgs()
+        $args.nicname = $nic.Name
+        $args.eee = $false
+        $esxcli.network.nic.set.Invoke($args)
+        Write-Host "[$($vmhost.Name)] Disabled EEE on $($nic.Name)"
+    }
+}
 ```
 
 **LACP:** For bonded uplinks, use LACP Active/Active. Static trunking works but gives you no automatic failover negotiation. Match the mode to your physical switch config — Active/Active on both sides for load balancing across multiple uplinks.
@@ -44,29 +69,44 @@ Four mandatory port groups:
 3. **Storage (NFS/iSCSI)** — high-priority, low-latency, jumbo frames (MTU 9000) where supported
 4. **Guest/VM traffic** — general VM communication
 
-Create them consistently across all hosts with PowerCLI or via script:
+Create them consistently across all hosts with PowerCLI:
 
-```bash
-#!/bin/bash
-# Create segmented port groups on an ESXi host
-# Run from a management host with SSH access — adjust VLANs for your environment
+```powershell
+# Create segmented port groups on a vSphere Standard Switch across all hosts
+# Requires PowerCLI 13.3 or later — adjust VLANs for your environment
+Connect-VIServer -Server vcenter.yourdomain.local
 
-VLAN_MOTION=200
-VLAN_STORAGE=300
-VLAN_GUEST=400
-VLAN_MGMT=100
+$vlanMotion   = 200
+$vlanStorage  = 300
+$vlanGuest    = 400
+$vlanMgmt     = 100
+$vSwitchName  = "vSwitch0"
 
-# vMotion port group with jumbo frames
-vim-cmd hostsvc/portgroup/create "vMotion-Optimized" vmnic0 ${VLAN_MOTION} 9000
+Get-VMHost | ForEach-Object {
+    $vmhost = $_
 
-# Storage NFS port group
-vim-cmd hostsvc/portgroup/create "Storage-NFS" vmnic1 ${VLAN_STORAGE} 9000
+    # vMotion port group with jumbo frames
+    New-VirtualPortGroup -VMHost $vmhost -VirtualSwitch (Get-VirtualSwitch -VMHost $vmhost -Name $vSwitchName) `
+        -Name "vMotion-Optimized" -VLanId $vlanMotion | Out-Null
+    Get-VirtualPortGroup -VMHost $vmhost -Name "vMotion-Optimized" |
+        Set-VirtualPortGroup -Mtu 9000 | Out-Null
 
-# Guest traffic port group
-vim-cmd hostsvc/portgroup/create "Guest-Traffic" vmnic2 ${VLAN_GUEST} 1500
+    # Storage NFS port group
+    New-VirtualPortGroup -VMHost $vmhost -VirtualSwitch (Get-VirtualSwitch -VMHost $vmhost -Name $vSwitchName) `
+        -Name "Storage-NFS" -VLanId $vlanStorage | Out-Null
+    Get-VirtualPortGroup -VMHost $vmhost -Name "Storage-NFS" |
+        Set-VirtualPortGroup -Mtu 9000 | Out-Null
+
+    # Guest traffic port group
+    New-VirtualPortGroup -VMHost $vmhost -VirtualSwitch (Get-VirtualSwitch -VMHost $vmhost -Name $vSwitchName) `
+        -Name "Guest-Traffic" -VLanId $vlanGuest | Out-Null
+
+    Write-Host "[$($vmhost.Name)] Port groups created"
+}
 
 # Verify
-vim-cmd hostsvc/portgroup/list
+Get-VMHost | Get-VirtualPortGroup | Select-Object VMHost, Name, VLanId |
+    Sort-Object VMHost, Name | Format-Table -AutoSize
 ```
 
 > MTU 9000 (jumbo frames) is only safe if your physical switch ports also support it. If you enable jumbo frames in ESXi but the switch isn't configured for it, you'll get silent packet fragmentation that shows up as intermittent performance issues. Verify end-to-end.
@@ -112,12 +152,16 @@ The flat network model — every VM on the same VLAN, trusting each other — is
 
 Check Geneve VTEP configuration and MTU:
 
-```bash
-# Verify current MTU and IP on the physical NIC
-esxcli network ip general get
+```powershell
+# Verify MTU and IP configuration on all hosts
+Connect-VIServer -Server vcenter.yourdomain.local
 
-# List VTEP interfaces — verify IP assignments match NSX Manager config
-esxcli network ip interface list
+Get-VMHost | ForEach-Object {
+    $vmhost = $_
+    $esxcli = Get-EsxCli -VMHost $vmhost -V2
+    $interfaces = $esxcli.network.ip.interface.list.Invoke()
+    $interfaces | Select-Object @{N='Host';E={$vmhost.Name}}, Name, MTU, Enabled
+} | Format-Table -AutoSize
 ```
 
 Ensure the physical switch port supports jumbo frames if your overlay MTU exceeds 1500. Verify VTEP IP assignments in NSX Manager match what the hosts report.
@@ -126,9 +170,14 @@ Ensure the physical switch port supports jumbo frames if your overlay MTU exceed
 
 Isolate vMotion onto a dedicated physical NIC if possible. If sharing is required, adjust QoS policy to prioritize vMotion traffic. Check for CPU saturation on the source host — if the host is at 90%+ CPU, vMotion will time out before completing the memory copy phase.
 
-```bash
-# Check for queue depth issues on the vMotion NIC
-esxcli network ip interface ipv4 get
+```powershell
+# Check vMotion network adapter configuration on all hosts
+Connect-VIServer -Server vcenter.yourdomain.local
+
+Get-VMHost | Get-VMHostNetworkAdapter -VMKernel |
+    Where-Object { $_.VMotionEnabled } |
+    Select-Object VMHost, Name, IP, SubnetMask, MTU, VMotionEnabled |
+    Format-Table -AutoSize
 ```
 
 **Packet loss on RDMA/RoCE workloads**
@@ -141,24 +190,25 @@ A standard vSwitch supports one VLAN ID per port group, per uplink. If you need 
 
 ## Starting Your Networking Audit
 
-Run this on all hosts to identify legacy drivers, unsupported NICs, and missing features before you discover the problem during a production incident:
-
-```bash
-# Audit all NICs across ESXi hosts — run from each host via SSH
-esxcli network nic list
-esxcli network nic stats get -n vmnic0
-```
-
-For a cluster-wide audit via PowerCLI:
+Run this against your entire cluster to identify legacy drivers, unsupported NICs, and missing features before you discover the problem during a production incident:
 
 ```powershell
+# Full NIC audit across all hosts in a cluster — PowerCLI 13.3+
 Connect-VIServer -Server vcenter.yourdomain.local
 
 Get-VMHost | ForEach-Object {
-    $esxcli = Get-EsxCli -VMHost $_ -V2
+    $vmhost = $_
+    $esxcli = Get-EsxCli -VMHost $vmhost -V2
     $nics = $esxcli.network.nic.list.Invoke()
-    $nics | Select-Object @{N='Host';E={$_.Name -replace '.*/', ''}}, Name, Driver, Speed, Duplex, Link
-} | Format-Table -AutoSize
+    $nics | Select-Object `
+        @{N='Host';E={$vmhost.Name}},
+        Name,
+        Driver,
+        FirmwareVersion,
+        Speed,
+        Duplex,
+        @{N='LinkUp';E={$_.Link}}
+} | Sort-Object Host, Name | Format-Table -AutoSize
 ```
 
 Find anything running at 1 Gbps in a cluster where the rest is 10 or 25 Gbps — that's your bottleneck. Find drivers that are years out of date — that's your next patching priority.

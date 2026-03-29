@@ -112,5 +112,5 @@ If you're 20-50 hosts and already have NSX-T in your environment: **evaluate VCF
 
 Over 50 hosts with a dedicated networking team: **VCF is probably the right call.** The management overhead of running NSX separately from your lifecycle management is real at that scale.
 
-[AFFILIATE: HPE ProLiant Gen11 VCF-certified servers]
-[AFFILIATE: Dell PowerEdge VCF bundle hardware]
+[HPE ProLiant Gen11 VCF-certified servers](https://www.amazon.com/s?k=HPE+ProLiant+Gen11+VCF-certified+servers)
+[Dell PowerEdge VCF bundle hardware](https://www.amazon.com/s?k=Dell+PowerEdge+VCF+bundle+hardware)

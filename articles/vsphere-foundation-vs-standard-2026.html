@@ -105,7 +105,7 @@
 
     <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
       <li><strong>vSphere Standard:</strong> End of Sale July 31, 2025. You cannot buy or renew it. It's effectively legacy software on a death march to October 2027 EOL.</li>
-      <li><strong>vSphere Foundation (VVF):</strong> The replacement. Includes Enterprise Plus hypervisor features, vCenter, vSAN, and Aria Operations bundled. Minimum purchase: 72 cores. MSRP: $190/core/year (1-year) or $150/core/year (multi-year).</li>
+      <li><strong>vSphere Foundation (VVF):</strong> The replacement. Includes Enterprise Plus hypervisor features, vCenter, vSAN, and Aria Operations bundled. Minimum: <strong>16 cores per CPU socket</strong> (a 72-core order minimum was briefly introduced in April 2025 but reversed after industry backlash). MSRP: $190/core/year (1-year) or $150/core/year (multi-year).</li>
       <li><strong>VMware Cloud Foundation (VCF):</strong> The full SDDC stack. Adds NSX, full Aria Suite, SDDC Manager. MSRP: $350/core/year. Required if you need NSX.</li>
       <li><strong>vSphere 9:</strong> Only available to VVF and VCF customers. Standard users are permanently locked at vSphere 8.</li>
       <li><strong>Perpetual license holders:</strong> Your licenses don't expire, but your support does. vSphere 6.x and 7.x are already out of general support as of October 2025.</li>
@@ -335,20 +335,15 @@
 
     <p>For small and mid-size organizations, this change hits harder than anything else in the new pricing model, and it's frequently misunderstood.</p>
 
-    <p>VVF has <strong class="text-slate-200">two separate minimums that both apply</strong>:</p>
+    <p>VVF has a <strong class="text-slate-200">16-core minimum per physical CPU socket</strong>. Even if your CPU physically has 8 or 12 cores, you must license it as 16 cores minimum.</p>
 
-    <ol class="list-decimal list-inside text-slate-300 space-y-3 mb-6">
-      <li><strong>16 cores per physical CPU socket:</strong> Even if your CPU physically has 8 or 12 cores, you must license it as 16 cores minimum.</li>
-      <li><strong>72 cores minimum total purchase order:</strong> Regardless of how many sockets you have, your minimum order is 72 cores.</li>
-    </ol>
+    <p><strong>Note on the 72-core minimum:</strong> In April 2025, Broadcom briefly introduced a 72-core minimum per purchase order — which would have required even small single-server deployments to buy 72 cores regardless of actual socket count. After significant industry backlash, Broadcom reversed the decision and returned to the 16-core-per-CPU minimum. The 72-core order minimum is no longer in effect.</p>
 
-    <p>The 72-core order minimum is the constraint that bites hardest. Consider a common scenario: a small organization runs a 3-node ESXi cluster, each node with dual 12-core CPUs. That's 72 physical cores — right at the minimum. But if you have a 2-node cluster with dual 16-core CPUs, you have 64 physical cores — and you still have to buy 72. You're paying for capacity you don't have hardware to use.</p>
+    <p>In practice, the 16-core-per-socket rule means a single server with two 10-core CPUs (20 physical cores) must be licensed as 32 cores (16 per socket). A 3-node cluster with dual 12-core CPUs would be licensed for its full physical core count at 72 cores — not due to an order minimum, but because 3 nodes × 2 sockets × 16 cores = 96 minimum, or 3 nodes × 2 sockets × 12 actual cores = 72 real cores (no floor adjustment needed at 12+ cores/socket).</p>
 
-    <p>Worse: the 16-core-per-socket rule means a single server with two 10-core CPUs (20 physical cores) must be licensed as 32 cores. The 72-core order minimum then applies on top. Effectively, even a single-server VMware deployment costs you 72 cores × $190 = <strong class="text-slate-200">$13,680/year at minimum</strong>.</p>
+    <p>According to community reports on r/vmware, even without the order-level minimum, the per-socket 16-core floor has been one of the primary drivers pushing SMBs toward Proxmox and other alternatives. As one commenter put it: <em>"Your absolute bare minimum is 72 cores of either flavor — even if your hardware is smaller than that."</em> (This reflects a 3-node dual-socket cluster at 16 cores per socket, not a separate order minimum.)</p>
 
-    <p>According to community reports on r/vmware, this 72-core minimum was mandated in April 2025 and has been one of the primary drivers pushing SMBs toward Proxmox and other alternatives. As one commenter put it: <em>"Your absolute bare minimum is 72 cores of either flavor — even if your hardware is smaller than that."</em></p>
-
-    <h3 class="text-xl font-semibold text-white">Real Dollar Examples at the 72-Core Floor</h3>
+    <h3 class="text-xl font-semibold text-white">Real Dollar Examples at Common Deployment Sizes</h3>
 
     <div class="bg-card rounded-xl p-6 border border-slate-700 mb-6">
       <p class="text-slate-300 mb-2"><strong>Old vSphere Standard (72 cores):</strong> $50 × 72 = <span class="text-red-400 font-bold">$3,600/year</span> <em class="text-slate-500">(no longer purchasable)</em></p>
@@ -370,7 +365,7 @@
       <li>European customers in late 2025 reporting VVF at <strong>€50/core</strong> for 2025 terms, being warned prices would change in 2026.</li>
     </ul>
 
-    <p>The bottom line from the r/vmware community: <em>"Broadcom likes the 'how much you got?' approach — MSRP isn't a thing anymore."</em> Get quotes from at least three resellers before agreeing to anything. For deals over 200 cores, expect meaningful room to negotiate. For 72-core minimum orders, you're likely paying closer to list.</p>
+    <p>The bottom line from the r/vmware community: <em>"Broadcom likes the 'how much you got?' approach — MSRP isn't a thing anymore."</em> Get quotes from at least three resellers before agreeing to anything. For deals over 200 cores, expect meaningful room to negotiate. For smaller deployments at or near the 16-core-per-socket floor, you're likely paying closer to list.</p>
 
     <div class="callout">
       <strong class="text-yellow-400">EMEA Pricing Warning:</strong> The December 2025 Broadcom EMEA-Non-EEA price book reportedly removed vSphere Foundation and Enterprise Plus entirely from that regional catalog — leaving only vSphere Standard at $70/core and VCF at $400/core. If you're in an affected region, verify your options with your reseller directly. US pricing remains as listed above.

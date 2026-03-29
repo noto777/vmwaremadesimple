@@ -246,7 +246,7 @@
         <tr>
           <td class="font-medium text-slate-300">VDI / EUC</td>
           <td>Omnissa Horizon on ESXi — GA, full feature set. App Volumes, DEM, instant clones, Blast Extreme. Largest VDI install base globally per IDC 2024 VDI market share.</td>
-          <td>Nutanix Frame (cloud DaaS) + Omnissa Horizon on AHV (Limited Availability as of Horizon 2506). Horizon/AHV not yet GA; vGPU/App Volumes in LA require Omnissa to enable.</td>
+          <td>Nutanix Frame (cloud DaaS) + Omnissa Horizon on AHV — <strong>GA as of December 2025</strong>. vGPU, App Volumes, DEM, FIPS, and CPA supported. (Source: Nutanix Community blog, Dec 2025)</td>
           <td class="win-vmware">VMware</td>
         </tr>
         <tr>
@@ -344,10 +344,10 @@
 
     <h3 class="text-xl font-semibold text-white">3. VDI — Horizon on ESXi Is Still the Gold Standard</h3>
     <p>
-      Omnissa Horizon on ESXi has shipped since 2008 and supports: instant clones, App Volumes, Dynamic Environment Manager, Blast Extreme protocol, vGPU support across every NVIDIA profile, full Cloud Pod Architecture for 50,000+ seat deployments. Nutanix has Nutanix Frame (a cloud DaaS product, not an on-prem VDI solution) and a newly announced partnership with Omnissa for Horizon on AHV — which was in <strong class="text-slate-200">Limited Availability</strong> as of Horizon 2506 in late 2025. That means vGPU, App Volumes, DEM, FIPS mode, and CPA are accessible, but you need Omnissa to enable them and it's not yet fully GA. <em>(Source: <a href="https://www.omnissa.com/insights/blog/omnissa-horizon-8-support-for-nutanix-ahv/" target="_blank" rel="noopener" class="text-blue-400 hover:text-blue-300">Omnissa blog, Aug 2025, updated Oct 2025</a>)</em>
+      Omnissa Horizon on ESXi has shipped since 2008 and supports: instant clones, App Volumes, Dynamic Environment Manager, Blast Extreme protocol, vGPU support across every NVIDIA profile, full Cloud Pod Architecture for 50,000+ seat deployments. Nutanix launched Limited Availability for Horizon on AHV in July 2025; <strong class="text-slate-200">Horizon on AHV reached full GA in December 2025</strong> — vGPU, App Volumes, DEM, FIPS mode, and CPA are all supported. <em>(Source: <a href="https://next.nutanix.com/community-blog-154/horizon-on-nutanix-ahv-robust-features-for-modern-euc-45132" target="_blank" rel="noopener" class="text-blue-400 hover:text-blue-300">Nutanix Community blog, Dec 2025</a>)</em>
     </p>
     <p>
-      If your environment is heavily VDI, moving to Nutanix right now means either waiting for Horizon/AHV to reach full GA, accepting Limited Availability status for key features, or running a split stack where Horizon stays on VMware. None of those are clean answers.
+      If your environment is heavily VDI, Horizon on AHV is now GA and a viable option. That said, ESXi remains the more mature and widely deployed Horizon substrate — evaluate based on your specific workload requirements, vGPU complexity, and Cloud Pod Architecture scale.
     </p>
 
     <h3 class="text-xl font-semibold text-white">4. DRS Maturity and Workload Automation Depth</h3>
@@ -406,7 +406,7 @@
 
     <h3 class="text-xl font-semibold text-white">Stay on VMware (for now) if:</h3>
     <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
-      <li>You're running <strong>Horizon VDI with 500+ desktops</strong>. Horizon/AHV is not yet GA. This is not a year to be an early adopter for enterprise VDI.</li>
+      <li>You're running <strong>Horizon VDI with 500+ desktops</strong> and have deep vGPU, App Volumes, or Cloud Pod Architecture dependencies. Horizon on AHV went GA in December 2025 but has fewer production deployments at scale than the ESXi path — evaluate carefully before committing large VDI estates.</li>
       <li>You have <strong>NSX deployed and in use</strong> — distributed routing, L7 firewall, or IDS/IPS. Flow does not replace this.</li>
       <li>Your backup/DR stack is <strong>Zerto-dependent</strong>. Zerto does not support Nutanix.</li>
       <li>Your team is <strong>deep VMware-only</strong> and you're in a hiring market where retraining creates real operational risk.</li>
@@ -417,7 +417,7 @@
     <h2 class="text-2xl font-bold text-white">Bottom Line</h2>
 
     <p>
-      Nutanix AHV is a credible alternative to VMware for enterprise compute workloads that do not depend on NSX, Horizon VDI (pending GA on AHV), or Zerto-based DR. It is not a drop-in replacement for a fully deployed VMware stack — no alternative is, because the VMware ecosystem extends well beyond the hypervisor.
+      Nutanix AHV is a credible alternative to VMware for enterprise compute workloads that do not depend on NSX or Zerto-based DR. Horizon on AHV reached GA in December 2025, removing the VDI blocker for most deployments — though large-scale VDI estates should validate AHV maturity against their specific feature requirements. It is not a drop-in replacement for a fully deployed VMware stack — no alternative is, because the VMware ecosystem extends well beyond the hypervisor.
     </p>
 
     <p>

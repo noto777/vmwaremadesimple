@@ -103,7 +103,7 @@
       <li><strong>Collapsed the product catalog:</strong> VMware had ~8,000 SKUs. Broadcom reduced this to a handful of bundles centered on VMware Cloud Foundation (VCF) and vSphere Foundation (VVF). If your environment used a specific mix of point products, that option is gone.</li>
       <li><strong>Eliminated perpetual licenses entirely:</strong> All new VMware sales are subscription-only. If you were planning to buy a perpetual license and ride it out, that ship sailed.</li>
       <li><strong>Discontinued vSphere Standard:</strong> End of Sale was confirmed as <strong class="text-slate-200">July 31, 2025</strong>, via a Broadcom partner rep on Reddit's r/vmware (the January 2025 date cited in some articles was when resellers informally stopped quoting it — the official EoS date is July 31). No new sales, no renewals, no upgrades at that tier. The new entry point is vSphere Enterprise Plus or VVF at $190/core/year.</li>
-      <li><strong>Raised the minimum core requirement:</strong> As of April 10, 2025, Broadcom requires a minimum of 72 cores per purchase (up from 16). A small three-node cluster with dual 16-core CPUs = 96 cores x $190 = $18,240/year for entry-level VVF.</li>
+      <li><strong>Raised — then reversed — the minimum core requirement:</strong> In April 2025, Broadcom briefly mandated a 72-core minimum per purchase order. After significant industry backlash, they reversed the decision and returned to the existing <strong>16-core minimum per CPU socket</strong>. A small three-node cluster with dual 16-core CPUs = 96 cores × $190 = $18,240/year for entry-level VVF.</li>
       <li><strong>Added a 20% late renewal penalty:</strong> Miss your anniversary renewal date? That's an automatic 20% surcharge on top of whatever your new quote is.</li>
       <li><strong>Cut the channel:</strong> Ingram Micro — one of VMware's largest distributors — dropped VMware entirely. The sales and support ecosystem got smaller overnight.</li>
       <li><strong>Locked vSphere 9 to VVF/VCF:</strong> The next major release of vSphere will only be available to customers on VVF (vSphere Foundation) or VCF (VMware Cloud Foundation). If you're on anything else, you're on a dead-end branch.</li>
@@ -130,7 +130,7 @@
       </tbody>
     </table>
 
-    <p>That minimum-72-core requirement means the absolute floor for VVF is approximately <strong class="text-slate-200">$10,800/year</strong> — and that's MSRP. By late 2025, Reddit threads on r/vmware were reporting additional 20–25% price increases on renewal quotes, with one user describing a renewal that came in $23,000 over the prior year's invoice for identical workloads.</p>
+    <p>The 16-core-per-socket minimum means the absolute floor for VVF is determined by your actual CPU socket count, billed at whichever is higher: your real core count or 16 cores per socket. Community reports on r/vmware note that the effective minimum most shops encounter is 96 cores (3-node dual-socket cluster), putting the floor around <strong class="text-slate-200">$18,240/year</strong> at VVF MSRP. By late 2025, Reddit threads on r/vmware were reporting additional 20–25% price increases on renewal quotes, with one user describing a renewal that came in $23,000 over the prior year's invoice for identical workloads.</p>
 
     <!-- Section 2: Decision Framework -->
     <h2 class="text-2xl font-bold text-white">How to Choose: A Quick Decision Framework</h2>
