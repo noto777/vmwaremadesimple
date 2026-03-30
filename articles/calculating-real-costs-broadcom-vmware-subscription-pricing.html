@@ -4,12 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Calculating Real VMware Costs: A Complete Breakdown of Broadcom's Subscription Pricing | VMware Made Simple</title>
-  <meta name="description" content="Broadcom's per-core subscription model has shocked VMware administrators with 150–1,000% cost increases. This guide walks through the new VCF vs VVF pricing structure, the 72-core minimum trap, late-renewal penalties, and how to audit your environment with PowerCLI before your next renewal." />
-  <meta name="keywords" content="VMware licensing, Broadcom VMware pricing, VCF vs VVF cost, vSphere Foundation pricing 2025, VMware per-core licensing, VMware subscription cost calculator" />
+  <meta name="description" content="Broadcom's per-core subscription model has shocked VMware administrators." />
+  <meta name="keywords" content="vmware,broadcom,licensing,vcf,vvf,pricing" />
   <link rel="canonical" href="https://vmwaremadesimple.com/articles/calculating-real-costs-broadcom-vmware-subscription-pricing.html" />
 
   <meta property="og:title" content="Calculating Real VMware Costs: A Complete Breakdown of Broadcom's Subscription Pricing" />
-  <meta property="og:description" content="Broadcom's per-core subscription model has shocked VMware administrators with 150–1,000% cost increases. This guide walks through the new VCF vs VVF pricing structure, the 72-core minimum trap, late-renewal penalties, and how to audit your environment with PowerCLI before your next renewal." />
+  <meta property="og:description" content="Broadcom's per-core subscription model has shocked VMware administrators." />
   <meta property="og:type" content="article" />
   <meta property="og:url" content="https://vmwaremadesimple.com/articles/calculating-real-costs-broadcom-vmware-subscription-pricing.html" />
 
@@ -28,7 +28,7 @@
     "@context": "https://schema.org",
     "@type": "Article",
     "headline": "Calculating Real VMware Costs: A Complete Breakdown of Broadcom's Subscription Pricing",
-    "description": "Broadcom's per-core subscription model has shocked VMware administrators with 150–1,000% cost increases. This guide walks through the new VCF vs VVF pricing structure, the 72-core minimum trap, late-renewal penalties, and how to audit your environment with PowerCLI before your next renewal.",
+    "description": "Broadcom's per-core subscription model has shocked VMware administrators.",
     "author": { "@type": "Person", "name": "Rob Notaro" },
     "publisher": { "@type": "Organization", "name": "VMware Made Simple" },
     "datePublished": "2026-03-30",
@@ -78,74 +78,250 @@
 
     <!-- Header -->
     <div class="mb-10">
-      <div class="text-xs text-blue-400 font-medium uppercase tracking-wide mb-3">Licensing {{CATEGORY}} Cost</div>
+      <div class="text-xs text-blue-400 font-medium uppercase tracking-wide mb-3">Licensing & Cost</div>
       <h1 class="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight" style="-webkit-text-fill-color: white;">
         Calculating Real VMware Costs: A Complete Breakdown of Broadcom's Subscription Pricing
       </h1>
       <p class="text-slate-400 text-lg">
-        March 30, 2026 · 10 min read
+        March 30, 2026 · 11 min read
       </p>
     </div>
 
-    <!--
-      ARTICLE BODY GOES HERE
+    <h2>Calculating Real VMware Costs: A Complete Breakdown of Broadcom's Subscription Pricing</h2>
+<p>Broadcom's acquisition of VMware in late 2023 didn't just change the vendor — it fundamentally rewired how VMware environments are priced. Administrators who had spent years working with predictable per-socket perpetual licenses suddenly faced subscription-only bundles, a shift to per-core counting, and cost increases that community reports place at <strong>150% to over 1,000%</strong> for many organizations.</p>
+<p>This isn't a guide about whether the new model is fair. It's a guide to surviving it. You need to understand exactly how Broadcom counts cores, what VCF versus VVF actually includes, where the hidden costs live, and how to run a PowerCLI audit before your renewal conversation — so you're not negotiating blind.</p>
+<blockquote><strong>📋 TL;DR:</strong> VMware licensing now costs roughly <strong>$190–250 per core per year</strong> depending on tier, with a <strong>72-core minimum order</strong>. A modest 5-host cluster with dual 16-core CPUs = 160 cores = <strong>$30,400–40,000/year at list price</strong>. Before Broadcom, that same cluster might have run $5,000–10,000/year on perpetual + SnS.</blockquote>
+<p>[SCREENSHOT: Side-by-side cost comparison table showing pre-Broadcom perpetual vs post-Broadcom subscription for a 5-host cluster]</p>
+<h2>What Actually Changed: The End of Perpetual Licensing</h2>
+<p>On January 22, 2024, Broadcom <a href="https://blogs.vmware.com/cloud-foundation/2024/01/22/vmware-end-of-availability-of-perpetual-licensing-and-saas-services/">officially ended</a> perpetual VMware licenses and renewals for all products. This affects every organization on the planet running VMware infrastructure. Here's the complete picture of what changed:</p>
+<p>| Feature | Pre-Broadcom (≤2023) | Post-Broadcom (2024+) |</p>
+<p>|---|---|---|</p>
+<p>| License model | Perpetual + annual SnS | Subscription-only (annual or multi-year) |</p>
+<p>| License metric | <strong>Per socket</strong> (1 license = 1 CPU, up to 32 cores) | <strong>Per core</strong> (16-core minimum per CPU, 72-core minimum order) |</p>
+<p>| Product options | Modular — buy vSphere, vSAN, NSX separately | Bundled — VCF or VVF only |</p>
+<p>| Essentials/Essentials Plus | Available for SMBs | <strong>Discontinued</strong> |</p>
+<p>| Support | Optional, purchasable separately | Mandatory, bundled into subscription |</p>
+<p>| Compliance enforcement | Trust-based, infrequent audits | Active telemetry monitoring, strict enforcement |</p>
+<p>| Late renewal | No penalty | <strong>20% surcharge on first-year subscription cost</strong> |</p>
+<p>The elimination of Essentials and Essentials Plus kits is particularly brutal for small businesses. There is no longer a budget on-ramp for VMware.</p>
+<h2>The Two Bundles: VCF vs VVF (That's It)</h2>
+<p>Broadcom collapsed what was once a modular catalog of 10+ products into exactly two subscription offerings. Every conversation with a Broadcom rep or VAR will eventually come back to this choice.</p>
+<h3>VMware Cloud Foundation (VCF) — The Full Stack</h3>
+<p>VCF is Broadcom's flagship bundle. It includes everything:</p>
+<ul>
+<li>vSphere (hypervisor + vCenter Standard)</li>
+<li>vSAN (software-defined storage, 1 TiB included per core)</li>
+<li>NSX (network virtualization, overlay networking)</li>
+<li>vSphere Kubernetes Service (VKS, formerly TKG)</li>
+<li>VCF Operations (formerly Aria Suite)</li>
+<li>VCF Operations for Networks</li>
+</ul>
+<p><strong>List price:</strong> ~$240–250 per core per year (community-verified Q1 2025 quotes; your negotiated rate will vary)</p>
+<p>The "pay for everything" trap: NSX adds real complexity and cost. If your organization doesn't need software-defined networking today, you're still paying for it. VCF requires a minimum of <strong>16 cores per physical CPU</strong> for counting purposes and carries the <strong>72-core minimum order</strong> for new purchases.</p>
+<p><strong>Minimum cluster requirement:</strong> Broadcom's official VCF design requires a minimum of <strong>7 physical nodes</strong> (4 for management domain + 3 for workload domain) with vSAN storage.</p>
+<h3>VMware vSphere Foundation (VVF) — The Lean Tier</h3>
+<p>VVF is the stripped-down alternative:</p>
+<ul>
+<li>vSphere (hypervisor + vCenter Standard)</li>
+<li>vSAN (0.25 TiB included per core after 2024 increase)</li>
+<li>vSphere Kubernetes Service (single supervisor cluster only)</li>
+<li><strong>No NSX</strong> — standard and distributed virtual switches only</li>
+<li><strong>No Aria/VCF Operations</strong></li>
+</ul>
+<p><strong>List price:</strong> ~$190–192 per core per year (community-verified)</p>
+<p>VVF looks cheaper on a per-core basis, but the vSAN entitlement is tight. A dual-socket server with 32 total cores gets only ~8 TiB included. For most production workloads, you'll hit that cap quickly and need to purchase vSAN Capacity Add-On licenses — which erodes the cost advantage.</p>
+<p>[SCREENSHOT: VVF vs VCF feature comparison matrix with checkmarks, showing NSX and Aria gaps in VVF]</p>
+<h2>The 72-Core Minimum: The Hidden Tax on Small Deployments</h2>
+<p>This is the change that hit small and mid-size organizations hardest. Effective April 10, 2025, <strong>Broadcom mandates a minimum purchase of 72 cores per product per order</strong>.</p>
+<p>What this means in practice:</p>
+<ul>
+<li>A single-socket server with 8 cores? You're paying for <strong>72 cores</strong>.</li>
+<li>A 3-host cluster with single-socket 12-core CPUs (36 total cores)? You're paying for <strong>72 cores</strong>.</li>
+<li>A 5-host cluster with dual-socket 16-core CPUs (160 total cores)? You pay for all <strong>160 cores</strong> — you exceed the minimum.</li>
+</ul>
+<p>Additionally, each physical CPU is counted at a <strong>minimum of 16 cores</strong>, even if the processor has fewer. A 12-core Xeon is billed as 16 cores.</p>
+<p><strong>The math for a small shop:</strong></p>
+<pre><code>
+72 cores × $192/core/year (VVF list price) = $13,824/year
+</code></pre>
+<p>Before Broadcom, a comparable small environment on vSphere Essentials might have cost $600–800/year in SnS renewals on a perpetual license bought years ago.</p>
+<h2>Step-by-Step: Calculating Your Real Cost</h2>
+<h3>Step 1: Audit Your Physical Core Count with PowerCLI</h3>
+<p>Before any conversation with Broadcom or a reseller, you need a precise core count. Use PowerCLI against your vCenter to generate an accurate inventory:</p>
+<pre><code class="language-powershell">
+# Connect to vCenter first
+Connect-VIServer -Server vcenter.yourdomain.local
 
-      Available HTML patterns:
-
-      == PARAGRAPH ==
-      <p>Text here. Use <strong class="text-slate-200">bold text</strong> for emphasis.</p>
-
-      == HEADING H2 ==
-      <h2 class="text-2xl font-bold text-white">Section Title</h2>
-
-      == HEADING H3 ==
-      <h3 class="text-xl font-semibold text-white">Subsection Title</h3>
-
-      == UNORDERED LIST ==
-      <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
-        <li><strong>Item label:</strong> Description</li>
-      </ul>
-
-      == ORDERED LIST ==
-      <ol class="list-decimal list-inside text-slate-300 space-y-3 mb-6">
-        <li><strong>Step label.</strong> Description</li>
-      </ol>
-
-      == TABLE ==
-      <table>
-        <thead>
-          <tr><th>Column 1</th><th>Column 2</th></tr>
-        </thead>
-        <tbody>
-          <tr><td class="font-medium text-slate-300">Row label</td><td>Value</td></tr>
-        </tbody>
-      </table>
-
-      == CALLOUT (yellow/warning) ==
-      <div class="callout">
-        <strong class="text-yellow-400">Note:</strong> Message here.
-      </div>
-
-      == CALLOUT (red/important) ==
-      <div class="callout-red callout">
-        <strong class="text-red-400">Important:</strong> Message here.
-      </div>
-
-      == CALLOUT (green/positive) ==
-      <div class="callout-green callout">
-        <strong class="text-green-400">Good news:</strong> Message here.
-      </div>
-
-      == INFO CARD ==
-      <div class="bg-card rounded-xl p-6 border border-slate-700 mb-6">
-        <p class="text-slate-300 mb-2"><strong>Label:</strong> Content</p>
-      </div>
-
-      == AFFILIATE LINK ==
-      <a href="{{AFFILIATE_URL}}" target="_blank" rel="noopener sponsored" class="text-blue-400 hover:text-blue-300 underline">Product Name</a>
-    -->
-
+# Get physical CPU core count per host (this is what Broadcom counts)
+Get-VMHost | Sort-Object Name | ForEach-Object {
+    $hostView = $_ | Get-View
+    $cpuPackages = $hostView.Hardware.CpuInfo.NumCpuPackages  # Physical sockets
+    $cpuCores    = $hostView.Hardware.CpuInfo.NumCpuCores     # Physical cores (total)
+    $coresPerCPU = [math]::Round($cpuCores / $cpuPackages)
     
+    # Broadcom counts each CPU at minimum 16 cores
+    $billableCores = [math]::Max($cpuCores, $cpuPackages * 16)
+    
+    [PSCustomObject]@{
+        Host           = $_.Name
+        Sockets        = $cpuPackages
+        PhysicalCores  = $cpuCores
+        CoresPerSocket = $coresPerCPU
+        BillableCores  = $billableCores
+    }
+} | Format-Table -AutoSize
+</code></pre>
+<pre><code class="language-powershell">
+# Get total billable cores across all hosts — your licensing floor
+$totalBillable = Get-VMHost | ForEach-Object {
+    $v = $_ | Get-View
+    $sockets = $v.Hardware.CpuInfo.NumCpuPackages
+    $cores   = $v.Hardware.CpuInfo.NumCpuCores
+    [math]::Max($cores, $sockets * 16)
+} | Measure-Object -Sum
+
+$licenseFloor = [math]::Max($totalBillable.Sum, 72)
+Write-Host "Total billable cores (Broadcom model): $($totalBillable.Sum)"
+Write-Host "Effective license minimum: $licenseFloor cores"
+</code></pre>
+<blockquote>⚠️ <strong>Do NOT use <code>Get-CimInstance Win32_Processor</code> against ESXi hosts</strong> — ESXi is not Windows and this query will fail or return garbage. Use <code>Get-View</code> with <code>Hardware.CpuInfo</code> as shown above.</blockquote>
+<p>[SCREENSHOT: PowerCLI console output showing the core audit script results for a 3-host cluster]</p>
+<h3>Step 2: Calculate vSAN Storage Requirements</h3>
+<p>If you're using vSAN, calculate your raw storage against the per-core entitlement. Use William Lam's <a href="https://knowledge.broadcom.com/external/article/313548/counting-cores-for-vmware-cloud-foundati.html">official Broadcom core/TiB calculator</a> for precise numbers.</p>
+<pre><code class="language-powershell">
+# VVF gives 0.25 TiB per core; VCF gives 1 TiB per core
+# Calculate whether you need vSAN Capacity Add-On licenses
+
+$vcfCoresLicensed  = $licenseFloor  # from Step 1
+$vvfStorageIncl    = $vcfCoresLicensed * 0.25  # TiB included with VVF
+$vcfStorageIncl    = $vcfCoresLicensed * 1.0   # TiB included with VCF
+
+# Get actual raw vSAN capacity in your cluster
+$vsanCapacity = Get-Datastore | Where-Object {$_.Type -eq "vsan"} | 
+    Select-Object -ExpandProperty CapacityGB
+$vsanTiB = [math]::Round(($vsanCapacity / 1024), 2)
+
+Write-Host "Raw vSAN capacity: $vsanTiB TiB"
+Write-Host "VVF included storage: $vvfStorageIncl TiB"
+Write-Host "VCF included storage: $vcfStorageIncl TiB"
+
+if ($vsanTiB -gt $vvfStorageIncl) {
+    $addOnNeeded = [math]::Ceiling($vsanTiB - $vvfStorageIncl)
+    Write-Host "⚠️  VVF requires $addOnNeeded TiB in vSAN Capacity Add-On licenses"
+}
+</code></pre>
+<h3>Step 3: Model 1-Year vs. 3-Year Costs</h3>
+<p>Multi-year commitments typically yield <strong>15–20% discount</strong> versus annual list price — but they lock you into current pricing and the current feature set. Model both scenarios:</p>
+<pre><code class="language-powershell">
+# Cost modeling: VCF vs VVF, 1yr vs 3yr
+$coreCount     = $licenseFloor  # from Step 1
+$vcfListYear   = 250            # $/core/year list price (verify with your VAR)
+$vvfListYear   = 192            # $/core/year list price
+
+$discount1yr   = 0.00   # no discount on annual
+$discount3yr   = 0.17   # ~17% typical multi-year discount
+
+$results = @(
+    [PSCustomObject]@{ Tier="VCF"; Term="1-year"; CostPerCore=$vcfListYear; Total=[math]::Round($coreCount * $vcfListYear * (1 - $discount1yr)) }
+    [PSCustomObject]@{ Tier="VCF"; Term="3-year"; CostPerCore=[math]::Round($vcfListYear*(1-$discount3yr),2); Total=[math]::Round($coreCount * $vcfListYear * 3 * (1 - $discount3yr)) }
+    [PSCustomObject]@{ Tier="VVF"; Term="1-year"; CostPerCore=$vvfListYear; Total=[math]::Round($coreCount * $vvfListYear * (1 - $discount1yr)) }
+    [PSCustomObject]@{ Tier="VVF"; Term="3-year"; CostPerCore=[math]::Round($vvfListYear*(1-$discount3yr),2); Total=[math]::Round($coreCount * $vvfListYear * 3 * (1 - $discount3yr)) }
+)
+
+$results | Format-Table -AutoSize
+</code></pre>
+<p><strong>Real-world example</strong> for a 5-host cluster with dual 16-core CPUs (160 billable cores):</p>
+<p>| Tier | Term | Annual Cost | 3-Year Total |</p>
+<p>|---|---|---|---|</p>
+<p>| VCF | 1-year | $40,000 | $120,000 |</p>
+<p>| VCF | 3-year | ~$33,200/yr | ~$99,600 |</p>
+<p>| VVF | 1-year | $30,720 | $92,160 |</p>
+<p>| VVF | 3-year | ~$25,500/yr | ~$76,500 |</p>
+<p><em>List prices. Negotiated rates for large deployments are typically lower — engage your VAR or Broadcom directly.</em></p>
+<h2>The Late-Renewal Penalty Trap</h2>
+<p>This one catches organizations off-guard. Broadcom now charges a <strong>20% late-renewal surcharge</strong> on the first-year subscription cost if you do not renew by your anniversary date.</p>
+<p>On a 160-core VCF deployment at $40,000/year, a missed renewal date costs you <strong>$8,000 on top of the renewal fee</strong>. This is a hard deadline, not a grace period.</p>
+<p><strong>Action items:</strong></p>
+<ul>
+<li>Set calendar reminders 90 days, 30 days, and 7 days before your anniversary</li>
+<li>Confirm renewal dates in the <a href="https://support.broadcom.com">Broadcom Support Portal</a></li>
+<li>Designate a backup renewal owner — don't let this fall through in vacation season</li>
+</ul>
+<h2>Troubleshooting Real Licensing Issues</h2>
+<h3>Problem: "License Mismatch" After Host Addition</h3>
+<p>When adding a new host to a licensed cluster, vCenter performs a license check. If the new host's core count pushes you over your purchased license total, you'll see a compliance warning in vCenter Health.</p>
+<pre><code class="language-powershell">
+# Check current license usage vs. capacity
+Get-VMHost | ForEach-Object {
+    $v = $_ | Get-View
+    [PSCustomObject]@{
+        Host            = $_.Name
+        State           = $_.ConnectionState
+        LicenseState    = $_.LicenseKey
+        PhysicalCores   = $v.Hardware.CpuInfo.NumCpuCores
+    }
+} | Format-Table -AutoSize
+</code></pre>
+<p>Resolve by purchasing additional cores before adding the host. Do not add hosts and plan to "true-up later" — Broadcom's telemetry reports compliance in near-real time.</p>
+<h3>Problem: vSAN Features Grayed Out</h3>
+<p>If erasure coding, stretched cluster, or deduplication/compression options appear grayed out, the issue is almost always either:</p>
+<ol>
+<li>1. <strong>Insufficient vSAN storage entitlement</strong> — you've exceeded your included TiB and haven't purchased Add-On licenses</li>
+<li>2. <strong>VVF tier</strong> — certain advanced vSAN features require VCF</li>
+</ol>
+<pre><code class="language-bash">
+# On the ESXi host directly — check vSAN status
+esxcli vsan health cluster list
+
+# Check storage policy compliance
+esxcli storage vsan status get -s
+</code></pre>
+<p>For erasure coding specifically: this requires vSAN Enterprise or VCF. VVF does not include it.</p>
+<h3>Problem: NSX Features Missing After Migration to VVF</h3>
+<p>If you migrated from a VCF trial or legacy NSX-T deployment to VVF, NSX will be unlicensed. VVF does not include NSX at any tier. You'll see standard and distributed virtual switches available, but all NSX overlays and distributed firewall rules will cease functioning.</p>
+<p><strong>Resolution:</strong> Either upgrade to VCF (which includes NSX) or purchase NSX as a separate add-on. There is no partial NSX in VVF.</p>
+<h2>Hidden Costs Checklist</h2>
+<p>Before finalizing any Broadcom quote, verify these frequently-missed line items:</p>
+<p>| Cost Item | Notes |</p>
+<p>|---|---|</p>
+<p>| vSAN Capacity Add-On | Required when raw storage exceeds per-core entitlement |</p>
+<p>| NSX Advanced Add-Ons | Distributed Firewall, IDS/IPS are add-ons even within VCF |</p>
+<p>| VCF Operations for Networks | Some versions require separate license |</p>
+<p>| ARM/Non-x86 Infrastructure | Separate SKU discussion with Broadcom required |</p>
+<p>| Multi-site/stretched cluster | Additional vSAN licensing implications |</p>
+<p>| Late-renewal penalty | 20% of first-year cost if you miss anniversary date |</p>
+<p>| Hardware refresh true-up | Adding hosts mid-term requires immediate license amendment |</p>
+<h2>The Alternatives Conversation</h2>
+<p>Given these cost increases, the community discussion around alternatives is louder than ever. This isn't the article to deep-dive alternatives, but know that these are actively being evaluated by organizations facing renewal sticker shock:</p>
+<ul>
+<li><strong>Proxmox VE</strong> — open-source, free tier available, community-supported, enterprise support available (~€1,500/year for 3 servers)</li>
+<li><strong>Microsoft Hyper-V / Azure Stack HCI</strong> — viable for Windows-heavy shops, Azure Stack HCI uses per-core Azure subscription model</li>
+<li><strong>Nutanix AHV</strong> — bundled with Nutanix licensing, significant migration lift</li>
+<li><strong>OpenShift Virtualization</strong> — Red Hat's KVM-based VM platform, Kubernetes-native</li>
+</ul>
+<p>The migration cost and retraining investment is real. Many organizations will choose to stay on VMware for 3–5 more years while evaluating. The 72-core minimum and late-renewal penalties make that calculus painful but sometimes still better than a full migration.</p>
+<h2>Summary: What You Need to Do Before Your Next Renewal</h2>
+<ol>
+<li>1. <strong>Run the PowerCLI core audit</strong> (Step 1 above) — know your exact billable core count before any conversation</li>
+<li>2. <strong>Check your renewal anniversary date</strong> in the Broadcom Support Portal today</li>
+<li>3. <strong>Model VCF vs VVF</strong> using the cost table in Step 3 — involve your storage team on vSAN entitlement</li>
+<li>4. <strong>Verify vSAN raw capacity</strong> against included TiB to spot Add-On requirements early</li>
+<li>5. <strong>Set renewal reminders</strong> — the 20% late fee is avoidable with a calendar alert</li>
+<li>6. <strong>Get quotes from a VAR, not just list price</strong> — negotiated rates can be 20–40% below list for larger deployments</li>
+<li>7. <strong>Evaluate VMUG Advantage</strong> if you run a home lab or dev environment — VMUG provides VCF/VVF access for $200/year</li>
+</ol>
+<blockquote>💡 <strong>Affiliate note:</strong> For hardware infrastructure supporting your VMware environment, we recommend server platforms validated on the <a href="https://www.vmware.com/resources/compatibility/search.php">Broadcom Hardware Compatibility Guide</a>. See our <a href="#">home lab hardware guide</a> for current affiliate picks on budget-friendly Xeon platforms.</blockquote>
+<h2>Sources & Further Reading</h2>
+<ul>
+<li><a href="https://blogs.vmware.com/cloud-foundation/2024/01/22/vmware-end-of-availability-of-perpetual-licensing-and-saas-services/">Broadcom: End of Availability of Perpetual Licensing (Official Blog)</a></li>
+<li><a href="https://williamlam.com/2024/02/updated-inventory-calculator-scripts-for-counting-cores-tibs-for-vmware-cloud-foundation-vcf-and-vmware-vsphere-foundation-vvf.html">William Lam: Updated Core/TiB Calculator Scripts for VCF and VVF</a></li>
+<li><a href="https://knowledge.broadcom.com/external/article/313548/counting-cores-for-vmware-cloud-foundati.html">Broadcom KB 313548: Counting Cores for VMware Cloud Foundation</a></li>
+<li><a href="https://www.crn.com/news/data-center/2025/broadcom-vmware-ups-minimum-core-purchase-substantially-levies-late-renewal-penalties">CRN: Broadcom VMware 72-Core Minimum and Late-Renewal Penalties</a></li>
+<li><a href="https://redresscompliance.com/broadcom-vmware-licensing-and-subscription-changes-explained/">Redress Compliance: VMware Licensing Changes Explained</a></li>
+<li><a href="https://www.reddit.com/r/vmware/comments/1jo8oa1/latest_list_price/">r/vmware: Latest List Price Discussion (2025)</a></li>
+<li><a href="https://developer.broadcom.com/powercli/latest/vmware.vimautomation.core/commands/get-vmhosthardware">Get-VMHostHardware PowerCLI Reference</a></li>
+</ul>
+<p><em>Last verified: March 2026. Broadcom pricing changes frequently — always confirm current rates with your reseller or Broadcom account team before budgeting.</em></p>
 
     <!-- Newsletter CTA -->
     <div class="mt-16 bg-card border border-slate-700 rounded-2xl p-10 text-center">
@@ -195,4 +371,3 @@
 
 </body>
 </html>
-
