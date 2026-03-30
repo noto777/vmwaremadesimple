@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VCF 9 Nested Lab Setup: The Complete Walkthrough | VMware Made Simple</title>
+  <meta name="description" content="In the early days of virtualization, running a "nested" environment — an entire enterprise infrastructure stack simulating production inside a single physical" />
+  <meta name="keywords" content="vmware,broadcom,proxmox,migration,licensing" />
+  <link rel="canonical" href="https://vmwaremadesimple.com/articles/vcf-9-nested-lab-setup-complete-walkthrough.html" />
+
+  <meta property="og:title" content="VCF 9 Nested Lab Setup: The Complete Walkthrough" />
+  <meta property="og:description" content="In the early days of virtualization, running a "nested" environment — an entire enterprise infrastructure stack simulating production inside a single physical" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://vmwaremadesimple.com/articles/vcf-9-nested-lab-setup-complete-walkthrough.html" />
+
+  <!-- Google Analytics — replace G-2NDPP0ZTKC with your measurement ID -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-2NDPP0ZTKC"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-2NDPP0ZTKC');
+  </script>
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "VCF 9 Nested Lab Setup: The Complete Walkthrough",
+    "description": "In the early days of virtualization, running a "nested" environment — an entire enterprise infrastructure stack simulating production inside a single physical",
+    "author": { "@type": "Person", "name": "Rob Notaro" },
+    "publisher": { "@type": "Organization", "name": "VMware Made Simple" },
+    "datePublished": "2026-03-30",
+    "dateModified": "2026-03-30",
+    "mainEntityOfPage": "https://vmwaremadesimple.com/articles/vcf-9-nested-lab-setup-complete-walkthrough.html"
+  }
+  </script>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { colors: { brand: '#1a73e8', dark: '#0f172a', card: '#1e293b' } } }
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .gradient-text { background: linear-gradient(135deg, #1a73e8, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .prose h2 { margin-top: 2.5rem; margin-bottom: 1rem; }
+    .prose h3 { margin-top: 2rem; margin-bottom: 0.75rem; }
+    .prose p { margin-bottom: 1.25rem; line-height: 1.8; }
+    .prose table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+    .prose th { text-align: left; padding: 0.75rem 1rem; border-bottom: 2px solid #334155; color: #94a3b8; font-size: 0.875rem; text-transform: uppercase; }
+    .prose td { padding: 0.75rem 1rem; border-bottom: 1px solid #1e293b; }
+    .prose tr:hover { background: #1e293b40; }
+    .callout { background: #1e293b; border-left: 4px solid #f59e0b; padding: 1.25rem 1.5rem; border-radius: 0 0.5rem 0.5rem 0; margin: 1.5rem 0; }
+    .callout-red { border-left-color: #ef4444; }
+    .callout-green { border-left-color: #22c55e; }
+  </style>
+</head>
+<body class="bg-dark text-slate-100">
+
+  <!-- Nav -->
+  <nav class="border-b border-slate-800 sticky top-0 z-50 bg-dark/95 backdrop-blur">
+    <div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="/" class="text-xl font-bold text-white">VMware<span class="gradient-text">MadeSimple</span></a>
+      <a href="/#newsletter" class="bg-brand text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition text-sm font-medium">Get Updates</a>
+    </div>
+  </nav>
+
+  <!-- Article -->
+  <article class="max-w-4xl mx-auto px-6 py-12 prose">
+
+    <!-- Breadcrumb -->
+    <div class="text-sm text-slate-500 mb-6">
+      <a href="/" class="hover:text-slate-300">Home</a> → <span class="text-slate-400">VCF 9 Nested Lab Setup: The Complete Walkthrough</span>
+    </div>
+
+    <!-- Header -->
+    <div class="mb-10">
+      <div class="text-xs text-blue-400 font-medium uppercase tracking-wide mb-3">Broadcom Licensing</div>
+      <h1 class="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight" style="-webkit-text-fill-color: white;">
+        VCF 9 Nested Lab Setup: The Complete Walkthrough
+      </h1>
+      <p class="text-slate-400 text-lg">
+        March 30, 2026 · 10 min read
+      </p>
+    </div>
+
+    <!--
+      ARTICLE BODY GOES HERE
+
+      Available HTML patterns:
+
+      == PARAGRAPH ==
+      <p>Text here. Use <strong class="text-slate-200">bold text</strong> for emphasis.</p>
+
+      == HEADING H2 ==
+      <h2 class="text-2xl font-bold text-white">Section Title</h2>
+
+      == HEADING H3 ==
+      <h3 class="text-xl font-semibold text-white">Subsection Title</h3>
+
+      == UNORDERED LIST ==
+      <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
+        <li><strong>Item label:</strong> Description</li>
+      </ul>
+
+      == ORDERED LIST ==
+      <ol class="list-decimal list-inside text-slate-300 space-y-3 mb-6">
+        <li><strong>Step label.</strong> Description</li>
+      </ol>
+
+      == TABLE ==
+      <table>
+        <thead>
+          <tr><th>Column 1</th><th>Column 2</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="font-medium text-slate-300">Row label</td><td>Value</td></tr>
+        </tbody>
+      </table>
+
+      == CALLOUT (yellow/warning) ==
+      <div class="callout">
+        <strong class="text-yellow-400">Note:</strong> Message here.
+      </div>
+
+      == CALLOUT (red/important) ==
+      <div class="callout-red callout">
+        <strong class="text-red-400">Important:</strong> Message here.
+      </div>
+
+      == CALLOUT (green/positive) ==
+      <div class="callout-green callout">
+        <strong class="text-green-400">Good news:</strong> Message here.
+      </div>
+
+      == INFO CARD ==
+      <div class="bg-card rounded-xl p-6 border border-slate-700 mb-6">
+        <p class="text-slate-300 mb-2"><strong>Label:</strong> Content</p>
+      </div>
+
+      == AFFILIATE LINK ==
+      <a href="{{AFFILIATE_URL}}" target="_blank" rel="noopener sponsored" class="text-blue-400 hover:text-blue-300 underline">Product Name</a>
+    -->
+
+    
+
+    <!-- Newsletter CTA -->
+    <div class="mt-16 bg-card border border-slate-700 rounded-2xl p-10 text-center">
+      <h2 class="text-2xl font-bold text-white mb-3" style="-webkit-text-fill-color: white;">Stay ahead of the VMware changes</h2>
+      <p class="text-slate-400 mb-6">We're publishing detailed comparison guides, migration walkthroughs, and cost calculators. Get them in your inbox.</p>
+      <form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" onsubmit="handleSubscribe(event)">
+        <input type="email" placeholder="your@email.com" class="flex-1 bg-dark border border-slate-600 text-white px-5 py-3 rounded-xl focus:outline-none focus:border-blue-500 placeholder-slate-500" required />
+        <button type="submit" class="bg-brand text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-600 transition">Subscribe</button>
+      </form>
+    </div>
+
+    <!-- Author -->
+    <div class="mt-12 pt-8 border-t border-slate-800">
+      <div class="flex items-start gap-4">
+        <div class="w-12 h-12 bg-slate-700 rounded-full flex items-center justify-center text-xl">🖥️</div>
+        <div>
+          <p class="text-white font-semibold">Written by Rob Notaro</p>
+          <p class="text-slate-400 text-sm mt-1">Senior infrastructure engineer specializing in VMware, Horizon VDI, and enterprise virtualization. Currently deploying Horizon 2512 and VCF in production environments.</p>
+        </div>
+      </div>
+    </div>
+
+  </article>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800 mt-10">
+    <div class="max-w-4xl mx-auto px-6 py-10 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="text-slate-400 text-sm">© 2026 VMwareMadeSimple.com — Independent. Not affiliated with VMware or Broadcom.</div>
+      <div class="flex gap-6 text-slate-400 text-sm">
+        <a href="/" class="hover:text-white transition">Home</a>
+        <a href="/#articles" class="hover:text-white transition">Articles</a>
+        <a href="/#newsletter" class="hover:text-white transition">Newsletter</a>
+      </div>
+    </div>
+    <div class="max-w-4xl mx-auto px-6 pb-8 text-slate-600 text-xs">
+      Some links on this site are affiliate links. If you purchase through them, we may earn a small commission at no extra cost to you.
+    </div>
+  </footer>
+
+  <script>
+    function handleSubscribe(e) {
+      e.preventDefault();
+      alert('Thanks! We\'ll be in touch soon.');
+      e.target.reset();
+    }
+  </script>
+
+</body>
+</html>
+
