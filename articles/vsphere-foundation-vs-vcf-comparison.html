@@ -56,10 +56,9 @@
     .callout { background: #1e293b; border-left: 4px solid #f59e0b; padding: 1.25rem 1.5rem; border-radius: 0 0.5rem 0.5rem 0; margin: 1.5rem 0; }
     .callout-red { border-left-color: #ef4444; }
     .callout-green { border-left-color: #22c55e; }
-    pre { background: #1e293b; border: 1px solid #334155; border-radius: 0.5rem; padding: 1.25rem; overflow-x: auto; margin: 1.25rem 0; }
-    code { font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace; font-size: 0.875rem; color: #93c5fd; }
-    pre code { color: #e2e8f0; }
-    p code, li code { background: #1e293b; padding: 0.15rem 0.4rem; border-radius: 0.25rem; color: #93c5fd; font-size: 0.85em; }
+    code { background: #1e293b; padding: 0.2rem 0.5rem; border-radius: 0.25rem; font-family: 'Courier New', monospace; font-size: 0.9em; }
+    pre { background: #1e293b; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; }
+    pre code { background: none; padding: 0; }
   </style>
 </head>
 <body class="bg-dark text-slate-100">
@@ -77,12 +76,12 @@
 
     <!-- Breadcrumb -->
     <div class="text-sm text-slate-500 mb-6">
-      <a href="/" class="hover:text-slate-300">Home</a> → <span class="text-slate-400">Licensing &amp; Pricing</span>
+      <a href="/" class="hover:text-slate-300">Home</a> → <span class="text-slate-400">Licensing & Pricing</span>
     </div>
 
     <!-- Header -->
     <div class="mb-10">
-      <div class="text-xs text-blue-400 font-medium uppercase tracking-wide mb-3">Licensing &amp; Pricing</div>
+      <div class="text-xs text-blue-400 font-medium uppercase tracking-wide mb-3">LICENSING &amp; PRICING</div>
       <h1 class="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight" style="-webkit-text-fill-color: white;">
         vSphere Foundation vs VCF: Real Pricing and Which One to Deploy (2026)
       </h1>
@@ -94,7 +93,7 @@
     <!-- Body -->
     <p>VCF is overkill for 90% of shops under 50 hosts. You're paying for NSX and a full automation stack you'll never configure properly. Buy vSphere Foundation (VVF) and put the savings toward storage — if you can still get VVF quoted, which is becoming its own problem.</p>
 
-    <p>That's my short answer. The longer version depends on your environment, and there's a real pricing trap in the comparison that the marketing materials won't show you.</p>
+    <p>That's my short answer. The longer version depends on your environment, and there's a real pricing trap in the comparison that the marketing materials won't show you. Let me break it down.</p>
 
     <h2 class="text-2xl font-bold text-white">What Broadcom Actually Sells Now</h2>
 
@@ -111,23 +110,65 @@
         </tr>
       </thead>
       <tbody>
-        <tr><td class="font-medium text-slate-300">vSphere / vCenter</td><td>✅ Enterprise Plus tier</td><td>✅ Enterprise Plus tier</td></tr>
-        <tr><td class="font-medium text-slate-300">vSAN</td><td>✅ 0.25 TiB/core included</td><td>✅ 1 TiB/core included</td></tr>
-        <tr><td class="font-medium text-slate-300">NSX</td><td>❌</td><td>✅ Full NSX included</td></tr>
-        <tr><td class="font-medium text-slate-300">SDDC Manager / VCF Operations</td><td>❌</td><td>✅</td></tr>
-        <tr><td class="font-medium text-slate-300">Aria Operations (monitoring)</td><td>✅ basic</td><td>✅ full suite</td></tr>
-        <tr><td class="font-medium text-slate-300">Aria Automation</td><td>❌</td><td>✅</td></tr>
-        <tr><td class="font-medium text-slate-300">vSphere Kubernetes Service</td><td>✅ single supervisor cluster</td><td>✅ full</td></tr>
-        <tr><td class="font-medium text-slate-300">HCX (migration)</td><td>❌</td><td>✅</td></tr>
-        <tr><td class="font-medium text-slate-300">MSRP (per core/yr, 1-year)</td><td>~$190</td><td>~$350</td></tr>
-        <tr><td class="font-medium text-slate-300">Minimum purchase</td><td>72 cores per SKU</td><td>72 cores per SKU</td></tr>
-        <tr><td class="font-medium text-slate-300">Minimum per CPU socket</td><td>16 cores</td><td>16 cores</td></tr>
+        <tr>
+          <td class="font-medium text-slate-300">vSphere / vCenter</td>
+          <td>✅ Enterprise Plus tier</td>
+          <td>✅ Enterprise Plus tier</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">vSAN</td>
+          <td>✅ 0.25 TiB/core included</td>
+          <td>✅ 1 TiB/core included</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">NSX</td>
+          <td>❌</td>
+          <td>✅ Full NSX included</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">SDDC Manager / VCF Operations</td>
+          <td>❌</td>
+          <td>✅</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">Aria Operations (monitoring)</td>
+          <td>✅ (basic)</td>
+          <td>✅ (full suite)</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">Aria Automation</td>
+          <td>❌</td>
+          <td>✅</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">Kubernetes (vSphere Kubernetes Service)</td>
+          <td>✅ single supervisor cluster</td>
+          <td>✅ full</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">HCX (migration)</td>
+          <td>❌</td>
+          <td>✅</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">MSRP (per core/yr, 1-year)</td>
+          <td>~$190</td>
+          <td>~$350</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">Minimum purchase</td>
+          <td>72 cores per SKU</td>
+          <td>72 cores per SKU</td>
+        </tr>
+        <tr>
+          <td class="font-medium text-slate-300">Minimum per CPU socket</td>
+          <td>16 cores</td>
+          <td>16 cores</td>
+        </tr>
       </tbody>
     </table>
 
-    <div class="callout">
-      <strong class="text-yellow-400">Sources:</strong> Broadcom KB313548 (core counting), r/vmware MSRP thread (March 2025), licenseware.io minimum purchase analysis (May 2025)
-    </div>
+    <p><strong class="text-slate-200">Sources:</strong> Broadcom KB313548 (core counting), r/vmware MSRP thread (March 2025), licenseware.io minimum purchase analysis (May 2025)</p>
 
     <p>The price delta looks big in that table but understates the real gap once you account for what NSX actually costs to implement and run.</p>
 
@@ -157,7 +198,7 @@ Write-Host "Included vSAN capacity: $vSanTiB TiB"
     <p>VCF gives you 1 TiB/core — same cluster gets 96 TiB included. If you're building vSAN-heavy workloads at scale, that matters.</p>
 
     <div class="callout">
-      <strong class="text-yellow-400">Screenshot:</strong> Broadcom store showing VVF vs VCF SKU pricing breakdown, MSRP per-core for 1-year and 3-year terms
+      <strong class="text-yellow-400">Note:</strong> [SCREENSHOT: Broadcom store showing VVF vs VCF SKU pricing breakdown, MSRP per-core for 1-year and 3-year terms]
     </div>
 
     <h2 class="text-2xl font-bold text-white">VCF 9 Minimum Hardware — The 7-Node Myth</h2>
@@ -165,6 +206,7 @@ Write-Host "Included vSAN capacity: $vSanTiB TiB"
     <p>The "7-node minimum" for VCF (4 management + 3 workload) was true for VCF 5.x. VCF 9 changed this.</p>
 
     <p><strong class="text-slate-200">VCF 9 actual minimums</strong> (per William Lam's June 2025 lab guide and Broadcom's installer):</p>
+
     <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
       <li><strong>3 ESXi hosts</strong> when using vSAN (OSA or ESA)</li>
       <li><strong>2 ESXi hosts</strong> when using external storage (FC VMFS or NFS)</li>
@@ -177,15 +219,14 @@ Write-Host "Included vSAN capacity: $vSanTiB TiB"
 # Minimum 3 hosts for vSAN OSA/ESA, 2 for external storage
 cat /var/log/vmware/vcf/installer/vcf-installer.log | grep "host-count-validation"</code></pre>
 
-    <div class="callout callout-red">
-      <strong class="text-red-400">Production warning:</strong> Running a VCF management domain on 3 nodes with vSAN leaves zero fault tolerance headroom during patching. If a host needs to enter maintenance mode for a VCF lifecycle upgrade, you're down to 2 active vSAN nodes. Minimum 4 hosts is still the right answer for any production cluster you actually care about.
-    </div>
+    <p>That said: running a VCF management domain on 3 nodes with vSAN leaves zero fault tolerance headroom during patching. If a host needs to enter maintenance mode for a VCF lifecycle upgrade, you're down to 2 active vSAN nodes. Minimum 4 hosts is still the right answer for any production cluster you actually care about.</p>
 
     <h2 class="text-2xl font-bold text-white">VVF: Where It Makes Sense</h2>
 
     <p>VVF is ESXi + vCenter + vSAN + one vSphere Kubernetes Service supervisor cluster. No NSX, no lifecycle automation tooling, no Aria Automation. You manage everything with the tools you already know.</p>
 
     <p><strong class="text-slate-200">This is the right choice when:</strong></p>
+
     <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
       <li>You have existing external storage (SAN, NFS) and don't need vSAN at scale</li>
       <li>Your team doesn't have dedicated NSX skills</li>
@@ -215,12 +256,10 @@ Get-Datastore -VMHost $vmHost |
 esxcli vsan storage list
 esxcli vsan health cluster get</code></pre>
 
-    <div class="callout">
-      <strong class="text-yellow-400">The VVF storage caveat:</strong> You get 0.25 TiB/core of vSAN. On a dual-socket 16-core host, that's 8 TiB per host in a cluster. For dev/test workloads that's usually fine. For production databases or large VDI pools, you'll hit the cap faster than you expect. Run the math before you sign the contract.
-    </div>
+    <p><strong class="text-slate-200">The VVF storage caveat:</strong> You get 0.25 TiB/core of vSAN. On a dual-socket 16-core host, that's 8 TiB per host in a cluster. For dev/test workloads that's usually fine. For production databases or large VDI pools, you'll hit the cap faster than you expect. Run the math before you sign the contract.</p>
 
     <div class="callout">
-      <strong class="text-yellow-400">Screenshot:</strong> vSphere Client showing VVF host datastore inventory — external NFS and local VMFS datastores visible alongside vSAN
+      <strong class="text-yellow-400">Note:</strong> [SCREENSHOT: vSphere Client showing VVF host datastore inventory — external NFS and local VMFS datastores visible alongside vSAN]
     </div>
 
     <h2 class="text-2xl font-bold text-white">VCF: Where It Pays Off</h2>
@@ -230,6 +269,7 @@ esxcli vsan health cluster get</code></pre>
     <p>In VCF 9, SDDC Manager still ships as a component but its orchestration role moved to <strong class="text-slate-200">VCF Operations Fleet Management</strong> — a centralized multi-instance control plane. If you're upgrading from VCF 5.x, you'll notice SDDC Manager is still there but increasingly becomes a passthrough.</p>
 
     <p><strong class="text-slate-200">This is the right choice when:</strong></p>
+
     <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
       <li>20+ hosts where the NSX management overhead is justified</li>
       <li>You already have NSX-T in your environment (VCF absorbs the cost instead of a separate line item)</li>
@@ -270,9 +310,7 @@ spec:
 
     <p>A November 2025 r/vmware thread included a rep's statement that "VVF will be phased out within 18 months." Broadcom hasn't made an official announcement, but the pattern matches what happened to vSphere Standard (end-of-sale July 2025 with no replacement below VVF).</p>
 
-    <div class="callout callout-red">
-      <strong class="text-red-400">Planning risk:</strong> If you're building a 3–5 year infrastructure plan, factor this in. VVF might not be available at your next renewal. That's not a reason to overbuy VCF today — if VVF pricing is right for your current environment, use it — but it's a reason to architect for a migration path to VCF without needing to rip out NSX-incompatible network configs when the time comes.
-    </div>
+    <p>If you're building a 3-5 year infrastructure plan, factor this in. VVF might not be available at your next renewal. That's not a reason to overbuy VCF today — if VVF pricing is right for your current environment, use it — but it's a reason to architect for a migration path to VCF without needing to rip out NSX-incompatible network configs when the time comes.</p>
 
     <h2 class="text-2xl font-bold text-white">Troubleshooting Common Issues</h2>
 
@@ -315,30 +353,30 @@ esxcli network ip interface list | grep -A5 vmk</code></pre>
     <p>You've hit the minimum fault domain floor. vSAN needs a minimum of 3 hosts for standard cluster resiliency. Get the third host back online before doing anything else. Don't try to change the cluster configuration while degraded.</p>
 
     <div class="callout">
-      <strong class="text-yellow-400">Screenshot:</strong> vSphere Client vSAN health dashboard showing degraded status and host connectivity state
+      <strong class="text-yellow-400">Note:</strong> [SCREENSHOT: vSphere Client vSAN health dashboard showing degraded status and host connectivity state]
     </div>
 
     <h2 class="text-2xl font-bold text-white">My Recommendation</h2>
 
     <p><strong class="text-slate-200">Under 20 hosts:</strong> VVF. No question. Even with the discontinuation risk, you pay roughly half the per-core cost, you skip the NSX learning curve, and the operational model stays in the tooling your team already knows. If VVF gets end-of-saled in the next 18 months, you'll have time to evaluate VCF on a planned refresh cycle, not emergency terms.</p>
 
-    <p><strong class="text-slate-200">20–50 hosts, existing NSX-T:</strong> Evaluate VCF seriously. If you're already paying for NSX separately, the delta between VVF and VCF shrinks and the SDDC Manager/VCF Operations lifecycle automation starts paying back in engineer time.</p>
+    <p><strong class="text-slate-200">20-50 hosts, existing NSX-T:</strong> Evaluate VCF seriously. If you're already paying for NSX separately, the delta between VVF and VCF shrinks and the SDDC Manager/VCF Operations lifecycle automation starts paying back in engineer time.</p>
 
     <p><strong class="text-slate-200">50+ hosts, dedicated networking team:</strong> VCF. The lifecycle management alone justifies the cost at that scale. Running patching cycles across 50+ hosts without lifecycle automation is where SR incidents happen.</p>
 
-    <h2 class="text-2xl font-bold text-white">Hardware That Works</h2>
+    <h2 class="text-2xl font-bold text-white">Hardware Recommendations</h2>
 
     <p>The hardware choices that matter most in a VCF deployment are vSAN-certified hosts. Both of these are on the VCF 9 HCL and certified for vSAN ESA:</p>
 
     <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
-      <li><a href="https://www.dell.com/en-us/shop/dell-poweredge-servers/poweredge-r760-rack-server/spd/poweredge-r760" target="_blank" rel="noopener sponsored" class="text-blue-400 hover:text-blue-300 underline">Dell PowerEdge R760</a> — VCF 9 HCL certified, vSAN ESA ready</li>
-      <li><a href="https://www.hpe.com/us/en/servers/proliant-dl-servers/proliant-dl380-server.html" target="_blank" rel="noopener sponsored" class="text-blue-400 hover:text-blue-300 underline">HPE ProLiant DL380 Gen11</a> — VCF 9 HCL certified, vSAN ESA ready</li>
+      <li>Dell PowerEdge R760 (VCF 9 HCL certified, vSAN ESA ready)</li>
+      <li>HPE ProLiant DL380 Gen11 (VCF 9 HCL certified, vSAN ESA ready)</li>
     </ul>
 
     <p>For VVF environments on external storage, any server meeting VMware's vSphere compatibility list works — you're not locked into vSAN ESA certified hardware.</p>
 
-    <div class="callout">
-      <strong class="text-yellow-400">Pricing note:</strong> Pricing as of March 2026. Broadcom changes list prices quarterly — verify against the current price book before quoting. Core counting rules: <a href="https://kb.broadcom.com/s/article/KB313548" target="_blank" rel="noopener" class="text-blue-400 hover:text-blue-300">Broadcom KB313548</a>. VCF 9 minimum host requirements: <a href="https://williamlam.com/2025/06" target="_blank" rel="noopener" class="text-blue-400 hover:text-blue-300">williamlam.com/2025/06</a>.
+    <div class="callout callout-green">
+      <strong class="text-green-400">Note:</strong> Pricing as of March 2026. Broadcom changes list prices quarterly — verify against the current price book before quoting. Core counting rules: Broadcom KB313548. VCF 9 minimum host requirements: williamlam.com/2025/06.
     </div>
 
     <!-- Newsletter CTA -->
