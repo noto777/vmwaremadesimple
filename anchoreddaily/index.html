@@ -6,13 +6,9 @@
   <title>Anchored Daily — Scripture & Reflection</title>
   <meta name="description" content="A daily devotional for those anchored in faith. Scripture, reflection, and a word for the day." />
   <link rel="canonical" href="https://anchoreddaily.vmwaremadesimple.com" />
-
-  <!-- Open Graph -->
   <meta property="og:title" content="Anchored Daily" />
   <meta property="og:description" content="Daily scripture and reflection. Anchored in faith." />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://anchoreddaily.vmwaremadesimple.com" />
-
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap');
@@ -22,71 +18,61 @@
 </head>
 <body class="bg-stone-50 text-stone-800 font-sans min-h-screen">
 
-  <!-- Header -->
   <header class="border-b border-stone-200 bg-white">
     <div class="max-w-2xl mx-auto px-6 py-5 flex items-center justify-between">
-      <div>
-        <a href="/anchoreddaily/" class="text-stone-900 no-underline">
-          <h1 class="text-xl font-semibold tracking-tight">⚓ Anchored Daily</h1>
-          <p class="text-xs text-stone-400 mt-0.5 font-light">Scripture & Reflection</p>
-        </a>
-      </div>
-      <nav class="flex gap-5 text-sm text-stone-500">
-        <a href="/anchoreddaily/" class="hover:text-stone-900 transition-colors">Today</a>
+      <a href="/anchoreddaily/" class="text-stone-900 no-underline">
+        <h1 class="text-xl font-semibold tracking-tight">⚓ Anchored Daily</h1>
+        <p class="text-xs text-stone-400 mt-0.5 font-light">Scripture & Reflection</p>
+      </a>
+      <nav class="flex gap-4 text-sm text-stone-500">
+        <a href="/anchoreddaily/" class="font-medium text-stone-900">Today</a>
         <a href="/anchoreddaily/archive.html" class="hover:text-stone-900 transition-colors">Archive</a>
+        <a href="/anchoreddaily/plan.html" class="hover:text-stone-900 transition-colors">The Plan</a>
         <a href="/anchoreddaily/about.html" class="hover:text-stone-900 transition-colors">About</a>
       </nav>
     </div>
   </header>
 
-  <!-- Today's Devotional -->
   <main class="max-w-2xl mx-auto px-6 py-12">
 
-    <!-- Date -->
     <p class="text-xs font-medium uppercase tracking-widest text-stone-400 mb-6" id="today-date"></p>
 
-    <!-- Verse -->
+    <!-- Daily Verse Card -->
     <div class="bg-white rounded-2xl border border-stone-200 p-8 mb-8 shadow-sm">
-      <p class="text-xs font-medium uppercase tracking-widest text-amber-600 mb-4">Today's Verse</p>
-      <blockquote class="font-serif text-xl leading-relaxed text-stone-800 mb-5 italic">
-        "We have this hope as an anchor for the soul, firm and secure."
-      </blockquote>
-      <cite class="text-sm font-medium text-stone-500 not-italic">— Hebrews 6:19 (NIV)</cite>
+      <p class="text-xs font-medium uppercase tracking-widest text-amber-600 mb-4" id="today-theme"></p>
+      <blockquote class="font-serif text-xl leading-relaxed text-stone-800 mb-5 italic" id="today-verse"></blockquote>
+      <cite class="text-sm font-medium text-stone-500 not-italic" id="today-ref"></cite>
     </div>
 
     <!-- Reflection -->
     <div class="mb-10">
       <h2 class="font-serif text-lg font-bold text-stone-900 mb-4">Reflection</h2>
-      <div class="text-stone-600 leading-relaxed space-y-4 text-base">
-        <p>
-          An anchor doesn't stop a storm. It doesn't make the water calm or the wind quiet. What it does is hold you in place when everything around you is moving.
-        </p>
-        <p>
-          That's what hope in Christ is. Not a promise that life gets easy — but something deep and immovable that keeps you from drifting when it doesn't. The anchor holds even when you can't see the bottom.
-        </p>
-        <p>
-          Today, whatever you're facing, you're not adrift. You're held.
-        </p>
-      </div>
+      <div class="text-stone-600 leading-relaxed space-y-4 text-base" id="today-reflection"></div>
     </div>
 
     <!-- Prayer -->
     <div class="border-l-2 border-amber-200 pl-6 mb-10">
       <p class="text-xs font-medium uppercase tracking-widest text-stone-400 mb-3">A Prayer</p>
-      <p class="text-stone-600 italic font-serif leading-relaxed">
-        Lord, thank you that my hope is not in circumstances but in you. When life is uncertain, remind me that I am anchored to something that cannot move. Give me peace today. Amen.
-      </p>
+      <p class="text-stone-600 italic font-serif leading-relaxed" id="today-prayer"></p>
     </div>
 
-    <!-- Share -->
-    <div class="flex items-center gap-3 text-sm text-stone-400">
-      <span>Share today's word:</span>
-      <button onclick="share()" class="text-stone-500 hover:text-stone-800 transition-colors underline underline-offset-2">Copy link</button>
+    <!-- CTA row -->
+    <div class="flex items-center justify-between text-sm">
+      <a href="/anchoreddaily/archive.html" class="text-stone-400 hover:text-stone-700 transition-colors">View all devotionals →</a>
+      <button onclick="share()" class="text-stone-400 hover:text-stone-700 transition-colors underline underline-offset-2">Share today's verse</button>
+    </div>
+
+    <!-- Plan CTA -->
+    <div class="mt-12 bg-amber-50 border border-amber-200 rounded-2xl p-6 flex items-center justify-between gap-4">
+      <div>
+        <p class="font-semibold text-stone-800 text-sm">Ready to build the habit?</p>
+        <p class="text-stone-500 text-xs mt-1">A 3-phase soul training plan — 5 minutes a day to start.</p>
+      </div>
+      <a href="/anchoreddaily/plan.html" class="bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors whitespace-nowrap">See The Plan</a>
     </div>
 
   </main>
 
-  <!-- Footer -->
   <footer class="border-t border-stone-200 mt-16">
     <div class="max-w-2xl mx-auto px-6 py-8 text-center">
       <p class="text-xs text-stone-400">"We have this hope as an anchor for the soul." — Heb 6:19</p>
@@ -94,18 +80,122 @@
   </footer>
 
   <script>
-    // Set today's date
-    const d = new Date();
-    const opts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    document.getElementById('today-date').textContent = d.toLocaleDateString('en-US', opts);
+    const devotionals = [
+      {
+        theme: "Anchor",
+        verse: "We have this hope as an anchor for the soul, firm and secure.",
+        ref: "— Hebrews 6:19 (NIV)",
+        reflection: [
+          "An anchor doesn't stop a storm. It doesn't make the water calm or the wind quiet. What it does is hold you in place when everything around you is moving.",
+          "That's what hope in Christ is. Not a promise that life gets easy — but something deep and immovable that keeps you from drifting when it doesn't. The anchor holds even when you can't see the bottom.",
+          "Today, whatever you're facing, you're not adrift. You're held."
+        ],
+        prayer: "Lord, thank you that my hope is not in circumstances but in you. When life is uncertain, remind me that I am anchored to something that cannot move. Give me peace today. Amen."
+      },
+      {
+        theme: "Faith",
+        verse: "Now faith is the assurance of things hoped for, the conviction of things not seen.",
+        ref: "— Hebrews 11:1 (ESV)",
+        reflection: [
+          "Faith isn't the absence of doubt. It's moving forward anyway — with assurance that what you can't see is more real than what you can.",
+          "The writer of Hebrews doesn't say faith is optimism, or a feeling, or a personality trait. It's a conviction. Something settled and decided, not dependent on circumstances cooperating.",
+          "You don't need to see the whole road. You just need to know who's leading."
+        ],
+        prayer: "Lord, grow my faith. Not the feeling kind — the convicted kind. Help me walk in assurance of what I cannot yet see. Amen."
+      },
+      {
+        theme: "Faith",
+        verse: "So faith comes from hearing, and hearing through the word of Christ.",
+        ref: "— Romans 10:17 (ESV)",
+        reflection: [
+          "If you want more faith, here's the prescription: get in the Word. Not a complicated formula. Not a feeling you wait around for. Just read.",
+          "Faith isn't conjured up from willpower. It grows when you hear what God has said — his promises, his character, his track record. The more you expose yourself to the Word, the more solid your footing becomes.",
+          "Weak faith is often just untended faith. Feed it."
+        ],
+        prayer: "Lord, give me hunger for your Word. Let what I read take root and become real conviction in my life. Amen."
+      },
+      {
+        theme: "Strength",
+        verse: "Do not fear, for I am with you; do not be dismayed, for I am your God. I will strengthen you, surely I will help you, surely I will uphold you with My righteous right hand.",
+        ref: "— Isaiah 41:10 (NASB)",
+        reflection: [
+          "Three times God says 'I will' in this verse. Not 'I might.' Not 'if you're good enough.' I will strengthen. I will help. I will uphold.",
+          "The command not to fear isn't based on circumstances improving — it's based on who is with you. Fear loses its grip when you're convinced you're not alone.",
+          "Whatever you're walking into today, you've got backup you didn't earn and can't lose."
+        ],
+        prayer: "God, I choose not to fear today. Not because things are easy, but because you said you'd hold me up. I'm trusting that. Amen."
+      },
+      {
+        theme: "Trust",
+        verse: "Trust in the Lord with all your heart and lean not on your own understanding; in all your ways submit to him, and he will make your paths straight.",
+        ref: "— Proverbs 3:5-6 (NIV)",
+        reflection: [
+          "'Lean not on your own understanding.' That's the hard part. We're wired to figure things out, to map every step before we take it. But sometimes the map isn't ours to draw.",
+          "Trusting God with all your heart means releasing the outcome — not the effort, not the responsibility, but the outcome. You do your part. He straightens the path.",
+          "The person who submits their plans to God doesn't stop planning. They just stop white-knuckling the results."
+        ],
+        prayer: "Lord, I give you today's decisions. Where my understanding falls short, fill in the gaps. Make my paths straight. I trust you. Amen."
+      },
+      {
+        theme: "Faithfulness",
+        verse: "Because of the Lord's great love we are not consumed, for his compassions never fail. They are new every morning; great is your faithfulness.",
+        ref: "— Lamentations 3:22-23 (NIV)",
+        reflection: [
+          "This verse comes from a book about suffering. Lamentations is a poet sitting in the rubble of Jerusalem, watching everything collapse — and finding this truth in the middle of it.",
+          "That's the context. Not written from comfort, but from wreckage. And still: 'his compassions never fail.'",
+          "Every morning is a reset. Yesterday's failures, yesterday's grief — God's mercies don't carry them over. You wake up to new. That's not a feeling. That's a fact."
+        ],
+        prayer: "Thank you, Lord, for mercies that don't run out. For the gift of a new morning. Let me not drag yesterday into today. Amen."
+      },
+      {
+        theme: "Perseverance",
+        verse: "Consider it pure joy, my brothers and sisters, whenever you face trials of many kinds, because you know that the testing of your faith produces perseverance. Let perseverance finish its work so that you may be mature and complete, not lacking anything.",
+        ref: "— James 1:2-4 (NIV)",
+        reflection: [
+          "James doesn't say trials are enjoyable. He says consider them joy — meaning it's a choice, a perspective. You look at the hard thing and decide what it is.",
+          "The logic is clear: tested faith produces perseverance. Perseverance, finished, produces maturity. You can't get there another way. There's no shortcut to being unshakeable.",
+          "The trial isn't punishment. It's the training. And the goal isn't survival — it's becoming complete."
+        ],
+        prayer: "Lord, help me see my struggles as training, not punishment. Let perseverance do its work. Make me complete. Amen."
+      }
+    ];
 
-    // Share button
+    // Rotate by day of year so it changes daily
+    const now = new Date();
+    const start = new Date(now.getFullYear(), 0, 0);
+    const diff = now - start;
+    const oneDay = 1000 * 60 * 60 * 24;
+    const dayOfYear = Math.floor(diff / oneDay);
+    const d = devotionals[dayOfYear % devotionals.length];
+
+    // Set date
+    const opts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    document.getElementById('today-date').textContent = now.toLocaleDateString('en-US', opts);
+
+    // Populate content
+    document.getElementById('today-theme').textContent = d.theme;
+    document.getElementById('today-verse').textContent = '\u201c' + d.verse + '\u201d';
+    document.getElementById('today-ref').textContent = d.ref;
+    document.getElementById('today-prayer').textContent = d.prayer;
+
+    const refEl = document.getElementById('today-reflection');
+    d.reflection.forEach(p => {
+      const el = document.createElement('p');
+      el.textContent = p;
+      refEl.appendChild(el);
+    });
+
     function share() {
-      navigator.clipboard.writeText(window.location.href).then(() => {
-        const btn = document.querySelector('button');
-        btn.textContent = 'Copied!';
-        setTimeout(() => btn.textContent = 'Copy link', 2000);
-      });
+      const text = `"${d.verse}" ${d.ref} — anchoreddaily via Anchored Daily`;
+      if (navigator.share) {
+        navigator.share({ title: 'Anchored Daily', text, url: window.location.href });
+      } else {
+        navigator.clipboard.writeText(window.location.href).then(() => {
+          const btn = document.querySelector('button');
+          btn.textContent = 'Copied!';
+          setTimeout(() => btn.textContent = 'Share today\'s verse', 2000);
+        });
+      }
     }
   </script>
 </body>
