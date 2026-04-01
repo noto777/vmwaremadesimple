@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Anchored Daily — Scripture & Reflection</title>
+  <meta name="description" content="A daily devotional for those anchored in faith. Scripture, reflection, and a word for the day." />
+  <link rel="canonical" href="https://anchoreddaily.vmwaremadesimple.com" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Anchored Daily" />
+  <meta property="og:description" content="Daily scripture and reflection. Anchored in faith." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://anchoreddaily.vmwaremadesimple.com" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap');
+    .font-serif { font-family: 'Merriweather', Georgia, serif; }
+    .font-sans { font-family: 'Inter', system-ui, sans-serif; }
+  </style>
+</head>
+<body class="bg-stone-50 text-stone-800 font-sans min-h-screen">
+
+  <!-- Header -->
+  <header class="border-b border-stone-200 bg-white">
+    <div class="max-w-2xl mx-auto px-6 py-5 flex items-center justify-between">
+      <div>
+        <a href="/anchoreddaily/" class="text-stone-900 no-underline">
+          <h1 class="text-xl font-semibold tracking-tight">⚓ Anchored Daily</h1>
+          <p class="text-xs text-stone-400 mt-0.5 font-light">Scripture & Reflection</p>
+        </a>
+      </div>
+      <nav class="flex gap-5 text-sm text-stone-500">
+        <a href="/anchoreddaily/" class="hover:text-stone-900 transition-colors">Today</a>
+        <a href="/anchoreddaily/archive.html" class="hover:text-stone-900 transition-colors">Archive</a>
+        <a href="/anchoreddaily/about.html" class="hover:text-stone-900 transition-colors">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Today's Devotional -->
+  <main class="max-w-2xl mx-auto px-6 py-12">
+
+    <!-- Date -->
+    <p class="text-xs font-medium uppercase tracking-widest text-stone-400 mb-6" id="today-date"></p>
+
+    <!-- Verse -->
+    <div class="bg-white rounded-2xl border border-stone-200 p-8 mb-8 shadow-sm">
+      <p class="text-xs font-medium uppercase tracking-widest text-amber-600 mb-4">Today's Verse</p>
+      <blockquote class="font-serif text-xl leading-relaxed text-stone-800 mb-5 italic">
+        "We have this hope as an anchor for the soul, firm and secure."
+      </blockquote>
+      <cite class="text-sm font-medium text-stone-500 not-italic">— Hebrews 6:19 (NIV)</cite>
+    </div>
+
+    <!-- Reflection -->
+    <div class="mb-10">
+      <h2 class="font-serif text-lg font-bold text-stone-900 mb-4">Reflection</h2>
+      <div class="text-stone-600 leading-relaxed space-y-4 text-base">
+        <p>
+          An anchor doesn't stop a storm. It doesn't make the water calm or the wind quiet. What it does is hold you in place when everything around you is moving.
+        </p>
+        <p>
+          That's what hope in Christ is. Not a promise that life gets easy — but something deep and immovable that keeps you from drifting when it doesn't. The anchor holds even when you can't see the bottom.
+        </p>
+        <p>
+          Today, whatever you're facing, you're not adrift. You're held.
+        </p>
+      </div>
+    </div>
+
+    <!-- Prayer -->
+    <div class="border-l-2 border-amber-200 pl-6 mb-10">
+      <p class="text-xs font-medium uppercase tracking-widest text-stone-400 mb-3">A Prayer</p>
+      <p class="text-stone-600 italic font-serif leading-relaxed">
+        Lord, thank you that my hope is not in circumstances but in you. When life is uncertain, remind me that I am anchored to something that cannot move. Give me peace today. Amen.
+      </p>
+    </div>
+
+    <!-- Share -->
+    <div class="flex items-center gap-3 text-sm text-stone-400">
+      <span>Share today's word:</span>
+      <button onclick="share()" class="text-stone-500 hover:text-stone-800 transition-colors underline underline-offset-2">Copy link</button>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-stone-200 mt-16">
+    <div class="max-w-2xl mx-auto px-6 py-8 text-center">
+      <p class="text-xs text-stone-400">"We have this hope as an anchor for the soul." — Heb 6:19</p>
+    </div>
+  </footer>
+
+  <script>
+    // Set today's date
+    const d = new Date();
+    const opts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    document.getElementById('today-date').textContent = d.toLocaleDateString('en-US', opts);
+
+    // Share button
+    function share() {
+      navigator.clipboard.writeText(window.location.href).then(() => {
+        const btn = document.querySelector('button');
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = 'Copy link', 2000);
+      });
+    }
+  </script>
+</body>
+</html>
