@@ -1,7 +1,15 @@
 {
-  "lastIndex": 7,
-  "lastDate": "2026-04-01",
+  "lastIndex": 8,
+  "lastDate": "2026-04-02",
   "manifest": [
+    {
+      "slug": "2026-04-02",
+      "date": "Thursday, April 2, 2026",
+      "isoDate": "2026-04-02",
+      "ref": "Joshua 1:9 (ESV)",
+      "theme": "Courage",
+      "preview": "Have I not commanded you? Be strong and courageous. Do not be frightened, and do..."
+    },
     {
       "slug": "2026-04-01",
       "date": "Tuesday, April 1, 2026",
