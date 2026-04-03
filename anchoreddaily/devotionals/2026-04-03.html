@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Anchored Daily — Scripture & Reflection — Anchored Daily</title>
+  <title>Psalm 46:10 (NIV) — Anchored Daily</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap');
@@ -48,36 +48,12 @@
       <p class="text-xs font-medium uppercase tracking-widest text-stone-400 mb-3">A Prayer</p>
       <p class="text-stone-600 italic font-serif leading-relaxed">Lord, quiet the noise in me today. Let me be still long enough to remember that you are God and I am not. Amen.</p>
     </div>
-    
-    <div class="flex items-center justify-between text-sm">
-      <a href="/anchoreddaily/archive.html" class="text-stone-400 hover:text-stone-700 transition-colors">View all devotionals →</a>
-      <button onclick="share()" class="text-stone-400 hover:text-stone-700 transition-colors underline underline-offset-2">Share today's verse</button>
-    </div>
-    <div class="mt-12 bg-amber-50 border border-amber-200 rounded-2xl p-6 flex items-center justify-between gap-4">
-      <div>
-        <p class="font-semibold text-stone-800 text-sm">Ready to build the habit?</p>
-        <p class="text-stone-500 text-xs mt-1">A 3-phase soul training plan — 5 minutes a day to start.</p>
-      </div>
-      <a href="/anchoreddaily/plan.html" class="bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors whitespace-nowrap">See The Plan</a>
-    </div>
+    <a href="/anchoreddaily/archive.html" class="text-sm text-stone-400 hover:text-stone-700 transition-colors">← All devotionals</a>
   </main>
   <footer class="border-t border-stone-200 mt-16">
     <div class="max-w-2xl mx-auto px-6 py-8 text-center">
       <p class="text-xs text-stone-400">"We have this hope as an anchor for the soul." — Heb 6:19</p>
     </div>
   </footer>
-<script>
-  function share() {
-    const text = '"Be still, and know that I am God." — Psalm 46:10 (NIV)';
-    if (navigator.share) {
-      navigator.share({ title: 'Anchored Daily', text, url: window.location.href });
-    } else {
-      navigator.clipboard.writeText(window.location.href).then(() => {
-        const btn = document.querySelector('button');
-        btn.textContent = 'Copied!';
-        setTimeout(() => btn.textContent = "Share today's verse", 2000);
-      });
-    }
-  }
-</script>
+</body>
 </html>
