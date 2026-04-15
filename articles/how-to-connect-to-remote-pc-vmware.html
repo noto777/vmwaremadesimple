@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How to Connect to a Remote PC with VMware: Horizon, VMRC, and vSphere Console (2026) | VMware Made Simple</title>
+  <meta name="description" content="Yes, you can connect to a remote PC from VMware infrastructure. Complete guide covering VMware Horizon client access, vSphere Remote Console (VMRC), the HTML5 web console, Blast Extreme vs PCoIP protocols, and troubleshooting connection failures." />
+  <meta name="keywords" content="VMware remote PC connection, VMware Horizon client, vSphere Remote Console, VMRC, connect to VM remotely, Blast Extreme, PCoIP, vSphere web console, VMware remote desktop" />
+  <link rel="canonical" href="https://vmwaremadesimple.com/articles/how-to-connect-to-remote-pc-vmware.html" />
+
+  <meta property="og:title" content="How to Connect to a Remote PC with VMware: Horizon, VMRC, and vSphere Console (2026)" />
+  <meta property="og:description" content="Yes, you can connect to a remote PC from VMware infrastructure. Complete guide covering VMware Horizon client access, vSphere Remote Console (VMRC), the HTML5 web console, Blast Extreme vs PCoIP protocols, and troubleshooting connection failures." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://vmwaremadesimple.com/articles/how-to-connect-to-remote-pc-vmware.html" />
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-2NDPP0ZTKC"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-2NDPP0ZTKC');
+  </script>
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "How to Connect to a Remote PC with VMware: Horizon, VMRC, and vSphere Console (2026)",
+    "description": "Yes, you can connect to a remote PC from VMware infrastructure. Complete guide covering VMware Horizon client access, vSphere Remote Console (VMRC), the HTML5 web console, Blast Extreme vs PCoIP protocols, and troubleshooting connection failures.",
+    "author": { "@type": "Person", "name": "Rob Notaro" },
+    "publisher": { "@type": "Organization", "name": "VMware Made Simple" },
+    "datePublished": "2026-04-15",
+    "dateModified": "2026-04-15",
+    "mainEntityOfPage": "https://vmwaremadesimple.com/articles/how-to-connect-to-remote-pc-vmware.html"
+  }
+  </script>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { colors: { brand: '#1a73e8', dark: '#0f172a', card: '#1e293b' } } }
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .gradient-text { background: linear-gradient(135deg, #1a73e8, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .prose h2 { margin-top: 2.5rem; margin-bottom: 1rem; }
+    .prose h3 { margin-top: 2rem; margin-bottom: 0.75rem; }
+    .prose p { margin-bottom: 1.25rem; line-height: 1.8; }
+    .prose table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+    .prose th { text-align: left; padding: 0.75rem 1rem; border-bottom: 2px solid #334155; color: #94a3b8; font-size: 0.875rem; text-transform: uppercase; }
+    .prose td { padding: 0.75rem 1rem; border-bottom: 1px solid #1e293b; }
+    .prose tr:hover { background: #1e293b40; }
+    .prose pre { background: #1e293b; border: 1px solid #334155; border-radius: 0.5rem; padding: 1.25rem; overflow-x: auto; margin: 1.25rem 0; }
+    .prose code { font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace; font-size: 0.875rem; }
+    .prose p code, .prose li code { background: #1e293b; color: #7dd3fc; padding: 0.15rem 0.4rem; border-radius: 0.25rem; font-size: 0.85em; }
+    .callout { background: #1e293b; border-left: 4px solid #f59e0b; padding: 1.25rem 1.5rem; border-radius: 0 0.5rem 0.5rem 0; margin: 1.5rem 0; }
+    .callout-red { border-left-color: #ef4444; }
+    .callout-green { border-left-color: #22c55e; }
+    .callout-blue { border-left-color: #3b82f6; }
+  </style>
+</head>
+<body class="bg-dark text-slate-100">
+
+  <!-- Nav -->
+  <nav class="border-b border-slate-800 sticky top-0 z-50 bg-dark/95 backdrop-blur">
+    <div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="/" class="text-xl font-bold text-white">VMware<span class="gradient-text">MadeSimple</span></a>
+      <a href="/#newsletter" class="bg-brand text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition text-sm font-medium">Get Updates</a>
+    </div>
+  </nav>
+
+  <!-- Article -->
+  <article class="max-w-4xl mx-auto px-6 py-12 prose">
+
+    <!-- Breadcrumb -->
+    <div class="text-sm text-slate-500 mb-6">
+      <a href="/" class="hover:text-slate-300">Home</a> → <span class="text-slate-400">Remote Access</span>
+    </div>
+
+    <!-- Header -->
+    <div class="mb-10">
+      <div class="text-xs text-green-400 font-medium uppercase tracking-wide mb-3">Remote Access</div>
+      <h1 class="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight" style="-webkit-text-fill-color: white;">
+        Can I Connect to My PC from Here? VMware Remote Access Explained (2026)
+      </h1>
+      <p class="text-slate-400 text-lg">
+        April 15, 2026 · 12 min read
+      </p>
+    </div>
+
+    <!-- ARTICLE BODY -->
+
+    <p>Short answer: <strong class="text-slate-200">yes</strong> — and VMware gives you multiple ways to do it depending on what you're trying to connect to and why. Whether you want to reach a virtual machine running on ESXi, access a corporate desktop through Horizon VDI, or just get into a VM console for emergency recovery, there's a right tool for each situation.</p>
+
+    <p>This guide covers the three main VMware remote connection methods you'll encounter in real environments: <strong class="text-slate-200">VMware Horizon</strong> for managed virtual desktops, the <strong class="text-slate-200">vSphere Remote Console (VMRC)</strong> for direct VM access, and the <strong class="text-slate-200">HTML5 web console</strong> built into vSphere Client. We'll cover when to use each one, how to get connected, and how to fix the problems that actually come up.</p>
+
+    <div class="callout callout-blue">
+      <strong class="text-blue-400">Which method do you need?</strong>
+      <ul class="list-disc list-inside text-slate-300 space-y-1 mt-2">
+        <li><strong>Accessing a corporate virtual desktop (VDI)?</strong> → Use VMware Horizon Client</li>
+        <li><strong>Managing a VM on ESXi or vCenter?</strong> → Use VMRC or the vSphere web console</li>
+        <li><strong>Emergency console access (no network)?</strong> → Use the vSphere web console</li>
+        <li><strong>Connecting to a physical PC remotely?</strong> → See the section on Horizon RDSH and PC-over-IP</li>
+      </ul>
+    </div>
+
+    <h2 class="text-2xl font-bold text-white">Method 1: VMware Horizon Client (VDI Access)</h2>
+
+    <p>If your organization runs VMware Horizon, this is how end users connect to their virtual desktops. Horizon delivers Windows or Linux desktops as virtual machines on ESXi hosts, streamed to the user's device over the <strong class="text-slate-200">Blast Extreme</strong> or <strong class="text-slate-200">PCoIP</strong> protocol. The experience feels like using a local PC — but the compute happens in the data center.</p>
+
+    <h3 class="text-xl font-semibold text-white">What You Need</h3>
+
+    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
+      <li>The <strong>VMware Horizon Client</strong> installed on your local device (Windows, macOS, Linux, iOS, Android, or Chromebook)</li>
+      <li>The <strong>Connection Server address</strong> — your IT team provides this (e.g., <code>horizon.company.com</code>)</li>
+      <li>Your <strong>Active Directory credentials</strong> (domain username and password)</li>
+      <li>Network access to the Connection Server — either on the corporate network or through a Unified Access Gateway (UAG) for external access</li>
+    </ul>
+
+    <h3 class="text-xl font-semibold text-white">Connecting Step by Step</h3>
+
+    <ol class="list-decimal list-inside text-slate-300 space-y-3 mb-6">
+      <li>Open VMware Horizon Client. Click <strong>New Server</strong>.</li>
+      <li>Enter the Connection Server address your IT department provided. Click <strong>Connect</strong>.</li>
+      <li>Accept the SSL certificate if prompted (your IT team should have a trusted cert — if you see a persistent warning, flag it to them).</li>
+      <li>Log in with your domain credentials (<code>DOMAIN\username</code> or just <code>username</code> depending on your org's setup).</li>
+      <li>A list of desktops and published applications you're entitled to appears. Double-click the one you want.</li>
+      <li>The session opens. You're in.</li>
+    </ol>
+
+    <div class="callout">
+      <strong class="text-yellow-400">External Access:</strong> Connecting from outside the office? Your org needs a <strong>Unified Access Gateway (UAG)</strong> deployed in the DMZ. The UAG is what makes Horizon accessible from the internet without a VPN. If remote access isn't working and you're off-network, the UAG configuration (or firewall rules blocking TCP 443 / UDP 8443) is the first thing to check with IT.
+    </div>
+
+    <h3 class="text-xl font-semibold text-white">Blast Extreme vs PCoIP: Which Protocol to Use</h3>
+
+    <p>When you connect, Horizon negotiates a display protocol between your client and the virtual desktop. You may be able to choose in the Horizon Client settings. Here's the practical difference:</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Protocol</th>
+          <th>Best For</th>
+          <th>Bandwidth</th>
+          <th>Latency Tolerance</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="text-slate-300"><strong>Blast Extreme</strong></td>
+          <td class="text-slate-400">Most use cases, works over TCP 443 and UDP 8443</td>
+          <td class="text-slate-400">Adaptive (lower on slow links)</td>
+          <td class="text-slate-400">Good — tolerates up to ~150ms round-trip</td>
+        </tr>
+        <tr>
+          <td class="text-slate-300"><strong>PCoIP</strong></td>
+          <td class="text-slate-400">LAN/WAN with consistent bandwidth, legacy deployments</td>
+          <td class="text-slate-400">Higher baseline</td>
+          <td class="text-slate-400">Moderate — sensitive above ~80ms</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p><strong class="text-slate-200">For 2026 deployments, Blast Extreme is the default and the right choice for most users.</strong> It uses H.264/H.265 encoding, adapts to available bandwidth, and works through standard HTTPS firewalls. PCoIP is still supported but is essentially legacy at this point.</p>
+
+    <h2 class="text-2xl font-bold text-white">Method 2: vSphere Remote Console (VMRC)</h2>
+
+    <p>VMRC is the standalone application that lets you open a console session directly into any VM on your ESXi hosts or vCenter. Unlike Horizon (which is for end-user desktops), VMRC is an admin tool — you use it to manage VMs at the OS level, access BIOS/UEFI, troubleshoot boot issues, and do things that require console access rather than network access.</p>
+
+    <p>VMRC connects over <strong class="text-slate-200">TCP 902</strong> directly to the ESXi host running the VM. If port 902 is blocked between you and the host, VMRC won't work — use the web console instead (covered in Method 3).</p>
+
+    <h3 class="text-xl font-semibold text-white">Installing VMRC</h3>
+
+    <p>Download VMRC from the Broadcom Support Portal (requires a Broadcom account). It's a free download — no license required — and installs on Windows or Linux. As of April 2026, the current version is <strong class="text-slate-200">VMRC 13.0</strong>.</p>
+
+    <h3 class="text-xl font-semibold text-white">Launching VMRC from vSphere Client</h3>
+
+    <ol class="list-decimal list-inside text-slate-300 space-y-3 mb-6">
+      <li>Log into your vSphere Client (e.g., <code>https://vcenter.lab.local</code>).</li>
+      <li>Navigate to the VM you want to access. Click it in the inventory.</li>
+      <li>In the VM's summary page, click <strong>Actions → Open Remote Console</strong>.</li>
+      <li>Your browser will offer to open the <code>.vmrc</code> file with VMware Remote Console. Allow it.</li>
+      <li>VMRC opens and connects. You'll see the VM's screen.</li>
+    </ol>
+
+    <div class="callout callout-blue">
+      <strong class="text-blue-400">Tip:</strong> VMRC supports clipboard sharing, USB device pass-through, and screen scaling. Right-click the VMRC toolbar to access these options. For USB pass-through, your VM needs VMware Tools installed and the USB controller must be configured.
+    </div>
+
+    <h3 class="text-xl font-semibold text-white">Direct VMRC Launch (Without vSphere Client)</h3>
+
+    <p>You can also launch VMRC directly with a connection URL — useful for scripts or quick bookmarks:</p>
+
+    <pre><code class="language-bash">vmrc://clone:ticket@esxi-host/?moid=vm-42</code></pre>
+
+    <p>In practice you'll pull the managed object ID (moid) from vCenter's API or the vSphere Client URL. This is mostly useful if you're building automation.</p>
+
+    <h3 class="text-xl font-semibold text-white">VMRC Keyboard Shortcuts That Actually Matter</h3>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Action</th>
+          <th>Shortcut</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="text-slate-300">Send Ctrl+Alt+Delete</td>
+          <td class="text-slate-400">Ctrl+Alt+Insert</td>
+        </tr>
+        <tr>
+          <td class="text-slate-300">Release mouse/keyboard grab</td>
+          <td class="text-slate-400">Ctrl+Alt</td>
+        </tr>
+        <tr>
+          <td class="text-slate-300">Toggle full screen</td>
+          <td class="text-slate-400">Ctrl+Alt+Enter</td>
+        </tr>
+        <tr>
+          <td class="text-slate-300">Enter/exit Unity mode</td>
+          <td class="text-slate-400">Ctrl+Shift+U</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 class="text-2xl font-bold text-white">Method 3: HTML5 Web Console (No Install Required)</h2>
+
+    <p>The vSphere Client has a built-in browser-based console that works without installing VMRC. It's slower and less feature-rich than VMRC, but it works anywhere you can reach vCenter in a browser — and it doesn't require TCP 902, since it tunnels through TCP 443 to vCenter.</p>
+
+    <p>Use the web console when:</p>
+
+    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
+      <li>You're on a machine without VMRC installed and can't install software</li>
+      <li>TCP 902 is blocked between your workstation and the ESXi hosts</li>
+      <li>You need quick console access for a one-off task</li>
+      <li>You're troubleshooting a VM that has no network connectivity (the web console is out-of-band)</li>
+    </ul>
+
+    <h3 class="text-xl font-semibold text-white">Launching the Web Console</h3>
+
+    <ol class="list-decimal list-inside text-slate-300 space-y-3 mb-6">
+      <li>In vSphere Client, navigate to your VM.</li>
+      <li>Click the thumbnail preview of the VM screen in the Summary tab.</li>
+      <li>Alternatively: <strong>Actions → Open Browser Console</strong>.</li>
+      <li>The console opens in a new browser tab. Click inside it to capture keyboard and mouse input.</li>
+    </ol>
+
+    <div class="callout">
+      <strong class="text-yellow-400">Web Console Limitations:</strong> No USB pass-through, no audio, clipboard sharing is limited, and performance degrades on high-resolution displays. For regular admin work, VMRC is meaningfully better. Use the web console as a fallback, not a primary tool.
+    </div>
+
+    <h2 class="text-2xl font-bold text-white">Connecting to a Physical PC (Not a VM)</h2>
+
+    <p>If you're asking whether VMware can help you connect to a <em>physical</em> PC — not a virtual machine — the answer depends on what you mean.</p>
+
+    <h3 class="text-xl font-semibold text-white">Horizon PC-over-IP (Physical PC Access)</h3>
+
+    <p>VMware Horizon supports a feature called <strong class="text-slate-200">PC-over-IP Remote Workstation Cards</strong> — physical PCIe cards installed in workstations that allow Horizon to deliver the physical desktop to remote users, the same way it delivers virtual desktops. This is common for GPU-heavy workstations (CAD, video editing) that can't be virtualized cost-effectively.</p>
+
+    <p>This requires:</p>
+
+    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
+      <li>A PCoIP Remote Workstation Card (from Teradici/HP) in the physical PC</li>
+      <li>A Horizon Connection Server in your environment</li>
+      <li>Horizon Agent installed on the physical PC</li>
+      <li>A Horizon entitlement configured for the user</li>
+    </ul>
+
+    <p>Once configured, the user connects through the standard Horizon Client — they just see their physical workstation's desktop instead of a VM.</p>
+
+    <h3 class="text-xl font-semibold text-white">Standard Remote Desktop (RDP) — No VMware Required</h3>
+
+    <p>If you just need to connect to a Windows PC remotely and don't have Horizon infrastructure, plain RDP (built into Windows) is the practical answer. Enable it under <strong>Settings → System → Remote Desktop</strong> on the target PC, then connect with:</p>
+
+    <pre><code class="language-bash">mstsc /v:pc-hostname-or-ip</code></pre>
+
+    <p>For external access without a VPN, tools like <strong class="text-slate-200">Microsoft Remote Desktop Gateway</strong> or third-party options solve the connectivity problem. VMware isn't required for basic PC-to-PC remote access.</p>
+
+    <h2 class="text-2xl font-bold text-white">Firewall Ports Reference</h2>
+
+    <p>Connection failures are almost always a firewall or routing problem. Here are the ports you need open for each method:</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Method</th>
+          <th>Protocol/Port</th>
+          <th>Source → Destination</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="text-slate-300">Horizon Client (Blast Extreme)</td>
+          <td class="text-slate-400">TCP 443, UDP 8443</td>
+          <td class="text-slate-400">Client → Connection Server / UAG</td>
+        </tr>
+        <tr>
+          <td class="text-slate-300">Horizon Client (PCoIP)</td>
+          <td class="text-slate-400">TCP/UDP 4172</td>
+          <td class="text-slate-400">Client → Connection Server / UAG</td>
+        </tr>
+        <tr>
+          <td class="text-slate-300">VMRC</td>
+          <td class="text-slate-400">TCP 902</td>
+          <td class="text-slate-400">Admin workstation → ESXi host</td>
+        </tr>
+        <tr>
+          <td class="text-slate-300">vSphere Web Console</td>
+          <td class="text-slate-400">TCP 443</td>
+          <td class="text-slate-400">Admin workstation → vCenter</td>
+        </tr>
+        <tr>
+          <td class="text-slate-300">vSphere Client (general)</td>
+          <td class="text-slate-400">TCP 443</td>
+          <td class="text-slate-400">Admin workstation → vCenter</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 class="text-2xl font-bold text-white">Troubleshooting: Common Connection Failures</h2>
+
+    <h3 class="text-xl font-semibold text-white">Horizon: "Cannot connect to the Connection Server"</h3>
+
+    <p><strong class="text-slate-200">From on-network:</strong> Verify TCP 443 is reachable from your client to the Connection Server. Try <code>Test-NetConnection -ComputerName horizon.company.com -Port 443</code> from PowerShell. Check that the Connection Server services are running (the Horizon Admin Console shows service status).</p>
+
+    <p><strong class="text-slate-200">From off-network:</strong> The Unified Access Gateway (UAG) is the external entry point. Verify TCP 443 and UDP 8443 are open on the perimeter firewall to the UAG's external IP. If the UAG is misconfigured or its certificate is expired, all external connections will fail.</p>
+
+    <h3 class="text-xl font-semibold text-white">Horizon: Connected but black screen after login</h3>
+
+    <p>Three common causes:</p>
+    <ol class="list-decimal list-inside text-slate-300 space-y-3 mb-6">
+      <li><strong>Horizon Agent not running</strong> on the virtual desktop. RDP into the VM via an admin path and check the VMware Horizon Agent service in services.msc.</li>
+      <li><strong>Display protocol mismatch</strong> — the Connection Server is trying to use PCoIP but the Agent has it disabled, or vice versa. Check the pool's display protocol settings in Horizon Admin.</li>
+      <li><strong>GPU driver issue</strong> (on GPU-enabled desktops). Driver updates on the host or VM can break the display pipeline. Roll back the driver if this happened after an update.</li>
+    </ol>
+
+    <h3 class="text-xl font-semibold text-white">VMRC: "Could not connect to the remote PC. Connection timed out."</h3>
+
+    <p>TCP 902 is almost certainly blocked. Verify:</p>
+    <pre><code class="language-bash"># From Windows, test port 902 to the ESXi host
+Test-NetConnection -ComputerName esxi01.lab.local -Port 902
+
+# From Linux
+nc -zv esxi01.lab.local 902</code></pre>
+
+    <p>If the port is blocked, use the web console (Method 3) as a workaround, or open TCP 902 in your firewall between admin workstations and ESXi management IPs.</p>
+
+    <h3 class="text-xl font-semibold text-white">Web Console: Screen loads but keyboard input doesn't work</h3>
+
+    <p>This is a browser focus issue. Click directly inside the console area to capture input. Some browsers (particularly with certain extensions installed) intercept keyboard shortcuts before they reach the console. Try a different browser or disable extensions. Chrome and Edge work most reliably with the vSphere HTML5 console.</p>
+
+    <h3 class="text-xl font-semibold text-white">VMRC: "The SSL certificate is invalid" / Certificate error on launch</h3>
+
+    <p>Your ESXi host is presenting a self-signed certificate and VMRC is enforcing verification. Two options:</p>
+
+    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
+      <li><strong>Proper fix:</strong> Replace the ESXi self-signed certificate with one from your internal CA. Do this through <strong>vCenter → Host → Certificate Management</strong>.</li>
+      <li><strong>Quick workaround (lab/dev only):</strong> In VMRC, go to <strong>VMRC → Preferences → Security</strong> and set certificate checking to warn instead of block. Never do this in production.</li>
+    </ul>
+
+    <h2 class="text-2xl font-bold text-white">Quick Reference: Which Method for Which Situation</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Situation</th>
+          <th>Right Tool</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="text-slate-300">Accessing your assigned virtual desktop at work</td>
+          <td class="text-slate-400">VMware Horizon Client</td>
+        </tr>
+        <tr>
+          <td class="text-slate-300">Accessing Horizon from outside the office</td>
+          <td class="text-slate-400">Horizon Client → UAG external address</td>
+        </tr>
+        <tr>
+          <td class="text-slate-300">Managing a VM on ESXi (admin task)</td>
+          <td class="text-slate-400">VMRC (preferred) or Web Console</td>
+        </tr>
+        <tr>
+          <td class="text-slate-300">Emergency console access, no VMRC installed</td>
+          <td class="text-slate-400">vSphere Web Console</td>
+        </tr>
+        <tr>
+          <td class="text-slate-300">VM with no network — need out-of-band access</td>
+          <td class="text-slate-400">vSphere Web Console (tunnels through vCenter)</td>
+        </tr>
+        <tr>
+          <td class="text-slate-300">Physical workstation remote access (GPU/CAD)</td>
+          <td class="text-slate-400">Horizon with PCoIP Remote Workstation Card</td>
+        </tr>
+        <tr>
+          <td class="text-slate-300">Simple Windows PC remote access, no VMware</td>
+          <td class="text-slate-400">RDP (mstsc) — VMware not needed</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 class="text-2xl font-bold text-white">Summary</h2>
+
+    <p>Yes, you can connect to your PC from anywhere with VMware infrastructure — the right path depends on what you're connecting to. For virtual desktops in an enterprise environment, <strong class="text-slate-200">VMware Horizon Client</strong> with Blast Extreme is the answer. For VM console access during administration or troubleshooting, use <strong class="text-slate-200">VMRC</strong> when you can, and fall back to the <strong class="text-slate-200">HTML5 web console</strong> when you can't. For physical PCs, Horizon with a PCoIP Workstation Card solves the problem at scale, though plain RDP works fine for ad hoc access.</p>
+
+    <p>The most common failure is a blocked port — check the firewall ports table first before chasing configuration issues.</p>
+
+    <p class="text-slate-500 text-sm"><em>Last updated: April 2026 | Verified against VMware Horizon 2512 and vSphere 8.0 Update 3i</em></p>
+
+    <!-- Newsletter CTA -->
+    <div class="mt-16 bg-card border border-slate-700 rounded-2xl p-10 text-center">
+      <h2 class="text-2xl font-bold text-white mb-3" style="-webkit-text-fill-color: white;">Stay ahead of the VMware changes</h2>
+      <p class="text-slate-400 mb-6">We're publishing detailed guides, migration walkthroughs, and cost calculators. Get them in your inbox.</p>
+      <form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" onsubmit="handleSubscribe(event)">
+        <input type="email" placeholder="your@email.com" class="flex-1 bg-dark border border-slate-600 text-white px-5 py-3 rounded-xl focus:outline-none focus:border-blue-500 placeholder-slate-500" required />
+        <button type="submit" class="bg-brand text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-600 transition">Subscribe</button>
+      </form>
+    </div>
+
+    <!-- Author -->
+    <div class="mt-12 pt-8 border-t border-slate-800">
+      <div class="flex items-start gap-4">
+        <div class="w-12 h-12 bg-slate-700 rounded-full flex items-center justify-center text-xl">🖥️</div>
+        <div>
+          <p class="text-white font-semibold">Written by Rob Notaro</p>
+          <p class="text-slate-400 text-sm mt-1">Senior infrastructure engineer specializing in VMware, Horizon VDI, and enterprise virtualization. Currently deploying Horizon 2512 and VCF in production environments.</p>
+        </div>
+      </div>
+    </div>
+
+  </article>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800 mt-10">
+    <div class="max-w-4xl mx-auto px-6 py-10 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="text-slate-400 text-sm">© 2026 VMwareMadeSimple.com — Independent. Not affiliated with VMware or Broadcom.</div>
+      <div class="flex gap-6 text-slate-400 text-sm">
+        <a href="/" class="hover:text-white transition">Home</a>
+        <a href="/#articles" class="hover:text-white transition">Articles</a>
+        <a href="/#newsletter" class="hover:text-white transition">Newsletter</a>
+      </div>
+    </div>
+    <div class="max-w-4xl mx-auto px-6 pb-8 text-slate-600 text-xs">
+      Some links on this site are affiliate links. If you purchase through them, we may earn a small commission at no extra cost to you.
+    </div>
+  </footer>
+
+  <script>
+    function handleSubscribe(e) {
+      e.preventDefault();
+      alert('Thanks! We\'ll be in touch soon.');
+      e.target.reset();
+    }
+  </script>
+
+</body>
+</html>
