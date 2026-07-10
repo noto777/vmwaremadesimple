@@ -5,7 +5,7 @@
 
 set -e
 
-REPO_DIR="/home/rob/.openclaw/vmwaremadesimple"
+REPO_DIR="/home/rob/vmwaremadesimple"
 TEMPLATE="$REPO_DIR/article-template.html"
 SLUG="$1"
 TITLE="$2"
@@ -67,7 +67,6 @@ fi
 
 # Git commit and push
 cd "$REPO_DIR"
-source /home/rob/.openclaw/workspace/secrets/github.env
 git add "articles/${SLUG}.html" sitemap.xml
 git commit -m "Add article: ${TITLE}"
 git push origin master 2>&1
