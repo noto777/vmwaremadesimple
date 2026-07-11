@@ -6,12 +6,12 @@
   <title>VMware vs Nutanix AHV: An Honest Engineer's Comparison (2026) | VMware Made Simple</title>
   <meta name="description" content="A straight-talk comparison of VMware VCF/vSphere vs Nutanix AHV for enterprise IT. Covers architecture, licensing costs, migration realities, VDI, networking, and who should actually switch." />
   <meta name="keywords" content="VMware vs Nutanix, Nutanix AHV comparison, VMware alternative 2026, Nutanix NCI pricing, VMware Broadcom migration, HCI comparison, AHV vs ESXi, Nutanix AHV review" />
-  <link rel="canonical" href="https://vmwaremadesimple.com/articles/2026-03-08-vmware-vs-nutanix-ahv.html" />
+  <link rel="canonical" href="https://vmwaremadesimple.com/articles/vmware-vs-nutanix-ahv-2026.html" />
 
   <meta property="og:title" content="VMware vs Nutanix AHV: An Honest Engineer's Comparison (2026)" />
   <meta property="og:description" content="A straight-talk comparison of VMware VCF/vSphere vs Nutanix AHV for enterprise IT. Covers architecture, licensing costs, migration realities, VDI, networking, and who should actually switch." />
   <meta property="og:type" content="article" />
-  <meta property="og:url" content="https://vmwaremadesimple.com/articles/2026-03-08-vmware-vs-nutanix-ahv.html" />
+  <meta property="og:url" content="https://vmwaremadesimple.com/articles/vmware-vs-nutanix-ahv-2026.html" />
 
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-2NDPP0ZTKC"></script>
@@ -33,7 +33,7 @@
     "publisher": { "@type": "Organization", "name": "VMware Made Simple" },
     "datePublished": "2026-03-08",
     "dateModified": "2026-03-08",
-    "mainEntityOfPage": "https://vmwaremadesimple.com/articles/2026-03-08-vmware-vs-nutanix-ahv.html"
+    "mainEntityOfPage": "https://vmwaremadesimple.com/articles/vmware-vs-nutanix-ahv-2026.html"
   }
   </script>
 
@@ -165,6 +165,10 @@
     <p>
       Real-world NCI Pro pricing from community reports: approximately <strong class="text-slate-200">$300/core on renewal</strong> as of March 2025 for existing customers. New purchase government pricing was reported at ~$1,500/core in 2022 via SHI. <em>(Sources: <a href="https://www.reddit.com/r/sysadmin/comments/1j5wm30/nutanix_pricing/" target="_blank" rel="noopener" class="text-blue-400 hover:text-blue-300">r/sysadmin Nutanix Pricing thread, March 2025</a>; <a href="https://www.reddit.com/r/sysadmin/comments/1katioa/" target="_blank" rel="noopener" class="text-blue-400 hover:text-blue-300">r/sysadmin NCI Pro quote thread, April 2025</a>)</em>
     </p>
+
+    <div class="callout callout-blue">
+      <strong class="text-blue-400">Pricing caveat:</strong> The $300/core figure is based on community reports from March 2025 — over a year old. Nutanix pricing can change with each renewal cycle and varies significantly by deal size, tier, and region. <strong class="text-slate-200">Verify current pricing directly with Nutanix or an authorized reseller before making budget decisions.</strong>
+    </div>
 
     <p>
       One genuine advantage: 1 TiB of Nutanix Unified Storage (NUS Pro) is included free per NCI cluster. AHV itself carries no additional license fee. <em>(Source: nutanix.com NCI datasheet, Sept 2025)</em>
@@ -417,7 +421,7 @@
     <h2 class="text-2xl font-bold text-white">Bottom Line</h2>
 
     <p>
-      Nutanix AHV is a credible alternative to VMware for enterprise compute workloads that do not depend on NSX or Zerto-based DR. Horizon on AHV reached GA in December 2025, removing the VDI blocker for most deployments — though large-scale VDI estates should validate AHV maturity against their specific feature requirements. It is not a drop-in replacement for a fully deployed VMware stack — no alternative is, because the VMware ecosystem extends well beyond the hypervisor.
+      Nutanix AHV is a mature, production-ready VMware alternative for enterprise compute workloads that do not depend on NSX or Zerto-based DR. Horizon on AHV reached GA in December 2025, removing the VDI blocker for most deployments — though large-scale VDI estates should validate AHV maturity against their specific feature requirements. It is not a drop-in replacement for a fully deployed VMware stack — no alternative is, because the VMware ecosystem extends well beyond the hypervisor.
     </p>
 
     <p>
@@ -449,7 +453,7 @@
     <!-- Author -->
     <div class="mt-12 pt-8 border-t border-slate-800">
       <div class="flex items-start gap-4">
-        <div class="w-12 h-12 bg-slate-700 rounded-full flex items-center justify-center text-xl">🖥️</div>
+        <div class="w-12 h-12 bg-slate-700 rounded-full flex items-center justify-center text-xl">VT</div>
         <div>
           <p class="text-white font-semibold">Written by Rob Notaro</p>
           <p class="text-slate-400 text-sm mt-1">Senior infrastructure engineer specializing in VMware, Horizon VDI, and enterprise virtualization. Currently deploying Horizon 2512 and VCF in production environments.</p>

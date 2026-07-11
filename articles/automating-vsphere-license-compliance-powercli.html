@@ -13,13 +13,13 @@
   <meta property="og:type" content="article" />
   <meta property="og:url" content="https://vmwaremadesimple.com/articles/automating-vsphere-license-compliance-powercli.html" />
 
-  <!-- Google Analytics — replace G-XXXXXXXXXX with your measurement ID -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-2NDPP0ZTKC"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'G-XXXXXXXXXX');
+    gtag('config', 'G-2NDPP0ZTKC');
   </script>
 
   <!-- Structured Data -->
@@ -116,9 +116,7 @@ Get-Module VCF.PowerCLI | Select-Object Name, Version</code></pre>
 
     <pre><code class="language-powershell">Install-Module -Name PackageManagement -Force -AllowClobber</code></pre>
 
-    <div class="callout">
-      <strong class="text-yellow-400">Note:</strong> [SCREENSHOT: PowerShell output showing VCF.PowerCLI 9.0.x installed and module version confirmed]
-    </div>
+
 
     <h2 class="text-2xl font-bold text-white">What We're Actually Checking</h2>
 
@@ -186,9 +184,7 @@ foreach ($cluster in $clusters) {
       <li><code>NumCpuPackages</code> is the socket count. With Intel Xeon Scalable and AMD EPYC, you'll typically see 2 sockets with 16–64 physical cores each. Know your socket/core split before going into a renewal conversation.</li>
     </ul>
 
-    <div class="callout">
-      <strong class="text-yellow-400">Note:</strong> [SCREENSHOT: PowerShell output showing $reportData table with cluster name, hostname, ESXi version, license key (partially masked), physical cores, and status columns]
-    </div>
+
 
     <h3 class="text-xl font-semibold text-white">Add the 72-Core Floor Check</h3>
 
@@ -230,9 +226,7 @@ Write-Host "Full report: $reportPath"</code></pre>
 
     <p>If you want email or Teams alerting, wire up <code>Send-MailMessage</code> or a webhook call where the <code>Write-Host</code> lines are. I use a Teams webhook in prod — the JSON payload is about 10 lines, webhook endpoint comes from your Teams channel connector settings.</p>
 
-    <div class="callout">
-      <strong class="text-yellow-400">Note:</strong> [SCREENSHOT: Console output showing CRITICAL alert with two hosts flagged in red, plus green summary line for all other hosts]
-    </div>
+
 
     <h2 class="text-2xl font-bold text-white">Scheduling It</h2>
 
