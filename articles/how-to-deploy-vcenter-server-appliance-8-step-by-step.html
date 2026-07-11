@@ -1,110 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>How to Deploy vCenter Server Appliance 8: Step-by-Step Guide (2026) | VMware Made Simple</title>
-  <meta name="description" content="Deploy vCenter Server Appliance (vCSA) 8.0 Update 3i the right way. Step-by-step guide covering the VCSA Installer ISO method, correct hardware sizing, Broadcom portal downloads, and post-deployment validation. Updated March 2026." />
-  <meta name="keywords" content="vCenter Server Appliance 8, deploy vCSA 8, vSphere 8 setup, VCSA installer, VMware vCenter deployment guide, Broadcom vSphere" />
-  <link rel="canonical" href="https://vmwaremadesimple.com/articles/how-to-deploy-vcenter-server-appliance-8-step-by-step.html" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>How to Deploy vCenter Server Appliance 8: Step-by-Step Guide (2026) | VMwareMadeSimple</title>
+<meta name="description" content="Deploy vCenter Server Appliance (vCSA) 8.0 Update 3i the right way. Step-by-step guide covering the VCSA Installer ISO method, correct hardware sizing, Broadcom portal downloads, and post-deployment validation. Updated March 2026." />
+<meta name="keywords" content="vCenter Server Appliance 8, deploy vCSA 8, vSphere 8 setup, VCSA installer, VMware vCenter deployment guide, Broadcom vSphere" />
+<link rel="canonical" href="https://vmwaremadesimple.com/articles/how-to-deploy-vcenter-server-appliance-8-step-by-step.html" />
+<link rel="stylesheet" href="/css/style.css" />
 
-  <meta property="og:title" content="How to Deploy vCenter Server Appliance 8: Step-by-Step Guide (2026)" />
-  <meta property="og:description" content="Deploy vCenter Server Appliance (vCSA) 8.0 Update 3i the right way. Step-by-step guide covering the VCSA Installer ISO method, correct hardware sizing, Broadcom portal downloads, and post-deployment validation. Updated March 2026." />
-  <meta property="og:type" content="article" />
-  <meta property="og:url" content="https://vmwaremadesimple.com/articles/how-to-deploy-vcenter-server-appliance-8-step-by-step.html" />
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2NDPP0ZTKC"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-2NDPP0ZTKC');
+</script>
 
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-2NDPP0ZTKC"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-2NDPP0ZTKC');
-  </script>
+<!-- Open Graph -->
+<meta property="og:title" content="How to Deploy vCenter Server Appliance 8: Step-by-Step Guide (2026)" />
+<meta property="og:description" content="Deploy vCenter Server Appliance (vCSA) 8.0 Update 3i the right way. Step-by-step guide covering the VCSA Installer ISO method, correct hardware sizing, Broadcom portal downloads, and post-deployment validation. Updated March 2026." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://vmwaremadesimple.com/articles/how-to-deploy-vcenter-server-appliance-8-step-by-step.html" />
 
-  <!-- Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "headline": "How to Deploy vCenter Server Appliance 8: Step-by-Step Guide (2026)",
-    "description": "Deploy vCenter Server Appliance (vCSA) 8.0 Update 3i the right way. Step-by-step guide covering the VCSA Installer ISO method, correct hardware sizing, Broadcom portal downloads, and post-deployment validation. Updated March 2026.",
-    "author": { "@type": "Person", "name": "Rob Notaro" },
-    "publisher": { "@type": "Organization", "name": "VMware Made Simple" },
-    "datePublished": "2026-03-24",
-    "dateModified": "2026-03-27",
-    "mainEntityOfPage": "https://vmwaremadesimple.com/articles/how-to-deploy-vcenter-server-appliance-8-step-by-step.html"
-  }
-  </script>
-
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: { extend: { colors: { brand: '#1a73e8', dark: '#0f172a', card: '#1e293b' } } }
-    }
-  </script>
-  <style>
-    body { font-family: 'Inter', system-ui, sans-serif; }
-    .gradient-text { background: linear-gradient(135deg, #1a73e8, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .prose h2 { margin-top: 2.5rem; margin-bottom: 1rem; }
-    .prose h3 { margin-top: 2rem; margin-bottom: 0.75rem; }
-    .prose p { margin-bottom: 1.25rem; line-height: 1.8; }
-    .prose table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
-    .prose th { text-align: left; padding: 0.75rem 1rem; border-bottom: 2px solid #334155; color: #94a3b8; font-size: 0.875rem; text-transform: uppercase; }
-    .prose td { padding: 0.75rem 1rem; border-bottom: 1px solid #1e293b; }
-    .prose tr:hover { background: #1e293b40; }
-    .prose pre { background: #1e293b; border: 1px solid #334155; border-radius: 0.5rem; padding: 1.25rem; overflow-x: auto; margin: 1.25rem 0; }
-    .prose code { font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace; font-size: 0.875rem; }
-    .prose p code, .prose li code { background: #1e293b; color: #7dd3fc; padding: 0.15rem 0.4rem; border-radius: 0.25rem; font-size: 0.85em; }
-    .callout { background: #1e293b; border-left: 4px solid #f59e0b; padding: 1.25rem 1.5rem; border-radius: 0 0.5rem 0.5rem 0; margin: 1.5rem 0; }
-    .callout-red { border-left-color: #ef4444; }
-    .callout-green { border-left-color: #22c55e; }
-  </style>
+<!-- Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "How to Deploy vCenter Server Appliance 8: Step-by-Step Guide (2026)",
+  "description": "Deploy vCenter Server Appliance (vCSA) 8.0 Update 3i the right way. Step-by-step guide covering the VCSA Installer ISO method, correct hardware sizing, Broadcom portal downloads, and post-deployment validation. Updated March 2026.",
+  "author": { "@type": "Organization", "name": "VMwareMadeSimple Editorial" },
+  "publisher": { "@type": "Organization", "name": "VMwareMadeSimple" },
+  "datePublished": "2026-03-24",
+  "dateModified": "2026-03-27",
+  "mainEntityOfPage": "https://vmwaremadesimple.com/articles/how-to-deploy-vcenter-server-appliance-8-step-by-step.html"
+}
+</script>
 </head>
-<body class="bg-dark text-slate-100">
+<body>
 
-  <!-- Nav -->
-  <nav class="border-b border-slate-800 sticky top-0 z-50 bg-dark/95 backdrop-blur">
-    <div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
-      <a href="/" class="text-xl font-bold text-white">VMware<span class="gradient-text">MadeSimple</span></a>
-      <a href="/#newsletter" class="bg-brand text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition text-sm font-medium">Get Updates</a>
+<!-- Masthead -->
+<div class="masthead">
+  <div class="masthead-inner">
+    <h1><a href="/">VMware<span class="red">MadeSimple</span></a></h1>
+    <div class="tagline">Independent VMware analysis for IT professionals. No vendor spin.</div>
+    <div class="credibility-bar">
+      <div class="creds">
+        <span><span class="dot">●</span> Independent</span>
+        <span><span class="dot">●</span> Sources linked</span>
+        <span><span class="dot">●</span> Updated weekly</span>
+        <span><span class="dot">●</span> Not affiliated with VMware/Broadcom</span>
+      </div>
+      <div class="social">
+        <a href="/sitemap.xml">RSS</a>
+        <a href="#newsletter">Newsletter</a>
+        <a href="mailto:contact@vmwaremadesimple.com">Contact</a>
+      </div>
     </div>
-  </nav>
+  </div>
+</div>
 
-  <!-- Article -->
-  <article class="max-w-4xl mx-auto px-6 py-12 prose">
-
-    <!-- Breadcrumb -->
-    <div class="text-sm text-slate-500 mb-6">
-      <a href="/" class="hover:text-slate-300">Home</a> → <span class="text-slate-400">vCenter</span>
+<!-- Category nav -->
+<div class="navbar">
+  <div class="navbar-inner">
+    <a href="/">Home</a>
+    <a href="/#licensing">Licensing</a>
+    <a href="/#migration">Migration</a>
+    <a href="/#vcf">VCF 9.1</a>
+    <a href="/#homelab" class="active">Home Lab</a>
+    <a href="/#powercli">PowerCLI</a>
+    <a href="/#alternatives">Alternatives</a>
+    <a href="/tools/price-calculator.html">Tools</a>
+    <div class="nav-search">
+      <input type="text" placeholder="Search..." onkeyup="searchSite(this.value)" />
     </div>
+  </div>
+</div>
 
-    <!-- Header -->
-    <div class="mb-10">
-      <div class="text-xs text-blue-400 font-medium uppercase tracking-wide mb-3">vCenter</div>
-      <h1 class="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight" style="-webkit-text-fill-color: white;">
-        How to Deploy vCenter Server Appliance 8: Step-by-Step Guide (2026)
-      </h1>
-      <p class="text-slate-400 text-lg">
-        March 24, 2026 · 12 min read
-      </p>
-    </div>
+<!-- Article header -->
+<div class="article-header">
+  <div class="breadcrumb"><a href="/">Home</a> → vCenter</div>
+  <div class="cat-label">vCenter</div>
+  <h1>How to Deploy vCenter Server Appliance 8: Step-by-Step Guide (2026)</h1>
+  <div class="byline">
+    <span>Updated Mar 24, 2026</span>
+    <span>·</span>
+    <span>12 min</span>
+    <span class="verified">Fact-checked</span>
+  </div>
+</div>
 
-    <!-- ARTICLE BODY -->
+<!-- Article body -->
+<div class="article-body">
 
-    <p>Managing a vSphere environment without vCenter is like flying a 747 by looking out a porthole. You <em>can</em> manage individual ESXi hosts directly, but the moment you need live migration, HA, DRS, or centralized alerting, you need vCenter. The <strong class="text-slate-200">vCenter Server Appliance (vCSA)</strong> is VMware's Linux-based management platform — and deploying it properly matters as Broadcom continues reshaping the licensing landscape.</p>
+    <p>Managing a vSphere environment without vCenter is like flying a 747 by looking out a porthole. You <em>can</em> manage individual ESXi hosts directly, but the moment you need live migration, HA, DRS, or centralized alerting, you need vCenter. The <strong>vCenter Server Appliance (vCSA)</strong> is VMware's Linux-based management platform — and deploying it properly matters as Broadcom continues reshaping the licensing landscape.</p>
 
-    <p>This guide covers a fresh deployment of <strong class="text-slate-200">vCenter Server 8.0 Update 3i</strong> (the current release as of March 2026) using the official VCSA Installer method. We'll walk through every step — downloading from the Broadcom Support Portal, sizing your appliance correctly, running the installer, and validating the result.</p>
+    <p>This guide covers a fresh deployment of <strong>vCenter Server 8.0 Update 3i</strong> (the current release as of March 2026) using the official VCSA Installer method. We'll walk through every step — downloading from the Broadcom Support Portal, sizing your appliance correctly, running the installer, and validating the result.</p>
 
     <div class="callout">
-      <strong class="text-yellow-400">Licensing Note (March 2026):</strong> vCenter/vSphere licensing is now subscription-based. Current bundle options include <strong>vSphere Standard</strong>, <strong>vSphere Enterprise Plus</strong>, <strong>VMware vSphere Foundation (VVF)</strong>, and <strong>VMware Cloud Foundation (VCF)</strong>. If you're evaluating, a 60-day trial is available from the Broadcom Support Portal. Budget impact is real — plan your licensing before you start.
+      <strong>Licensing Note (March 2026):</strong> vCenter/vSphere licensing is now subscription-based. Current bundle options include <strong>vSphere Standard</strong>, <strong>vSphere Enterprise Plus</strong>, <strong>VMware vSphere Foundation (VVF)</strong>, and <strong>VMware Cloud Foundation (VCF)</strong>. If you're evaluating, a 60-day trial is available from the Broadcom Support Portal. Budget impact is real — plan your licensing before you start.
     </div>
 
-    <h2 class="text-2xl font-bold text-white">Prerequisites Checklist</h2>
+    <h2>Prerequisites Checklist</h2>
 
     <p>Before touching the installer, verify:</p>
 
-    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
+    <ul>
       <li><strong>ESXi host:</strong> ESXi 6.7 or later (ESXi 8.0 recommended). Fully patched, network-accessible.</li>
       <li><strong>DNS:</strong> Forward <em>and</em> reverse DNS records configured for your vCenter FQDN. This is non-negotiable — vCenter's SSO and certificate stack will fail without it.</li>
       <li><strong>NTP:</strong> ESXi host synced to a reliable NTP source. Clock drift causes Kerberos failures.</li>
@@ -114,11 +117,11 @@
       <li><strong>Installer machine:</strong> A Windows, macOS, or Linux workstation from which you'll run the VCSA installer UI (needs network line-of-sight to the ESXi host).</li>
     </ul>
 
-    <h2 class="text-2xl font-bold text-white">Step 1: Size Your Deployment Correctly</h2>
+    <h2>Step 1: Size Your Deployment Correctly</h2>
 
-    <p>This is where most guides fail you. The vCSA is <strong class="text-slate-200">not</strong> a one-size appliance — it ships in five deployment sizes. Pick the wrong one and you'll either under-provision for your environment or waste resources you can't recover without a redeploy.</p>
+    <p>This is where most guides fail you. The vCSA is <strong>not</strong> a one-size appliance — it ships in five deployment sizes. Pick the wrong one and you'll either under-provision for your environment or waste resources you can't recover without a redeploy.</p>
 
-    <p><strong class="text-slate-200">Official sizing from Broadcom TechDocs (vSphere 8.0):</strong></p>
+    <p><strong>Official sizing from Broadcom TechDocs (vSphere 8.0):</strong></p>
 
     <table>
       <thead>
@@ -132,35 +135,35 @@
       </thead>
       <tbody>
         <tr>
-          <td class="font-medium text-slate-300"><strong>Tiny</strong></td>
+          <td><strong>Tiny</strong></td>
           <td>2</td>
           <td>14 GB</td>
           <td>579 GB</td>
           <td>Up to 10 hosts / 100 VMs</td>
         </tr>
         <tr>
-          <td class="font-medium text-slate-300"><strong>Small</strong></td>
+          <td><strong>Small</strong></td>
           <td>4</td>
           <td>21 GB</td>
           <td>694 GB</td>
           <td>Up to 100 hosts / 1,000 VMs</td>
         </tr>
         <tr>
-          <td class="font-medium text-slate-300"><strong>Medium</strong></td>
+          <td><strong>Medium</strong></td>
           <td>8</td>
           <td>30 GB</td>
           <td>908 GB</td>
           <td>Up to 400 hosts / 4,000 VMs</td>
         </tr>
         <tr>
-          <td class="font-medium text-slate-300"><strong>Large</strong></td>
+          <td><strong>Large</strong></td>
           <td>16</td>
           <td>39 GB</td>
           <td>1,358 GB</td>
           <td>Up to 1,000 hosts / 10,000 VMs</td>
         </tr>
         <tr>
-          <td class="font-medium text-slate-300"><strong>X-Large</strong></td>
+          <td><strong>X-Large</strong></td>
           <td>24</td>
           <td>58 GB</td>
           <td>2,283 GB</td>
@@ -170,32 +173,32 @@
     </table>
 
     <div class="callout">
-      <strong class="text-yellow-400">Storage note:</strong> These are <em>default</em> sizes — the installer offers "Large" and "X-Large" storage tiers per deployment type. The numbers above represent thin-provisioned defaults; thick provisioning requires the full allocation upfront. For a home lab, Tiny with default storage on an NVMe datastore is the right call.
+      <strong>Storage note:</strong> These are <em>default</em> sizes — the installer offers "Large" and "X-Large" storage tiers per deployment type. The numbers above represent thin-provisioned defaults; thick provisioning requires the full allocation upfront. For a home lab, Tiny with default storage on an NVMe datastore is the right call.
     </div>
 
-    <p><strong class="text-slate-200">For 99% of readers:</strong> Start with <strong class="text-slate-200">Tiny</strong>. It handles up to 10 hosts cleanly and still gives you the full vCenter feature set. You can always redeploy at a larger size — you cannot shrink in-place.</p>
+    <p><strong>For 99% of readers:</strong> Start with <strong>Tiny</strong>. It handles up to 10 hosts cleanly and still gives you the full vCenter feature set. You can always redeploy at a larger size — you cannot shrink in-place.</p>
 
-    <div class="callout-green callout">
-      <strong class="text-green-400">Performance tip:</strong> Store the vCSA on SSD or NVMe. HDD works but is painfully slow for vSAN and vCenter operations. The vPostgres database is write-intensive during inventory operations, snapshot chains, and vSphere Lifecycle Manager image syncs. An HDD-backed datastore will cause intermittent lockups under load.
+    <div class="callout-green">
+      <strong>Performance tip:</strong> Store the vCSA on SSD or NVMe. HDD works but is painfully slow for vSAN and vCenter operations. The vPostgres database is write-intensive during inventory operations, snapshot chains, and vSphere Lifecycle Manager image syncs. An HDD-backed datastore will cause intermittent lockups under load.
     </div>
 
-    <h2 class="text-2xl font-bold text-white">Step 2: Download the VCSA Installer from Broadcom Support Portal</h2>
+    <h2>Step 2: Download the VCSA Installer from Broadcom Support Portal</h2>
 
-    <div class="callout-red callout">
-      <strong class="text-red-400">Common mistake:</strong> This is an ISO you mount locally — not an OVA you upload to a datastore. The vCenter installer runs on your workstation and deploys the appliance remotely to your ESXi host. Do not upload anything to your datastore.
+    <div class="callout-red">
+      <strong>Common mistake:</strong> This is an ISO you mount locally — not an OVA you upload to a datastore. The vCenter installer runs on your workstation and deploys the appliance remotely to your ESXi host. Do not upload anything to your datastore.
     </div>
 
-    <h3 class="text-xl font-semibold text-white">Getting to the Download</h3>
+    <h3>Getting to the Download</h3>
 
-    <ol class="list-decimal list-inside text-slate-300 space-y-3 mb-6">
-      <li>Go to <strong><a href="https://support.broadcom.com" class="text-blue-400 hover:text-blue-300">support.broadcom.com</a></strong> — the VMware Customer Connect portal no longer exists; it was replaced by the Broadcom Support Portal.</li>
+    <ol>
+      <li>Go to <strong><a href="https://support.broadcom.com">support.broadcom.com</a></strong> — the VMware Customer Connect portal no longer exists; it was replaced by the Broadcom Support Portal.</li>
       <li>Log in with your Broadcom account (free registration required; your VMware account may have been migrated automatically).</li>
       <li>Navigate to <strong>My Downloads → VMware vSphere</strong>.</li>
       <li>Select <strong>vSphere → 8.0</strong> → locate the latest release (<strong>VMware vCenter Server 8.0 Update 3i</strong> as of March 2026).</li>
       <li>Download the file named <code>VMware-VCSA-all-8.0.x-xxxxxxxx.iso</code> — this is approximately <strong>11–12 GB</strong>.</li>
     </ol>
 
-    <h3 class="text-xl font-semibold text-white">Verify the Download</h3>
+    <h3>Verify the Download</h3>
 
     <p>Always verify the ISO checksum before deploying. Broadcom publishes SHA-256 hashes on the download page.</p>
 
@@ -207,13 +210,13 @@ Get-FileHash .\VMware-VCSA-all-8.0.3-xxxxxxxx.iso -Algorithm SHA256</code></pre>
 
     <p>Compare the output against the hash listed on the Broadcom portal. If they don't match, re-download.</p>
 
-    <h2 class="text-2xl font-bold text-white">Step 3: Prepare Your Network</h2>
+    <h2>Step 3: Prepare Your Network</h2>
 
     <p>DNS is the #1 cause of failed vCenter deployments. Get this right before mounting the ISO.</p>
 
-    <h3 class="text-xl font-semibold text-white">DNS Requirements</h3>
+    <h3>DNS Requirements</h3>
 
-    <p>Create these records on your DNS server <strong class="text-slate-200">before</strong> running the installer:</p>
+    <p>Create these records on your DNS server <strong>before</strong> running the installer:</p>
 
     <pre><code class="language-bash"># Forward record
 vcenter01.lab.local  →  192.168.10.10
@@ -221,7 +224,7 @@ vcenter01.lab.local  →  192.168.10.10
 # Reverse record (PTR)
 10.10.168.192.in-addr.arpa  →  vcenter01.lab.local</code></pre>
 
-    <p>Test both lookups from the machine running the installer <strong class="text-slate-200">and</strong> from the ESXi host:</p>
+    <p>Test both lookups from the machine running the installer <strong>and</strong> from the ESXi host:</p>
 
     <pre><code class="language-bash"># Test from installer workstation
 nslookup vcenter01.lab.local
@@ -233,7 +236,7 @@ nslookup vcenter01.lab.local</code></pre>
 
     <p>If either reverse or forward lookup fails, stop here and fix DNS. Deploying with a broken DNS configuration leads to certificate errors that require a full redeploy to fix.</p>
 
-    <h3 class="text-xl font-semibold text-white">Firewall Ports</h3>
+    <h3>Firewall Ports</h3>
 
     <p>If a firewall sits between your installer workstation and the ESXi host, or between vCenter and your ESXi hosts, open these ports:</p>
 
@@ -248,31 +251,31 @@ nslookup vcenter01.lab.local</code></pre>
       </thead>
       <tbody>
         <tr>
-          <td class="font-medium text-slate-300">443</td>
+          <td><strong>443</strong></td>
           <td>TCP</td>
           <td>Client → vCenter</td>
           <td>HTTPS management, vSphere API</td>
         </tr>
         <tr>
-          <td class="font-medium text-slate-300">5480</td>
+          <td><strong>5480</strong></td>
           <td>TCP</td>
           <td>Client → vCenter</td>
           <td>VCSA Appliance Management UI</td>
         </tr>
         <tr>
-          <td class="font-medium text-slate-300">902</td>
+          <td><strong>902</strong></td>
           <td>TCP</td>
           <td>vCenter → ESXi</td>
           <td>Agent heartbeat and provisioning</td>
         </tr>
         <tr>
-          <td class="font-medium text-slate-300">53</td>
+          <td><strong>53</strong></td>
           <td>UDP/TCP</td>
           <td>vCenter → DNS</td>
           <td>DNS resolution</td>
         </tr>
         <tr>
-          <td class="font-medium text-slate-300">123</td>
+          <td><strong>123</strong></td>
           <td>UDP</td>
           <td>vCenter → NTP</td>
           <td>Time synchronization</td>
@@ -280,13 +283,13 @@ nslookup vcenter01.lab.local</code></pre>
       </tbody>
     </table>
 
-    <p>For the complete port list, use Broadcom's official tool: <a href="https://ports.broadcom.com" class="text-blue-400 hover:text-blue-300">ports.broadcom.com</a>.</p>
+    <p>For the complete port list, use Broadcom's official tool: <a href="https://ports.broadcom.com">ports.broadcom.com</a>.</p>
 
-    <h2 class="text-2xl font-bold text-white">Step 4: Run the VCSA Installer (GUI Method)</h2>
+    <h2>Step 4: Run the VCSA Installer (GUI Method)</h2>
 
     <p>Mount the ISO on your local workstation, then launch the installer.</p>
 
-    <h3 class="text-xl font-semibold text-white">Mount the ISO</h3>
+    <h3>Mount the ISO</h3>
 
     <pre><code class="language-bash"># Linux: mount to a local directory
 sudo mount -o loop VMware-VCSA-all-8.0.3-xxxxxxxx.iso /mnt/vcsa-installer
@@ -303,51 +306,51 @@ sudo mount -o loop VMware-VCSA-all-8.0.3-xxxxxxxx.iso /mnt/vcsa-installer
 
     <p>Launch the executable (<code>installer</code>, <code>Installer.app</code>, or <code>installer.exe</code>).</p>
 
-    <h3 class="text-xl font-semibold text-white">Stage 1: Deploy the OVA</h3>
+    <h3>Stage 1: Deploy the OVA</h3>
 
     <p>The installer runs in two stages. Stage 1 deploys the base appliance. Stage 2 configures it.</p>
 
-    <p><strong class="text-slate-200">Select "Install" → "Install vCenter Server"</strong></p>
+    <p><strong>Select "Install" → "Install vCenter Server"</strong></p>
 
-    <h3 class="text-xl font-semibold text-white">Page 1: vCenter Server Deployment Target</h3>
+    <h3>Page 1: vCenter Server Deployment Target</h3>
 
-    <p>Enter the <strong class="text-slate-200">ESXi host</strong> details (not an existing vCenter — you're building a new one):</p>
+    <p>Enter the <strong>ESXi host</strong> details (not an existing vCenter — you're building a new one):</p>
 
-    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
+    <ul>
       <li><strong>ESXi host:</strong> IP or FQDN of your target ESXi host</li>
       <li><strong>HTTPS port:</strong> 443 (default)</li>
       <li><strong>Username:</strong> <code>root</code></li>
       <li><strong>Password:</strong> your ESXi root password</li>
     </ul>
 
-    <p>Accept the SHA-1 certificate fingerprint after verifying it matches your ESXi host.</p>
+    <p>Accept the Sha-1 certificate fingerprint after verifying it matches your ESXi host.</p>
 
-    <h3 class="text-xl font-semibold text-white">Page 2: Set Up vCenter Server VM</h3>
+    <h3>Page 2: Set Up vCenter Server VM</h3>
 
-    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
+    <ul>
       <li><strong>VM name:</strong> <code>vcenter01</code> (no spaces — keeps CLI operations clean)</li>
       <li><strong>Root password:</strong> Create a strong password. Store it in your password manager immediately. Minimum 8 characters, upper/lower/number/special.</li>
     </ul>
 
-    <h3 class="text-xl font-semibold text-white">Page 3: Select Deployment Size</h3>
+    <h3>Page 3: Select Deployment Size</h3>
 
-    <p>Choose your size from the dropdown (see the sizing table in Step 1). For most home labs: <strong class="text-slate-200">Tiny</strong>.</p>
+    <p>Choose your size from the dropdown (see the sizing table in Step 1). For most home labs: <strong>Tiny</strong>.</p>
 
-    <p>The storage size dropdown shows "Default," "Large," and "X-Large" — for a home lab, <strong class="text-slate-200">Default</strong> is fine.</p>
+    <p>The storage size dropdown shows "Default," "Large," and "X-Large" — for a home lab, <strong>Default</strong> is fine.</p>
 
-    <h3 class="text-xl font-semibold text-white">Page 4: Select Datastore</h3>
+    <h3>Page 4: Select Datastore</h3>
 
     <p>Select the target datastore for the appliance VMDK files. Key considerations:</p>
 
-    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
+    <ul>
       <li>Must have sufficient free space (at minimum, the Default storage size for your chosen tier)</li>
       <li><strong>Enable thin disk mode</strong> if storage is limited — select the checkbox "Enable Thin Disk Mode"</li>
       <li>Prefer NVMe or SSD-backed datastores for vPostgres database performance</li>
     </ul>
 
-    <h3 class="text-xl font-semibold text-white">Page 5: Configure Network Settings</h3>
+    <h3>Page 5: Configure Network Settings</h3>
 
-    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
+    <ul>
       <li><strong>Network:</strong> Select your management port group (VLAN)</li>
       <li><strong>IP version:</strong> IPv4</li>
       <li><strong>IP assignment:</strong> <strong>Static</strong> (DHCP is not recommended for production vCenter)</li>
@@ -357,57 +360,57 @@ sudo mount -o loop VMware-VCSA-all-8.0.3-xxxxxxxx.iso /mnt/vcsa-installer
       <li><strong>NTP servers:</strong> Enter your NTP source (e.g., <code>pool.ntp.org</code> or your internal NTP server)</li>
     </ul>
 
-    <div class="callout-red callout">
-      <strong class="text-red-400">The FQDN field is critical.</strong> It drives the certificate CN. Whatever you enter here must exactly match your DNS records — no shortcuts, no typos.
+    <div class="callout-red">
+      <strong>The FQDN field is critical.</strong> It drives the certificate CN. Whatever you enter here must exactly match your DNS records — no shortcuts, no typos.
     </div>
 
-    <h3 class="text-xl font-semibold text-white">Review and Deploy</h3>
+    <h3>Review and Deploy</h3>
 
-    <p>Review the summary page. When satisfied, click <strong class="text-slate-200">Finish</strong>. Stage 1 deployment begins — the installer copies the OVA to your ESXi host and powers on the VM. This takes <strong class="text-slate-200">10–25 minutes</strong> depending on your network and storage speed.</p>
+    <p>Review the summary page. When satisfied, click <strong>Finish</strong>. Stage 1 deployment begins — the installer copies the OVA to your ESXi host and powers on the VM. This takes <strong>10–25 minutes</strong> depending on your network and storage speed.</p>
 
     <div class="callout">
-      <strong class="text-yellow-400">Warning:</strong> Do not close the installer window or let your workstation sleep during deployment.
+      <strong>Warning:</strong> Do not close the installer window or let your workstation sleep during deployment.
     </div>
 
-    <h2 class="text-2xl font-bold text-white">Step 5: Stage 2 — Initial Configuration</h2>
+    <h2>Step 5: Stage 2 — Initial Configuration</h2>
 
-    <p>Once Stage 1 completes, a dialog prompts you to continue to Stage 2. Click <strong class="text-slate-200">Continue</strong>.</p>
+    <p>Once Stage 1 completes, a dialog prompts you to continue to Stage 2. Click <strong>Continue</strong>.</p>
 
     <p>Stage 2 runs directly in your browser, connecting to the newly deployed appliance.</p>
 
-    <h3 class="text-xl font-semibold text-white">Configure SSO Domain</h3>
+    <h3>Configure SSO Domain</h3>
 
-    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
+    <ul>
       <li><strong>SSO domain:</strong> <code>vsphere.local</code> (default, fine for most deployments — keep it unless you have a specific reason to change it)</li>
       <li><strong>SSO username:</strong> <code>administrator</code> (creates <code>administrator@vsphere.local</code>)</li>
       <li><strong>SSO password:</strong> Another strong password — this is your day-to-day vCenter admin login</li>
     </ul>
 
     <div class="callout">
-      <strong class="text-yellow-400">Tip:</strong> Use a different password from your root account. If SSO becomes degraded, you'll still need root access to the appliance shell to fix it.
+      <strong>Tip:</strong> Use a different password from your root account. If SSO becomes degraded, you'll still need root access to the appliance shell to fix it.
     </div>
 
-    <h3 class="text-xl font-semibold text-white">Review and Finish</h3>
+    <h3>Review and Finish</h3>
 
-    <p>Click <strong class="text-slate-200">Finish</strong>. Stage 2 takes <strong class="text-slate-200">5–15 minutes</strong> as the appliance starts all services (SSO, Inventory Service, vSphere Client, etc.).</p>
+    <p>Click <strong>Finish</strong>. Stage 2 takes <strong>5–15 minutes</strong> as the appliance starts all services (SSO, Inventory Service, vSphere Client, etc.).</p>
 
-    <h2 class="text-2xl font-bold text-white">Step 6: Post-Deployment Validation</h2>
+    <h2>Step 6: Post-Deployment Validation</h2>
 
     <p>The installer completed — now verify everything actually works before you start adding hosts.</p>
 
-    <h3 class="text-xl font-semibold text-white">Access the vSphere Client</h3>
+    <h3>Access the vSphere Client</h3>
 
     <pre><code>https://vcenter01.lab.local/ui</code></pre>
 
     <p>Log in as <code>administrator@vsphere.local</code> using the SSO password set in Stage 2. You should see the vSphere Client home screen with your datacenter inventory (empty at this point).</p>
 
-    <h3 class="text-xl font-semibold text-white">Check Appliance Health</h3>
+    <h3>Check Appliance Health</h3>
 
-    <p>Navigate to <code>https://vcenter01.lab.local:5480</code> — this is the <strong class="text-slate-200">VCSA Appliance Management UI</strong> (VAMI). Log in with <code>root</code>.</p>
+    <p>Navigate to <code>https://vcenter01.lab.local:5480</code> — this is the <strong>VCSA Appliance Management UI</strong> (VAMI). Log in with <code>root</code>.</p>
 
     <p>Check:</p>
 
-    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
+    <ul>
       <li><strong>Summary tab:</strong> All services showing <strong>Running</strong></li>
       <li><strong>Health tab:</strong> No critical alerts</li>
       <li><strong>Time:</strong> Confirm NTP is synced (look for "Time synchronized" in the Summary)</li>
@@ -415,7 +418,7 @@ sudo mount -o loop VMware-VCSA-all-8.0.3-xxxxxxxx.iso /mnt/vcsa-installer
 
     <p>If any services show "Stopped" or "Degraded," check <code>/var/log/vmware/vmon/vmon.log</code> via SSH for the cause.</p>
 
-    <h3 class="text-xl font-semibold text-white">Run a Quick DNS Sanity Check</h3>
+    <h3>Run a Quick DNS Sanity Check</h3>
 
     <p>SSH into the appliance (if enabled):</p>
 
@@ -430,11 +433,11 @@ systemctl status systemd-timesyncd
 # or
 chronyc tracking</code></pre>
 
-    <h3 class="text-xl font-semibold text-white">Take Your First Backup</h3>
+    <h3>Take Your First Backup</h3>
 
     <p>Before you touch anything else:</p>
 
-    <ol class="list-decimal list-inside text-slate-300 space-y-3 mb-6">
+    <ol>
       <li>In VAMI (<code>https://vcenter01.lab.local:5480</code>), go to <strong>Backup</strong></li>
       <li>Configure a backup destination (SFTP, FTP, or SMB share)</li>
       <li>Run a manual backup immediately</li>
@@ -442,28 +445,28 @@ chronyc tracking</code></pre>
 
     <p>This is your safety net. The first backup is the most important one you'll ever take.</p>
 
-    <h2 class="text-2xl font-bold text-white">Troubleshooting Common Issues</h2>
+    <h2>Troubleshooting Common Issues</h2>
 
-    <h3 class="text-xl font-semibold text-white">"SSL Certificate Verification Failed" / Can't Access UI</h3>
+    <h3>"SSL Certificate Verification Failed" / Can't Access UI</h3>
 
-    <p><strong class="text-slate-200">Cause:</strong> DNS mismatch. The certificate was generated with the FQDN you entered in Stage 1, but your browser or client can't resolve it.</p>
+    <p><strong>Cause:</strong> DNS mismatch. The certificate was generated with the FQDN you entered in Stage 1, but your browser or client can't resolve it.</p>
 
-    <p><strong class="text-slate-200">Fix:</strong></p>
-    <ol class="list-decimal list-inside text-slate-300 space-y-3 mb-6">
+    <p><strong>Fix:</strong></p>
+    <ol>
       <li>Verify forward and reverse DNS from the client machine: <code>nslookup vcenter01.lab.local</code> and <code>nslookup 192.168.10.10</code></li>
       <li>Check <code>/etc/resolv.conf</code> on the appliance to ensure it's pointing to the correct DNS server</li>
       <li>If DNS is wrong post-deploy, you may need to regenerate certificates via <code>certificate-manager</code> in the appliance shell — or redeploy</li>
     </ol>
 
-    <h3 class="text-xl font-semibold text-white">Stage 2 Fails / Services Won't Start</h3>
+    <h3>Stage 2 Fails / Services Won't Start</h3>
 
-    <p><strong class="text-slate-200">Common causes:</strong> Clock skew between ESXi host and vCenter (NTP not synced), datastore fills during deployment (thin provisioning with insufficient headroom), or duplicate IP address on the management network.</p>
+    <p><strong>Common causes:</strong> Clock skew between ESXi host and vCenter (NTP not synced), datastore fills during deployment (thin provisioning with insufficient headroom), or duplicate IP address on the management network.</p>
 
     <pre><code class="language-bash"># SSH to appliance
 journalctl -u vmware-vmon --since "1 hour ago" | grep -i error
 tail -200 /var/log/vmware/vmon/vmon.log</code></pre>
 
-    <h3 class="text-xl font-semibold text-white">"IP Address Conflict" Error During Stage 1</h3>
+    <h3>"IP Address Conflict" Error During Stage 1</h3>
 
     <p>The static IP you assigned is already in use. Check your DHCP server's lease table and ARP cache:</p>
 
@@ -475,19 +478,19 @@ nmap -sn 192.168.10.0/24 | grep -A1 "Nmap scan"</code></pre>
 
     <p>Assign a truly free IP and re-run Stage 1.</p>
 
-    <h3 class="text-xl font-semibold text-white">Installer "Cannot Connect to ESXi Host"</h3>
+    <h3>Installer "Cannot Connect to ESXi Host"</h3>
 
-    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
+    <ul>
       <li>Verify TCP 443 is accessible from your workstation to the ESXi host</li>
       <li>Confirm the ESXi host is running and SSH/management services are up</li>
       <li>Check that your ESXi root password is correct (easy to mix up if you have multiple hosts)</li>
     </ul>
 
-    <h2 class="text-2xl font-bold text-white">Post-Deployment: Immediate Next Steps</h2>
+    <h2>Post-Deployment: Immediate Next Steps</h2>
 
     <p>With a clean vCenter deployed, work through this checklist in order:</p>
 
-    <ol class="list-decimal list-inside text-slate-300 space-y-3 mb-6">
+    <ol>
       <li><strong>Apply latest patches</strong> — In VAMI → Update, check for available updates. As of March 2026, you should be on <strong>8.0 Update 3i</strong>. Apply it before adding any hosts.</li>
       <li><strong>Add your ESXi hosts</strong> — In the vSphere Client, create a Datacenter and Cluster, then add hosts via <strong>Actions → Add Hosts</strong>.</li>
       <li><strong>Configure vSphere Lifecycle Manager (vLCM)</strong> — Set up an image-based baseline for your hosts to automate future ESXi patching.</li>
@@ -495,7 +498,7 @@ nmap -sn 192.168.10.0/24 | grep -A1 "Nmap scan"</code></pre>
       <li><strong>Schedule recurring backups</strong> — VAMI supports scheduled SFTP/SMB backups. Set them up now, before you have anything critical in inventory.</li>
     </ol>
 
-    <h2 class="text-2xl font-bold text-white">Key Corrections vs. Generic Guides</h2>
+    <h2>Key Corrections vs. Generic Guides</h2>
 
     <p>If you found this after running into trouble with another tutorial, here's what they typically get wrong:</p>
 
@@ -508,85 +511,73 @@ nmap -sn 192.168.10.0/24 | grep -A1 "Nmap scan"</code></pre>
       </thead>
       <tbody>
         <tr>
-          <td class="font-medium text-slate-300">"Download the OVA from VMware Customer Portal"</td>
+          <td>"Download the OVA from VMware Customer Portal"</td>
           <td>Download the <strong>ISO</strong> from <strong>Broadcom Support Portal</strong> (support.broadcom.com)</td>
         </tr>
         <tr>
-          <td class="font-medium text-slate-300">"Upload OVA to datastore, deploy from vSphere Client"</td>
+          <td>"Upload OVA to datastore, deploy from vSphere Client"</td>
           <td>Mount ISO locally, run <strong>VCSA Installer GUI</strong> — deploys remotely to ESXi</td>
         </tr>
         <tr>
-          <td class="font-medium text-slate-300">"Minimum 8 GB RAM / 50 GB disk"</td>
+          <td>"Minimum 8 GB RAM / 50 GB disk"</td>
           <td>Minimum (Tiny) is <strong>14 GB RAM / 579 GB storage</strong></td>
         </tr>
         <tr>
-          <td class="font-medium text-slate-300">"vCenter Standard license required"</td>
+          <td>"vCenter Standard license required"</td>
           <td>vCenter/vSphere licensing is now subscription-based. Current bundle options include <strong>vSphere Standard</strong>, <strong>vSphere Enterprise Plus</strong>, <strong>VVF</strong>, and <strong>VCF</strong>.</td>
         </tr>
         <tr>
-          <td class="font-medium text-slate-300">"Port 902 for vCenter API"</td>
+          <td>"Port 902 for vCenter API"</td>
           <td>Port 902 is ESXi agent/provisioning traffic; primary API is <strong>TCP 443</strong></td>
         </tr>
       </tbody>
     </table>
 
-    <h2 class="text-2xl font-bold text-white">Resources</h2>
+    <h2>Resources</h2>
 
-    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
-      <li><a href="https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/vcenter-installation-and-setup/deploying-the-vcenter-server-appliance/vcenter-server-appliance-requirements.html" class="text-blue-400 hover:text-blue-300" target="_blank" rel="noopener">Broadcom TechDocs: vCSA System Requirements</a></li>
-      <li><a href="https://ports.broadcom.com" class="text-blue-400 hover:text-blue-300" target="_blank" rel="noopener">Broadcom Ports and Protocols Tool</a></li>
-      <li><a href="https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/release-notes/vcenter-server-update-and-patch-release-notes/vsphere-vcenter-server-80u3i-release-notes.html" class="text-blue-400 hover:text-blue-300" target="_blank" rel="noopener">vCenter 8.0 Update 3i Release Notes</a></li>
-      <li><a href="https://williamlam.com/2022/09/homelab-considerations-for-vsphere-8.html" class="text-blue-400 hover:text-blue-300" target="_blank" rel="noopener">William Lam's Blog — Homelab Considerations for vSphere 8</a></li>
-      <li><a href="https://support.broadcom.com" class="text-blue-400 hover:text-blue-300" target="_blank" rel="noopener">Broadcom Support Portal</a></li>
+    <ul>
+      <li><a href="https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/vcenter-installation-and-setup/deploying-the-vcenter-server-appliance/vcenter-server-appliance-requirements.html" target="_blank" rel="noopener">Broadcom TechDocs: vCSA System Requirements</a></li>
+      <li><a href="https://ports.broadcom.com" target="_blank" rel="noopener">Broadcom Ports and Protocols Tool</a></li>
+      <li><a href="https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/release-notes/vcenter-server-update-and-patch-release-notes/vsphere-vcenter-server-80u3i-release-notes.html" target="_blank" rel="noopener">vCenter 8.0 Update 3i Release Notes</a></li>
+      <li><a href="https://williamlam.com/2022/09/homelab-considerations-for-vsphere-8.html" target="_blank" rel="noopener">William Lam's Blog — Homelab Considerations for vSphere 8</a></li>
+      <li><a href="https://support.broadcom.com" target="_blank" rel="noopener">Broadcom Support Portal</a></li>
     </ul>
 
-    <p class="text-slate-500 text-sm"><em>Last updated: March 2026 | Verified against vCenter Server 8.0 Update 3i</em></p>
+    <p><em>Last updated: March 2026 | Verified against vCenter Server 8.0 Update 3i</em></p>
 
-    <!-- Newsletter CTA -->
-    <div class="mt-16 bg-card border border-slate-700 rounded-2xl p-10 text-center">
-      <h2 class="text-2xl font-bold text-white mb-3" style="-webkit-text-fill-color: white;">Stay ahead of the VMware changes</h2>
-      <p class="text-slate-400 mb-6">We're publishing detailed comparison guides, migration walkthroughs, and cost calculators. Get them in your inbox.</p>
-      <form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" onsubmit="handleSubscribe(event)">
-        <input type="email" placeholder="your@email.com" class="flex-1 bg-dark border border-slate-600 text-white px-5 py-3 rounded-xl focus:outline-none focus:border-blue-500 placeholder-slate-500" required />
-        <button type="submit" class="bg-brand text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-600 transition">Subscribe</button>
-      </form>
-    </div>
+</div>
 
-    <!-- Author -->
-    <div class="mt-12 pt-8 border-t border-slate-800">
-      <div class="flex items-start gap-4">
-        <div class="w-12 h-12 bg-slate-700 rounded-full flex items-center justify-center text-xl"></div>
-        <div>
-          <p class="text-white font-semibold">Written by Rob Notaro</p>
-          <p class="text-slate-400 text-sm mt-1">Senior infrastructure engineer specializing in VMware, Horizon VDI, and enterprise virtualization. Currently deploying Horizon 2512 and VCF in production environments.</p>
-        </div>
-      </div>
-    </div>
+<!-- Newsletter CTA -->
+<div class="newsletter-cta" id="newsletter">
+  <h3>Licensing Alerts</h3>
+  <p>Pricing changes, new guides, lab tips. No spam.</p>
+  <input type="email" placeholder="your@email.com" />
+  <button>Subscribe</button>
+</div>
 
-  </article>
+<!-- Footer -->
+<footer>
+  <div>
+    © 2026 VMwareMadeSimple.com — Independent. Not affiliated with VMware or Broadcom.
+    <div class="aff-disclosure" style="margin-top: 0.3rem;">Some links are affiliate links. See our <a href="#">disclosure policy</a>.</div>
+  </div>
+  <div class="footer-links">
+    <a href="#">About</a>
+    <a href="mailto:contact@vmwaremadesimple.com">Contact</a>
+    <a href="/sitemap.xml">RSS</a>
+    <a href="#">Privacy</a>
+    <a href="#">Corrections</a>
+  </div>
+</footer>
 
-  <!-- Footer -->
-  <footer class="border-t border-slate-800 mt-10">
-    <div class="max-w-4xl mx-auto px-6 py-10 flex flex-col md:flex-row items-center justify-between gap-4">
-      <div class="text-slate-400 text-sm">© 2026 VMwareMadeSimple.com — Independent. Not affiliated with VMware or Broadcom.</div>
-      <div class="flex gap-6 text-slate-400 text-sm">
-        <a href="/" class="hover:text-white transition">Home</a>
-        <a href="/#articles" class="hover:text-white transition">Articles</a>
-        <a href="/#newsletter" class="hover:text-white transition">Newsletter</a>
-      </div>
-    </div>
-    <div class="max-w-4xl mx-auto px-6 pb-8 text-slate-600 text-xs">
-      Some links on this site are affiliate links. If you purchase through them, we may earn a small commission at no extra cost to you.
-    </div>
-  </footer>
-
-  <script>
-    function handleSubscribe(e) {
-      e.preventDefault();
-      alert('Thanks! We\'ll be in touch soon.');
-      e.target.reset();
-    }
-  </script>
+<script>
+function searchSite(q) {
+  if (q.length < 2) return;
+  if (event && event.key === 'Enter') {
+    window.location.href = 'https://www.google.com/search?q=site:vmwaremadesimple.com+' + encodeURIComponent(q);
+  }
+}
+</script>
 
 </body>
 </html>

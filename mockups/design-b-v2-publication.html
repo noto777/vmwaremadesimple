@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VMwareMadeSimple — Mockup B v2: Professional Publication</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --ink: #0f1419;
+    --paper: #ffffff;
+    --surface: #f5f6f8;
+    --muted: #5c6773;
+    --rule: #d4d9e0;
+    --rule-light: #e8eaed;
+    --accent: #c8102e;       /* deep red — publication feel */
+    --accent-dark: #8a0a1f;
+    --link: #0a58ca;
+    --gold: #b8860b;
+    --green: #1a7f37;
+    --blue-accent: #0969da;
+    --purple: #6f42c1;
+  }
+  body {
+    font-family: 'Georgia', 'Charter', 'Times New Roman', serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.65;
+  }
+  a { color: var(--link); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* ── Alert banner ── */
+  .alert-banner {
+    background: var(--accent);
+    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 0.78rem;
+    text-align: center;
+    padding: 0.45rem 1rem;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+  }
+  .alert-banner a { color: #fff; text-decoration: underline; }
+  .alert-banner .pulse {
+    display: inline-block;
+    width: 7px; height: 7px;
+    background: #fff;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+    animation: pulse 1.8s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* ── Masthead ── */
+  .masthead {
+    border-bottom: 4px solid var(--ink);
+    padding: 1.8rem 0 1rem;
+    text-align: center;
+  }
+  .masthead-inner { max-width: 1160px; margin: 0 auto; padding: 0 1.5rem; }
+  .masthead h1 {
+    font-family: Georgia, serif;
+    font-size: 2.8rem;
+    font-weight: 700;
+    letter-spacing: -1px;
+    line-height: 1;
+    color: var(--ink);
+  }
+  .masthead h1 .red { color: var(--accent); }
+  .masthead .tagline {
+    font-family: -apple-system, sans-serif;
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-top: 0.5rem;
+    font-style: italic;
+  }
+  .masthead .date-strip {
+    font-family: -apple-system, sans-serif;
+    font-size: 0.72rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 0.8rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--rule-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .masthead .date-strip .social { display: flex; gap: 1rem; }
+  .masthead .date-strip .social a {
+    font-size: 0.7rem;
+    color: var(--muted);
+    font-family: -apple-system, sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  /* ── Category nav bar ── */
+  .navbar {
+    background: var(--ink);
+    font-family: -apple-system, sans-serif;
+    font-size: 0.82rem;
+    border-bottom: 1px solid #000;
+  }
+  .navbar-inner {
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+  }
+  .navbar a {
+    color: #c9d1d9;
+    text-decoration: none;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    padding: 0.7rem 1.1rem;
+    white-space: nowrap;
+    transition: 0.15s;
+    border-right: 1px solid #2d333b;
+  }
+  .navbar a:hover {
+    color: #fff;
+    background: rgba(255,255,255,0.06);
+    text-decoration: none;
+  }
+  .navbar a.active { color: #fff; border-bottom: 3px solid var(--accent); }
+
+  /* ── Layout ── */
+  .main {
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 2.5rem;
+  }
+
+  /* ── Hero / Featured story ── */
+  .hero-featured {
+    margin-bottom: 2rem;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .hero-featured .hero-accent-bar {
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent) 0%, var(--accent) 60%, var(--gold) 100%);
+  }
+  .hero-featured .hero-content { padding: 1.8rem 2rem; }
+  .hero-featured .cat-label {
+    font-family: -apple-system, sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+  .hero-featured h2 {
+    font-family: Georgia, serif;
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.25;
+    margin-bottom: 0.6rem;
+  }
+  .hero-featured h2 a { color: var(--ink); text-decoration: none; }
+  .hero-featured h2 a:hover { color: var(--accent); text-decoration: none; }
+  .hero-featured .byline {
+    font-family: -apple-system, sans-serif;
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .hero-featured .byline .author { font-weight: 600; color: var(--ink); }
+  .hero-featured .excerpt {
+    font-size: 1.08rem;
+    color: #2d333b;
+    line-height: 1.7;
+  }
+  .hero-featured .continue-reading {
+    font-family: -apple-system, sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-top: 0.8rem;
+    display: inline-block;
+    letter-spacing: 0.3px;
+  }
+
+  /* ── Two-column article row ── */
+  .article-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--rule-light);
+  }
+  .article-row:last-child { border-bottom: none; }
+
+  .article-item .cat-label {
+    font-family: -apple-system, sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.3rem;
+  }
+  .article-item .cat-label.licensing { color: var(--accent); }
+  .article-item .cat-label.migration { color: var(--green); }
+  .article-item .cat-label.homelab { color: var(--purple); }
+  .article-item .cat-label.comparison { color: var(--gold); }
+  .article-item .cat-label.deployment { color: var(--blue-accent); }
+  .article-item .cat-label.lab { color: var(--blue-accent); }
+  .article-item .cat-label.powercli { color: var(--ink); }
+
+  .article-item h3 {
+    font-family: Georgia, serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 0.3rem;
+  }
+  .article-item h3 a { color: var(--ink); text-decoration: none; }
+  .article-item h3 a:hover { color: var(--link); text-decoration: none; }
+  .article-item .byline {
+    font-family: -apple-system, sans-serif;
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-bottom: 0.4rem;
+  }
+  .article-item .excerpt {
+    font-size: 0.92rem;
+    color: #3d4450;
+    line-height: 1.55;
+  }
+
+  /* ── Sidebar ── */
+  .sidebar { font-family: -apple-system, sans-serif; }
+  .sidebar .widget { margin-bottom: 1.8rem; }
+  .sidebar h4 {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--ink);
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 0.35rem;
+    margin-bottom: 0.8rem;
+  }
+
+  /* Tool card */
+  .sidebar .tool-card {
+    background: linear-gradient(135deg, #fafbfc 0%, #eef1f4 100%);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 1rem 1.2rem;
+    border-left: 3px solid var(--accent);
+  }
+  .sidebar .tool-card h5 {
+    font-family: -apple-system, sans-serif;
+    font-size: 0.92rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+  }
+  .sidebar .tool-card p { font-size: 0.78rem; color: var(--muted); line-height: 1.5; }
+  .sidebar .tool-card a {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--accent);
+    text-decoration: none;
+    margin-top: 0.5rem;
+    display: inline-block;
+  }
+
+  /* Trending list */
+  .sidebar ol { list-style: none; counter-reset: trending; padding: 0; }
+  .sidebar ol li {
+    counter-increment: trending;
+    padding: 0.5rem 0 0.5rem 1.8rem;
+    border-bottom: 1px solid var(--rule-light);
+    position: relative;
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+  .sidebar ol li::before {
+    content: counter(trending);
+    position: absolute;
+    left: 0;
+    top: 0.5rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--accent);
+    font-family: Georgia, serif;
+  }
+  .sidebar ol li a { color: var(--ink); text-decoration: none; }
+  .sidebar ol li a:hover { color: var(--link); }
+
+  /* Topic tags */
+  .tag-cloud { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+  .tag-cloud span {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    padding: 0.2rem 0.6rem;
+    border-radius: 3px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: default;
+  }
+  .tag-cloud span:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* Newsletter signup */
+  .newsletter-box {
+    background: var(--ink);
+    color: #c9d1d9;
+    border-radius: 4px;
+    padding: 1.2rem;
+  }
+  .newsletter-box h5 {
+    font-family: Georgia, serif;
+    font-size: 1.1rem;
+    color: #fff;
+    margin-bottom: 0.3rem;
+  }
+  .newsletter-box p { font-size: 0.78rem; color: #8b949e; margin-bottom: 0.8rem; }
+  .newsletter-box input {
+    width: 100%;
+    background: #1c2128;
+    border: 1px solid #2d333b;
+    color: #fff;
+    padding: 0.55rem 0.7rem;
+    border-radius: 4px;
+    font-size: 0.82rem;
+    margin-bottom: 0.5rem;
+    font-family: -apple-system, sans-serif;
+  }
+  .newsletter-box input::placeholder { color: #6e7681; }
+  .newsletter-box button {
+    width: 100%;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 0.55rem;
+    border-radius: 4px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.82rem;
+    letter-spacing: 0.3px;
+    font-family: -apple-system, sans-serif;
+    transition: 0.15s;
+  }
+  .newsletter-box button:hover { background: var(--accent-dark); }
+
+  /* ── Section divider ── */
+  .section-divider {
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .section-divider .line { flex: 1; height: 1px; background: var(--rule); }
+  .section-divider .label {
+    font-family: -apple-system, sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+  }
+
+  /* ── Hardware picks strip ── */
+  .hardware-strip {
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 1.5rem 1.5rem 2rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+  .hw-card {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 1rem;
+    text-align: center;
+    transition: 0.15s;
+  }
+  .hw-card:hover { border-color: var(--accent); box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+  .hw-card .hw-name { font-family: -apple-system, sans-serif; font-size: 0.88rem; font-weight: 700; }
+  .hw-card .hw-spec { font-family: -apple-system, sans-serif; font-size: 0.75rem; color: var(--muted); margin-top: 0.2rem; }
+  .hw-card .hw-link { font-family: -apple-system, sans-serif; font-size: 0.75rem; font-weight: 600; color: var(--accent); margin-top: 0.4rem; display: block; }
+
+  /* ── Footer ── */
+  footer {
+    border-top: 4px solid var(--ink);
+    padding: 1.5rem 1.5rem;
+    max-width: 1160px;
+    margin: 0 auto;
+    font-family: -apple-system, sans-serif;
+    font-size: 0.78rem;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  footer .footer-links { display: flex; gap: 1.2rem; }
+  footer .footer-links a { color: var(--muted); }
+
+  /* ── Mockup label ── */
+  .mockup-label {
+    position: fixed; top: 0; left: 0; right: 0;
+    background: #1a1a1a; color: #fff; text-align: center;
+    padding: 0.3rem; font-size: 0.7rem; z-index: 100; letter-spacing: 0.5px;
+    font-family: -apple-system, sans-serif;
+  }
+  .alert-banner { margin-top: 1.5rem; }
+
+  @media (max-width: 768px) {
+    .main { grid-template-columns: 1fr; }
+    .article-row { grid-template-columns: 1fr; }
+    .hardware-strip { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="mockup-label">MOCKUP B v2 — Professional Publication (enhanced)</div>
+
+<!-- Alert banner -->
+<div class="alert-banner">
+  <span class="pulse"></span>
+  VCF 9.1 IS HERE — <a href="#">Licensing changed again. Here's what's new →</a>
+</div>
+
+<!-- Masthead -->
+<div class="masthead">
+  <div class="masthead-inner">
+    <h1>VMware<span class="red">MadeSimple</span></h1>
+    <div class="tagline">Independent VMware analysis for IT professionals. No vendor spin.</div>
+    <div class="date-strip">
+      <span>Friday, July 11, 2026</span>
+      <div class="social">
+        <a href="#">RSS</a>
+        <a href="#">Newsletter</a>
+        <a href="#">Contact</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Category nav -->
+<div class="navbar">
+  <div class="navbar-inner">
+    <a href="#" class="active">Home</a>
+    <a href="#">Licensing</a>
+    <a href="#">Migration</a>
+    <a href="#">VCF 9.1</a>
+    <a href="#">Home Lab</a>
+    <a href="#">PowerCLI</a>
+    <a href="#">Alternatives</a>
+    <a href="#">Tools</a>
+    <a href="#">All Articles</a>
+  </div>
+</div>
+
+<!-- Main layout -->
+<div class="main">
+  <div>
+    <!-- Featured story -->
+    <div class="hero-featured">
+      <div class="hero-accent-bar"></div>
+      <div class="hero-content">
+        <div class="cat-label">Licensing</div>
+        <h2><a href="#">Broadcom VMware Licensing Breakdown: What You're Actually Paying For Now</a></h2>
+        <div class="byline">
+          <span class="author">Rob Notaro</span>
+          <span>·</span>
+          <span>July 2026</span>
+          <span>·</span>
+          <span>12 min read</span>
+        </div>
+        <div class="excerpt">
+          VCF vs VVF pricing, the 72-core per-order minimum, real-world cost examples, and what your renewal quote actually means. Four subscription bundles, per-core pricing, and the gotchas Broadcom doesn't advertise — in plain English.
+        </div>
+        <a href="#" class="continue-reading">Continue Reading →</a>
+      </div>
+    </div>
+
+    <!-- Article row 1 -->
+    <div class="article-row">
+      <div class="article-item">
+        <div class="cat-label comparison">Comparison</div>
+        <h3><a href="#">VMware vs Nutanix AHV: An Honest Engineer's Comparison</a></h3>
+        <div class="byline">July 2026 · 14 min read</div>
+        <div class="excerpt">A working engineer's take on licensing, performance, management overhead, and when each actually makes sense for your environment.</div>
+      </div>
+      <div class="article-item">
+        <div class="cat-label migration">Migration</div>
+        <h3><a href="#">Best VMware Alternatives in 2026: The Complete Guide</a></h3>
+        <div class="byline">July 2026 · 14 min read</div>
+        <div class="excerpt">Proxmox, Hyper-V, Nutanix AHV, XCP-ng — real pricing, migration timelines, and community consensus on what's actually viable.</div>
+      </div>
+    </div>
+
+    <!-- Article row 2 -->
+    <div class="article-row">
+      <div class="article-item">
+        <div class="cat-label migration">Migration</div>
+        <h3><a href="#">How to Migrate from VMware to Proxmox: Complete Step-by-Step</a></h3>
+        <div class="byline">July 2026 · 14 min read</div>
+        <div class="excerpt">Import Wizard method, Windows VM gotchas, real pricing data, and what you'll miss after switching to Proxmox VE 9.</div>
+      </div>
+      <div class="article-item">
+        <div class="cat-label licensing">Licensing</div>
+        <h3><a href="#">VCF Licensing Explained: Per-Core Minimums and Your Budget</a></h3>
+        <div class="byline">July 2026 · 12 min read</div>
+        <div class="excerpt">The 16-core per CPU minimum, the 72-core order floor, and worked cost examples showing what you actually pay.</div>
+      </div>
+    </div>
+
+    <!-- Article row 3 -->
+    <div class="article-row">
+      <div class="article-item">
+        <div class="cat-label homelab">Home Lab</div>
+        <h3><a href="#">Best Hardware for a VMware Home Lab in 2026</a></h3>
+        <div class="byline">July 2026 · 10 min read</div>
+        <div class="excerpt">Mini PCs with Intel NICs, 128GB RAM support, NVMe storage. Updated with Minisforum MS-03 and MS-S1 Max picks.</div>
+      </div>
+      <div class="article-item">
+        <div class="cat-label deployment">Deployment</div>
+        <h3><a href="#">How to Deploy vCenter Server Appliance 8: Step-by-Step</a></h3>
+        <div class="byline">July 2026 · 12 min read</div>
+        <div class="excerpt">Complete VCSA 8 deployment walkthrough from downloading the ISO to first login — sizing, networking, gotchas.</div>
+      </div>
+    </div>
+
+    <!-- Article row 4 -->
+    <div class="article-row">
+      <div class="article-item">
+        <div class="cat-label lab">Lab Guide</div>
+        <h3><a href="#">VCF 9.1 Nested Lab Setup: The Complete Walkthrough</a></h3>
+        <div class="byline">July 2026 · 18 min read</div>
+        <div class="excerpt">Build a fully functional VCF 9.1 nested lab on a single workstation. From SDDC Manager config to first workload deployment.</div>
+      </div>
+      <div class="article-item">
+        <div class="cat-label powercli">PowerCLI</div>
+        <h3><a href="#">Automating vSphere License Compliance Audits with PowerCLI</a></h3>
+        <div class="byline">July 2026 · 10 min read</div>
+        <div class="excerpt">Working PowerShell scripts to inventory host core counts, license keys, and eval status for Broadcom subscription compliance.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <!-- Price Calculator -->
+    <div class="widget">
+      <h4>Price Calculator</h4>
+      <div class="tool-card">
+        <h5>VMware Cost Comparison</h5>
+        <p>Side-by-side: VVF, VCF, Proxmox, Nutanix, Hyper-V. 72-core minimum enforced. 3-year TCO with hidden gotchas.</p>
+        <a href="#">Open Calculator →</a>
+      </div>
+    </div>
+
+    <!-- Trending -->
+    <div class="widget">
+      <h4>Most Read</h4>
+      <ol>
+        <li><a href="#">Broadcom Licensing Breakdown</a></li>
+        <li><a href="#">VMware Alternatives in 2026</a></li>
+        <li><a href="#">Proxmox Migration Guide</a></li>
+        <li><a href="#">VCF Licensing Per-Core Minimums</a></li>
+        <li><a href="#">Home Lab Hardware 2026</a></li>
+      </ol>
+    </div>
+
+    <!-- Newsletter -->
+    <div class="widget">
+      <h4>Newsletter</h4>
+      <div class="newsletter-box">
+        <h5>Licensing Alerts</h5>
+        <p>New guides, pricing changes, and home lab tips. No spam. Unsubscribe anytime.</p>
+        <input type="email" placeholder="your@email.com" />
+        <button>Subscribe Free</button>
+      </div>
+    </div>
+
+    <!-- Topics -->
+    <div class="widget">
+      <h4>Topics</h4>
+      <div class="tag-cloud">
+        <span>Licensing (4)</span>
+        <span>Migration (2)</span>
+        <span>Home Lab (2)</span>
+        <span>VCF 9.1 (2)</span>
+        <span>PowerCLI (1)</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Section divider -->
+<div class="section-divider">
+  <div class="line"></div>
+  <span class="label">Home Lab Picks — Verified July 2026</span>
+  <div class="line"></div>
+</div>
+
+<!-- Hardware strip -->
+<div class="hardware-strip">
+  <div class="hw-card">
+    <div class="hw-name">ASUS NUC 14 Pro</div>
+    <div class="hw-spec">Intel Core Ultra 7 · 96GB DDR5 · 2x NVMe</div>
+    <a href="#" class="hw-link">Amazon →</a>
+  </div>
+  <div class="hw-card">
+    <div class="hw-name">Minisforum MS-01</div>
+    <div class="hw-spec">i9-13900H · 2x 10GbE · PCIe x16 · 3x M.2</div>
+    <a href="#" class="hw-link">Amazon →</a>
+  </div>
+  <div class="hw-card">
+    <div class="hw-name">Samsung 990 Pro 2TB</div>
+    <div class="hw-spec">PCIe Gen4 · 7,450 MB/s · NVMe</div>
+    <a href="#" class="hw-link">Amazon →</a>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <span>© 2026 VMwareMadeSimple.com — Independent. Not affiliated with VMware or Broadcom. Some links are affiliate links.</span>
+  <div class="footer-links">
+    <a href="#">About</a>
+    <a href="#">Contact</a>
+    <a href="#">RSS</a>
+    <a href="#">Privacy</a>
+  </div>
+</footer>
+</body>
+</html>

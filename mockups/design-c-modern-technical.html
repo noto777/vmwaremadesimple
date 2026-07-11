@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VMwareMadeSimple — Mockup C: Modern Technical</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #ffffff;
+    --surface: #f7f8fa;
+    --text: #0d1117;
+    --muted: #57606a;
+    --accent: #0969da;
+    --accent-hover: #0550ae;
+    --border: #d0d7de;
+    --border-muted: #eaeef2;
+    --green: #1a7f37;
+    --orange: #bc4c00;
+    --purple: #8250df;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    font-size: 15px;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* Header */
+  header {
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(8px);
+    z-index: 50;
+  }
+  .header-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--text);
+    text-decoration: none;
+    letter-spacing: -0.3px;
+  }
+  .logo:hover { text-decoration: none; }
+  .logo span { color: var(--accent); }
+  .header-nav { display: flex; gap: 1.5rem; }
+  .header-nav a {
+    color: var(--muted);
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+  }
+  .header-nav a:hover { color: var(--accent); text-decoration: none; }
+  .header-cta {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 0.35rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text);
+    text-decoration: none;
+    transition: 0.15s;
+  }
+  .header-cta:hover { border-color: var(--accent); text-decoration: none; }
+
+  /* Hero */
+  .hero {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 3.5rem 1.5rem 2rem;
+    text-align: center;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: #ddf4ff;
+    border: 1px solid #54aeff66;
+    color: var(--accent);
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    margin-bottom: 1.2rem;
+  }
+  .hero h1 {
+    font-size: 2.4rem;
+    font-weight: 700;
+    letter-spacing: -1px;
+    line-height: 1.2;
+    margin-bottom: 0.8rem;
+    max-width: 640px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .hero p {
+    font-size: 1.1rem;
+    color: var(--muted);
+    max-width: 520px;
+    margin: 0 auto 1.5rem;
+  }
+  .hero-actions { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    padding: 0.6rem 1.4rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border: 1px solid var(--accent);
+    cursor: pointer;
+    transition: 0.15s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--accent-hover); text-decoration: none; }
+  .btn-secondary {
+    background: var(--surface);
+    color: var(--text);
+    padding: 0.6rem 1.4rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: 0.15s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-secondary:hover { border-color: var(--accent); text-decoration: none; }
+
+  /* Tool callout */
+  .tool-callout {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 1.5rem 2rem;
+  }
+  .tool-card-main {
+    background: linear-gradient(135deg, #ddf4ff 0%, #f6f8fa 100%);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .tool-card-main h3 { font-size: 1.05rem; margin-bottom: 0.2rem; }
+  .tool-card-main p { font-size: 0.85rem; color: var(--muted); }
+
+  /* Articles grid */
+  .articles-section {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 1rem 1.5rem 3rem;
+  }
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+  .section-header h2 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+  .section-header .count { font-size: 0.82rem; color: var(--muted); }
+
+  .article-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+  .article-card {
+    background: var(--surface);
+    border: 1px solid var(--border-muted);
+    border-radius: 8px;
+    padding: 1.2rem;
+    transition: 0.15s;
+  }
+  .article-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .article-card a { text-decoration: none; color: var(--text); }
+  .article-card a:hover { text-decoration: none; }
+  .article-card .cat {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.4rem;
+  }
+  .article-card .cat.licensing { color: var(--accent); }
+  .article-card .cat.migration { color: var(--green); }
+  .article-card .cat.homelab { color: var(--purple); }
+  .article-card .cat.comparison { color: var(--orange); }
+  .article-card h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.35;
+    margin-bottom: 0.3rem;
+  }
+  .article-card p {
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+  .article-card .meta { font-size: 0.75rem; color: #8b949e; }
+
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 1.5rem 1.5rem;
+    max-width: 1080px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  .mockup-label {
+    position: fixed; top: 0; left: 0; right: 0;
+    background: #1a1a1a; color: #fff; text-align: center;
+    padding: 0.3rem; font-size: 0.75rem; z-index: 100; letter-spacing: 0.5px;
+  }
+  header { top: 1.5rem; }
+</style>
+</head>
+<body>
+<div class="mockup-label">MOCKUP C — Modern Technical (GitHub / Vercel style — light, clean, fast)</div>
+
+<header>
+  <div class="header-inner">
+    <a href="#" class="logo">VMware<span>MadeSimple</span></a>
+    <nav class="header-nav">
+      <a href="#">Articles</a>
+      <a href="#">Licensing</a>
+      <a href="#">Migration</a>
+      <a href="#">Home Lab</a>
+      <a href="#">Tools</a>
+    </nav>
+    <a href="#" class="header-cta">Subscribe</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-badge">Updated for VCF 9.1</div>
+  <h1>VMware guidance that doesn't waste your time</h1>
+  <p>Practical guides for IT professionals navigating vSphere, Broadcom licensing, migration options, and home lab builds.</p>
+  <div class="hero-actions">
+    <a href="#" class="btn-primary">Read the Licensing Breakdown</a>
+    <a href="#" class="btn-secondary">Browse All Articles</a>
+  </div>
+</section>
+
+<div class="tool-callout">
+  <div class="tool-card-main">
+    <div>
+      <h3>VMware Price Comparison Calculator</h3>
+      <p>Side-by-side cost comparison: VVF, VCF, Proxmox, Nutanix, and Hyper-V. 72-core minimum enforced, 3-year TCO.</p>
+    </div>
+    <a href="#" class="btn-secondary">Open →</a>
+  </div>
+</div>
+
+<section class="articles-section">
+  <div class="section-header">
+    <h2>Latest Articles</h2>
+    <span class="count">9 articles</span>
+  </div>
+  <div class="article-grid">
+    <div class="article-card">
+      <a href="#">
+        <div class="cat licensing">Licensing</div>
+        <h3>Broadcom VMware Licensing Breakdown</h3>
+        <p>VCF vs VVF pricing, the 72-core minimum, real-world cost examples.</p>
+        <div class="meta">12 min read</div>
+      </a>
+    </div>
+    <div class="article-card">
+      <a href="#">
+        <div class="cat comparison">Comparison</div>
+        <h3>VMware vs Nutanix AHV: Honest Comparison</h3>
+        <p>Working engineer's take on licensing, performance, and management overhead.</p>
+        <div class="meta">14 min read</div>
+      </a>
+    </div>
+    <div class="article-card">
+      <a href="#">
+        <div class="cat migration">Migration</div>
+        <h3>Best VMware Alternatives in 2026</h3>
+        <p>Proxmox, Hyper-V, Nutanix AHV, XCP-ng — real pricing and timelines.</p>
+        <div class="meta">14 min read</div>
+      </a>
+    </div>
+    <div class="article-card">
+      <a href="#">
+        <div class="cat migration">Migration</div>
+        <h3>Migrate from VMware to Proxmox: Step-by-Step</h3>
+        <p>Import Wizard method, Windows VM gotchas, what you'll miss.</p>
+        <div class="meta">14 min read</div>
+      </a>
+    </div>
+    <div class="article-card">
+      <a href="#">
+        <div class="cat homelab">Home Lab</div>
+        <h3>Best Hardware for a VMware Home Lab in 2026</h3>
+        <p>Mini PCs with Intel NICs, 128GB RAM, NVMe storage — community validated.</p>
+        <div class="meta">10 min read</div>
+      </a>
+    </div>
+    <div class="article-card">
+      <a href="#">
+        <div class="cat licensing">Licensing</div>
+        <h3>VCF Licensing Explained: Per-Core Minimums</h3>
+        <p>The 16-core per CPU minimum, the 72-core order floor, worked cost examples.</p>
+        <div class="meta">12 min read</div>
+      </a>
+    </div>
+    <div class="article-card">
+      <a href="#">
+        <div class="cat licensing">PowerCLI</div>
+        <h3>Automating License Compliance Audits</h3>
+        <p>Working PowerShell scripts for Broadcom subscription compliance auditing.</p>
+        <div class="meta">10 min read</div>
+      </a>
+    </div>
+    <div class="article-card">
+      <a href="#">
+        <div class="cat homelab">Lab Guide</div>
+        <h3>VCF 9.1 Nested Lab Setup: Complete Walkthrough</h3>
+        <p>Build a fully functional VCF 9.1 nested lab on a single workstation.</p>
+        <div class="meta">18 min read</div>
+      </a>
+    </div>
+    <div class="article-card">
+      <a href="#">
+        <div class="cat licensing">Deployment</div>
+        <h3>Deploy vCenter Server Appliance 8: Step-by-Step</h3>
+        <p>Complete VCSA 8 walkthrough — sizing, networking, gotchas.</p>
+        <div class="meta">12 min read</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2026 VMwareMadeSimple.com — Independent. Not affiliated with VMware or Broadcom.</span>
+  <span>Some links are affiliate links.</span>
+</footer>
+</body>
+</html>

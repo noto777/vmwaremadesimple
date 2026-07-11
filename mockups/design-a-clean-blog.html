@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VMwareMadeSimple — Mockup A: Clean Technical Blog</title>
+<style>
+  /* Self-contained, no CDN. System fonts only. */
+  :root {
+    --bg: #fafafa;
+    --text: #1a1a1a;
+    --muted: #666;
+    --link: #0066cc;
+    --border: #e0e0e0;
+    --code-bg: #f4f4f4;
+    --tag-bg: #eee;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+  header { border-bottom: 1px solid var(--border); padding-bottom: 1rem; margin-bottom: 2rem; }
+  header h1 { font-size: 1.25rem; font-weight: 700; }
+  header h1 a { color: var(--text); text-decoration: none; }
+  header nav { margin-top: 0.5rem; font-size: 0.9rem; }
+  header nav a { color: var(--muted); text-decoration: none; margin-right: 1.2rem; }
+  header nav a:hover { color: var(--link); }
+
+  .post-list { list-style: none; }
+  .post-list li { padding: 1.2rem 0; border-bottom: 1px solid var(--border); }
+  .post-list .date { font-size: 0.8rem; color: var(--muted); }
+  .post-list .title { font-size: 1.15rem; font-weight: 600; margin: 0.2rem 0; }
+  .post-list .title a { color: var(--text); text-decoration: none; }
+  .post-list .title a:hover { color: var(--link); }
+  .post-list .summary { font-size: 0.9rem; color: var(--muted); }
+  .tag {
+    display: inline-block;
+    font-size: 0.75rem;
+    background: var(--tag-bg);
+    padding: 0.1rem 0.5rem;
+    border-radius: 3px;
+    color: var(--muted);
+    margin-right: 0.3rem;
+  }
+
+  .tool-box {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1rem;
+    margin: 1rem 0;
+  }
+  .tool-box h3 { font-size: 1rem; }
+  .tool-box p { font-size: 0.85rem; color: var(--muted); margin-top: 0.3rem; }
+
+  footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--border); font-size: 0.8rem; color: var(--muted); }
+
+  .mockup-label {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: #1a1a1a;
+    color: #fff;
+    text-align: center;
+    padding: 0.3rem;
+    font-size: 0.75rem;
+    z-index: 100;
+    letter-spacing: 0.5px;
+  }
+  body { padding-top: 3rem; }
+</style>
+</head>
+<body>
+<div class="mockup-label">MOCKUP A — Clean Technical Blog (William Lam / virtuallyGhetto style)</div>
+
+<header>
+  <h1><a href="#">VMwareMadeSimple</a></h1>
+  <nav>
+    <a href="#">Articles</a>
+    <a href="#">Licensing</a>
+    <a href="#">Migration</a>
+    <a href="#">Home Lab</a>
+    <a href="#">Tools</a>
+    <a href="#">RSS</a>
+  </nav>
+</header>
+
+<div class="tool-box">
+  <h3>VMware Price Comparison Calculator</h3>
+  <p>Compare real costs across VVF, VCF, Proxmox, Nutanix, and Hyper-V →</p>
+</div>
+
+<ul class="post-list">
+  <li>
+    <span class="date">July 2026 · 12 min read</span>
+    <div class="title"><a href="#">Broadcom VMware Licensing Breakdown: What You're Actually Paying For Now</a></div>
+    <div class="summary">VCF vs VVF pricing, the 72-core minimum, real-world cost examples, and what your renewal quote actually means. Plain English, no vendor spin.</div>
+    <div style="margin-top:0.4rem;"><span class="tag">Licensing</span></div>
+  </li>
+  <li>
+    <span class="date">July 2026 · 14 min read</span>
+    <div class="title"><a href="#">VMware vs Nutanix AHV: An Honest Engineer's Comparison</a></div>
+    <div class="summary">A working engineer's take on licensing, performance, management overhead, and when each actually makes sense.</div>
+    <div style="margin-top:0.4rem;"><span class="tag">Comparison</span></div>
+  </li>
+  <li>
+    <span class="date">July 2026 · 14 min read</span>
+    <div class="title"><a href="#">Best VMware Alternatives in 2026: The Complete Guide</a></div>
+    <div class="summary">Proxmox, Hyper-V, Nutanix AHV, XCP-ng — real pricing, migration timelines, and community consensus.</div>
+    <div style="margin-top:0.4rem;"><span class="tag">Migration</span></div>
+  </li>
+  <li>
+    <span class="date">July 2026 · 14 min read</span>
+    <div class="title"><a href="#">How to Migrate from VMware to Proxmox: Complete Step-by-Step</a></div>
+    <div class="summary">Import Wizard method, Windows VM gotchas, real pricing data, and what you'll miss after switching.</div>
+    <div style="margin-top:0.4rem;"><span class="tag">Migration</span></div>
+  </li>
+  <li>
+    <span class="date">July 2026 · 10 min read</span>
+    <div class="title"><a href="#">Best Hardware for a VMware Home Lab in 2026</a></div>
+    <div class="summary">Mini PCs with Intel NICs, 128GB RAM support, and NVMe storage — real hardware picks validated by the community.</div>
+    <div style="margin-top:0.4rem;"><span class="tag">Home Lab</span></div>
+  </li>
+</ul>
+
+<footer>
+  © 2026 VMwareMadeSimple.com — Independent. Not affiliated with VMware or Broadcom.
+</footer>
+</body>
+</html>

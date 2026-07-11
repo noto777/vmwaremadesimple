@@ -1,422 +1,288 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VMware Made Simple — Virtualization Guides, Tips & Migration Help</title>
-  <meta name="description" content="Practical VMware and vSphere guides for IT professionals. Honest advice on Broadcom licensing, migration alternatives, and home lab builds." />
-  <meta name="keywords" content="VMware, vSphere, Broadcom, virtualization, Proxmox migration, VMware alternative, vSAN, NSX, home lab" />
-  <link rel="canonical" href="https://vmwaremadesimple.com" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VMwareMadeSimple — Virtualization Guides, Licensing & Migration Help</title>
+<meta name="description" content="Independent VMware analysis for IT professionals. Broadcom licensing breakdowns, migration guides, home lab builds, and PowerCLI scripts. No vendor spin." />
+<link rel="canonical" href="https://vmwaremadesimple.com" />
+<link rel="stylesheet" href="/css/style.css" />
 
-  <!-- Google Analytics — replace G-2NDPP0ZTKC with your measurement ID -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-2NDPP0ZTKC"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-2NDPP0ZTKC');
-  </script>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2NDPP0ZTKC"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-2NDPP0ZTKC');
+</script>
 
-  <!-- Open Graph -->
-  <meta property="og:title" content="VMware Made Simple" />
-  <meta property="og:description" content="Practical VMware guides for IT professionals. No fluff." />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://vmwaremadesimple.com" />
-
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brand: '#1a73e8',
-            dark: '#0f172a',
-            card: '#1e293b',
-          }
-        }
-      }
-    }
-  </script>
-  <style>
-    body { font-family: 'Inter', system-ui, sans-serif; }
-    .gradient-text {
-      background: linear-gradient(135deg, #1a73e8, #60a5fa);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .card-hover { transition: transform 0.2s, box-shadow 0.2s; }
-    .card-hover:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
-  </style>
+<!-- Open Graph -->
+<meta property="og:title" content="VMwareMadeSimple" />
+<meta property="og:description" content="Independent VMware analysis for IT professionals. No vendor spin." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://vmwaremadesimple.com" />
 </head>
-<body class="bg-dark text-slate-100">
+<body>
 
-  <!-- Nav -->
-  <nav class="border-b border-slate-800 sticky top-0 z-50 bg-dark/95 backdrop-blur">
-    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-      <a href="/" class="text-xl font-bold text-white">
-        VMware<span class="gradient-text">MadeSimple</span>
-      </a>
-      <div class="hidden md:flex items-center gap-8 text-sm text-slate-400">
-        <a href="#articles" class="hover:text-white transition">Articles</a>
-        <a href="#tools" class="hover:text-white transition">Tools</a>
-        <a href="#broadcom" class="hover:text-white transition">Broadcom Guide</a>
-        <a href="#homelab" class="hover:text-white transition">Home Lab</a>
-        <a href="#newsletter" class="bg-brand text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition font-medium">
-          Get Updates
-        </a>
-      </div>
-    </div>
-  </nav>
+<!-- Alert strip -->
+<div class="alert-strip">
+  VCF 9.1 released — <a href="/articles/vcf-9-nested-lab-setup-complete-walkthrough.html">licensing and upgrade paths changed. Here's what's new →</a>
+</div>
 
-  <!-- Hero -->
-  <section class="max-w-6xl mx-auto px-6 py-24 text-center">
-    <div class="inline-flex items-center gap-2 bg-blue-950 text-blue-400 text-sm px-4 py-2 rounded-full mb-8 border border-blue-800">
-      <span class="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></span>
-      Broadcom changed everything. Here's what to do.
-    </div>
-    <h1 class="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
-      VMware guidance that<br/><span class="gradient-text">actually makes sense</span>
-    </h1>
-    <p class="text-xl text-slate-400 max-w-2xl mx-auto mb-10">
-      Practical guides for IT professionals navigating vSphere, Broadcom licensing, migration options, and home lab builds. No vendor spin. No fluff.
-    </p>
-    <div class="flex flex-col sm:flex-row gap-4 justify-center">
-      <a href="#broadcom" class="bg-brand text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-blue-600 transition">
-        Broadcom Survival Guide →
-      </a>
-      <a href="#articles" class="border border-slate-700 text-slate-300 px-8 py-4 rounded-xl font-semibold text-lg hover:border-slate-500 hover:text-white transition">
-        Browse Articles
-      </a>
-    </div>
-  </section>
-
-  <!-- Stats bar -->
-  <div class="border-y border-slate-800 bg-card/50">
-    <div class="max-w-6xl mx-auto px-6 py-8 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-      <div>
-        <div class="text-3xl font-bold text-white">10+</div>
-        <div class="text-slate-400 text-sm mt-1">Years VMware Experience</div>
+<!-- Masthead -->
+<div class="masthead">
+  <div class="masthead-inner">
+    <h1><a href="/">VMware<span class="red">MadeSimple</span></a></h1>
+    <div class="tagline">Independent VMware analysis for IT professionals. No vendor spin.</div>
+    <div class="credibility-bar">
+      <div class="creds">
+        <span><span class="dot">●</span> Independent</span>
+        <span><span class="dot">●</span> Sources linked</span>
+        <span><span class="dot">●</span> Updated weekly</span>
+        <span><span class="dot">●</span> Not affiliated with VMware/Broadcom</span>
       </div>
-      <div>
-        <div class="text-3xl font-bold text-white">VCP</div>
-        <div class="text-slate-400 text-sm mt-1">Certified Professional</div>
-      </div>
-      <div>
-        <div class="text-3xl font-bold text-white">100%</div>
-        <div class="text-slate-400 text-sm mt-1">Vendor Independent</div>
-      </div>
-      <div>
-        <div class="text-3xl font-bold text-white">Free</div>
-        <div class="text-slate-400 text-sm mt-1">Always Free to Read</div>
+      <div class="social">
+        <a href="/sitemap.xml">RSS</a>
+        <a href="#newsletter">Newsletter</a>
+        <a href="mailto:contact@vmwaremadesimple.com">Contact</a>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- Featured: Broadcom Guide -->
-  <section id="broadcom" class="max-w-6xl mx-auto px-6 py-20">
-    <div class="bg-gradient-to-br from-blue-950 to-slate-900 border border-blue-800 rounded-2xl p-10">
-      <div class="inline-flex items-center gap-2 bg-blue-900 text-blue-300 text-xs px-3 py-1 rounded-full mb-6 font-medium uppercase tracking-wide">
-        🔥 Most Read
+<!-- Category nav -->
+<div class="navbar">
+  <div class="navbar-inner">
+    <a href="/" class="active">Home</a>
+    <a href="#licensing">Licensing</a>
+    <a href="#migration">Migration</a>
+    <a href="#vcf">VCF 9.1</a>
+    <a href="#homelab">Home Lab</a>
+    <a href="#powercli">PowerCLI</a>
+    <a href="#alternatives">Alternatives</a>
+    <a href="/tools/price-calculator.html">Tools</a>
+    <div class="nav-search">
+      <input type="text" placeholder="Search..." onkeyup="searchSite(this.value)" />
+    </div>
+  </div>
+</div>
+
+<!-- Main layout -->
+<div class="main">
+  <div>
+    <!-- Featured story -->
+    <div class="hero-featured" id="licensing">
+      <div class="cat-label">Licensing</div>
+      <h2><a href="/articles/broadcom-vmware-licensing-breakdown.html">Broadcom VMware Licensing Breakdown: What You're Paying For Under Per-Core</a></h2>
+      <div class="byline">
+        <span>Updated Jul 11, 2026</span>
+        <span>·</span>
+        <span>12 min</span>
+        <span class="verified">Fact-checked</span>
       </div>
-      <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
-        Broadcom Bought VMware. Now What?
-      </h2>
-      <p class="text-slate-300 text-lg mb-8 max-w-2xl">
-        Licensing costs jumped 10x overnight for thousands of organizations. Here's an honest breakdown of your options — stay, migrate, or negotiate — with no vendor bias.
-      </p>
-      <div class="grid md:grid-cols-3 gap-6 mb-8">
-        <div class="bg-slate-900/60 rounded-xl p-6 border border-slate-700">
-          <div class="text-2xl mb-3">📋</div>
-          <h3 class="font-semibold text-white mb-2">Understand the New Licensing</h3>
-          <p class="text-slate-400 text-sm">VCF, vSphere Foundation, and what you're actually paying for now</p>
-        </div>
-        <div class="bg-slate-900/60 rounded-xl p-6 border border-slate-700">
-          <div class="text-2xl mb-3">🔄</div>
-          <h3 class="font-semibold text-white mb-2">Migration Options Compared</h3>
-          <p class="text-slate-400 text-sm">Proxmox, Nutanix, Hyper-V, and OpenStack — honest pros and cons</p>
-        </div>
-        <div class="bg-slate-900/60 rounded-xl p-6 border border-slate-700">
-          <div class="text-2xl mb-3">💰</div>
-          <h3 class="font-semibold text-white mb-2">Negotiation Tactics</h3>
-          <p class="text-slate-400 text-sm">How to push back on Broadcom and what actually works</p>
-        </div>
+      <div class="excerpt">
+        Four subscription bundles, per-core pricing, the 72-core order floor, and the gotchas Broadcom doesn't advertise. Worked cost examples from real renewal quotes.
       </div>
-      <a href="/articles/broadcom-vmware-licensing-breakdown.html" class="inline-block bg-brand text-white px-8 py-4 rounded-xl font-semibold hover:bg-blue-600 transition">
-        Read the Full Breakdown →
-      </a>
+      <a href="/articles/broadcom-vmware-licensing-breakdown.html" class="continue">Continue reading →</a>
     </div>
-  </section>
 
-  <!-- Tools -->
-  <section id="tools" class="max-w-6xl mx-auto px-6 py-10">
-    <div class="flex items-center justify-between mb-8">
-      <h2 class="text-3xl font-bold text-white">Tools</h2>
-      <span class="text-slate-400 text-sm">Free calculators &amp; utilities</span>
+    <!-- Latest section -->
+    <div class="section-label">
+      <span>Latest</span>
+      <span class="meta">9 articles · Updated Jul 2026</span>
     </div>
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-      <a href="/tools/price-calculator.html" class="bg-card border border-slate-700 rounded-xl p-6 card-hover group block">
-        <div class="flex items-start justify-between mb-4">
-          <div class="text-3xl">💰</div>
-          <span class="text-xs font-bold uppercase tracking-wide px-2 py-1 rounded" style="background:rgba(34,197,94,.13);color:#4ade80;border:1px solid rgba(34,197,94,.28)">Free Tool</span>
-        </div>
-        <h3 class="text-lg font-semibold text-white mb-2 group-hover:text-blue-400 transition">
-          VMware Price Comparison Calculator
-        </h3>
-        <p class="text-slate-400 text-sm mb-4">
-          Side-by-side cost comparison: VVF, VCF, Proxmox, Nutanix AHV, and Hyper-V. Enter your host count, cores, and features — get instant annual cost and 3-year TCO with the 72-core minimum enforced.
-        </p>
-        <div class="flex flex-wrap gap-2 mb-4">
-          <span class="text-xs bg-slate-900 text-slate-400 px-2 py-1 rounded border border-slate-700">72-core minimum</span>
-          <span class="text-xs bg-slate-900 text-slate-400 px-2 py-1 rounded border border-slate-700">3-yr TCO</span>
-          <span class="text-xs bg-slate-900 text-slate-400 px-2 py-1 rounded border border-slate-700">vSAN entitlement</span>
-          <span class="text-xs bg-slate-900 text-slate-400 px-2 py-1 rounded border border-slate-700">5 platforms</span>
-        </div>
-        <div class="text-blue-400 text-sm font-medium group-hover:text-blue-300 transition">Open Calculator →</div>
-      </a>
-
+    <div class="article-item">
+      <div class="meta-line">
+        <span class="type analysis">Analysis</span>
+        <span>·</span>
+        <span>Jul 2026</span>
+        <span>·</span>
+        <span>14 min</span>
+      </div>
+      <h3><a href="/articles/vmware-vs-nutanix-ahv-2026.html">VMware vs Nutanix AHV: An Engineer's Comparison</a></h3>
+      <div class="excerpt">Licensing, performance, management overhead, and when each actually makes sense for your environment.</div>
     </div>
-  </section>
 
-  <!-- Articles -->
-  <section id="articles" class="max-w-6xl mx-auto px-6 py-10">
-    <div class="flex items-center justify-between mb-10">
-      <h2 class="text-3xl font-bold text-white">Latest Articles</h2>
-      <span class="text-slate-400 text-sm">12 articles published</span>
+    <div class="article-item" id="alternatives">
+      <div class="meta-line">
+        <span class="type guide">Guide</span>
+        <span>·</span>
+        <span>Jul 2026</span>
+        <span>·</span>
+        <span>14 min</span>
+        <span class="updated-badge">Updated for VCF 9.1</span>
+      </div>
+      <h3><a href="/articles/best-vmware-alternatives-2026.html">Best VMware Alternatives in 2026</a></h3>
+      <div class="excerpt">Proxmox, Hyper-V, Nutanix AHV, XCP-ng — real pricing, migration timelines, and community consensus.</div>
     </div>
-    <div class="grid md:grid-cols-3 gap-6">
 
-      <article class="bg-card border border-slate-700 rounded-xl p-6 card-hover">
-        <div class="text-xs text-orange-400 font-medium uppercase tracking-wide mb-3">Comparison</div>
-        <h3 class="text-lg font-semibold text-white mb-3 leading-snug">
-          VMware vs Nutanix AHV: An Honest Engineer's Comparison (2026)
-        </h3>
-        <p class="text-slate-400 text-sm mb-4">A working engineer's honest take on VMware vs Nutanix AHV — licensing, performance, management overhead, and when each actually makes sense for your environment.</p>
-        <div class="flex items-center justify-between">
-          <span class="text-slate-500 text-xs">14 min read</span>
-          <a href="/articles/vmware-vs-nutanix-ahv-2026.html" class="text-blue-400 text-sm hover:text-blue-300 font-medium">Read →</a>
-        </div>
-      </article>
-
-      <article class="bg-card border border-slate-700 rounded-xl p-6 card-hover">
-        <div class="text-xs text-green-400 font-medium uppercase tracking-wide mb-3">Migration Guide</div>
-        <h3 class="text-lg font-semibold text-white mb-3 leading-snug">
-          Best VMware Alternatives in 2026: The Complete Guide (With Real Pricing)
-        </h3>
-        <p class="text-slate-400 text-sm mb-4">Broadcom's acquisition triggered 150–1,000% price hikes. Complete guide to VMware alternatives in 2026 with real pricing and migration timelines.</p>
-        <div class="flex items-center justify-between">
-          <span class="text-slate-500 text-xs">14 min read</span>
-          <a href="/articles/best-vmware-alternatives-2026.html" class="text-blue-400 text-sm hover:text-blue-300 font-medium">Read →</a>
-        </div>
-      </article>
-
-      <article class="bg-card border border-slate-700 rounded-xl p-6 card-hover">
-        <div class="text-xs text-green-400 font-medium uppercase tracking-wide mb-3">Migration Guide</div>
-        <h3 class="text-lg font-semibold text-white mb-3 leading-snug">
-          How to Migrate from VMware to Proxmox in 2026: The Complete Step-by-Step Guide
-        </h3>
-        <p class="text-slate-400 text-sm mb-4">A senior engineer's complete guide — covering the Import Wizard method, Windows VM gotchas, real pricing data, and what you'll miss after switching.</p>
-        <div class="flex items-center justify-between">
-          <span class="text-slate-500 text-xs">14 min read</span>
-          <a href="/articles/vmware-to-proxmox-migration-guide.html" class="text-blue-400 text-sm hover:text-blue-300 font-medium">Read →</a>
-        </div>
-      </article>
-
-      <article class="bg-card border border-slate-700 rounded-xl p-6 card-hover">
-        <div class="text-xs text-blue-400 font-medium uppercase tracking-wide mb-3">Broadcom Licensing</div>
-        <h3 class="text-lg font-semibold text-white mb-3 leading-snug">
-          VMware VCF Licensing Explained: Per-Core Minimums and What They Mean for Your Budget
-        </h3>
-        <p class="text-slate-400 text-sm mb-4">The 16-core per CPU minimum, the 72-core order floor, real customer pricing from Reddit and Spiceworks, and worked cost examples. What you actually pay under Broadcom's per-core model.</p>
-        <div class="flex items-center justify-between">
-          <span class="text-slate-500 text-xs">12 min read</span>
-          <a href="/articles/vmware-vcf-licensing-explained-per-core-minimums.html" class="text-blue-400 text-sm hover:text-blue-300 font-medium">Read →</a>
-        </div>
-      </article>
-
-      <article class="bg-card border border-slate-700 rounded-xl p-6 card-hover">
-        <div class="text-xs text-purple-400 font-medium uppercase tracking-wide mb-3">Home Lab</div>
-        <h3 class="text-lg font-semibold text-white mb-3 leading-snug">
-          Best Hardware for a VMware Home Lab in 2026 (Under $500)
-        </h3>
-        <p class="text-slate-400 text-sm mb-4">Mini PCs with Intel NICs, 128GB RAM support, and NVMe storage — real hardware picks validated by William Lam and the VMware community.</p>
-        <div class="flex items-center justify-between">
-          <span class="text-slate-500 text-xs">10 min read</span>
-          <a href="/articles/best-vmware-home-lab-hardware-2026.html" class="text-blue-400 text-sm hover:text-blue-300 font-medium">Read →</a>
-        </div>
-      </article>
-
-      <article class="bg-card border border-slate-700 rounded-xl p-6 card-hover">
-        <div class="text-xs text-blue-400 font-medium uppercase tracking-wide mb-3">Broadcom Licensing</div>
-        <h3 class="text-lg font-semibold text-white mb-3 leading-snug">
-          Broadcom VMware Licensing Breakdown: What You're Actually Paying For Now
-        </h3>
-        <p class="text-slate-400 text-sm mb-4">VCF vs VVF pricing, the 72-core minimum, real-world cost examples, and what your renewal quote actually means. Plain English, no vendor spin.</p>
-        <div class="flex items-center justify-between">
-          <span class="text-slate-500 text-xs">12 min read</span>
-          <a href="/articles/broadcom-vmware-licensing-breakdown.html" class="text-blue-400 text-sm hover:text-blue-300 font-medium">Read →</a>
-        </div>
-      </article>
-
-      <article class="bg-card border border-slate-700 rounded-xl p-6 card-hover">
-        <div class="text-xs text-orange-400 font-medium uppercase tracking-wide mb-3">Deployment Guide</div>
-        <h3 class="text-lg font-semibold text-white mb-3 leading-snug">
-          How to Deploy vCenter Server Appliance 8: Step-by-Step Guide (2026)
-        </h3>
-        <p class="text-slate-400 text-sm mb-4">Complete VCSA 8 deployment walkthrough — from downloading the ISO to first login. Covers sizing, networking, and the gotchas that trip people up.</p>
-        <div class="flex items-center justify-between">
-          <span class="text-slate-500 text-xs">12 min read</span>
-          <a href="/articles/how-to-deploy-vcenter-server-appliance-8-step-by-step.html" class="text-blue-400 text-sm hover:text-blue-300 font-medium">Read →</a>
-        </div>
-      </article>
-
-      <article class="bg-card border border-slate-700 rounded-xl p-6 card-hover">
-        <div class="text-xs text-green-400 font-medium uppercase tracking-wide mb-3">Lab Guide</div>
-        <h3 class="text-lg font-semibold text-white mb-3 leading-snug">
-          VCF 9 Nested Lab Setup: The Complete Walkthrough
-        </h3>
-        <p class="text-slate-400 text-sm mb-4">Build a fully functional VCF 9 nested lab on a single workstation. Step-by-step from SDDC Manager config to first workload deployment.</p>
-        <div class="flex items-center justify-between">
-          <span class="text-slate-500 text-xs">18 min read</span>
-          <a href="/articles/vcf-9-nested-lab-setup-complete-walkthrough.html" class="text-blue-400 text-sm hover:text-blue-300 font-medium">Read →</a>
-        </div>
-      </article>
-
-      <article class="bg-card border border-slate-700 rounded-xl p-6 card-hover">
-        <div class="text-xs text-blue-400 font-medium uppercase tracking-wide mb-3">PowerCLI</div>
-        <h3 class="text-lg font-semibold text-white mb-3 leading-snug">
-          Automating vSphere License Compliance Audits with VCF PowerCLI
-        </h3>
-        <p class="text-slate-400 text-sm mb-4">Working PowerShell scripts to inventory host core counts, license keys, and eval status for Broadcom subscription compliance auditing.</p>
-        <div class="flex items-center justify-between">
-          <span class="text-slate-500 text-xs">10 min read</span>
-          <a href="/articles/automating-vsphere-license-compliance-powercli.html" class="text-blue-400 text-sm hover:text-blue-300 font-medium">Read →</a>
-        </div>
-      </article>
-
+    <div class="article-item" id="migration">
+      <div class="meta-line">
+        <span class="type guide">Guide</span>
+        <span>·</span>
+        <span>Jul 2026</span>
+        <span>·</span>
+        <span>14 min</span>
+      </div>
+      <h3><a href="/articles/vmware-to-proxmox-migration-guide.html">Migrating from VMware to Proxmox VE 9</a></h3>
+      <div class="excerpt">Import Wizard method, Windows VM preparation, storage migration, and what you'll miss after switching.</div>
     </div>
-  </section>
 
-  <!-- Home Lab section -->
-  <section id="homelab" class="max-w-6xl mx-auto px-6 py-10">
-    <div class="bg-card border border-slate-700 rounded-2xl p-10">
-      <h2 class="text-3xl font-bold text-white mb-3">Build Your VMware Home Lab</h2>
-      <p class="text-slate-400 mb-8 max-w-xl">The fastest way to get certified and stay sharp. Here's the gear I recommend — tested in a real home lab running vSphere 9.</p>
-      <div class="grid md:grid-cols-2 gap-6">
-        <div class="space-y-4">
-          <h3 class="font-semibold text-slate-300 text-sm uppercase tracking-wide">Recommended Hardware</h3>
-          <p class="text-slate-500 text-xs mb-2">All hardware verified on <a href="https://williamlam.com/2024/10/interesting-vmware-homelab-kits-for-2024.html" class="text-blue-400 hover:text-blue-300" target="_blank" rel="noopener">williamlam.com</a></p>
-          <div class="flex items-center gap-4 bg-slate-900 rounded-lg p-4 border border-slate-700 card-hover">
-            <div class="text-2xl">🖥️</div>
-            <div class="flex-1">
-              <div class="text-white font-medium">ASUS NUC 14 Pro</div>
-              <div class="text-slate-400 text-sm">Intel Core Ultra 7 155H, up to 96GB DDR5, 2x M.2 NVMe — <a href="https://williamlam.com/2024/09/esxi-on-asus-nuc-14-pro-revel-canyon.html" class="text-blue-400 hover:text-blue-300" target="_blank" rel="noopener">ESXi verified by William Lam</a></div>
-            </div>
-            <a href="https://www.amazon.com/dp/B0CXMYL7CH?tag=vmwaremadesim-20" class="text-blue-400 text-sm font-medium hover:text-blue-300" target="_blank" rel="nofollow noopener">Amazon →</a>
-          </div>
-          <div class="flex items-center gap-4 bg-slate-900 rounded-lg p-4 border border-slate-700 card-hover">
-            <div class="text-2xl">🔥</div>
-            <div class="flex-1">
-              <div class="text-white font-medium">Minisforum MS-01</div>
-              <div class="text-slate-400 text-sm">i9-13900H, 2x 10GbE SFP+, 2x 2.5GbE, PCIe x16 slot, 3x M.2 — <a href="https://williamlam.com/2024/02/esxi-on-minisforum-ms-01.html" class="text-blue-400 hover:text-blue-300" target="_blank" rel="noopener">ESXi verified by William Lam</a></div>
-            </div>
-            <a href="https://www.amazon.com/dp/B0CT2FPD2C?tag=vmwaremadesim-20" class="text-blue-400 text-sm font-medium hover:text-blue-300" target="_blank" rel="nofollow noopener">Amazon →</a>
-          </div>
-          <div class="flex items-center gap-4 bg-slate-900 rounded-lg p-4 border border-slate-700 card-hover">
-            <div class="text-2xl">💾</div>
-            <div class="flex-1">
-              <div class="text-white font-medium">Samsung 990 Pro 2TB NVMe</div>
-              <div class="text-slate-400 text-sm">PCIe Gen4, 7,450 MB/s — ideal for vSAN ESA and <a href="https://williamlam.com/2024/08/nvme-tiering-in-vsphere-8-0-update-3-is-a-homelab-game-changer.html" class="text-blue-400 hover:text-blue-300" target="_blank" rel="noopener">NVMe memory tiering</a></div>
-            </div>
-            <a href="https://www.amazon.com/dp/B0BHJJ9Y77?tag=vmwaremadesim-20" class="text-blue-400 text-sm font-medium hover:text-blue-300" target="_blank" rel="nofollow noopener">Amazon →</a>
-          </div>
-          <div class="flex items-center gap-4 bg-slate-900 rounded-lg p-4 border border-slate-700 card-hover">
-            <div class="text-2xl">🔌</div>
-            <div class="flex-1">
-              <div class="text-white font-medium">TP-Link TL-SG108E</div>
-              <div class="text-slate-400 text-sm">8-port managed switch — VLAN tagging for proper lab segmentation</div>
-            </div>
-            <a href="https://www.amazon.com/dp/B00K4DS5KU?tag=vmwaremadesim-20" class="text-blue-400 text-sm font-medium hover:text-blue-300" target="_blank" rel="nofollow noopener">Amazon →</a>
-          </div>
-        </div>
-        <div class="space-y-4">
-          <h3 class="font-semibold text-slate-300 text-sm uppercase tracking-wide">Recommended Training</h3>
-          <div class="flex items-center gap-4 bg-slate-900 rounded-lg p-4 border border-slate-700 card-hover">
-            <div class="text-2xl">🎓</div>
-            <div class="flex-1">
-              <div class="text-white font-medium">Clear and Simple VCP-DCV — Rick Crisci</div>
-              <div class="text-slate-400 text-sm">The go-to VCP prep on Udemy. 473K+ students, 4.6★. Full video training, not just practice tests. $15 on sale.</div>
-            </div>
-            <a href="https://www.udemy.com/course/vsphere8vcp/" class="text-blue-400 text-sm font-medium hover:text-blue-300" target="_blank" rel="noopener">Udemy →</a>
-          </div>
-          <div class="flex items-center gap-4 bg-slate-900 rounded-lg p-4 border border-slate-700 card-hover">
-            <div class="text-2xl">🧪</div>
-            <div class="flex-1">
-              <div class="text-white font-medium">VMware Hands-on Labs — VCF 9</div>
-              <div class="text-slate-400 text-sm">Free browser-based labs direct from Broadcom. Full VCF 9 and vSphere 9 environments, no hardware needed.</div>
-            </div>
-            <a href="https://labs.hol.vmware.com/HOL" class="text-blue-400 text-sm font-medium hover:text-blue-300" target="_blank" rel="noopener">Free Labs →</a>
-          </div>
-          <div class="flex items-center gap-4 bg-slate-900 rounded-lg p-4 border border-slate-700 card-hover">
-            <div class="text-2xl">📺</div>
-            <div class="flex-1">
-              <div class="text-white font-medium">VirtualizationHowto — YouTube</div>
-              <div class="text-slate-400 text-sm">Brandon Lee's channel: deep-dive vSphere 9, VCF, and home lab walkthroughs updated constantly.</div>
-            </div>
-            <a href="https://www.youtube.com/channel/UCrxcWtpd1IGHG9RbD_9380A" class="text-blue-400 text-sm font-medium hover:text-blue-300" target="_blank" rel="noopener">YouTube →</a>
-          </div>
-        </div>
+    <div class="article-item">
+      <div class="meta-line">
+        <span class="type analysis">Analysis</span>
+        <span>·</span>
+        <span>Jul 2026</span>
+        <span>·</span>
+        <span>12 min</span>
+      </div>
+      <h3><a href="/articles/vmware-vcf-licensing-explained-per-core-minimums.html">VCF Licensing: Per-Core Minimums and Your Budget</a></h3>
+      <div class="excerpt">The 16-core per CPU minimum, the 72-core order floor, and worked cost examples for 3-host environments.</div>
+    </div>
+
+    <div class="article-item" id="homelab">
+      <div class="meta-line">
+        <span class="type guide">Guide</span>
+        <span>·</span>
+        <span>Jul 2026</span>
+        <span>·</span>
+        <span>10 min</span>
+        <span class="updated-badge">Updated Jul 11</span>
+      </div>
+      <h3><a href="/articles/best-vmware-home-lab-hardware-2026.html">Best Hardware for a VMware Home Lab in 2026</a></h3>
+      <div class="excerpt">Mini PCs with Intel NICs, 128GB RAM, NVMe storage. Now includes Minisforum MS-03 and MS-S1 Max.</div>
+    </div>
+
+    <div class="article-item">
+      <div class="meta-line">
+        <span class="type guide">Guide</span>
+        <span>·</span>
+        <span>Jul 2026</span>
+        <span>·</span>
+        <span>12 min</span>
+      </div>
+      <h3><a href="/articles/how-to-deploy-vcenter-server-appliance-8-step-by-step.html">Deploying vCenter Server Appliance 8</a></h3>
+      <div class="excerpt">Complete VCSA 8 walkthrough — sizing, networking, and the gotchas that trip people up.</div>
+    </div>
+
+    <div class="article-item" id="vcf">
+      <div class="meta-line">
+        <span class="type guide">Guide</span>
+        <span>·</span>
+        <span>Jul 2026</span>
+        <span>·</span>
+        <span>18 min</span>
+      </div>
+      <h3><a href="/articles/vcf-9-nested-lab-setup-complete-walkthrough.html">VCF 9.1 Nested Lab Setup</a></h3>
+      <div class="excerpt">Build a fully functional VCF 9.1 nested lab on a single workstation. From deployment to first workload.</div>
+    </div>
+
+    <div class="article-item" id="powercli">
+      <div class="meta-line">
+        <span class="type tool">Tool</span>
+        <span>·</span>
+        <span>Jul 2026</span>
+        <span>·</span>
+        <span>10 min</span>
+      </div>
+      <h3><a href="/articles/automating-vsphere-license-compliance-powercli.html">Automating License Compliance Audits with PowerCLI</a></h3>
+      <div class="excerpt">Working PowerShell scripts to inventory host core counts, license keys, and eval status for subscription compliance.</div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="widget">
+      <h4>Calculator</h4>
+      <div class="tool-card">
+        <h5>VMware Renewal Estimator</h5>
+        <p>Compare VVF, VCF, Proxmox, Nutanix, Hyper-V costs. 16-core/socket and 72-core order floor enforced. 3-year TCO.</p>
+        <a href="/tools/price-calculator.html">Open calculator →</a>
       </div>
     </div>
-  </section>
 
-  <!-- Newsletter -->
-  <section id="newsletter" class="max-w-6xl mx-auto px-6 py-20">
-    <div class="text-center max-w-2xl mx-auto">
-      <h2 class="text-4xl font-bold text-white mb-4">Stay ahead of VMware changes</h2>
-      <p class="text-slate-400 text-lg mb-8">New guides, licensing alerts, and home lab tips. No spam. Unsubscribe anytime.</p>
-      <form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" onsubmit="handleSubscribe(event)">
-        <input
-          type="email"
-          placeholder="your@email.com"
-          class="flex-1 bg-card border border-slate-700 text-white px-5 py-4 rounded-xl focus:outline-none focus:border-blue-500 placeholder-slate-500"
-          required
-        />
-        <button type="submit" class="bg-brand text-white px-8 py-4 rounded-xl font-semibold hover:bg-blue-600 transition whitespace-nowrap">
-          Subscribe Free
-        </button>
-      </form>
-      <p class="text-slate-500 text-sm mt-4">Join IT professionals keeping up with the VMware landscape.</p>
+    <div class="widget">
+      <h4>Most Read</h4>
+      <ol>
+        <li><a href="/articles/broadcom-vmware-licensing-breakdown.html">Broadcom Licensing Breakdown</a></li>
+        <li><a href="/articles/best-vmware-alternatives-2026.html">VMware Alternatives in 2026</a></li>
+        <li><a href="/articles/vmware-to-proxmox-migration-guide.html">Proxmox Migration Guide</a></li>
+        <li><a href="/articles/vmware-vcf-licensing-explained-per-core-minimums.html">VCF Per-Core Minimums</a></li>
+        <li><a href="/articles/best-vmware-home-lab-hardware-2026.html">Home Lab Hardware 2026</a></li>
+      </ol>
     </div>
-  </section>
 
-  <!-- Footer -->
-  <footer class="border-t border-slate-800 mt-10">
-    <div class="max-w-6xl mx-auto px-6 py-10 flex flex-col md:flex-row items-center justify-between gap-4">
-      <div class="text-slate-400 text-sm">
-        © 2026 VMwareMadeSimple.com — Independent. Not affiliated with VMware or Broadcom.
-      </div>
-      <div class="flex gap-6 text-slate-400 text-sm">
-        <a href="#articles" class="hover:text-white transition">Articles</a>
-        <a href="#tools" class="hover:text-white transition">Tools</a>
-        <a href="#homelab" class="hover:text-white transition">Home Lab</a>
-        <a href="#newsletter" class="hover:text-white transition">Newsletter</a>
+    <div class="widget">
+      <h4>About</h4>
+      <div class="about-box">
+        <div class="author-name">VMwareMadeSimple</div>
+        <div class="author-bio">Independent VMware analysis from a VCP-certified engineer with 10+ years in vSphere. This site takes no vendor money. Sources are linked, facts are verified, and corrections are made openly.</div>
       </div>
     </div>
-    <div class="max-w-6xl mx-auto px-6 pb-8 text-slate-600 text-xs">
-      Some links on this site are affiliate links. If you purchase through them, we may earn a small commission at no extra cost to you.
-    </div>
-  </footer>
 
-  <script>
-    function handleSubscribe(e) {
-      e.preventDefault();
-      const email = e.target.querySelector('input[type="email"]').value;
-      // TODO: wire to email provider (ConvertKit, Mailchimp, etc.)
-      alert('Thanks! We\\'ll be in touch soon.');
-      e.target.reset();
-    }
-  </script>
+    <div class="widget" id="newsletter">
+      <h4>Newsletter</h4>
+      <div class="newsletter-compact">
+        <h5>Licensing Alerts</h5>
+        <p>Pricing changes, new guides, lab tips. No spam.</p>
+        <input type="email" placeholder="your@email.com" />
+        <button>Subscribe</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Home Lab strip -->
+<div class="hardware-strip">
+  <div class="hw-label">
+    <span>Home Lab Picks</span>
+    <span class="verify">Verified Jul 2026</span>
+  </div>
+  <div class="hw-grid">
+    <div class="hw-item">
+      <div class="hw-name">ASUS NUC 14 Pro</div>
+      <div class="hw-spec">Core Ultra 7 · 96GB DDR5 · 2x NVMe</div>
+      <a href="https://www.amazon.com/dp/B0CXMYL7CH?tag=vmwaremadesim-20" class="hw-link" target="_blank" rel="nofollow noopener">Amazon <span class="disclosure">(affiliate)</span></a>
+    </div>
+    <div class="hw-item">
+      <div class="hw-name">Minisforum MS-01</div>
+      <div class="hw-spec">i9-13900H · 2x 10GbE · PCIe x16 · 3x M.2</div>
+      <a href="https://www.amazon.com/dp/B0CT2FPD2C?tag=vmwaremadesim-20" class="hw-link" target="_blank" rel="nofollow noopener">Amazon <span class="disclosure">(affiliate)</span></a>
+    </div>
+    <div class="hw-item">
+      <div class="hw-name">Samsung 990 Pro 2TB</div>
+      <div class="hw-spec">PCIe Gen4 · 7,450 MB/s · NVMe</div>
+      <a href="https://www.amazon.com/dp/B0BHJJ9Y77?tag=vmwaremadesim-20" class="hw-link" target="_blank" rel="nofollow noopener">Amazon <span class="disclosure">(affiliate)</span></a>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div>
+    © 2026 VMwareMadeSimple.com — Independent. Not affiliated with VMware or Broadcom.
+    <div class="aff-disclosure" style="margin-top: 0.3rem;">Some links are affiliate links. See our <a href="#">disclosure policy</a>.</div>
+  </div>
+  <div class="footer-links">
+    <a href="#">About</a>
+    <a href="mailto:contact@vmwaremadesimple.com">Contact</a>
+    <a href="/sitemap.xml">RSS</a>
+    <a href="#">Privacy</a>
+    <a href="#">Corrections</a>
+  </div>
+</footer>
+
+<script>
+function searchSite(q) {
+  if (q.length < 2) return;
+  // Simple client-side search — redirect to Google site search
+  if (event && event.key === 'Enter') {
+    window.location.href = 'https://www.google.com/search?q=site:vmwaremadesimple.com+' + encodeURIComponent(q);
+  }
+}
+</script>
 
 </body>
 </html>

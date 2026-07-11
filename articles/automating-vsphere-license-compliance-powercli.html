@@ -1,103 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Automating vSphere License Compliance Audits with VCF PowerCLI | VMware Made Simple</title>
-  <meta name="description" content="Broadcom's subscription model changed the compliance math. Here's a working VCF PowerCLI script to audit every host's core count and license key before Broadcom does it for you." />
-  <meta name="keywords" content="VCF PowerCLI, vSphere license compliance, Broadcom subscription audit, PowerCLI license script, VMware core count" />
-  <link rel="canonical" href="https://vmwaremadesimple.com/articles/automating-vsphere-license-compliance-powercli.html" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Automating vSphere License Compliance Audits with VCF PowerCLI | VMwareMadeSimple</title>
+<meta name="description" content="Broadcom's subscription model changed the compliance math. Here's a working VCF PowerCLI script to audit every host's core count and license key before Broadcom does it for you." />
+<meta name="keywords" content="VCF PowerCLI, vSphere license compliance, Broadcom subscription audit, PowerCLI license script, VMware core count" />
+<link rel="canonical" href="https://vmwaremadesimple.com/articles/automating-vsphere-license-compliance-powercli.html" />
+<link rel="stylesheet" href="/css/style.css" />
 
-  <meta property="og:title" content="Automating vSphere License Compliance Audits with VCF PowerCLI" />
-  <meta property="og:description" content="Broadcom's subscription model changed the compliance math. Here's a working VCF PowerCLI script to audit every host's core count and license key before Broadcom does it for you." />
-  <meta property="og:type" content="article" />
-  <meta property="og:url" content="https://vmwaremadesimple.com/articles/automating-vsphere-license-compliance-powercli.html" />
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2NDPP0ZTKC"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-2NDPP0ZTKC');
+</script>
 
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-2NDPP0ZTKC"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-2NDPP0ZTKC');
-  </script>
+<!-- Open Graph -->
+<meta property="og:title" content="Automating vSphere License Compliance Audits with VCF PowerCLI" />
+<meta property="og:description" content="Broadcom's subscription model changed the compliance math. Here's a working VCF PowerCLI script to audit every host's core count and license key before Broadcom does it for you." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://vmwaremadesimple.com/articles/automating-vsphere-license-compliance-powercli.html" />
 
-  <!-- Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "headline": "Automating vSphere License Compliance Audits with VCF PowerCLI",
-    "description": "Broadcom's subscription model changed the compliance math. Here's a working VCF PowerCLI script to audit every host's core count and license key before Broadcom does it for you.",
-    "author": { "@type": "Person", "name": "Rob Notaro" },
-    "publisher": { "@type": "Organization", "name": "VMware Made Simple" },
-    "datePublished": "2026-04-01",
-    "dateModified": "2026-04-01",
-    "mainEntityOfPage": "https://vmwaremadesimple.com/articles/automating-vsphere-license-compliance-powercli.html"
-  }
-  </script>
-
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: { extend: { colors: { brand: '#1a73e8', dark: '#0f172a', card: '#1e293b' } } }
-    }
-  </script>
-  <style>
-    body { font-family: 'Inter', system-ui, sans-serif; }
-    .gradient-text { background: linear-gradient(135deg, #1a73e8, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .prose h2 { margin-top: 2.5rem; margin-bottom: 1rem; }
-    .prose h3 { margin-top: 2rem; margin-bottom: 0.75rem; }
-    .prose p { margin-bottom: 1.25rem; line-height: 1.8; }
-    .prose table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
-    .prose th { text-align: left; padding: 0.75rem 1rem; border-bottom: 2px solid #334155; color: #94a3b8; font-size: 0.875rem; text-transform: uppercase; }
-    .prose td { padding: 0.75rem 1rem; border-bottom: 1px solid #1e293b; }
-    .prose tr:hover { background: #1e293b40; }
-    .callout { background: #1e293b; border-left: 4px solid #f59e0b; padding: 1.25rem 1.5rem; border-radius: 0 0.5rem 0.5rem 0; margin: 1.5rem 0; }
-    .callout-red { border-left-color: #ef4444; }
-    .callout-green { border-left-color: #22c55e; }
-    code { background: #0f172a; padding: 0.2em 0.4em; border-radius: 0.25rem; font-family: 'Menlo', 'Monaco', monospace; }
-    pre { background: #0f172a; padding: 1.5rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid #334155; }
-    pre code { padding: 0; background: none; }
-  </style>
+<!-- Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Automating vSphere License Compliance Audits with VCF PowerCLI",
+  "description": "Broadcom's subscription model changed the compliance math. Here's a working VCF PowerCLI script to audit every host's core count and license key before Broadcom does it for you.",
+  "author": { "@type": "Organization", "name": "VMwareMadeSimple Editorial" },
+  "publisher": { "@type": "Organization", "name": "VMwareMadeSimple" },
+  "datePublished": "2026-04-01",
+  "dateModified": "2026-04-01",
+  "mainEntityOfPage": "https://vmwaremadesimple.com/articles/automating-vsphere-license-compliance-powercli.html"
+}
+</script>
 </head>
-<body class="bg-dark text-slate-100">
+<body>
 
-  <!-- Nav -->
-  <nav class="border-b border-slate-800 sticky top-0 z-50 bg-dark/95 backdrop-blur">
-    <div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
-      <a href="/" class="text-xl font-bold text-white">VMware<span class="gradient-text">MadeSimple</span></a>
-      <a href="/#newsletter" class="bg-brand text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition text-sm font-medium">Get Updates</a>
+<!-- Masthead -->
+<div class="masthead">
+  <div class="masthead-inner">
+    <h1><a href="/">VMware<span class="red">MadeSimple</span></a></h1>
+    <div class="tagline">Independent VMware analysis for IT professionals. No vendor spin.</div>
+    <div class="credibility-bar">
+      <div class="creds">
+        <span><span class="dot">●</span> Independent</span>
+        <span><span class="dot">●</span> Sources linked</span>
+        <span><span class="dot">●</span> Updated weekly</span>
+        <span><span class="dot">●</span> Not affiliated with VMware/Broadcom</span>
+      </div>
+      <div class="social">
+        <a href="/sitemap.xml">RSS</a>
+        <a href="#newsletter">Newsletter</a>
+        <a href="mailto:contact@vmwaremadesimple.com">Contact</a>
+      </div>
     </div>
-  </nav>
+  </div>
+</div>
 
-  <!-- Article -->
-  <article class="max-w-4xl mx-auto px-6 py-12 prose">
-
-    <!-- Breadcrumb -->
-    <div class="text-sm text-slate-500 mb-6">
-      <a href="/" class="hover:text-slate-300">Home</a> → <span class="text-slate-400">PowerCLI</span>
+<!-- Category nav -->
+<div class="navbar">
+  <div class="navbar-inner">
+    <a href="/">Home</a>
+    <a href="/#licensing">Licensing</a>
+    <a href="/#migration">Migration</a>
+    <a href="/#vcf">VCF 9.1</a>
+    <a href="/#homelab">Home Lab</a>
+    <a href="/#powercli" class="active">PowerCLI</a>
+    <a href="/#alternatives">Alternatives</a>
+    <a href="/tools/price-calculator.html">Tools</a>
+    <div class="nav-search">
+      <input type="text" placeholder="Search..." onkeyup="searchSite(this.value)" />
     </div>
+  </div>
+</div>
 
-    <!-- Header -->
-    <div class="mb-10">
-      <div class="text-xs text-blue-400 font-medium uppercase tracking-wide mb-3">PowerCLI</div>
-      <h1 class="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight" style="-webkit-text-fill-color: white;">
-        Automating vSphere License Compliance Audits with VCF PowerCLI
-      </h1>
-      <p class="text-slate-400 text-lg">
-        April 1, 2026 · 12 min read
-      </p>
-    </div>
+<!-- Article header -->
+<div class="article-header">
+  <div class="breadcrumb"><a href="/">Home</a> → PowerCLI</div>
+  <div class="cat-label">PowerCLI</div>
+  <h1>Automating vSphere License Compliance Audits with VCF PowerCLI</h1>
+  <div class="byline">
+    <span>Updated Apr 1, 2026</span>
+    <span>·</span>
+    <span>10 min</span>
+    <span class="verified">Fact-checked</span>
+  </div>
+</div>
 
-    <!-- Article Body -->
+<!-- Article body -->
+<div class="article-body">
+
     <p>Broadcom changed the compliance rules and the tooling at the same time. If you're still running quarterly manual audits — or worse, relying on the old <code>VMware.PowerCLI</code> module — you're behind on both counts.</p>
 
-    <p>The 16-core per-socket minimum means each CPU is licensed for at least 16 cores. Separately, Broadcom introduced a 72-core per-order minimum in April 2025. The 72-core per-order minimum was partially reversed for some renewals, but still applies to new orders, subscription transitions, and tier changes. Add to that a 20% penalty for late renewals and Broadcom's telemetry actively phoning home on vSphere+ and cloud-connected deployments, and the cost of being out of compliance at renewal has gone up significantly. (<a href="https://www.crn.com/news/data-center/2025/broadcom-vmware-ups-minimum-core-purchase-substantially-levies-late-renewal-penalties" target="_blank" rel="noopener" class="text-blue-400 hover:text-blue-300 underline">CRN reporting from March 2025</a>)</p>
+    <p>The 16-core per-socket minimum means each CPU is licensed for at least 16 cores. Separately, Broadcom introduced a 72-core per-order minimum in April 2025. The 72-core per-order minimum was partially reversed for some renewals, but still applies to new orders, subscription transitions, and tier changes. Add to that a 20% penalty for late renewals and Broadcom's telemetry actively phoning home on vSphere+ and cloud-connected deployments, and the cost of being out of compliance at renewal has gone up significantly. (<a href="https://www.crn.com/news/data-center/2025/broadcom-vmware-ups-minimum-core-purchase-substantially-levies-late-renewal-penalties" target="_blank" rel="noopener">CRN reporting from March 2025</a>)</p>
 
     <p>The script I'm running pulls core counts, license keys, and host inventory from every production cluster, flags any host with an eval license or no assigned key, and exports a timestamped CSV. Takes 30 seconds on 40 hosts.</p>
 
-    <h2 class="text-2xl font-bold text-white">First: Update Your Module</h2>
+    <h2>First: Update Your Module</h2>
 
     <p><code>VMware.PowerCLI</code> was deprecated in June 2025 (version 13.3.0 was the last release). The replacement is <code>VCF.PowerCLI</code>, which Broadcom signed with a Broadcom certificate — not the old VMware one. If you're getting certificate warnings during install, that's why.</p>
 
@@ -116,13 +120,11 @@ Get-Module VCF.PowerCLI | Select-Object Name, Version</code></pre>
 
     <pre><code class="language-powershell">Install-Module -Name PackageManagement -Force -AllowClobber</code></pre>
 
-
-
-    <h2 class="text-2xl font-bold text-white">What We're Actually Checking</h2>
+    <h2>What We're Actually Checking</h2>
 
     <p>With Broadcom's subscription model, there are three things you need to know about every host:</p>
 
-    <ol class="list-decimal list-inside text-slate-300 space-y-3 mb-6">
+    <ol>
       <li><strong>Is it running an eval license?</strong> Eval keys are <code>00000-00000-00000-00000-00000</code>. If you have hosts on eval in production you've got a problem.</li>
       <li><strong>What license key is assigned?</strong> You need this for reconciliation against your Broadcom contract.</li>
       <li><strong>How many physical cores does this host have?</strong> Broadcom licenses per core. Your contracted core count needs to cover all physical cores across licensed hosts. The 72-core per-order minimum applies to new orders, subscription transitions, and tier changes (it was partially relaxed for some renewals).</li>
@@ -130,7 +132,7 @@ Get-Module VCF.PowerCLI | Select-Object Name, Version</code></pre>
 
     <p>There is no PowerCLI cmdlet that directly queries Broadcom's licensing backend and returns a subscription compliance status. Anyone who tells you otherwise is either hallucinating or referring to a feature that doesn't exist in the public tooling. What you <em>can</em> do — and what Broadcom's own audit process does — is inventory your deployed core counts and compare them to your contract.</p>
 
-    <h2 class="text-2xl font-bold text-white">The Script</h2>
+    <h2>The Script</h2>
 
     <p>Connect first:</p>
 
@@ -140,7 +142,7 @@ Connect-VIServer -Server $vcenter -Credential $credential</code></pre>
 
     <p>The account needs at minimum read access on the cluster and host objects. The built-in <strong>Read-Only</strong> role is sufficient for the inventory and license key queries below. You don't need admin rights for a read-only compliance audit.</p>
 
-    <h3 class="text-xl font-semibold text-white">Core Count and License Inventory</h3>
+    <h3>Core Count and License Inventory</h3>
 
     <pre><code class="language-powershell">$reportData = @()
 
@@ -178,15 +180,13 @@ foreach ($cluster in $clusters) {
 
     <p>A few notes on the core counting:</p>
 
-    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
+    <ul>
       <li><code>$vmHost.NumCpu</code> returns the total logical processor count (cores × HT threads). Do not use this for licensing.</li>
       <li><code>$view.Hardware.CpuInfo.NumCpuCores</code> returns physical cores. This is what Broadcom counts.</li>
       <li><code>NumCpuPackages</code> is the socket count. With Intel Xeon Scalable and AMD EPYC, you'll typically see 2 sockets with 16–64 physical cores each. Know your socket/core split before going into a renewal conversation.</li>
     </ul>
 
-
-
-    <h3 class="text-xl font-semibold text-white">Add the 72-Core Floor Check</h3>
+    <h3>Add the 72-Core Floor Check</h3>
 
     <pre><code class="language-powershell"># Group by cluster to get total licensed core count
 $clusterSummary = $reportData | 
@@ -206,7 +206,7 @@ $clusterSummary | Format-Table -AutoSize</code></pre>
 
     <p>The 72-core per-order minimum applies to new orders, subscription transitions, and tier changes (it was partially relaxed for some renewals), not per cluster — but running this check per cluster gives you the data you need if Broadcom asks for a breakdown by workload grouping.</p>
 
-    <h3 class="text-xl font-semibold text-white">Export and Alert</h3>
+    <h3>Export and Alert</h3>
 
     <pre><code class="language-powershell">$ts = Get-Date -Format "yyyyMMdd_HHmmss"
 $reportPath = "C:\Logs\vSphere_License_Audit_$ts.csv"
@@ -226,9 +226,7 @@ Write-Host "Full report: $reportPath"</code></pre>
 
     <p>If you want email or Teams alerting, wire up <code>Send-MailMessage</code> or a webhook call where the <code>Write-Host</code> lines are. I use a Teams webhook in prod — the JSON payload is about 10 lines, webhook endpoint comes from your Teams channel connector settings.</p>
 
-
-
-    <h2 class="text-2xl font-bold text-white">Scheduling It</h2>
+    <h2>Scheduling It</h2>
 
     <p>I run this daily at 6 AM via Windows Task Scheduler on a jump host that has access to vCenter. The script writes a dated CSV to a network share that my manager can pull if Broadcom ever asks for a usage report.</p>
 
@@ -241,7 +239,7 @@ Register-ScheduledTask -TaskName "vSphere License Audit" `
 
     <p>Don't alert on every run. If all hosts are licensed, you want silence. Alert only on <code>CRITICAL</code> status (eval key, no key). If you alert on everything, the ops team will route it to <code>/dev/null</code> within a week.</p>
 
-    <h2 class="text-2xl font-bold text-white">Troubleshooting</h2>
+    <h2>Troubleshooting</h2>
 
     <p><strong><code>Install-Module VCF.PowerCLI</code> fails with "No match was found"</strong><br/>
 Your PowerShellGet version doesn't support the Broadcom-signed package. Run <code>Install-Module -Name PowerShellGet -Force</code>, restart your PowerShell session, then retry.</p>
@@ -258,11 +256,11 @@ Excel's delimiter detection breaks on some regional settings. Open Excel → Dat
     <p><strong>The license key shows as all zeros on a host you know is licensed</strong><br/>
 The key is written to the host when vCenter assigns it. If the host temporarily lost connectivity to vCenter and was re-added, the key assignment doesn't always re-sync automatically. Re-assign the license from the vCenter license manager UI to force the write.</p>
 
-    <h2 class="text-2xl font-bold text-white">What This Doesn't Cover</h2>
+    <h2>What This Doesn't Cover</h2>
 
     <p>This script tells you what's deployed and what keys are assigned. It does not:</p>
 
-    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
+    <ul>
       <li>Verify that your assigned keys are valid against Broadcom's backend (that requires the Broadcom Customer Portal or a support case)</li>
       <li>Check vSAN entitlement consumption separately — VCF includes 1 TiB per core and VVF includes 0.25 TiB per core.</li>
       <li>Cover NSX licensing — NSX Manager has its own license status under System → Licenses</li>
@@ -270,51 +268,40 @@ The key is written to the host when vCenter assigns it. If the host temporarily 
 
     <p>If you're running VCF with SDDC Manager, SDDC Manager's <strong>Administration → Licensing</strong> view shows the consolidated picture across vSphere, vSAN, and NSX in one place. Worth checking there first before running individual component scripts.</p>
 
-    <!-- Newsletter CTA -->
-    <div class="mt-16 bg-card border border-slate-700 rounded-2xl p-10 text-center">
-      <h2 class="text-2xl font-bold text-white mb-3" style="-webkit-text-fill-color: white;">Stay ahead of the VMware changes</h2>
-      <p class="text-slate-400 mb-6">We're publishing detailed comparison guides, migration walkthroughs, and cost calculators. Get them in your inbox.</p>
-      <form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" onsubmit="handleSubscribe(event)">
-        <input type="email" placeholder="your@email.com" class="flex-1 bg-dark border border-slate-600 text-white px-5 py-3 rounded-xl focus:outline-none focus:border-blue-500 placeholder-slate-500" required />
-        <button type="submit" class="bg-brand text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-600 transition">Subscribe</button>
-      </form>
-    </div>
+</div>
 
-    <!-- Author -->
-    <div class="mt-12 pt-8 border-t border-slate-800">
-      <div class="flex items-start gap-4">
-        <div class="w-12 h-12 bg-slate-700 rounded-full flex items-center justify-center text-xl">🖥️</div>
-        <div>
-          <p class="text-white font-semibold">Written by Rob Notaro</p>
-          <p class="text-slate-400 text-sm mt-1">Senior infrastructure engineer specializing in VMware, Horizon VDI, and enterprise virtualization. Currently deploying Horizon 2512 and VCF in production environments.</p>
-        </div>
-      </div>
-    </div>
+<!-- Newsletter CTA -->
+<div class="newsletter-cta" id="newsletter">
+  <h3>Licensing Alerts</h3>
+  <p>Pricing changes, new guides, lab tips. No spam.</p>
+  <input type="email" placeholder="your@email.com" />
+  <button>Subscribe</button>
+</div>
 
-  </article>
+<!-- Footer -->
+<footer>
+  <div>
+    © 2026 VMwareMadeSimple.com — Independent. Not affiliated with VMware or Broadcom.
+    <div class="aff-disclosure" style="margin-top: 0.3rem;">Some links are affiliate links. See our <a href="#">disclosure policy</a>.</div>
+  </div>
+  <div class="footer-links">
+    <a href="#">About</a>
+    <a href="mailto:contact@vmwaremadesimple.com">Contact</a>
+    <a href="/sitemap.xml">RSS</a>
+    <a href="#">Privacy</a>
+    <a href="#">Corrections</a>
+  </div>
+</footer>
 
-  <!-- Footer -->
-  <footer class="border-t border-slate-800 mt-10">
-    <div class="max-w-4xl mx-auto px-6 py-10 flex flex-col md:flex-row items-center justify-between gap-4">
-      <div class="text-slate-400 text-sm">© 2026 VMwareMadeSimple.com — Independent. Not affiliated with VMware or Broadcom.</div>
-      <div class="flex gap-6 text-slate-400 text-sm">
-        <a href="/" class="hover:text-white transition">Home</a>
-        <a href="/#articles" class="hover:text-white transition">Articles</a>
-        <a href="/#newsletter" class="hover:text-white transition">Newsletter</a>
-      </div>
-    </div>
-    <div class="max-w-4xl mx-auto px-6 pb-8 text-slate-600 text-xs">
-      Some links on this site are affiliate links. If you purchase through them, we may earn a small commission at no extra cost to you.
-    </div>
-  </footer>
-
-  <script>
-    function handleSubscribe(e) {
-      e.preventDefault();
-      alert('Thanks! We\'ll be in touch soon.');
-      e.target.reset();
-    }
-  </script>
+<script>
+function searchSite(q) {
+  if (q.length < 2) return;
+  // Simple client-side search — redirect to Google site search
+  if (event && event.key === 'Enter') {
+    window.location.href = 'https://www.google.com/search?q=site:vmwaremadesimple.com+' + encodeURIComponent(q);
+  }
+}
+</script>
 
 </body>
 </html>

@@ -23,14 +23,10 @@
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://vmwaremadesimple.com/tools/price-calculator.html" />
 
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: { extend: { colors: { brand: '#1a73e8', dark: '#0f172a', card: '#1e293b' } } }
-    }
-  </script>
+<link rel="stylesheet" href="/css/style.css" />
+
   <style>
-    body { font-family: 'Inter', system-ui, sans-serif; }
+    /* Tool-specific styles — keep alongside shared CSS for calculator UI */
     .gradient-text { background: linear-gradient(135deg,#1a73e8,#60a5fa); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
     .card-hover { transition: transform .2s, box-shadow .2s; }
     .card-hover:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,.3); }
@@ -72,49 +68,90 @@
     /* Warning strip */
     .warn-strip { background:linear-gradient(135deg,#451a03,#78350f); border:1px solid #92400e; }
 
-    /* Sticky panel on large screens */
+    /* Calculator-specific layout overrides */
+    .calc-wrapper { max-width: 1000px; margin: 0 auto; padding: 1rem 1.5rem 2rem; }
+    .calc-grid { display: grid; grid-template-columns: 350px 1fr; gap: 2rem; align-items: start; }
     @media (min-width:1024px) { .sticky-panel { position:sticky; top:88px; } }
+    @media (max-width:768px) { .calc-grid { grid-template-columns: 1fr; gap: 1.5rem; } }
 
     /* Responsive tooltip on mobile */
     @media (max-width:640px) { .tip-box { left:0; transform:none; } .tip-box::after { left:12px; transform:none; } }
+
+    /* Calculator card styling (dark UI elements) */
+    .calc-card { background: #1e293b; border: 1px solid #334155; border-radius: 1rem; padding: 1.5rem; }
+    .calc-section-title { font-weight: 700; color: #fff; font-size: 1rem; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem; }
+    .calc-label { font-size: 0.875rem; font-weight: 500; color: #cbd5e1; display: flex; align-items: center; }
+    .calc-sublabel { font-size: 0.75rem; color: #64748b; }
+    .calc-value { color: #60a5fa; font-weight: 700; }
+    .calc-input-text { font-size: 0.875rem; font-weight: 500; color: #cbd5e1; margin-bottom: 0.625rem; display: flex; align-items: center; }
+    .calc-feature-label { font-size: 0.875rem; font-weight: 500; color: #cbd5e1; display: flex; align-items: center; }
+    .calc-feature-sub { font-size: 0.75rem; color: #64748b; }
+    .calc-footer-text { font-size: 0.875rem; color: #94a3b8; }
+    .calc-badge-text { font-size: 0.625rem; font-weight: 700; }
+    .calc-small { font-size: 0.75rem; color: #94a3b8; }
+    .calc-method-title { font-size: 0.875rem; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.75rem; }
   </style>
 </head>
-<body class="bg-dark text-slate-100 min-h-screen">
+<body>
 
-<!-- ===== NAV ===== -->
-<nav class="border-b border-slate-800 sticky top-0 z-50 bg-dark/95 backdrop-blur">
-  <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-    <a href="/" class="text-xl font-bold text-white">VMware<span class="gradient-text">MadeSimple</span></a>
-    <div class="hidden md:flex items-center gap-8 text-sm text-slate-400">
-      <a href="/#articles" class="hover:text-white transition">Articles</a>
-      <a href="/#tools" class="hover:text-white transition">Tools</a>
-      <a href="/tools/price-calculator.html" class="text-blue-400 font-medium">Price Calculator</a>
-      <a href="/#newsletter" class="bg-brand text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition font-medium">Get Updates</a>
+<!-- Masthead -->
+<div class="masthead">
+  <div class="masthead-inner">
+    <h1><a href="/">VMware<span class="red">MadeSimple</span></a></h1>
+    <div class="tagline">Independent VMware analysis for IT professionals. No vendor spin.</div>
+    <div class="credibility-bar">
+      <div class="creds">
+        <span><span class="dot">●</span> Independent</span>
+        <span><span class="dot">●</span> Sources linked</span>
+        <span><span class="dot">●</span> Updated weekly</span>
+        <span><span class="dot">●</span> Not affiliated with VMware/Broadcom</span>
+      </div>
+      <div class="social">
+        <a href="/sitemap.xml">RSS</a>
+        <a href="#newsletter">Newsletter</a>
+        <a href="mailto:contact@vmwaremadesimple.com">Contact</a>
+      </div>
     </div>
   </div>
-</nav>
-
-<!-- ===== HEADER ===== -->
-<div class="max-w-6xl mx-auto px-6 pt-10 pb-4">
-  <div class="flex items-center gap-2 text-sm text-slate-500 mb-4">
-    <a href="/" class="hover:text-slate-300 transition">Home</a> <span>›</span>
-    <a href="/#tools" class="hover:text-slate-300 transition">Tools</a> <span>›</span>
-    <span class="text-slate-400">Price Calculator</span>
-  </div>
-  <div class="inline-flex items-center gap-2 bg-blue-950 text-blue-400 text-sm px-4 py-2 rounded-full mb-5 border border-blue-800">
-    <span class="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></span> Pricing updated July 2026
-  </div>
-  <h1 class="text-4xl md:text-5xl font-bold text-white mb-3 leading-tight">
-    Virtualization <span class="gradient-text">Price Calculator</span>
-  </h1>
-  <p class="text-lg text-slate-400 max-w-3xl mb-8">
-    Enter your environment specs and see an honest side-by-side cost comparison across five platforms — including the 72-core minimum trap, 3-year TCO, and every hidden gotcha Broadcom doesn't advertise.
-  </p>
 </div>
 
+<!-- Category nav -->
+<div class="navbar">
+  <div class="navbar-inner">
+    <a href="/">Home</a>
+    <a href="/#licensing">Licensing</a>
+    <a href="/#migration">Migration</a>
+    <a href="/#vcf">VCF 9.1</a>
+    <a href="/#homelab">Home Lab</a>
+    <a href="/#powercli">PowerCLI</a>
+    <a href="/#alternatives">Alternatives</a>
+    <a href="/tools/price-calculator.html" class="active">Tools</a>
+    <div class="nav-search">
+      <input type="text" placeholder="Search..." onkeyup="searchSite(this.value)" />
+    </div>
+  </div>
+</div>
+
+<!-- ===== HEADER ===== -->
+<div class="article-header">
+  <div class="breadcrumb"><a href="/">Home</a> → <a href="/#tools">Tools</a> → Price Calculator</div>
+  <div class="cat-label">Tools</div>
+  <h1>Virtualization Price Calculator</h1>
+  <div class="byline">
+    <span>Pricing updated July 2026</span>
+    <span>·</span>
+    <span>5 platforms compared</span>
+    <span class="verified">Fact-checked</span>
+  </div>
+</div>
+
+<div class="calc-wrapper" style="margin-top: 1rem;">
+  <p style="font-size: 1.05rem; color: #3d4450; line-height: 1.65; margin-bottom: 1.5rem;">
+    Enter your environment specs and see an honest side-by-side cost comparison across five platforms — including the 72-core minimum trap, 3-year TCO, and every hidden gotcha Broadcom doesn't advertise.
+  </p>
+
 <!-- ===== MAIN LAYOUT ===== -->
-<div class="max-w-6xl mx-auto px-6 pb-20">
-  <div class="grid lg:grid-cols-[350px_1fr] gap-8 items-start">
+<div class="calc-grid">
 
     <!-- ===== LEFT: INPUTS ===== -->
     <div class="sticky-panel space-y-5">
@@ -284,19 +321,28 @@
     </div>
   </div>
 </div>
+</div><!-- /calc-wrapper -->
 
-<!-- ===== FOOTER ===== -->
-<footer class="border-t border-slate-800 mt-10">
-  <div class="max-w-6xl mx-auto px-6 py-10 flex flex-col md:flex-row items-center justify-between gap-4">
-    <div class="text-slate-400 text-sm">© 2026 VMwareMadeSimple.com — Independent. Not affiliated with VMware or Broadcom.</div>
-    <div class="flex gap-6 text-slate-400 text-sm">
-      <a href="/#articles" class="hover:text-white transition">Articles</a>
-      <a href="/#tools" class="hover:text-white transition">Tools</a>
-      <a href="/#newsletter" class="hover:text-white transition">Newsletter</a>
-    </div>
+<!-- Newsletter CTA -->
+<div class="newsletter-cta" id="newsletter">
+  <h3>Licensing Alerts</h3>
+  <p>Pricing changes, new guides, lab tips. No spam.</p>
+  <input type="email" placeholder="your@email.com" />
+  <button>Subscribe</button>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div>
+    © 2026 VMwareMadeSimple.com — Independent. Not affiliated with VMware or Broadcom.
+    <div class="aff-disclosure" style="margin-top: 0.3rem;">Some links are affiliate links. See our <a href="#">disclosure policy</a>.</div>
   </div>
-  <div class="max-w-6xl mx-auto px-6 pb-8 text-slate-600 text-xs">
-    Some links on this site are affiliate links. If you purchase through them, we may earn a small commission at no extra cost to you.
+  <div class="footer-links">
+    <a href="#">About</a>
+    <a href="mailto:contact@vmwaremadesimple.com">Contact</a>
+    <a href="/sitemap.xml">RSS</a>
+    <a href="#">Privacy</a>
+    <a href="#">Corrections</a>
   </div>
 </footer>
 
@@ -943,5 +989,15 @@ function renderRec(cards) {
   txt.innerHTML = recs.map(r => `<p class="mb-2">${r}</p>`).join('');
 }
 </script>
+
+<script>
+function searchSite(q) {
+  if (q.length < 2) return;
+  if (event && event.key === 'Enter') {
+    window.location.href = 'https://www.google.com/search?q=site:vmwaremadesimple.com+' + encodeURIComponent(q);
+  }
+}
+</script>
+
 </body>
 </html>

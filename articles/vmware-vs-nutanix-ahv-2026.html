@@ -1,490 +1,468 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VMware vs Nutanix AHV: An Honest Engineer's Comparison (2026) | VMware Made Simple</title>
-  <meta name="description" content="A straight-talk comparison of VMware VCF/vSphere vs Nutanix AHV for enterprise IT. Covers architecture, licensing costs, migration realities, VDI, networking, and who should actually switch." />
-  <meta name="keywords" content="VMware vs Nutanix, Nutanix AHV comparison, VMware alternative 2026, Nutanix NCI pricing, VMware Broadcom migration, HCI comparison, AHV vs ESXi, Nutanix AHV review" />
-  <link rel="canonical" href="https://vmwaremadesimple.com/articles/vmware-vs-nutanix-ahv-2026.html" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VMware vs Nutanix AHV: An Honest Engineer's Comparison (2026) | VMwareMadeSimple</title>
+<meta name="description" content="A straight-talk comparison of VMware VCF/vSphere vs Nutanix AHV for enterprise IT. Covers architecture, licensing costs, migration realities, VDI, networking, and who should actually switch." />
+<meta name="keywords" content="VMware vs Nutanix, Nutanix AHV comparison, VMware alternative 2026, Nutanix NCI pricing, VMware Broadcom migration, HCI comparison, AHV vs ESXi, Nutanix AHV review" />
+<link rel="canonical" href="https://vmwaremadesimple.com/articles/vmware-vs-nutanix-ahv-2026.html" />
+<link rel="stylesheet" href="/css/style.css" />
 
-  <meta property="og:title" content="VMware vs Nutanix AHV: An Honest Engineer's Comparison (2026)" />
-  <meta property="og:description" content="A straight-talk comparison of VMware VCF/vSphere vs Nutanix AHV for enterprise IT. Covers architecture, licensing costs, migration realities, VDI, networking, and who should actually switch." />
-  <meta property="og:type" content="article" />
-  <meta property="og:url" content="https://vmwaremadesimple.com/articles/vmware-vs-nutanix-ahv-2026.html" />
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2NDPP0ZTKC"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-2NDPP0ZTKC');
+</script>
 
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-2NDPP0ZTKC"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-2NDPP0ZTKC');
-  </script>
-
-  <!-- Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "headline": "VMware vs Nutanix AHV: An Honest Engineer's Comparison (2026)",
-    "description": "A straight-talk comparison of VMware VCF/vSphere vs Nutanix AHV for enterprise IT. Covers architecture, licensing costs, migration realities, VDI, networking, and who should actually switch.",
-    "author": { "@type": "Person", "name": "Rob Notaro" },
-    "publisher": { "@type": "Organization", "name": "VMware Made Simple" },
-    "datePublished": "2026-03-08",
-    "dateModified": "2026-03-08",
-    "mainEntityOfPage": "https://vmwaremadesimple.com/articles/vmware-vs-nutanix-ahv-2026.html"
-  }
-  </script>
-
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: { extend: { colors: { brand: '#1a73e8', dark: '#0f172a', card: '#1e293b' } } }
-    }
-  </script>
-  <style>
-    body { font-family: 'Inter', system-ui, sans-serif; }
-    .gradient-text { background: linear-gradient(135deg, #1a73e8, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .prose h2 { margin-top: 2.5rem; margin-bottom: 1rem; }
-    .prose h3 { margin-top: 2rem; margin-bottom: 0.75rem; }
-    .prose p { margin-bottom: 1.25rem; line-height: 1.8; }
-    .prose table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
-    .prose th { text-align: left; padding: 0.75rem 1rem; border-bottom: 2px solid #334155; color: #94a3b8; font-size: 0.875rem; text-transform: uppercase; }
-    .prose td { padding: 0.75rem 1rem; border-bottom: 1px solid #1e293b; vertical-align: top; }
-    .prose tr:hover { background: #1e293b40; }
-    .callout { background: #1e293b; border-left: 4px solid #f59e0b; padding: 1.25rem 1.5rem; border-radius: 0 0.5rem 0.5rem 0; margin: 1.5rem 0; }
-    .callout-red { border-left-color: #ef4444; }
-    .callout-green { border-left-color: #22c55e; }
-    .callout-blue { border-left-color: #3b82f6; }
-    .win-vmware { color: #60a5fa; font-weight: 600; }
-    .win-nutanix { color: #34d399; font-weight: 600; }
-    .win-tie { color: #94a3b8; font-weight: 600; }
-    .source-note { font-size: 0.8rem; color: #64748b; margin-top: -0.75rem; margin-bottom: 1rem; }
-  </style>
+<!-- Open Graph -->
+<meta property="og:title" content="VMware vs Nutanix AHV: An Honest Engineer's Comparison (2026)" />
+<meta property="og:description" content="A straight-talk comparison of VMware VCF/vSphere vs Nutanix AHV for enterprise IT. Covers architecture, licensing costs, migration realities, VDI, networking, and who should actually switch." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://vmwaremadesimple.com/articles/vmware-vs-nutanix-ahv-2026.html" />
 </head>
-<body class="bg-dark text-slate-100">
-
-  <!-- Nav -->
-  <nav class="border-b border-slate-800 sticky top-0 z-50 bg-dark/95 backdrop-blur">
-    <div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
-      <a href="/" class="text-xl font-bold text-white">VMware<span class="gradient-text">MadeSimple</span></a>
-      <a href="/#newsletter" class="bg-brand text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition text-sm font-medium">Get Updates</a>
-    </div>
-  </nav>
-
-  <!-- Article -->
-  <article class="max-w-4xl mx-auto px-6 py-12 prose">
-
-    <!-- Breadcrumb -->
-    <div class="text-sm text-slate-500 mb-6">
-      <a href="/" class="hover:text-slate-300">Home</a> → <span class="text-slate-400">VMware vs Competitors</span>
-    </div>
-
-    <!-- Header -->
-    <div class="mb-10">
-      <div class="text-xs text-blue-400 font-medium uppercase tracking-wide mb-3">VMware vs Competitors · Series #1</div>
-      <h1 class="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight" style="-webkit-text-fill-color: white;">
-        VMware vs Nutanix AHV: An Honest Engineer's Comparison
-      </h1>
-      <p class="text-slate-400 text-lg">
-        March 8, 2026 · 15 min read
-      </p>
-    </div>
-
-    <!-- ARTICLE BODY -->
-
-    <p>
-      I've evaluated Nutanix as a VMware replacement for three different clients this year. In two cases the math worked. In one it didn't — because they had NSX deployed and nobody told the Nutanix sales rep. Here's the honest breakdown.
-    </p>
-
-    <p>
-      Nutanix has been aggressive — and rightfully so. After AT&T publicly revealed that Broadcom had offered them a <a href="https://www.theregister.com/2024/10/01/att_broadcom_filings_update/" target="_blank" rel="noopener" class="text-blue-400 hover:text-blue-300 underline">1,050% annual price increase</a> (AT&T EVP Susan Johnson literally wrote it in a letter to Hock Tan in August 2024), the floodgates opened. Forrester pegged average customer price spikes at 500%. The suit settled late 2024 with undisclosed terms, but the damage to Broadcom's reputation was done.
-    </p>
-
-    <p>
-      Nutanix added <a href="https://www.crn.com/news/data-center/2025/bye-bye-broadcom-nutanix-adds-2-700-new-customers-amid-channel-driven-share-grab" target="_blank" rel="noopener" class="text-blue-400 hover:text-blue-300 underline">over 2,700 former VMware customers in FY2025</a> — revenue up 18% — including enterprises like Toshiba who cited a ~10x price hike as the trigger. The market has moved.
-    </p>
-
-    <p>
-      Nutanix sales teams position AHV as a full VMware replacement at lower cost. That is partially true — and partially not, depending on which VMware features are in use. Having deployed both platforms, I can identify where Nutanix has real advantages, where VMware retains a significant lead, and which organizations are good candidates for a switch versus which should stay put.
-    </p>
-
-    <!-- SECTION 1: ARCHITECTURE -->
-    <h2 class="text-2xl font-bold text-white">Architecture: Two Fundamentally Different Approaches</h2>
-
-    <h3 class="text-xl font-semibold text-white">VMware: The Modular Stack</h3>
-
-    <p>
-      ESXi is a Type-1 bare-metal hypervisor, first released in 2001. vCenter Server is the management plane — DRS, HA, vMotion, and vSAN all run through it. The stack is modular: ESXi with external storage, vSAN added for HCI, NSX layered on for SDN. That modularity is both a strength and a cost center, because each layer historically came with its own license.
-    </p>
-
-    <p>
-      Under Broadcom, the preferred model is now VMware Cloud Foundation (VCF) — the full stack in a single subscription. VCF 9.1 includes vSphere/ESXi 9.1, vCenter, vSAN (1 TiB per licensed core), NSX, HCX, VCF Operations/Automation, VCF Fleet Services, and the updated VCF Operations License Server workflow in one SKU. VVF (vSphere Foundation) is the cut-down version — you get vSAN at 0.25 TiB/core but <strong class="text-slate-200">no NSX, no HCX, no Aria Automation</strong> — and it's still a per-core subscription with a 16-core minimum per socket. <em>(Sources: <a href="https://www.vmware.com/docs/vmware-cloud-foundation-9-0-feature-comparison-and-upgrade-paths" target="_blank" rel="noopener" class="text-blue-400 hover:text-blue-300">VCF 9.x Feature Comparison</a>; <a href="https://www.vmware.com/docs/vmw-datasheet-vsphere-product-line-comparison" target="_blank" rel="noopener" class="text-blue-400 hover:text-blue-300">vSphere Product Line Comparison</a>)</em>
-    </p>
-
-    <p>
-      One important note for anyone still on perpetual: New perpetual VMware licenses ended in early 2024. Existing perpetual licenses with active SnS are still honored under contract terms, but new purchases are subscription-based. Broadcom's current subscription lineup includes VCF, VVF, vSphere Standard, and vSphere Enterprise Plus. <em>(Source: vSphere Product Line Comparison datasheet, vmware.com)</em>
-    </p>
-
-    <h3 class="text-xl font-semibold text-white">Nutanix AHV: HCI-First, Storage-Centric</h3>
-
-    <p>
-      Nutanix started as a storage company that happened to need a hypervisor. AHV is built on Linux, QEMU, and KVM — not a custom proprietary kernel. Communication between AOS (the storage OS) and the hypervisor happens through libvirtd. The Controller VM (CVM) runs as a guest but uses PCI passthrough to get direct access to local disks, bypassing the hypervisor entirely for storage I/O. <em>(Source: <a href="https://www.nutanixbible.com/5a-book-of-ahv-architecture.html" target="_blank" rel="noopener" class="text-blue-400 hover:text-blue-300">Nutanix Bible — AHV Architecture</a>)</em>
-    </p>
-
-    <p>
-      The management story is Prism: Prism Element is per-cluster, Prism Central manages multiple clusters and is where you get the advanced features (policies, analytics, automation). AHV is free when you buy Nutanix — there's no separate hypervisor license. The hyperconverged storage (AOS/Distributed Storage Fabric) is what you're actually paying for.
-    </p>
-
-    <p>
-      Cluster maximums: 32 nodes per AHV cluster, VMs up to 4.5 TB RAM and 64 TB virtual disk size. <em>(Source: Nutanix Bible, AOS 6.8)</em>
-    </p>
-
-    <div class="callout callout-blue">
-      <strong class="text-blue-400">Architectural heritage:</strong> VMware started as a compute platform and added storage (vSAN) later. Nutanix started as a storage platform and added compute (AHV). That lineage shows up in where each platform is strongest — VMware in compute orchestration (DRS, vMotion, FT), Nutanix in storage features (dedup, compression, tiering, erasure coding).
-    </div>
-
-    <!-- SECTION 2: LICENSING -->
-    <h2 class="text-2xl font-bold text-white">Licensing & Cost: Reading Past the Marketing</h2>
-
-    <h3 class="text-xl font-semibold text-white">Nutanix NCI Pricing</h3>
-
-    <p>
-      Nutanix Cloud Infrastructure (NCI) is their core platform SKU — it covers AHV, AOS storage, and Prism. Pricing is <strong class="text-slate-200">per physical CPU core</strong>, and you must license every core in the cluster. Three tiers:
-    </p>
-
-    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-4">
-      <li><strong>NCI Starter:</strong> Core features, max 12-node cluster, no deduplication, no microsegmentation (add-on), no multi-site DR beyond async at 1hr+ RPO.</li>
-      <li><strong>NCI Pro:</strong> Dedup, encryption (from NCI 7.3+), erasure coding, multi-site async DR, VM affinity policies, cross-cluster live migration. Microsegmentation is still an add-on license.</li>
-      <li><strong>NCI Ultimate:</strong> Sync replication (RPO=0), NearSync (1–15 min RPO), advanced runbook automation, full multi-site DR stack. Metro Availability requires this tier plus an Advanced Replication add-on.</li>
-    </ul>
-
-    <p class="source-note"><em>Source: <a href="https://www.nutanix.com/products/cloud-platform/software-options" target="_blank" rel="noopener" class="text-blue-400">Nutanix Cloud Platform Software Options (nutanix.com, Feb 2025)</a></em></p>
-
-    <p>
-      Real-world NCI Pro pricing from community reports: approximately <strong class="text-slate-200">$300/core on renewal</strong> as of March 2025 for existing customers. New purchase government pricing was reported at ~$1,500/core in 2022 via SHI. <em>(Sources: <a href="https://www.reddit.com/r/sysadmin/comments/1j5wm30/nutanix_pricing/" target="_blank" rel="noopener" class="text-blue-400 hover:text-blue-300">r/sysadmin Nutanix Pricing thread, March 2025</a>; <a href="https://www.reddit.com/r/sysadmin/comments/1katioa/" target="_blank" rel="noopener" class="text-blue-400 hover:text-blue-300">r/sysadmin NCI Pro quote thread, April 2025</a>)</em>
-    </p>
-
-    <div class="callout callout-blue">
-      <strong class="text-blue-400">Pricing caveat:</strong> The $300/core figure is based on community reports from March 2025 — over a year old. Nutanix pricing can change with each renewal cycle and varies significantly by deal size, tier, and region. <strong class="text-slate-200">Verify current pricing directly with Nutanix or an authorized reseller before making budget decisions.</strong>
-    </div>
-
-    <p>
-      One genuine advantage: 1 TiB of Nutanix Unified Storage (NUS Pro) is included free per NCI cluster. AHV itself carries no additional license fee. <em>(Source: nutanix.com NCI datasheet, Sept 2025)</em>
-    </p>
-
-    <h3 class="text-xl font-semibold text-white">VMware VCF Pricing</h3>
-
-    <p>
-      VCF 9.1 is per-core subscription with a 16-core minimum per CPU socket. VCF gets you everything: vSphere/ESXi 9.1, vSAN at 1 TiB/core, NSX, HCX, VCF Operations/Automation, Fleet Services, and the 9.1 license-server workflow. VVF drops to 0.25 TiB vSAN/core and cuts NSX, HCX, and Aria Automation entirely. The pricing model is unchanged from VCF 9.0. <em>(Source: VCF 9.x Feature Comparison, Broadcom)</em>
-    </p>
-
-    <p>
-      Broadcom doesn't publish list prices publicly, and street pricing varies wildly by size and negotiation. What's well-documented is the direction of travel: customers are reporting 2–10x increases on renewal. That's not opinion — AT&T put the 1,050% number in a federal court filing.
-    </p>
-
-    <h3 class="text-xl font-semibold text-white">The Honest Licensing Comparison</h3>
-
-    <p>
-      Nutanix licensing does consolidate compute, storage, and the hypervisor into one SKU — that part is simpler. The per-core model is structurally the same as VMware's, though, and add-on licenses exist (microsegmentation, advanced replication). Renewal dynamics have been more predictable than Broadcom's through FY2025, but the per-core subscription structure means the same pricing leverage exists if Nutanix chooses to exercise it.
-    </p>
-
-    <!-- FEATURE COMPARISON TABLE -->
-    <h2 class="text-2xl font-bold text-white">Feature-by-Feature Comparison</h2>
-
-    <p>This table compares VMware VCF 9.1 (the full-stack product) against Nutanix NCI Pro (the most common enterprise tier). Where VVF differs materially from VCF, that's called out.</p>
-
-    <table>
-      <thead>
-        <tr>
-          <th>Feature</th>
-          <th>VMware (VCF 9.1)</th>
-          <th>Nutanix (NCI Pro / AHV)</th>
-          <th>Edge</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td class="font-medium text-slate-300">Hypervisor</td>
-          <td>ESXi — proprietary Type-1; released 2001, continuously updated</td>
-          <td>AHV — KVM/QEMU/Linux; open-source base; free with NCI</td>
-          <td class="win-tie">Tie</td>
-        </tr>
-        <tr>
-          <td class="font-medium text-slate-300">Management UI</td>
-          <td>vCenter — feature-dense but complex; significant learning curve; requires separate appliance VM (VCSA)</td>
-          <td>Prism Central — modern, clean UI; generally easier to learn; single pane for multi-cluster</td>
-          <td class="win-nutanix">Nutanix</td>
-        </tr>
-        <tr>
-          <td class="font-medium text-slate-300">Live Migration</td>
-          <td>vMotion — cross-vCenter, long-distance, Direct Path I/O passthrough. Storage vMotion independent. Shipped since ESX 2 (2003).</td>
-          <td>AHV live migration — functional, works well within cluster. Cross-cluster live migration requires NCI Pro+. Processor EVC equivalent built-in.</td>
-          <td class="win-vmware">VMware</td>
-        </tr>
-        <tr>
-          <td class="font-medium text-slate-300">HA / Failover</td>
-          <td>vSphere HA — granular restart priorities, admission control policies, Proactive HA with hardware awareness (Ent Plus+)</td>
-          <td>AHV HA — guaranteed failover (NCI Pro+), VM restart on host failure. Works well but less tunable than vSphere HA.</td>
-          <td class="win-vmware">VMware</td>
-        </tr>
-        <tr>
-          <td class="font-medium text-slate-300">Automated Workload Balancing</td>
-          <td>DRS — fully automated load balancing, storage DRS, DPM for power management. Shipped since vSphere 4 (2009), with predictive DRS added in 6.5.</td>
-          <td>ADS (Acropolis Dynamic Scheduler) — handles basic balancing. Less sophisticated than DRS; no storage-tier equivalent at DRS depth.</td>
-          <td class="win-vmware">VMware</td>
-        </tr>
-        <tr>
-          <td class="font-medium text-slate-300">Built-in HCI Storage</td>
-          <td>vSAN — solid, but requires VVF/VCF to access. VVF = 0.25 TiB/core, VCF = 1 TiB/core. External storage (FC, iSCSI, NFS, NVMe) also fully supported.</td>
-          <td>AOS / Distributed Storage Fabric — core to the platform. Dedup, compression, erasure coding, tiering all built-in (Pro+). Runs on commodity hardware.</td>
-          <td class="win-nutanix">Nutanix</td>
-        </tr>
-        <tr>
-          <td class="font-medium text-slate-300">Software-Defined Networking</td>
-          <td>NSX (VCF only) — full overlay networking, distributed routing, microsegmentation, L7 firewall, IDS/IPS, BGP/OSPF. Industry-leading depth.</td>
-          <td>Flow Network Security — microsegmentation, overlay networking (Pro+). Solid for east-west policy. Does not match NSX for routing, load balancing, or L7 capabilities. VVF has NO NSX.</td>
-          <td class="win-vmware">VMware (VCF)</td>
-        </tr>
-        <tr>
-          <td class="font-medium text-slate-300">VDI / EUC</td>
-          <td>Omnissa Horizon on ESXi — GA, full feature set. App Volumes, DEM, instant clones, Blast Extreme. Largest VDI install base globally per IDC 2024 VDI market share.</td>
-          <td>Nutanix Frame (cloud DaaS) + Omnissa Horizon on AHV — <strong>GA as of December 2025</strong>. vGPU, App Volumes, DEM, FIPS, and CPA supported. (Source: Nutanix Community blog, Dec 2025)</td>
-          <td class="win-vmware">VMware</td>
-        </tr>
-        <tr>
-          <td class="font-medium text-slate-300">Backup / DR Integration</td>
-          <td>Veeam, Commvault, Zerto, Cohesity, Rubrik, Veritas — all have feature-complete VMware integrations with multi-year release histories. SRM is purpose-built VMware DR orchestration.</td>
-          <td>Veeam supports AHV. Zerto does NOT support Nutanix. Commvault/Cohesity/Rubrik have varying AHV support. Built-in async/sync replication in NCI covers many use cases.</td>
-          <td class="win-vmware">VMware</td>
-        </tr>
-        <tr>
-          <td class="font-medium text-slate-300">Multi-Hypervisor Support</td>
-          <td>ESXi only. VMware hardware compatibility is broad but the hypervisor is VMware's.</td>
-          <td>NCI-D variant supports ESXi, Hyper-V alongside AHV. NCI can run on Nutanix hardware, OEM (Dell, HPE, Lenovo), or third-party servers.</td>
-          <td class="win-nutanix">Nutanix</td>
-        </tr>
-        <tr>
-          <td class="font-medium text-slate-300">Container / Kubernetes</td>
-          <td>vSphere Kubernetes Service (VKS) — included in VVF/VCF. Native Tanzu integration.</td>
-          <td>Nutanix Kubernetes Platform (NKP) — Starter included in Pro/Ultimate. NKP Pro/Ultimate are add-ons.</td>
-          <td class="win-tie">Tie</td>
-        </tr>
-        <tr>
-          <td class="font-medium text-slate-300">Fault Tolerance (synchronous VM mirroring)</td>
-          <td>Fault Tolerance — fully synchronous VM mirroring. Up to 8 vCPU (Ent Plus).</td>
-          <td>Metro Availability / Sync Replication — NCI Ultimate + Adv Replication add-on. Different model but achieves similar RPO=0 outcome.</td>
-          <td class="win-vmware">VMware</td>
-        </tr>
-        <tr>
-          <td class="font-medium text-slate-300">Talent Pool</td>
-          <td>VCP/VCAP ecosystem is enormous. Virtually every enterprise MSP has VMware-certified engineers. Training material is abundant.</td>
-          <td>Nutanix NCP/NCE certifications exist but pool is smaller. Growing fast, but you'll have fewer candidates and higher onboarding cost.</td>
-          <td class="win-vmware">VMware</td>
-        </tr>
-        <tr>
-          <td class="font-medium text-slate-300">Licensing Transparency</td>
-          <td>Per-core subscription, 16-core minimum. Perpetual dead. Prices opaque and subject to Broadcom's renewal use.</td>
-          <td>Per-core subscription. More predictable historically. Pricing trending up but from a lower base and with less shock-factor on renewal.</td>
-          <td class="win-nutanix">Nutanix</td>
-        </tr>
-        <tr>
-          <td class="font-medium text-slate-300">API / Automation</td>
-          <td>vSphere REST APIs, PowerCLI, Aria Automation (VCF only), Terraform provider. Large ecosystem with extensive community modules.</td>
-          <td>Prism REST API v2/v3, Nutanix Terraform provider, Python/Go SDKs. Good coverage; Prism API is well-documented.</td>
-          <td class="win-tie">Tie</td>
-        </tr>
-        <tr>
-          <td class="font-medium text-slate-300">Edge / Small Deployments</td>
-          <td>VCF 9.1 minimum: 3 hosts (vSAN) or 2 hosts (external storage) using consolidated architecture. Standard Architecture = 7 hosts.</td>
-          <td>3-node minimum for standard AHV cluster. 2-node clusters supported. NCI-Edge tier for true edge/robo use cases.</td>
-          <td class="win-nutanix">Nutanix</td>
-        </tr>
-      </tbody>
-    </table>
-    <p class="source-note"><em>Sources: VCF 9.x Feature Comparison (Broadcom); vSphere Product Line Comparison (Broadcom); Nutanix Cloud Platform Software Options (nutanix.com, Feb 2025); Nutanix Bible AHV Architecture; Omnissa blog (Aug 2025).</em></p>
-
-    <!-- SECTION: WHERE NUTANIX WINS -->
-    <h2 class="text-2xl font-bold text-white">Where Nutanix Genuinely Wins</h2>
-
-    <h3 class="text-xl font-semibold text-white">1. Built-in Storage Without the Nickel-and-Diming</h3>
-    <p>
-      vSAN is legitimately good — but under VVF you only get 0.25 TiB per licensed core, and under vanilla vSphere Enterprise Plus you get nothing. On Nutanix, AOS is the whole point. Dedup, compression, erasure coding, tiering, and data protection are what you bought — not bolted on. If you're an HCI shop running general-purpose workloads, you're going to feel that difference in your BOM.
-    </p>
-
-    <h3 class="text-xl font-semibold text-white">2. Prism Is a Better Management Experience</h3>
-    <p>
-      Prism Central is a more modern day-to-day management interface than vCenter. It surfaces cluster health, VM status, and storage metrics in fewer clicks. vCenter exposes more granular controls — DRS tuning, admission control, distributed switch configuration — but the UI reflects two decades of accumulated design decisions, and new operators take longer to become productive in it. Teams that spend limited time in the management console will generally onboard faster on Prism; teams that need deep control will need vCenter's depth regardless of the learning curve.
-    </p>
-
-    <h3 class="text-xl font-semibold text-white">3. Licensing Predictability (For Now)</h3>
-    <p>
-      Nutanix has not replicated Broadcom's renewal dynamics. Through FY2025, renewals have been more predictable, and revenue growth has come primarily from new customer acquisition (2,700+ new customers in FY2025 per CRN reporting). That said, Nutanix is a public company with quarterly earnings pressure — there is no structural guarantee against future pricing changes. Build an exit strategy for any vendor.
-    </p>
-
-    <h3 class="text-xl font-semibold text-white">4. Commodity Hardware Flexibility</h3>
-    <p>
-      You can run Nutanix on Dell PowerEdge, HPE ProLiant, Lenovo ThinkSystem, or Nutanix-branded NX nodes. This is a genuine advantage for orgs that have preferred hardware vendors or want to avoid Nutanix-branded appliance pricing. VMware runs on nearly everything too, but vSAN has its own hardware compatibility requirements and NVMe tiering is pickier.
-    </p>
-
-    <h3 class="text-xl font-semibold text-white">5. The Starter Point for HCI is Lower</h3>
-    <p>
-      Three nodes produce a functional AHV cluster. VCF's minimum footprint for a Standard Architecture is 7 hosts (4 management + 3 workload), though VCF 9.1's consolidated architecture reduces this to 3 hosts (vSAN) or 2 hosts (external storage). Nutanix also supports 2-node clusters and has an NCI-Edge tier for remote/branch deployments. For smaller sites, Nutanix requires less hardware to get started.
-    </p>
-
-    <!-- SECTION: WHERE VMware STILL WINS -->
-    <h2 class="text-2xl font-bold text-white">Where VMware Still Has a Meaningful Edge</h2>
-
-    <h3 class="text-xl font-semibold text-white">1. The ISV Ecosystem Is Not Close</h3>
-    <p>
-      Twenty years of market dominance means almost every enterprise software vendor tests against VMware first. Backup tools (Veeam, Commvault, Rubrik, Cohesity, Veritas), DR tools (Zerto — which does not support Nutanix), monitoring platforms, security tools, storage array integrations — the VMware ISV ecosystem is broad and deeply integrated. Veeam works well on AHV (v12+ native support), but do not assume every tool in the stack has parity AHV support. <strong class="text-slate-200">Check each ISV's AHV support matrix before committing.</strong> <em>(Source: r/vmware community discussion, confirmed Zerto no Nutanix support, Oct 2024)</em>
-    </p>
-
-    <h3 class="text-xl font-semibold text-white">2. NSX vs. Flow — This Is Not a Tie</h3>
-    <p>
-      If you're running NSX today — distributed routing, L7 firewall, IDS/IPS, BGP peer relationships — Nutanix Flow is not a replacement. Flow does microsegmentation well. It does not do distributed routing, load balancing, or the advanced security features NSX provides. To be fair, VVF doesn't include NSX either — that's VCF territory. But if NSX is in your architecture today, this is a real migration blocker that Nutanix sales will gloss over. <em>(Source: TechTarget Flow vs NSX comparison; VCF 9.x Feature Comparison, Broadcom)</em>
-    </p>
-
-    <h3 class="text-xl font-semibold text-white">3. VDI — Horizon on ESXi Is Still the More Mature Deployment Path</h3>
-    <p>
-      Omnissa Horizon on ESXi has shipped since 2008 and supports: instant clones, App Volumes, Dynamic Environment Manager, Blast Extreme protocol, vGPU support across every NVIDIA profile, full Cloud Pod Architecture for 50,000+ seat deployments. Nutanix launched Limited Availability for Horizon on AHV in July 2025; <strong class="text-slate-200">Horizon on AHV reached full GA in December 2025</strong> — vGPU, App Volumes, DEM, FIPS mode, and CPA are all supported. <em>(Source: <a href="https://next.nutanix.com/community-blog-154/horizon-on-nutanix-ahv-solid-features-for-modern-euc-45132" target="_blank" rel="noopener" class="text-blue-400 hover:text-blue-300">Nutanix Community blog, Dec 2025</a>)</em>
-    </p>
-    <p>
-      If your environment is heavily VDI, Horizon on AHV is now GA and a viable option. That said, ESXi remains the more mature and widely deployed Horizon substrate — evaluate based on your specific workload requirements, vGPU complexity, and Cloud Pod Architecture scale.
-    </p>
-
-    <h3 class="text-xl font-semibold text-white">4. DRS Maturity and Workload Automation Depth</h3>
-    <p>
-      VMware DRS (shipped in vSphere 4, 2009) handles predictive DRS, CPU/memory balancing, storage DRS, vGPU-aware DRS, and distributed power management. Nutanix's Acropolis Dynamic Scheduler handles CPU/memory balancing reliably but does not offer the same depth of tuning or the same breadth of workload awareness — no storage-tier equivalent to storage DRS, no power management, no predictive scheduling. In environments running mixed workloads (databases, ERP, VDI on the same cluster), the difference in scheduling granularity affects noisy-neighbor isolation and resource allocation fairness.
-    </p>
-
-    <h3 class="text-xl font-semibold text-white">5. Talent Pool and Hiring</h3>
-    <p>
-      The VCP-DCV certification base is large — VMware reported over 350,000 VCP holders as of 2022. Hiring or contracting for VMware expertise is significantly easier than for Nutanix. Nutanix NCP/NCE certifications exist, the pool is growing as adoption increases, but it remains smaller by an order of magnitude. Training and onboarding cost should be modeled into the total migration budget. The platform switch affects staffing, not only infrastructure.
-    </p>
-
-    <div class="callout callout-red">
-      <strong class="text-red-400">Migration reality check:</strong> Nutanix Move automates ESXi-to-AHV migrations and it works well for most VMs — but the reverse (AHV back to ESXi) is a manual process. There is no automated "undo." Community reports suggest approximately 1-in-100 VMs require manual remediation, and VMs over 30 TB can fail Move entirely. If you're migrating, build in time for testing and don't assume 100% automated success. <em>(Source: r/nutanix community, confirmed by multiple Nutanix Move users)</em>
-    </div>
-
-    <!-- MIGRATION PATH -->
-    <h2 class="text-2xl font-bold text-white">What Migration Actually Looks Like</h2>
-
-    <p>
-      Nutanix's migration tool is Nutanix Move — a free appliance that handles ESXi-to-AHV migrations. The workflow: Move seeds the VM data to AHV, tracks changes via CBT (Changed Block Tracking), and does a final cutover when scheduled (shuts down source VM, boots target on AHV). Downtime is the VM shutdown-and-boot window — typically minutes per VM for standard workloads.
-    </p>
-
-    <p>
-      What Move handles well: standard Windows and Linux VMs, disk-only migrations, most configurations. What requires more planning:
-    </p>
-
-    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
-      <li><strong>NSX-T workloads:</strong> Your network topology changes. If VMs are on NSX segments, you're re-addressing or rebuilding overlay networks in Flow.</li>
-      <li><strong>VMs with VMware Tools dependencies:</strong> You're swapping to VirtIO drivers and Nutanix Guest Tools. Most things work; some applications care about driver changes.</li>
-      <li><strong>Very large VMs (30 TB+):</strong> Move can fail. Nutanix support's workaround is protection domain-based migration, which is slower and more manual.</li>
-      <li><strong>vSphere-integrated backup solutions:</strong> If your backup tool uses VADP (vSphere APIs for Data Protection), it won't work with AHV. Veeam v12+ supports AHV natively; verify your specific version and backup job types.</li>
-      <li><strong>SRM-orchestrated DR:</strong> If you're using Site Recovery Manager, that entire runbook needs to be rebuilt — either in Nutanix's native replication and runbook engine (NCI Ultimate) or in a new tool.</li>
-    </ul>
-
-    <p>
-      The honest planning estimate for a mid-sized environment (100–500 VMs): 3–6 months, depending on NSX complexity, backup tool migration, and how much VDI is in the mix. Don't let anyone sell you a 30-day cutover unless it's a greenfield deployment.
-    </p>
-
-    <!-- WHO SHOULD SWITCH -->
-    <h2 class="text-2xl font-bold text-white">Who Should Actually Consider Switching</h2>
-
-    <p>
-      Nutanix is a legitimate VMware alternative. It is not the right move for every organization. The decision framework below separates good migration candidates from organizations that should stay:
-    </p>
-
-    <h3 class="text-xl font-semibold text-white">Good Nutanix migration candidates:</h3>
-    <!-- <a href="https://www.amazon.com/s?k=Nutanix+free+trial+/+evaluation+license" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-amber-400 hover:text-amber-300 font-medium"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.3 2.3c-.4.4-.1 1.1.5 1.1H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>Nutanix free trial / evaluation license</a>-->
-    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
-      <li>Organizations running <strong>general-purpose compute workloads</strong> (app servers, file servers, databases) without heavy VDI or NSX dependencies.</li>
-      <li>Shops on <strong>VVF or vSphere Enterprise Plus only</strong> — you're already not getting NSX or Aria Automation, so the capability gap is smaller.</li>
-      <li>Teams where <strong>storage is the primary pain point</strong> and AOS's feature richness (dedup, compression, tiering) addresses real bottlenecks.</li>
-      <li>Organizations facing <strong>3–5x VMware renewal increases</strong> where the TCO math genuinely works out — and have capacity to absorb a 3–6 month migration project.</li>
-      <li><strong>Greenfield or refresh cycles</strong> where there's no existing VMware investment to write off and no NSX topology to unwind.</li>
-    </ul>
-
-    <h3 class="text-xl font-semibold text-white">Stay on VMware (for now) if:</h3>
-    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
-      <li>You're running <strong>Horizon VDI with 500+ desktops</strong> and have deep vGPU, App Volumes, or Cloud Pod Architecture dependencies. Horizon on AHV went GA in December 2025 but has fewer production deployments at scale than the ESXi path — evaluate carefully before committing large VDI estates.</li>
-      <li>You have <strong>NSX deployed and in use</strong> — distributed routing, L7 firewall, or IDS/IPS. Flow does not replace this.</li>
-      <li>Your backup/DR stack is <strong>Zerto-dependent</strong>. Zerto does not support Nutanix.</li>
-      <li>Your team is <strong>deep VMware-only</strong> and you're in a hiring market where retraining creates real operational risk.</li>
-      <li>You have <strong>contractual obligations</strong> or software licensing tied to VMware infrastructure (some Oracle licensing scenarios, for instance).</li>
-    </ul>
-
-    <!-- BOTTOM LINE -->
-    <h2 class="text-2xl font-bold text-white">Bottom Line</h2>
-
-    <p>
-      Nutanix AHV is a mature, production-ready VMware alternative for enterprise compute workloads that do not depend on NSX or Zerto-based DR. Horizon on AHV reached GA in December 2025, removing the VDI blocker for most deployments — though large-scale VDI estates should validate AHV maturity against their specific feature requirements. It is not a drop-in replacement for a fully deployed VMware stack — no alternative is, because the VMware ecosystem extends well beyond the hypervisor.
-    </p>
-
-    <p>
-      The Broadcom pricing situation is real and it's not going back to the old model. If your renewal is coming up and the number Broadcom hands you is unjustifiable, Nutanix deserves a serious evaluation. Get a proof-of-concept running, inventory your NSX and VDI dependencies, and pressure-test the migration scope before signing anything.
-    </p>
-
-    <p>
-      For environments running NSX in production, relying on Horizon VDI, or using Zerto for DR — the feature gap is concrete, not theoretical. Options in that case include: negotiating with Broadcom (use exists while competitors are courting VMware customers), moving from VCF to VVF to reduce cost, or timing a Nutanix migration to coincide with the next hardware refresh cycle when sunk costs are lower.
-    </p>
-
-    <div class="callout callout-green">
-      <strong class="text-green-400">Evaluation approach:</strong> Ask any migration vendor to walk through the migration path for the three most complex workloads in the environment — NSX topology, VDI infrastructure, custom backup integration. Specific, documented answers indicate a vendor that has done similar migrations. Deferred answers ("we'll figure that out in the SOW") indicate they have not.
-    </div>
-
-    <p>
-      This is article #1 in the VMware vs Competitors series. Coming next: VMware vs Proxmox for SMB and homelab environments, and a deep dive on VMware vs Microsoft Azure Stack HCI for the enterprise.
-    </p>
-
-    <!-- Newsletter CTA -->
-    <div class="mt-16 bg-card border border-slate-700 rounded-2xl p-10 text-center">
-      <h2 class="text-2xl font-bold text-white mb-3" style="-webkit-text-fill-color: white;">Stay ahead of the VMware changes</h2>
-      <p class="text-slate-400 mb-6">We're publishing detailed comparison guides, migration walkthroughs, and cost calculators. Get them in your inbox.</p>
-      <form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" onsubmit="handleSubscribe(event)">
-        <input type="email" placeholder="your@email.com" class="flex-1 bg-dark border border-slate-600 text-white px-5 py-3 rounded-xl focus:outline-none focus:border-blue-500 placeholder-slate-500" required />
-        <button type="submit" class="bg-brand text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-600 transition">Subscribe</button>
-      </form>
-    </div>
-
-    <!-- Author -->
-    <div class="mt-12 pt-8 border-t border-slate-800">
-      <div class="flex items-start gap-4">
-        <div class="w-12 h-12 bg-slate-700 rounded-full flex items-center justify-center text-xl">VT</div>
-        <div>
-          <p class="text-white font-semibold">Written by Rob Notaro</p>
-          <p class="text-slate-400 text-sm mt-1">Senior infrastructure engineer specializing in VMware, Horizon VDI, and enterprise virtualization. Currently deploying Horizon 2512 and VCF in production environments.</p>
-        </div>
+<body>
+
+<!-- Alert strip -->
+<div class="alert-strip">
+  VCF 9.1 released — <a href="/articles/vcf-9-nested-lab-setup-complete-walkthrough.html">licensing and upgrade paths changed. Here's what's new →</a>
+</div>
+
+<!-- Masthead -->
+<div class="masthead">
+  <div class="masthead-inner">
+    <h1><a href="/">VMware<span class="red">MadeSimple</span></a></h1>
+    <div class="tagline">Independent VMware analysis for IT professionals. No vendor spin.</div>
+    <div class="credibility-bar">
+      <div class="creds">
+        <span><span class="dot">●</span> Independent</span>
+        <span><span class="dot">●</span> Sources linked</span>
+        <span><span class="dot">●</span> Updated weekly</span>
+        <span><span class="dot">●</span> Not affiliated with VMware/Broadcom</span>
+      </div>
+      <div class="social">
+        <a href="/sitemap.xml">RSS</a>
+        <a href="#newsletter">Newsletter</a>
+        <a href="mailto:contact@vmwaremadesimple.com">Contact</a>
       </div>
     </div>
+  </div>
+</div>
 
-  </article>
-
-  <!-- Footer -->
-  <footer class="border-t border-slate-800 mt-10">
-    <div class="max-w-4xl mx-auto px-6 py-10 flex flex-col md:flex-row items-center justify-between gap-4">
-      <div class="text-slate-400 text-sm">© 2026 VMwareMadeSimple.com — Independent. Not affiliated with VMware or Broadcom.</div>
-      <div class="flex gap-6 text-slate-400 text-sm">
-        <a href="/" class="hover:text-white transition">Home</a>
-        <a href="/#articles" class="hover:text-white transition">Articles</a>
-        <a href="/#newsletter" class="hover:text-white transition">Newsletter</a>
-      </div>
+<!-- Category nav -->
+<div class="navbar">
+  <div class="navbar-inner">
+    <a href="/">Home</a>
+    <a href="/#licensing">Licensing</a>
+    <a href="/#migration">Migration</a>
+    <a href="/#vcf">VCF 9.1</a>
+    <a href="/#homelab">Home Lab</a>
+    <a href="/#powercli">PowerCLI</a>
+    <a href="/#alternatives" class="active">Alternatives</a>
+    <a href="/tools/price-calculator.html">Tools</a>
+    <div class="nav-search">
+      <input type="text" placeholder="Search..." onkeyup="searchSite(this.value)" />
     </div>
-    <div class="max-w-4xl mx-auto px-6 pb-8 text-slate-600 text-xs">
-      Some links on this site are affiliate links. If you purchase through them, we may earn a small commission at no extra cost to you.
-    </div>
-  </footer>
+  </div>
+</div>
 
-  <script>
-    function handleSubscribe(e) {
-      e.preventDefault();
-      alert('Thanks! We\'ll be in touch soon.');
-      e.target.reset();
-    }
-  </script>
+<!-- Article header -->
+<div class="article-header">
+  <div class="breadcrumb"><a href="/">Home</a> → VMware vs Competitors</div>
+  <div class="cat-label">Analysis · VMware vs Competitors Series #1</div>
+  <h1>VMware vs Nutanix AHV: An Engineer's Comparison</h1>
+  <div class="byline">
+    <span>Updated Jul 2026</span>
+    <span>·</span>
+    <span>14 min read</span>
+    <span class="verified">Fact-checked</span>
+  </div>
+</div>
+
+<!-- Article body -->
+<div class="article-body">
+
+  <p>
+    I've evaluated Nutanix as a VMware replacement for three different clients this year. In two cases the math worked. In one it didn't — because they had NSX deployed and nobody told the Nutanix sales rep. Here's the honest breakdown.
+  </p>
+
+  <p>
+    Nutanix has been aggressive — and rightfully so. After AT&T publicly revealed that Broadcom had offered them a <a href="https://www.theregister.com/2024/10/01/att_broadcom_filings_update/" target="_blank" rel="noopener">1,050% annual price increase</a> (AT&T EVP Susan Johnson literally wrote it in a letter to Hock Tan in August 2024), the floodgates opened. Forrester pegged average customer price spikes at 500%. The suit settled late 2024 with undisclosed terms, but the damage to Broadcom's reputation was done.
+  </p>
+
+  <p>
+    Nutanix added <a href="https://www.crn.com/news/data-center/2025/bye-bye-broadcom-nutanix-adds-2-700-new-customers-amid-channel-driven-share-grab" target="_blank" rel="noopener">over 2,700 former VMware customers in FY2025</a> — revenue up 18% — including enterprises like Toshiba who cited a ~10x price hike as the trigger. The market has moved.
+  </p>
+
+  <p>
+    Nutanix sales teams position AHV as a full VMware replacement at lower cost. That is partially true — and partially not, depending on which VMware features are in use. Having deployed both platforms, I can identify where Nutanix has real advantages, where VMware retains a significant lead, and which organizations are good candidates for a switch versus which should stay put.
+  </p>
+
+  <!-- SECTION 1: ARCHITECTURE -->
+  <h2>Architecture: Two Fundamentally Different Approaches</h2>
+
+  <h3>VMware: The Modular Stack</h3>
+
+  <p>
+    ESXi is a Type-1 bare-metal hypervisor, first released in 2001. vCenter Server is the management plane — DRS, HA, vMotion, and vSAN all run through it. The stack is modular: ESXi with external storage, vSAN added for HCI, NSX layered on for SDN. That modularity is both a strength and a cost center, because each layer historically came with its own license.
+  </p>
+
+  <p>
+    Under Broadcom, the preferred model is now VMware Cloud Foundation (VCF) — the full stack in a single subscription. VCF 9.1 includes vSphere/ESXi 9.1, vCenter, vSAN (1 TiB per licensed core), NSX, HCX, VCF Operations/Automation, VCF Fleet Services, and the updated VCF Operations License Server workflow in one SKU. VVF (vSphere Foundation) is the cut-down version — you get vSAN at 0.25 TiB/core but <strong>no NSX, no HCX, no Aria Automation</strong> — and it's still a per-core subscription with a 16-core minimum per socket. <em>(Sources: <a href="https://www.vmware.com/docs/vmware-cloud-foundation-9-0-feature-comparison-and-upgrade-paths" target="_blank" rel="noopener">VCF 9.x Feature Comparison</a>; <a href="https://www.vmware.com/docs/vmw-datasheet-vsphere-product-line-comparison" target="_blank" rel="noopener">vSphere Product Line Comparison</a>)</em>
+  </p>
+
+  <p>
+    One important note for anyone still on perpetual: New perpetual VMware licenses ended in early 2024. Existing perpetual licenses with active SnS are still honored under contract terms, but new purchases are subscription-based. Broadcom's current subscription lineup includes VCF, VVF, vSphere Standard, and vSphere Enterprise Plus. <em>(Source: vSphere Product Line Comparison datasheet, vmware.com)</em>
+  </p>
+
+  <h3>Nutanix AHV: HCI-First, Storage-Centric</h3>
+
+  <p>
+    Nutanix started as a storage company that happened to need a hypervisor. AHV is built on Linux, QEMU, and KVM — not a custom proprietary kernel. Communication between AOS (the storage OS) and the hypervisor happens through libvirtd. The Controller VM (CVM) runs as a guest but uses PCI passthrough to get direct access to local disks, bypassing the hypervisor entirely for storage I/O. <em>(Source: <a href="https://www.nutanixbible.com/5a-book-of-ahv-architecture.html" target="_blank" rel="noopener">Nutanix Bible — AHV Architecture</a>)</em>
+  </p>
+
+  <p>
+    The management story is Prism: Prism Element is per-cluster, Prism Central manages multiple clusters and is where you get the advanced features (policies, analytics, automation). AHV is free when you buy Nutanix — there's no separate hypervisor license. The hyperconverged storage (AOS/Distributed Storage Fabric) is what you're actually paying for.
+  </p>
+
+  <p>
+    Cluster maximums: 32 nodes per AHV cluster, VMs up to 4.5 TB RAM and 64 TB virtual disk size. <em>(Source: Nutanix Bible, AOS 6.8)</em>
+  </p>
+
+  <div class="callout">
+    <strong>Architectural heritage:</strong> VMware started as a compute platform and added storage (vSAN) later. Nutanix started as a storage platform and added compute (AHV). That lineage shows up in where each platform is strongest — VMware in compute orchestration (DRS, vMotion, FT), Nutanix in storage features (dedup, compression, tiering, erasure coding).
+  </div>
+
+  <!-- SECTION 2: LICENSING -->
+  <h2>Licensing & Cost: Reading Past the Marketing</h2>
+
+  <h3>Nutanix NCI Pricing</h3>
+
+  <p>
+    Nutanix Cloud Infrastructure (NCI) is their core platform SKU — it covers AHV, AOS storage, and Prism. Pricing is <strong>per physical CPU core</strong>, and you must license every core in the cluster. Three tiers:
+  </p>
+
+  <ul>
+    <li><strong>NCI Starter:</strong> Core features, max 12-node cluster, no deduplication, no microsegmentation (add-on), no multi-site DR beyond async at 1hr+ RPO.</li>
+    <li><strong>NCI Pro:</strong> Dedup, encryption (from NCI 7.3+), erasure coding, multi-site async DR, VM affinity policies, cross-cluster live migration. Microsegmentation is still an add-on license.</li>
+    <li><strong>NCI Ultimate:</strong> Sync replication (RPO=0), NearSync (1–15 min RPO), advanced runbook automation, full multi-site DR stack. Metro Availability requires this tier plus an Advanced Replication add-on.</li>
+  </ul>
+
+  <p><em>Source: <a href="https://www.nutanix.com/products/cloud-platform/software-options" target="_blank" rel="noopener">Nutanix Cloud Platform Software Options (nutanix.com, Feb 2025)</a></em></p>
+
+  <p>
+    Real-world NCI Pro pricing from community reports: approximately <strong>$300/core on renewal</strong> as of March 2025 for existing customers. New purchase government pricing was reported at ~$1,500/core in 2022 via SHI. <em>(Sources: <a href="https://www.reddit.com/r/sysadmin/comments/1j5wm30/nutanix_pricing/" target="_blank" rel="noopener">r/sysadmin Nutanix Pricing thread, March 2025</a>; <a href="https://www.reddit.com/r/sysadmin/comments/1katioa/" target="_blank" rel="noopener">r/sysadmin NCI Pro quote thread, April 2025</a>)</em>
+  </p>
+
+  <div class="callout">
+    <strong>Pricing caveat:</strong> The $300/core figure is based on community reports from March 2025 — over a year old. Nutanix pricing can change with each renewal cycle and varies significantly by deal size, tier, and region. <strong>Verify current pricing directly with Nutanix or an authorized reseller before making budget decisions.</strong>
+  </div>
+
+  <p>
+    One genuine advantage: 1 TiB of Nutanix Unified Storage (NUS Pro) is included free per NCI cluster. AHV itself carries no additional license fee. <em>(Source: nutanix.com NCI datasheet, Sept 2025)</em>
+  </p>
+
+  <h3>VMware VCF Pricing</h3>
+
+  <p>
+    VCF 9.1 is per-core subscription with a 16-core minimum per CPU socket. VCF gets you everything: vSphere/ESXi 9.1, vSAN at 1 TiB/core, NSX, HCX, VCF Operations/Automation, Fleet Services, and the 9.1 license-server workflow. VVF drops to 0.25 TiB vSAN/core and cuts NSX, HCX, and Aria Automation entirely. The pricing model is unchanged from VCF 9.0. <em>(Source: VCF 9.x Feature Comparison, Broadcom)</em>
+  </p>
+
+  <p>
+    Broadcom doesn't publish list prices publicly, and street pricing varies wildly by size and negotiation. What's well-documented is the direction of travel: customers are reporting 2–10x increases on renewal. That's not opinion — AT&T put the 1,050% number in a federal court filing.
+  </p>
+
+  <h3>The Honest Licensing Comparison</h3>
+
+  <p>
+    Nutanix licensing does consolidate compute, storage, and the hypervisor into one SKU — that part is simpler. The per-core model is structurally the same as VMware's, though, and add-on licenses exist (microsegmentation, advanced replication). Renewal dynamics have been more predictable than Broadcom's through FY2025, but the per-core subscription structure means the same pricing leverage exists if Nutanix chooses to exercise it.
+  </p>
+
+  <!-- FEATURE COMPARISON TABLE -->
+  <h2>Feature-by-Feature Comparison</h2>
+
+  <p>This table compares VMware VCF 9.1 (the full-stack product) against Nutanix NCI Pro (the most common enterprise tier). Where VVF differs materially from VCF, that's called out.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Feature</th>
+        <th>VMware (VCF 9.1)</th>
+        <th>Nutanix (NCI Pro / AHV)</th>
+        <th>Edge</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Hypervisor</strong></td>
+        <td>ESXi — proprietary Type-1; released 2001, continuously updated</td>
+        <td>AHV — KVM/QEMU/Linux; open-source base; free with NCI</td>
+        <td>Tie</td>
+      </tr>
+      <tr>
+        <td><strong>Management UI</strong></td>
+        <td>vCenter — feature-dense but complex; significant learning curve; requires separate appliance VM (VCSA)</td>
+        <td>Prism Central — modern, clean UI; generally easier to learn; single pane for multi-cluster</td>
+        <td>Nutanix</td>
+      </tr>
+      <tr>
+        <td><strong>Live Migration</strong></td>
+        <td>vMotion — cross-vCenter, long-distance, Direct Path I/O passthrough. Storage vMotion independent. Shipped since ESX 2 (2003).</td>
+        <td>AHV live migration — functional, works well within cluster. Cross-cluster live migration requires NCI Pro+. Processor EVC equivalent built-in.</td>
+        <td>VMware</td>
+      </tr>
+      <tr>
+        <td><strong>HA / Failover</strong></td>
+        <td>vSphere HA — granular restart priorities, admission control policies, Proactive HA with hardware awareness (Ent Plus+)</td>
+        <td>AHV HA — guaranteed failover (NCI Pro+), VM restart on host failure. Works well but less tunable than vSphere HA.</td>
+        <td>VMware</td>
+      </tr>
+      <tr>
+        <td><strong>Automated Workload Balancing</strong></td>
+        <td>DRS — fully automated load balancing, storage DRS, DPM for power management. Shipped since vSphere 4 (2009), with predictive DRS added in 6.5.</td>
+        <td>ADS (Acropolis Dynamic Scheduler) — handles basic balancing. Less sophisticated than DRS; no storage-tier equivalent at DRS depth.</td>
+        <td>VMware</td>
+      </tr>
+      <tr>
+        <td><strong>Built-in HCI Storage</strong></td>
+        <td>vSAN — solid, but requires VVF/VCF to access. VVF = 0.25 TiB/core, VCF = 1 TiB/core. External storage (FC, iSCSI, NFS, NVMe) also fully supported.</td>
+        <td>AOS / Distributed Storage Fabric — core to the platform. Dedup, compression, erasure coding, tiering all built-in (Pro+). Runs on commodity hardware.</td>
+        <td>Nutanix</td>
+      </tr>
+      <tr>
+        <td><strong>Software-Defined Networking</strong></td>
+        <td>NSX (VCF only) — full overlay networking, distributed routing, microsegmentation, L7 firewall, IDS/IPS, BGP/OSPF. Industry-leading depth.</td>
+        <td>Flow Network Security — microsegmentation, overlay networking (Pro+). Solid for east-west policy. Does not match NSX for routing, load balancing, or L7 capabilities. VVF has NO NSX.</td>
+        <td>VMware (VCF)</td>
+      </tr>
+      <tr>
+        <td><strong>VDI / EUC</strong></td>
+        <td>Omnissa Horizon on ESXi — GA, full feature set. App Volumes, DEM, instant clones, Blast Extreme. Largest VDI install base globally per IDC 2024 VDI market share.</td>
+        <td>Nutanix Frame (cloud DaaS) + Omnissa Horizon on AHV — <strong>GA as of December 2025</strong>. vGPU, App Volumes, DEM, FIPS, and CPA supported. (Source: Nutanix Community blog, Dec 2025)</td>
+        <td>VMware</td>
+      </tr>
+      <tr>
+        <td><strong>Backup / DR Integration</strong></td>
+        <td>Veeam, Commvault, Zerto, Cohesity, Rubrik, Veritas — all have feature-complete VMware integrations with multi-year release histories. SRM is purpose-built VMware DR orchestration.</td>
+        <td>Veeam supports AHV. Zerto does NOT support Nutanix. Commvault/Cohesity/Rubrik have varying AHV support. Built-in async/sync replication in NCI covers many use cases.</td>
+        <td>VMware</td>
+      </tr>
+      <tr>
+        <td><strong>Multi-Hypervisor Support</strong></td>
+        <td>ESXi only. VMware hardware compatibility is broad but the hypervisor is VMware's.</td>
+        <td>NCI-D variant supports ESXi, Hyper-V alongside AHV. NCI can run on Nutanix hardware, OEM (Dell, HPE, Lenovo), or third-party servers.</td>
+        <td>Nutanix</td>
+      </tr>
+      <tr>
+        <td><strong>Container / Kubernetes</strong></td>
+        <td>vSphere Kubernetes Service (VKS) — included in VVF/VCF. Native Tanzu integration.</td>
+        <td>Nutanix Kubernetes Platform (NKP) — Starter included in Pro/Ultimate. NKP Pro/Ultimate are add-ons.</td>
+        <td>Tie</td>
+      </tr>
+      <tr>
+        <td><strong>Fault Tolerance (synchronous VM mirroring)</strong></td>
+        <td>Fault Tolerance — fully synchronous VM mirroring. Up to 8 vCPU (Ent Plus).</td>
+        <td>Metro Availability / Sync Replication — NCI Ultimate + Adv Replication add-on. Different model but achieves similar RPO=0 outcome.</td>
+        <td>VMware</td>
+      </tr>
+      <tr>
+        <td><strong>Talent Pool</strong></td>
+        <td>VCP/VCAP ecosystem is enormous. Virtually every enterprise MSP has VMware-certified engineers. Training material is abundant.</td>
+        <td>Nutanix NCP/NCE certifications exist but pool is smaller. Growing fast, but you'll have fewer candidates and higher onboarding cost.</td>
+        <td>VMware</td>
+      </tr>
+      <tr>
+        <td><strong>Licensing Transparency</strong></td>
+        <td>Per-core subscription, 16-core minimum. Perpetual dead. Prices opaque and subject to Broadcom's renewal use.</td>
+        <td>Per-core subscription. More predictable historically. Pricing trending up but from a lower base and with less shock-factor on renewal.</td>
+        <td>Nutanix</td>
+      </tr>
+      <tr>
+        <td><strong>API / Automation</strong></td>
+        <td>vSphere REST APIs, PowerCLI, Aria Automation (VCF only), Terraform provider. Large ecosystem with extensive community modules.</td>
+        <td>Prism REST API v2/v3, Nutanix Terraform provider, Python/Go SDKs. Good coverage; Prism API is well-documented.</td>
+        <td>Tie</td>
+      </tr>
+      <tr>
+        <td><strong>Edge / Small Deployments</strong></td>
+        <td>VCF 9.1 minimum: 3 hosts (vSAN) or 2 hosts (external storage) using consolidated architecture. Standard Architecture = 7 hosts.</td>
+        <td>3-node minimum for standard AHV cluster. 2-node clusters supported. NCI-Edge tier for true edge/robo use cases.</td>
+        <td>Nutanix</td>
+      </tr>
+    </tbody>
+  </table>
+  <p><em>Sources: VCF 9.x Feature Comparison (Broadcom); vSphere Product Line Comparison (Broadcom); Nutanix Cloud Platform Software Options (nutanix.com, Feb 2025); Nutanix Bible AHV Architecture; Omnissa blog (Aug 2025).</em></p>
+
+  <!-- SECTION: WHERE NUTANIX WINS -->
+  <h2>Where Nutanix Genuinely Wins</h2>
+
+  <h3>1. Built-in Storage Without the Nickel-and-Diming</h3>
+  <p>
+    vSAN is legitimately good — but under VVF you only get 0.25 TiB per licensed core, and under vanilla vSphere Enterprise Plus you get nothing. On Nutanix, AOS is the whole point. Dedup, compression, erasure coding, tiering, and data protection are what you bought — not bolted on. If you're an HCI shop running general-purpose workloads, you're going to feel that difference in your BOM.
+  </p>
+
+  <h3>2. Prism Is a Better Management Experience</h3>
+  <p>
+    Prism Central is a more modern day-to-day management interface than vCenter. It surfaces cluster health, VM status, and storage metrics in fewer clicks. vCenter exposes more granular controls — DRS tuning, admission control, distributed switch configuration — but the UI reflects two decades of accumulated design decisions, and new operators take longer to become productive in it. Teams that spend limited time in the management console will generally onboard faster on Prism; teams that need deep control will need vCenter's depth regardless of the learning curve.
+  </p>
+
+  <h3>3. Licensing Predictability (For Now)</h3>
+  <p>
+    Nutanix has not replicated Broadcom's renewal dynamics. Through FY2025, renewals have been more predictable, and revenue growth has come primarily from new customer acquisition (2,700+ new customers in FY2025 per CRN reporting). That said, Nutanix is a public company with quarterly earnings pressure — there is no structural guarantee against future pricing changes. Build an exit strategy for any vendor.
+  </p>
+
+  <h3>4. Commodity Hardware Flexibility</h3>
+  <p>
+    You can run Nutanix on Dell PowerEdge, HPE ProLiant, Lenovo ThinkSystem, or Nutanix-branded NX nodes. This is a genuine advantage for orgs that have preferred hardware vendors or want to avoid Nutanix-branded appliance pricing. VMware runs on nearly everything too, but vSAN has its own hardware compatibility requirements and NVMe tiering is pickier.
+  </p>
+
+  <h3>5. The Starter Point for HCI is Lower</h3>
+  <p>
+    Three nodes produce a functional AHV cluster. VCF's minimum footprint for a Standard Architecture is 7 hosts (4 management + 3 workload), though VCF 9.1's consolidated architecture reduces this to 3 hosts (vSAN) or 2 hosts (external storage). Nutanix also supports 2-node clusters and has an NCI-Edge tier for remote/branch deployments. For smaller sites, Nutanix requires less hardware to get started.
+  </p>
+
+  <!-- SECTION: WHERE VMware STILL WINS -->
+  <h2>Where VMware Still Has a Meaningful Edge</h2>
+
+  <h3>1. The ISV Ecosystem Is Not Close</h3>
+  <p>
+    Twenty years of market dominance means almost every enterprise software vendor tests against VMware first. Backup tools (Veeam, Commvault, Rubrik, Cohesity, Veritas), DR tools (Zerto — which does not support Nutanix), monitoring platforms, security tools, storage array integrations — the VMware ISV ecosystem is broad and deeply integrated. Veeam works well on AHV (v12+ native support), but do not assume every tool in the stack has parity AHV support. <strong>Check each ISV's AHV support matrix before committing.</strong> <em>(Source: r/vmware community discussion, confirmed Zerto no Nutanix support, Oct 2024)</em>
+  </p>
+
+  <h3>2. NSX vs. Flow — This Is Not a Tie</h3>
+  <p>
+    If you're running NSX today — distributed routing, L7 firewall, IDS/IPS, BGP peer relationships — Nutanix Flow is not a replacement. Flow does microsegmentation well. It does not do distributed routing, load balancing, or the advanced security features NSX provides. To be fair, VVF doesn't include NSX either — that's VCF territory. But if NSX is in your architecture today, this is a real migration blocker that Nutanix sales will gloss over. <em>(Source: TechTarget Flow vs NSX comparison; VCF 9.x Feature Comparison, Broadcom)</em>
+  </p>
+
+  <h3>3. VDI — Horizon on ESXi Is Still the More Mature Deployment Path</h3>
+  <p>
+    Omnissa Horizon on ESXi has shipped since 2008 and supports: instant clones, App Volumes, Dynamic Environment Manager, Blast Extreme protocol, vGPU support across every NVIDIA profile, full Cloud Pod Architecture for 50,000+ seat deployments. Nutanix launched Limited Availability for Horizon on AHV in July 2025; <strong>Horizon on AHV reached full GA in December 2025</strong> — vGPU, App Volumes, DEM, FIPS mode, and CPA are all supported. <em>(Source: <a href="https://next.nutanix.com/community-blog-154/horizon-on-nutanix-ahv-solid-features-for-modern-euc-45132" target="_blank" rel="noopener">Nutanix Community blog, Dec 2025</a>)</em>
+  </p>
+  <p>
+    If your environment is heavily VDI, Horizon on AHV is now GA and a viable option. That said, ESXi remains the more mature and widely deployed Horizon substrate — evaluate based on your specific workload requirements, vGPU complexity, and Cloud Pod Architecture scale.
+  </p>
+
+  <h3>4. DRS Maturity and Workload Automation Depth</h3>
+  <p>
+    VMware DRS (shipped in vSphere 4, 2009) handles predictive DRS, CPU/memory balancing, storage DRS, vGPU-aware DRS, and distributed power management. Nutanix's Acropolis Dynamic Scheduler handles CPU/memory balancing reliably but does not offer the same depth of tuning or the same breadth of workload awareness — no storage-tier equivalent to storage DRS, no power management, no predictive scheduling. In environments running mixed workloads (databases, ERP, VDI on the same cluster), the difference in scheduling granularity affects noisy-neighbor isolation and resource allocation fairness.
+  </p>
+
+  <h3>5. Talent Pool and Hiring</h3>
+  <p>
+    The VCP-DCV certification base is large — VMware reported over 350,000 VCP holders as of 2022. Hiring or contracting for VMware expertise is significantly easier than for Nutanix. Nutanix NCP/NCE certifications exist, the pool is growing as adoption increases, but it remains smaller by an order of magnitude. Training and onboarding cost should be modeled into the total migration budget. The platform switch affects staffing, not only infrastructure.
+  </p>
+
+  <div class="callout-red">
+    <strong>Migration reality check:</strong> Nutanix Move automates ESXi-to-AHV migrations and it works well for most VMs — but the reverse (AHV back to ESXi) is a manual process. There is no automated "undo." Community reports suggest approximately 1-in-100 VMs require manual remediation, and VMs over 30 TB can fail Move entirely. If you're migrating, build in time for testing and don't assume 100% automated success. <em>(Source: r/nutanix community, confirmed by multiple Nutanix Move users)</em>
+  </div>
+
+  <!-- MIGRATION PATH -->
+  <h2>What Migration Actually Looks Like</h2>
+
+  <p>
+    Nutanix's migration tool is Nutanix Move — a free appliance that handles ESXi-to-AHV migrations. The workflow: Move seeds the VM data to AHV, tracks changes via CBT (Changed Block Tracking), and does a final cutover when scheduled (shuts down source VM, boots target on AHV). Downtime is the VM shutdown-and-boot window — typically minutes per VM for standard workloads.
+  </p>
+
+  <p>
+    What Move handles well: standard Windows and Linux VMs, disk-only migrations, most configurations. What requires more planning:
+  </p>
+
+  <ul>
+    <li><strong>NSX-T workloads:</strong> Your network topology changes. If VMs are on NSX segments, you're re-addressing or rebuilding overlay networks in Flow.</li>
+    <li><strong>VMs with VMware Tools dependencies:</strong> You're swapping to VirtIO drivers and Nutanix Guest Tools. Most things work; some applications care about driver changes.</li>
+    <li><strong>Very large VMs (30 TB+):</strong> Move can fail. Nutanix support's workaround is protection domain-based migration, which is slower and more manual.</li>
+    <li><strong>vSphere-integrated backup solutions:</strong> If your backup tool uses VADP (vSphere APIs for Data Protection), it won't work with AHV. Veeam v12+ supports AHV natively; verify your specific version and backup job types.</li>
+    <li><strong>SRM-orchestrated DR:</strong> If you're using Site Recovery Manager, that entire runbook needs to be rebuilt — either in Nutanix's native replication and runbook engine (NCI Ultimate) or in a new tool.</li>
+  </ul>
+
+  <p>
+    The honest planning estimate for a mid-sized environment (100–500 VMs): 3–6 months, depending on NSX complexity, backup tool migration, and how much VDI is in the mix. Don't let anyone sell you a 30-day cutover unless it's a greenfield deployment.
+  </p>
+
+  <!-- WHO SHOULD SWITCH -->
+  <h2>Who Should Actually Consider Switching</h2>
+
+  <p>
+    Nutanix is a legitimate VMware alternative. It is not the right move for every organization. The decision framework below separates good migration candidates from organizations that should stay:
+  </p>
+
+  <h3>Good Nutanix migration candidates:</h3>
+  <ul>
+    <li>Organizations running <strong>general-purpose compute workloads</strong> (app servers, file servers, databases) without heavy VDI or NSX dependencies.</li>
+    <li>Shops on <strong>VVF or vSphere Enterprise Plus only</strong> — you're already not getting NSX or Aria Automation, so the capability gap is smaller.</li>
+    <li>Teams where <strong>storage is the primary pain point</strong> and AOS's feature richness (dedup, compression, tiering) addresses real bottlenecks.</li>
+    <li>Organizations facing <strong>3–5x VMware renewal increases</strong> where the TCO math genuinely works out — and have capacity to absorb a 3–6 month migration project.</li>
+    <li><strong>Greenfield or refresh cycles</strong> where there's no existing VMware investment to write off and no NSX topology to unwind.</li>
+  </ul>
+
+  <h3>Stay on VMware (for now) if:</h3>
+  <ul>
+    <li>You're running <strong>Horizon VDI with 500+ desktops</strong> and have deep vGPU, App Volumes, or Cloud Pod Architecture dependencies. Horizon on AHV went GA in December 2025 but has fewer production deployments at scale than the ESXi path — evaluate carefully before committing large VDI estates.</li>
+    <li>You have <strong>NSX deployed and in use</strong> — distributed routing, L7 firewall, or IDS/IPS. Flow does not replace this.</li>
+    <li>Your backup/DR stack is <strong>Zerto-dependent</strong>. Zerto does not support Nutanix.</li>
+    <li>Your team is <strong>deep VMware-only</strong> and you're in a hiring market where retraining creates real operational risk.</li>
+    <li>You have <strong>contractual obligations</strong> or software licensing tied to VMware infrastructure (some Oracle licensing scenarios, for instance).</li>
+  </ul>
+
+  <!-- BOTTOM LINE -->
+  <h2>Bottom Line</h2>
+
+  <p>
+    Nutanix AHV is a mature, production-ready VMware alternative for enterprise compute workloads that do not depend on NSX or Zerto-based DR. Horizon on AHV reached GA in December 2025, removing the VDI blocker for most deployments — though large-scale VDI estates should validate AHV maturity against their specific feature requirements. It is not a drop-in replacement for a fully deployed VMware stack — no alternative is, because the VMware ecosystem extends well beyond the hypervisor.
+  </p>
+
+  <p>
+    The Broadcom pricing situation is real and it's not going back to the old model. If your renewal is coming up and the number Broadcom hands you is unjustifiable, Nutanix deserves a serious evaluation. Get a proof-of-concept running, inventory your NSX and VDI dependencies, and pressure-test the migration scope before signing anything.
+  </p>
+
+  <p>
+    For environments running NSX in production, relying on Horizon VDI, or using Zerto for DR — the feature gap is concrete, not theoretical. Options in that case include: negotiating with Broadcom (use exists while competitors are courting VMware customers), moving from VCF to VVF to reduce cost, or timing a Nutanix migration to coincide with the next hardware refresh cycle when sunk costs are lower.
+  </p>
+
+  <div class="callout-green">
+    <strong>Evaluation approach:</strong> Ask any migration vendor to walk through the migration path for the three most complex workloads in the environment — NSX topology, VDI infrastructure, custom backup integration. Specific, documented answers indicate a vendor that has done similar migrations. Deferred answers ("we'll figure that out in the SOW") indicate they have not.
+  </div>
+
+  <p>
+    This is article #1 in the VMware vs Competitors series. Coming next: VMware vs Proxmox for SMB and homelab environments, and a deep dive on VMware vs Microsoft Azure Stack HCI for the enterprise.
+  </p>
+
+</div><!-- /.article-body -->
+
+<!-- Newsletter CTA -->
+<div class="newsletter-cta" id="newsletter">
+  <h3>Stay ahead of the VMware changes</h3>
+  <p>We're publishing detailed comparison guides, migration walkthroughs, and cost calculators. Get them in your inbox.</p>
+  <input type="email" placeholder="your@email.com" />
+  <button>Subscribe</button>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div>
+    © 2026 VMwareMadeSimple.com — Independent. Not affiliated with VMware or Broadcom.
+    <div class="aff-disclosure" style="margin-top: 0.3rem;">Some links are affiliate links. See our <a href="#">disclosure policy</a>.</div>
+  </div>
+  <div class="footer-links">
+    <a href="#">About</a>
+    <a href="mailto:contact@vmwaremadesimple.com">Contact</a>
+    <a href="/sitemap.xml">RSS</a>
+    <a href="#">Privacy</a>
+    <a href="#">Corrections</a>
+  </div>
+</footer>
+
+<script>
+function searchSite(q) {
+  if (q.length < 2) return;
+  if (event && event.key === 'Enter') {
+    window.location.href = 'https://www.google.com/search?q=site:vmwaremadesimple.com+' + encodeURIComponent(q);
+  }
+}
+</script>
 
 </body>
 </html>

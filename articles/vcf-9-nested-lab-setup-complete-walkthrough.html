@@ -1,93 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VCF 9 Nested Lab Setup: The Complete Walkthrough | VMware Made Simple</title>
-  <meta name="description" content="Build a fully functional VCF 9 nested lab on a single workstation." />
-  <meta name="keywords" content="vmware,vcf,nested,lab,esxi" />
-  <link rel="canonical" href="https://vmwaremadesimple.com/articles/vcf-9-nested-lab-setup-complete-walkthrough.html" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VCF 9 Nested Lab Setup: The Complete Walkthrough | VMwareMadeSimple</title>
+<meta name="description" content="Build a fully functional VCF 9 nested lab on a single workstation." />
+<meta name="keywords" content="vmware,vcf,nested,lab,esxi" />
+<link rel="canonical" href="https://vmwaremadesimple.com/articles/vcf-9-nested-lab-setup-complete-walkthrough.html" />
+<link rel="stylesheet" href="/css/style.css" />
 
-  <meta property="og:title" content="VCF 9 Nested Lab Setup: The Complete Walkthrough" />
-  <meta property="og:description" content="Build a fully functional VCF 9 nested lab on a single workstation." />
-  <meta property="og:type" content="article" />
-  <meta property="og:url" content="https://vmwaremadesimple.com/articles/vcf-9-nested-lab-setup-complete-walkthrough.html" />
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2NDPP0ZTKC"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-2NDPP0ZTKC');
+</script>
 
-  <!-- Google Analytics — replace G-2NDPP0ZTKC with your measurement ID -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-2NDPP0ZTKC"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-2NDPP0ZTKC');
-  </script>
+<!-- Open Graph -->
+<meta property="og:title" content="VCF 9 Nested Lab Setup: The Complete Walkthrough" />
+<meta property="og:description" content="Build a fully functional VCF 9 nested lab on a single workstation." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://vmwaremadesimple.com/articles/vcf-9-nested-lab-setup-complete-walkthrough.html" />
 
-  <!-- Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "headline": "VCF 9 Nested Lab Setup: The Complete Walkthrough",
-    "description": "Build a fully functional VCF 9 nested lab on a single workstation.",
-    "author": { "@type": "Person", "name": "Rob Notaro" },
-    "publisher": { "@type": "Organization", "name": "VMware Made Simple" },
-    "datePublished": "2026-03-30",
-    "dateModified": "2026-07-11",
-    "mainEntityOfPage": "https://vmwaremadesimple.com/articles/vcf-9-nested-lab-setup-complete-walkthrough.html"
-  }
-  </script>
-
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: { extend: { colors: { brand: '#1a73e8', dark: '#0f172a', card: '#1e293b' } } }
-    }
-  </script>
-  <style>
-    body { font-family: 'Inter', system-ui, sans-serif; }
-    .gradient-text { background: linear-gradient(135deg, #1a73e8, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .prose h2 { margin-top: 2.5rem; margin-bottom: 1rem; }
-    .prose h3 { margin-top: 2rem; margin-bottom: 0.75rem; }
-    .prose p { margin-bottom: 1.25rem; line-height: 1.8; }
-    .prose table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
-    .prose th { text-align: left; padding: 0.75rem 1rem; border-bottom: 2px solid #334155; color: #94a3b8; font-size: 0.875rem; text-transform: uppercase; }
-    .prose td { padding: 0.75rem 1rem; border-bottom: 1px solid #1e293b; }
-    .prose tr:hover { background: #1e293b40; }
-    .callout { background: #1e293b; border-left: 4px solid #f59e0b; padding: 1.25rem 1.5rem; border-radius: 0 0.5rem 0.5rem 0; margin: 1.5rem 0; }
-    .callout-red { border-left-color: #ef4444; }
-    .callout-green { border-left-color: #22c55e; }
-  </style>
+<!-- Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "VCF 9 Nested Lab Setup: The Complete Walkthrough",
+  "description": "Build a fully functional VCF 9 nested lab on a single workstation.",
+  "author": { "@type": "Organization", "name": "VMwareMadeSimple Editorial" },
+  "publisher": { "@type": "Organization", "name": "VMwareMadeSimple" },
+  "datePublished": "2026-03-30",
+  "dateModified": "2026-07-11",
+  "mainEntityOfPage": "https://vmwaremadesimple.com/articles/vcf-9-nested-lab-setup-complete-walkthrough.html"
+}
+</script>
 </head>
-<body class="bg-dark text-slate-100">
+<body>
 
-  <!-- Nav -->
-  <nav class="border-b border-slate-800 sticky top-0 z-50 bg-dark/95 backdrop-blur">
-    <div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
-      <a href="/" class="text-xl font-bold text-white">VMware<span class="gradient-text">MadeSimple</span></a>
-      <a href="/#newsletter" class="bg-brand text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition text-sm font-medium">Get Updates</a>
+<!-- Masthead -->
+<div class="masthead">
+  <div class="masthead-inner">
+    <h1><a href="/">VMware<span class="red">MadeSimple</span></a></h1>
+    <div class="tagline">Independent VMware analysis for IT professionals. No vendor spin.</div>
+    <div class="credibility-bar">
+      <div class="creds">
+        <span><span class="dot">●</span> Independent</span>
+        <span><span class="dot">●</span> Sources linked</span>
+        <span><span class="dot">●</span> Updated weekly</span>
+        <span><span class="dot">●</span> Not affiliated with VMware/Broadcom</span>
+      </div>
+      <div class="social">
+        <a href="/sitemap.xml">RSS</a>
+        <a href="#newsletter">Newsletter</a>
+        <a href="mailto:contact@vmwaremadesimple.com">Contact</a>
+      </div>
     </div>
-  </nav>
+  </div>
+</div>
 
-  <!-- Article -->
-  <article class="max-w-4xl mx-auto px-6 py-12 prose">
-
-    <!-- Breadcrumb -->
-    <div class="text-sm text-slate-500 mb-6">
-      <a href="/" class="hover:text-slate-300">Home</a> → <span class="text-slate-400">VCF 9 Nested Lab Setup: The Complete Walkthrough</span>
+<!-- Category nav -->
+<div class="navbar">
+  <div class="navbar-inner">
+    <a href="/">Home</a>
+    <a href="/#licensing">Licensing</a>
+    <a href="/#migration">Migration</a>
+    <a href="/#vcf" class="active">VCF 9.1</a>
+    <a href="/#homelab">Home Lab</a>
+    <a href="/#powercli">PowerCLI</a>
+    <a href="/#alternatives">Alternatives</a>
+    <a href="/tools/price-calculator.html">Tools</a>
+    <div class="nav-search">
+      <input type="text" placeholder="Search..." onkeyup="searchSite(this.value)" />
     </div>
+  </div>
+</div>
 
-    <!-- Header -->
-    <div class="mb-10">
-      <div class="text-xs text-blue-400 font-medium uppercase tracking-wide mb-3">VCF & Architecture</div>
-      <h1 class="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight" style="-webkit-text-fill-color: white;">
-        VCF 9 Nested Lab Setup: The Complete Walkthrough
-      </h1>
-      <p class="text-slate-400 text-lg">
-        Updated July 11, 2026 · 15 min read
-      </p>
-    </div>
+<!-- Article header -->
+<div class="article-header">
+  <div class="breadcrumb"><a href="/">Home</a> → VCF 9 Nested Lab Setup</div>
+  <div class="cat-label">VCF &amp; Architecture</div>
+  <h1>VCF 9 Nested Lab Setup: The Complete Walkthrough</h1>
+  <div class="byline">
+    <span>Updated Jul 11, 2026</span>
+    <span>·</span>
+    <span>15 min</span>
+    <span class="verified">Fact-checked</span>
+  </div>
+</div>
 
-    <h2>VCF 9 Nested Lab Setup: The Complete Walkthrough</h2>
+<!-- Article body -->
+<div class="article-body">
+
 <h2>Introduction: Nested Virtualization Grows Up</h2>
 <p>In the early days of virtualization, running a "nested" environment — an entire enterprise infrastructure stack simulating production inside a single physical host — was a niche experiment. Today it's the standard path for VMware Certified Professional (VCP) candidates, infrastructure architects, and anyone who wants to explore VMware Cloud Foundation (VCF) without a $50,000 hardware bill.</p>
 <p><strong>VMware Cloud Foundation 9.1</strong>, shipped in mid-2026, builds on the VCF 9.0 architectural reset that followed Broadcom's acquisition. It ships alongside ESXi 9.1, keeps the unified <strong>VCF Installer</strong> appliance, and expands the <strong>VCF Fleet</strong> management model with clearer fleet-level versus instance-level responsibilities. If you last played with VCF 5.x, you're in for a surprise. Verify current VCF 9.1 component names and requirements against Broadcom TechDocs before deployment.</p>
@@ -269,7 +276,7 @@ echo "feature.vcf.internal.single.host.domain=true" &gt;&gt; /home/vcf/feature.p
 # Restart VCF Installer services
 echo 'y' | /opt/vmware/vcf/operationsmanager/scripts/cli/sddcmanager_restart_services.sh
 </code></pre>
-<blockquote>⚠️ <strong>Disclaimer:</strong> This override is not officially supported by Broadcom. Use exclusively for lab/learning purposes. Do not apply to production environments.</blockquote>
+<blockquote><strong>Disclaimer:</strong> This override is not officially supported by Broadcom. Use exclusively for lab/learning purposes. Do not apply to production environments.</blockquote>
 <p>After restarting services, use the <strong>JSON deployment method</strong> instead of the interactive wizard — the UI still enforces the 3-host minimum at the front-end level. Upload your JSON with a single host reference and proceed directly to validation.</p>
 <h3>Step 5 — Deploy the VCF Fleet</h3>
 <p>With the installer configured, proceed through the bringup:</p>
@@ -327,7 +334,7 @@ EOF
 kubectl apply -f vks-cluster.yaml
 </code></pre>
 <blockquote><strong>Resource caveat:</strong> Enabling VKS adds significant memory overhead. Only attempt this if your foundation host has 256 GB+ RAM available.</blockquote>
-<h2>Part IV: Common Issues & Verified Fixes</h2>
+<h2>Part IV: Common Issues &amp; Verified Fixes</h2>
 <h3>Issue 1: "Insufficient Memory" During Nested Deployment</h3>
 <p><strong>Symptom:</strong> VCF bringup fails when spinning up nested ESXi VMs; VCFA fails to power on.</p>
 <p><strong>Root causes:</strong></p>
@@ -435,51 +442,39 @@ $vcfBringupSpec = @{
 </ul>
 <p><em>Last updated: July 2026 for VCF 9.1 context. Always check <a href="https://docs.vmware.com/en/VMware-Cloud-Foundation/index.html">Broadcom's release notes</a> and download portal for the latest build numbers, OVA filenames, license-server behavior, and compatibility information.</em></p>
 
-    <!-- Newsletter CTA -->
-    <div class="mt-16 bg-card border border-slate-700 rounded-2xl p-10 text-center">
-      <h2 class="text-2xl font-bold text-white mb-3" style="-webkit-text-fill-color: white;">Stay ahead of the VMware changes</h2>
-      <p class="text-slate-400 mb-6">We're publishing detailed comparison guides, migration walkthroughs, and cost calculators. Get them in your inbox.</p>
-      <form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" onsubmit="handleSubscribe(event)">
-        <input type="email" placeholder="your@email.com" class="flex-1 bg-dark border border-slate-600 text-white px-5 py-3 rounded-xl focus:outline-none focus:border-blue-500 placeholder-slate-500" required />
-        <button type="submit" class="bg-brand text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-600 transition">Subscribe</button>
-      </form>
-    </div>
+</div>
 
-    <!-- Author -->
-    <div class="mt-12 pt-8 border-t border-slate-800">
-      <div class="flex items-start gap-4">
-        <div class="w-12 h-12 bg-slate-700 rounded-full flex items-center justify-center text-xl">🖥️</div>
-        <div>
-          <p class="text-white font-semibold">Written by Rob Notaro</p>
-          <p class="text-slate-400 text-sm mt-1">Senior infrastructure engineer specializing in VMware, Horizon VDI, and enterprise virtualization. Currently deploying Horizon 2512 and VCF in production environments.</p>
-        </div>
-      </div>
-    </div>
+<!-- Newsletter CTA -->
+<div class="newsletter-cta" id="newsletter">
+  <h3>Licensing Alerts</h3>
+  <p>Pricing changes, new guides, lab tips. No spam.</p>
+  <input type="email" placeholder="your@email.com" />
+  <button>Subscribe</button>
+</div>
 
-  </article>
+<!-- Footer -->
+<footer>
+  <div>
+    © 2026 VMwareMadeSimple.com — Independent. Not affiliated with VMware or Broadcom.
+    <div class="aff-disclosure" style="margin-top: 0.3rem;">Some links are affiliate links. See our <a href="#">disclosure policy</a>.</div>
+  </div>
+  <div class="footer-links">
+    <a href="#">About</a>
+    <a href="mailto:contact@vmwaremadesimple.com">Contact</a>
+    <a href="/sitemap.xml">RSS</a>
+    <a href="#">Privacy</a>
+    <a href="#">Corrections</a>
+  </div>
+</footer>
 
-  <!-- Footer -->
-  <footer class="border-t border-slate-800 mt-10">
-    <div class="max-w-4xl mx-auto px-6 py-10 flex flex-col md:flex-row items-center justify-between gap-4">
-      <div class="text-slate-400 text-sm">© 2026 VMwareMadeSimple.com — Independent. Not affiliated with VMware or Broadcom.</div>
-      <div class="flex gap-6 text-slate-400 text-sm">
-        <a href="/" class="hover:text-white transition">Home</a>
-        <a href="/#articles" class="hover:text-white transition">Articles</a>
-        <a href="/#newsletter" class="hover:text-white transition">Newsletter</a>
-      </div>
-    </div>
-    <div class="max-w-4xl mx-auto px-6 pb-8 text-slate-600 text-xs">
-      Some links on this site are affiliate links. If you purchase through them, we may earn a small commission at no extra cost to you.
-    </div>
-  </footer>
-
-  <script>
-    function handleSubscribe(e) {
-      e.preventDefault();
-      alert('Thanks! We\'ll be in touch soon.');
-      e.target.reset();
-    }
-  </script>
+<script>
+function searchSite(q) {
+  if (q.length < 2) return;
+  if (event && event.key === 'Enter') {
+    window.location.href = 'https://www.google.com/search?q=site:vmwaremadesimple.com+' + encodeURIComponent(q);
+  }
+}
+</script>
 
 </body>
 </html>

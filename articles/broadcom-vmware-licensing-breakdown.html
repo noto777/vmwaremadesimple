@@ -1,366 +1,387 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Broadcom VMware Licensing Breakdown: What You're Actually Paying For Now | VMware Made Simple</title>
-  <meta name="description" content="VMware's new licensing under Broadcom explained: VCF vs VVF vs vSphere Standard pricing, what's included, and what actual costs look like in 2026." />
-  <meta name="keywords" content="VMware licensing 2026, Broadcom VMware pricing, VCF pricing, VVF pricing, vSphere Standard pricing, VMware per core cost, VMware alternatives" />
-  <link rel="canonical" href="https://vmwaremadesimple.com/articles/broadcom-vmware-licensing-breakdown.html" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Broadcom VMware Licensing Breakdown: What You're Actually Paying For Now | VMwareMadeSimple</title>
+<meta name="description" content="VMware's new licensing under Broadcom explained: VCF vs VVF vs vSphere Standard pricing, what's included, and what actual costs look like in 2026." />
+<meta name="keywords" content="VMware licensing 2026, Broadcom VMware pricing, VCF pricing, VVF pricing, vSphere Standard pricing, VMware per core cost, VMware alternatives" />
+<link rel="canonical" href="https://vmwaremadesimple.com/articles/broadcom-vmware-licensing-breakdown.html" />
+<link rel="stylesheet" href="/css/style.css" />
 
-  <meta property="og:title" content="Broadcom VMware Licensing Breakdown: What You're Actually Paying For Now" />
-  <meta property="og:description" content="VCF vs VVF vs vSphere Standard pricing, per-core minimums, and what your renewal quote actually means." />
-  <meta property="og:type" content="article" />
-  <meta property="og:url" content="https://vmwaremadesimple.com/articles/broadcom-vmware-licensing-breakdown.html" />
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2NDPP0ZTKC"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-2NDPP0ZTKC');
+</script>
 
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: { extend: { colors: { brand: '#1a73e8', dark: '#0f172a', card: '#1e293b' } } }
-    }
-  </script>
-  <style>
-    body { font-family: 'Inter', system-ui, sans-serif; }
-    .gradient-text { background: linear-gradient(135deg, #1a73e8, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .prose h2 { margin-top: 2.5rem; margin-bottom: 1rem; }
-    .prose h3 { margin-top: 2rem; margin-bottom: 0.75rem; }
-    .prose p { margin-bottom: 1.25rem; line-height: 1.8; }
-    .prose table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
-    .prose th { text-align: left; padding: 0.75rem 1rem; border-bottom: 2px solid #334155; color: #94a3b8; font-size: 0.875rem; text-transform: uppercase; }
-    .prose td { padding: 0.75rem 1rem; border-bottom: 1px solid #1e293b; }
-    .prose tr:hover { background: #1e293b40; }
-    .callout { background: #1e293b; border-left: 4px solid #f59e0b; padding: 1.25rem 1.5rem; border-radius: 0 0.5rem 0.5rem 0; margin: 1.5rem 0; }
-    .callout-red { border-left-color: #ef4444; }
-    .callout-green { border-left-color: #22c55e; }
-  </style>
+<!-- Open Graph -->
+<meta property="og:title" content="Broadcom VMware Licensing Breakdown: What You're Actually Paying For Now" />
+<meta property="og:description" content="VCF vs VVF vs vSphere Standard pricing, per-core minimums, and what your renewal quote actually means." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://vmwaremadesimple.com/articles/broadcom-vmware-licensing-breakdown.html" />
 </head>
-<body class="bg-dark text-slate-100">
+<body>
 
-  <!-- Nav -->
-  <nav class="border-b border-slate-800 sticky top-0 z-50 bg-dark/95 backdrop-blur">
-    <div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
-      <a href="/" class="text-xl font-bold text-white">VMware<span class="gradient-text">MadeSimple</span></a>
-      <a href="/#newsletter" class="bg-brand text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition text-sm font-medium">Get Updates</a>
+<!-- Alert strip -->
+<div class="alert-strip">
+  VCF 9.1 released — <a href="/articles/vcf-9-nested-lab-setup-complete-walkthrough.html">licensing and upgrade paths changed. Here's what's new →</a>
+</div>
+
+<!-- Masthead -->
+<div class="masthead">
+  <div class="masthead-inner">
+    <h1><a href="/">VMware<span class="red">MadeSimple</span></a></h1>
+    <div class="tagline">Independent VMware analysis for IT professionals. No vendor spin.</div>
+    <div class="credibility-bar">
+      <div class="creds">
+        <span><span class="dot">●</span> Independent</span>
+        <span><span class="dot">●</span> Sources linked</span>
+        <span><span class="dot">●</span> Updated weekly</span>
+        <span><span class="dot">●</span> Not affiliated with VMware/Broadcom</span>
+      </div>
+      <div class="social">
+        <a href="/sitemap.xml">RSS</a>
+        <a href="#newsletter">Newsletter</a>
+        <a href="mailto:contact@vmwaremadesimple.com">Contact</a>
+      </div>
     </div>
-  </nav>
+  </div>
+</div>
 
-  <!-- Article -->
-  <article class="max-w-4xl mx-auto px-6 py-12 prose">
-
-    <!-- Breadcrumb -->
-    <div class="text-sm text-slate-500 mb-6">
-      <a href="/" class="hover:text-slate-300">Home</a> → <span class="text-slate-400">Broadcom Licensing</span>
+<!-- Category nav -->
+<div class="navbar">
+  <div class="navbar-inner">
+    <a href="/">Home</a>
+    <a href="/#licensing" class="active">Licensing</a>
+    <a href="/#migration">Migration</a>
+    <a href="/#vcf">VCF 9.1</a>
+    <a href="/#homelab">Home Lab</a>
+    <a href="/#powercli">PowerCLI</a>
+    <a href="/#alternatives">Alternatives</a>
+    <a href="/tools/price-calculator.html">Tools</a>
+    <div class="nav-search">
+      <input type="text" placeholder="Search..." onkeyup="searchSite(this.value)" />
     </div>
+  </div>
+</div>
 
-    <!-- Header -->
-    <div class="mb-10">
-      <div class="text-xs text-blue-400 font-medium uppercase tracking-wide mb-3">Broadcom Licensing</div>
-      <h1 class="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight" style="-webkit-text-fill-color: white;">
-        Broadcom VMware Licensing Breakdown: What You're Actually Paying For Now
-      </h1>
-      <p class="text-slate-400 text-lg">
-        Updated February 2026 · 12 min read
-      </p>
-    </div>
+<!-- Article header -->
+<div class="article-header">
+  <div class="breadcrumb"><a href="/">Home</a> → Licensing</div>
+  <div class="cat-label">Licensing</div>
+  <h1>Broadcom VMware Licensing Breakdown: What You're Actually Paying For Now</h1>
+  <div class="byline">
+    <span>Updated Jul 11, 2026</span>
+    <span>·</span>
+    <span>12 min read</span>
+    <span class="verified">Fact-checked</span>
+  </div>
+</div>
 
-    <!-- Intro -->
-    <p class="text-lg text-slate-300">
-      My last renewal conversation with a Broadcom rep was enlightening. Their quote came back at 3.5x the prior year. Here's the actual breakdown of what changed, what it costs, and how to calculate your number.
-    </p>
+<!-- Article body -->
+<div class="article-body">
 
-    <div class="callout-red callout">
-      <strong class="text-red-400">The short version:</strong> Reported price increases range from 150% to over 1,000% depending on configuration and prior discounting (source: ColocationPlus, June 2025; AT&T federal court filing, 2024). Broadcom ended new perpetual license sales in early 2024; existing perpetual licenses and active SnS/support contracts are honored through their term, but once support expires you lose patches, support, and upgrade rights.
-    </div>
+  <p>
+    My last renewal conversation with a Broadcom rep was enlightening. Their quote came back at 3.5x the prior year. Here's the actual breakdown of what changed, what it costs, and how to calculate your number.
+  </p>
 
-    <!-- What Changed -->
-    <h2 class="text-2xl font-bold text-white">What Actually Changed</h2>
+  <div class="callout-red">
+    <strong>The short version:</strong> Reported price increases range from 150% to over 1,000% depending on configuration and prior discounting (source: ColocationPlus, June 2025; AT&T federal court filing, 2024). Broadcom ended new perpetual license sales in early 2024; existing perpetual licenses and active SnS/support contracts are honored through their term, but once support expires you lose patches, support, and upgrade rights.
+  </div>
 
-    <p>
-      Broadcom collapsed VMware's portfolio from roughly 8,000 SKUs and 168 bundles down to four primary subscription bundles: VMware Cloud Foundation (VCF), vSphere Foundation (VVF), vSphere Standard, and vSphere Enterprise Plus.
-    </p>
+  <!-- What Changed -->
+  <h2>What Actually Changed</h2>
 
-    <table>
-      <thead>
-        <tr>
-          <th></th>
-          <th>Old Model (Pre-Broadcom)</th>
-          <th>New Model (2025-2026)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td class="font-medium text-slate-300">License type</td>
-          <td>Perpetual (buy once, own forever) + annual support</td>
-          <td>Subscription only (1, 3, or 5-year terms)</td>
-        </tr>
-        <tr>
-          <td class="font-medium text-slate-300">Pricing metric</td>
-          <td>Per CPU socket (up to 32 cores/socket)</td>
-          <td>Per physical core</td>
-        </tr>
-        <tr>
-          <td class="font-medium text-slate-300">Typical cost</td>
-          <td>~$4,500/socket perpetual + ~$1,000/yr support</td>
-          <td>~$50 (vSphere Standard) – $350 (VCF) per core per year</td>
-        </tr>
-        <tr>
-          <td class="font-medium text-slate-300">Minimum purchase</td>
-          <td>No core minimum</td>
-          <td>16 cores per CPU socket; 72 cores per order (new orders and tier changes — partially reversed for renewals late 2025)</td>
-        </tr>
-        <tr>
-          <td class="font-medium text-slate-300">Product choice</td>
-          <td>Buy vSphere, vSAN, NSX, vCenter separately</td>
-          <td>Subscription bundles: VCF, VVF, vSphere Standard, or vSphere Enterprise Plus</td>
-        </tr>
-        <tr>
-          <td class="font-medium text-slate-300">If you stop paying</td>
-          <td>Keep using the software, lose updates</td>
-          <td>You lose updates, support, and upgrade rights. The software does not immediately stop working, but you are out of compliance.</td>
-        </tr>
-      </tbody>
-    </table>
+  <p>
+    Broadcom collapsed VMware's portfolio from roughly 8,000 SKUs and 168 bundles down to four primary subscription bundles: VMware Cloud Foundation (VCF), vSphere Foundation (VVF), vSphere Standard, and vSphere Enterprise Plus.
+  </p>
 
-    <!-- Primary Bundles -->
-    <h2 class="text-2xl font-bold text-white">The Four Primary Bundles: VCF, VVF, Standard, and Enterprise Plus</h2>
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        <th>Old Model (Pre-Broadcom)</th>
+        <th>New Model (2025-2026)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>License type</strong></td>
+        <td>Perpetual (buy once, own forever) + annual support</td>
+        <td>Subscription only (1, 3, or 5-year terms)</td>
+      </tr>
+      <tr>
+        <td><strong>Pricing metric</strong></td>
+        <td>Per CPU socket (up to 32 cores/socket)</td>
+        <td>Per physical core</td>
+      </tr>
+      <tr>
+        <td><strong>Typical cost</strong></td>
+        <td>~$4,500/socket perpetual + ~$1,000/yr support</td>
+        <td>~$50 (vSphere Standard) – $350 (VCF) per core per year</td>
+      </tr>
+      <tr>
+        <td><strong>Minimum purchase</strong></td>
+        <td>No core minimum</td>
+        <td>16 cores per CPU socket; 72 cores per order (new orders and tier changes — partially reversed for renewals late 2025)</td>
+      </tr>
+      <tr>
+        <td><strong>Product choice</strong></td>
+        <td>Buy vSphere, vSAN, NSX, vCenter separately</td>
+        <td>Subscription bundles: VCF, VVF, vSphere Standard, or vSphere Enterprise Plus</td>
+      </tr>
+      <tr>
+        <td><strong>If you stop paying</strong></td>
+        <td>Keep using the software, lose updates</td>
+        <td>You lose updates, support, and upgrade rights. The software does not immediately stop working, but you are out of compliance.</td>
+      </tr>
+    </tbody>
+  </table>
 
-    <h3 class="text-xl font-semibold text-white">VMware Cloud Foundation (VCF) — $350/core/year (list)</h3>
+  <!-- Primary Bundles -->
+  <h2>The Four Primary Bundles: VCF, VVF, Standard, and Enterprise Plus</h2>
 
-    <p>
-      VCF bundles everything VMware makes into a single subscription. It targets organizations already running vSAN and NSX, and is the tier Broadcom steers large accounts toward. The current list price is <strong>$350/core/year</strong>, reduced from the initial post-acquisition $700/core/year pricing in January 2024.
-    </p>
+  <h3>VMware Cloud Foundation (VCF) — $350/core/year (list)</h3>
 
-    <p><strong class="text-slate-200">What's included:</strong></p>
-    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
-      <li>vSphere Enterprise Plus (compute/hypervisor)</li>
-      <li>vCenter Standard (management)</li>
-      <li>vSAN Enterprise (software-defined storage) — 1 TiB per core included</li>
-      <li>NSX (software-defined networking and microsegmentation)</li>
-      <li>Aria Suite Enterprise (operations and monitoring)</li>
-      <li>SDDC Manager (lifecycle management)</li>
-      <li>vSphere Kubernetes Service (VKS)</li>
-      <li>HCX Enterprise (workload migration)</li>
-    </ul>
+  <p>
+    VCF bundles everything VMware makes into a single subscription. It targets organizations already running vSAN and NSX, and is the tier Broadcom steers large accounts toward. The current list price is <strong>$350/core/year</strong>, reduced from the initial post-acquisition $700/core/year pricing in January 2024.
+  </p>
 
-    <div class="callout">
-      <strong class="text-yellow-400">Hardware minimums:</strong> VCF 9.1 keeps the reduced VCF 9 footprint. The minimum is <strong>3 hosts</strong> with vSAN (OSA or ESA), or <strong>2 hosts</strong> with external storage (NFS/FC). The consolidated architecture lets management and workload VMs share the same cluster — no separate 4+3 domain split required. For 1-2 host environments, VVF or standalone vSphere is the appropriate tier.
-    </div>
+  <p><strong>What's included:</strong></p>
+  <ul>
+    <li>vSphere Enterprise Plus (compute/hypervisor)</li>
+    <li>vCenter Standard (management)</li>
+    <li>vSAN Enterprise (software-defined storage) — 1 TiB per core included</li>
+    <li>NSX (software-defined networking and microsegmentation)</li>
+    <li>Aria Suite Enterprise (operations and monitoring)</li>
+    <li>SDDC Manager (lifecycle management)</li>
+    <li>vSphere Kubernetes Service (VKS)</li>
+    <li>HCX Enterprise (workload migration)</li>
+  </ul>
 
-    <h3 class="text-xl font-semibold text-white">VMware vSphere Foundation (VVF) — $135/core/year (average list)</h3>
+  <div class="callout">
+    <strong>Hardware minimums:</strong> VCF 9.1 keeps the reduced VCF 9 footprint. The minimum is <strong>3 hosts</strong> with vSAN (OSA or ESA), or <strong>2 hosts</strong> with external storage (NFS/FC). The consolidated architecture lets management and workload VMs share the same cluster — no separate 4+3 domain split required. For 1-2 host environments, VVF or standalone vSphere is the appropriate tier.
+  </div>
 
-    <p>
-      VVF is the mid-tier bundle. It includes the hypervisor, storage, and basic management — but no NSX networking. Small and mid-size organizations that stay with VMware will likely end up here. Pricing varies by term: approximately <strong>$190/core/year for a 1-year subscription</strong>, <strong>$150/core/year for a 3-year commitment</strong>, averaging about <strong>$135/core/year</strong> across typical deals.
-    </p>
+  <h3>VMware vSphere Foundation (VVF) — $135/core/year (average list)</h3>
 
-    <p><strong class="text-slate-200">What's included:</strong></p>
-    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
-      <li>vSphere Enterprise Plus (compute/hypervisor)</li>
-      <li>vCenter Standard (management)</li>
-      <li>vSAN Enterprise (storage) — but only 0.25 TiB (250 GiB) per core (much less than VCF)</li>
-      <li>Aria Suite Standard (basic monitoring)</li>
-      <li>vSphere Kubernetes Service (VKS)</li>
-    </ul>
+  <p>
+    VVF is the mid-tier bundle. It includes the hypervisor, storage, and basic management — but no NSX networking. Small and mid-size organizations that stay with VMware will likely end up here. Pricing varies by term: approximately <strong>$190/core/year for a 1-year subscription</strong>, <strong>$150/core/year for a 3-year commitment</strong>, averaging about <strong>$135/core/year</strong> across typical deals.
+  </p>
 
-    <p>
-      <strong class="text-slate-200">What's NOT included:</strong> No NSX, no SDDC Manager, no HCX. The vSAN allocation is thin — a 32-core server only gets about 8 TB of vSAN capacity, which means additional vSAN capacity purchases are likely for environments with significant storage needs.
-    </p>
+  <p><strong>What's included:</strong></p>
+  <ul>
+    <li>vSphere Enterprise Plus (compute/hypervisor)</li>
+    <li>vCenter Standard (management)</li>
+    <li>vSAN Enterprise (storage) — but only 0.25 TiB (250 GiB) per core (much less than VCF)</li>
+    <li>Aria Suite Standard (basic monitoring)</li>
+    <li>vSphere Kubernetes Service (VKS)</li>
+  </ul>
 
-    <div class="callout callout">
-      <strong class="text-yellow-400">Update:</strong> Broadcom initially consolidated everything into VCF and VVF bundles only. After significant customer backlash, they expanded the portfolio back to four subscription tiers: <strong>VMware Cloud Foundation (VCF)</strong>, <strong>vSphere Foundation (VVF)</strong>, <strong>vSphere Standard</strong>, and <strong>vSphere Enterprise Plus</strong>. The standalone options are subscription-based (per core, per year) — not perpetual — but they do give smaller shops a path that doesn't require the full VCF/VVF stack.
-    </div>
+  <p>
+    <strong>What's NOT included:</strong> No NSX, no SDDC Manager, no HCX. The vSAN allocation is thin — a 32-core server only gets about 8 TB of vSAN capacity, which means additional vSAN capacity purchases are likely for environments with significant storage needs.
+  </p>
 
-    <h3 class="text-xl font-semibold text-white">vSphere Standard and vSphere Enterprise Plus — standalone subscription bundles</h3>
+  <div class="callout">
+    <strong>Update:</strong> Broadcom initially consolidated everything into VCF and VVF bundles only. After significant customer backlash, they expanded the portfolio back to four subscription tiers: <strong>VMware Cloud Foundation (VCF)</strong>, <strong>vSphere Foundation (VVF)</strong>, <strong>vSphere Standard</strong>, and <strong>vSphere Enterprise Plus</strong>. The standalone options are subscription-based (per core, per year) — not perpetual — but they do give smaller shops a path that doesn't require the full VCF/VVF stack.
+  </div>
 
-    <p>
-      vSphere Standard remains available as a subscription bundle at approximately <strong>$50/core/year</strong>, though some customers report sales pressure toward VVF or VCF. vSphere Enterprise Plus also remains a current subscription bundle for customers that need the higher-end vSphere feature set without adopting the full VVF or VCF stack. Verify the exact SKU, term, and upgrade rights with your reseller because Broadcom packaging and discounting can vary by contract.
-    </p>
+  <h3>vSphere Standard and vSphere Enterprise Plus — standalone subscription bundles</h3>
 
-    <!-- VCF 9 Hardware Minimums -->
-    <h3 class="text-xl font-semibold text-white">VCF 9.1 Hardware Requirements: The 7-Node Myth</h3>
+  <p>
+    vSphere Standard remains available as a subscription bundle at approximately <strong>$50/core/year</strong>, though some customers report sales pressure toward VVF or VCF. vSphere Enterprise Plus also remains a current subscription bundle for customers that need the higher-end vSphere feature set without adopting the full VVF or VCF stack. Verify the exact SKU, term, and upgrade rights with your reseller because Broadcom packaging and discounting can vary by contract.
+  </p>
 
-    <p>
-      The "7-node minimum" for VCF (4 management + 3 workload) was true for VCF 5.x. VCF 9 changed this, and VCF 9.1 keeps the same reduced floor. The actual minimums, per William Lam's lab guide and Broadcom's installer:
-    </p>
+  <!-- VCF 9 Hardware Minimums -->
+  <h3>VCF 9.1 Hardware Requirements: The 7-Node Myth</h3>
 
-    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
-      <li><strong>3 ESXi hosts</strong> when using vSAN (OSA or ESA)</li>
-      <li><strong>2 ESXi hosts</strong> when using external storage (FC VMFS or NFS)</li>
-      <li>The old 4-host management domain requirement came from vSAN's need for a fault tolerance host during patching — with VCF 9's updated lifecycle tooling, 3 hosts is a supported minimum for production</li>
-    </ul>
+  <p>
+    The "7-node minimum" for VCF (4 management + 3 workload) was true for VCF 5.x. VCF 9 changed this, and VCF 9.1 keeps the same reduced floor. The actual minimums, per William Lam's lab guide and Broadcom's installer:
+  </p>
 
-    <p>
-      If you're doing capacity planning against VCF 5.x docs, re-read the VCF 9.1 requirements. The floor dropped. That said: running a VCF management domain on 3 nodes with vSAN leaves zero fault tolerance headroom during patching. If a host needs to enter maintenance mode for a VCF lifecycle upgrade, you're down to 2 active vSAN nodes. Minimum 4 hosts is still the right answer for any production cluster you actually care about.
-    </p>
+  <ul>
+    <li><strong>3 ESXi hosts</strong> when using vSAN (OSA or ESA)</li>
+    <li><strong>2 ESXi hosts</strong> when using external storage (FC VMFS or NFS)</li>
+    <li>The old 4-host management domain requirement came from vSAN's need for a fault tolerance host during patching — with VCF 9's updated lifecycle tooling, 3 hosts is a supported minimum for production</li>
+  </ul>
 
-    <div class="callout callout-red">
-      <strong class="text-red-400">Sales-pressure risk:</strong> As of early 2026, multiple r/vmware threads report that Broadcom sales reps are steering customers toward larger bundles. Some shops report difficulty getting VVF quoted, with reps quoting VCF instead. vSphere Standard remains available as a subscription bundle at approximately $50/core/year, though some customers report sales pressure toward VVF or VCF. If you're building a 3-5 year infrastructure plan, verify current SKU availability, upgrade rights, and renewal terms with your reseller before committing.
-    </div>
+  <p>
+    If you're doing capacity planning against VCF 5.x docs, re-read the VCF 9.1 requirements. The floor dropped. That said: running a VCF management domain on 3 nodes with vSAN leaves zero fault tolerance headroom during patching. If a host needs to enter maintenance mode for a VCF lifecycle upgrade, you're down to 2 active vSAN nodes. Minimum 4 hosts is still the right answer for any production cluster you actually care about.
+  </p>
 
-    <p>
-      <strong>VCF 9.1 licensing-server note:</strong> The per-core commercial model did not change in 9.1, but the operational plumbing did. VCF 9.1 updates the VCF Operations License Server workflow as part of the broader management-plane consolidation, so validate license-server placement, connectivity, and Fleet-level visibility during bringup or upgrade.
-    </p>
+  <div class="callout-red">
+    <strong>Sales-pressure risk:</strong> As of early 2026, multiple r/vmware threads report that Broadcom sales reps are steering customers toward larger bundles. Some shops report difficulty getting VVF quoted, with reps quoting VCF instead. vSphere Standard remains available as a subscription bundle at approximately $50/core/year, though some customers report sales pressure toward VVF or VCF. If you're building a 3-5 year infrastructure plan, verify current SKU availability, upgrade rights, and renewal terms with your reseller before committing.
+  </div>
 
-    <!-- Break-Even Analysis -->
-    <h3 class="text-xl font-semibold text-white">When VVF Actually Makes Sense: The Break-Even</h3>
+  <p>
+    <strong>VCF 9.1 licensing-server note:</strong> The per-core commercial model did not change in 9.1, but the operational plumbing did. VCF 9.1 updates the VCF Operations License Server workflow as part of the broader management-plane consolidation, so validate license-server placement, connectivity, and Fleet-level visibility during bringup or upgrade.
+  </p>
 
-    <p>
-      The per-core price increase looks brutal in isolation. But it's the wrong way to evaluate VVF for shops that were already running separate Enterprise Plus, vSAN, and Aria licenses. At the old à la carte pricing (approximate historical figures):
-    </p>
+  <!-- Break-Even Analysis -->
+  <h3>When VVF Actually Makes Sense: The Break-Even</h3>
 
-    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
-      <li>vSphere Enterprise Plus: ~$120/core/year</li>
-      <li>vSAN Enterprise: ~$100-150/core/year (sold per-core, per-TiB pricing varied)</li>
-      <li>Aria Operations: ~$30-60/core/year</li>
-    </ul>
+  <p>
+    The per-core price increase looks brutal in isolation. But it's the wrong way to evaluate VVF for shops that were already running separate Enterprise Plus, vSAN, and Aria licenses. At the old à la carte pricing (approximate historical figures):
+  </p>
 
-    <p>
-      Stack those up and you were at $250-330/core before volume discounts — potentially more expensive than VVF's $135/core with everything bundled. For that kind of shop, VVF is the right product at a defensible price. At 72 cores, VVF's vSAN entitlement gives you 72 cores × 0.25 TiB/core = 18 TiB of vSAN capacity. If you needed that storage capacity and would have purchased vSAN anyway, the bundled economics work.
-    </p>
+  <ul>
+    <li>vSphere Enterprise Plus: ~$120/core/year</li>
+    <li>vSAN Enterprise: ~$100-150/core/year (sold per-core, per-TiB pricing varied)</li>
+    <li>Aria Operations: ~$30-60/core/year</li>
+  </ul>
 
-    <div class="callout callout-green">
-      <strong class="text-green-400">VVF makes financial sense if:</strong> You were previously licensing vSphere Enterprise Plus + vSAN + Aria Operations separately. The bundle consolidation is real value. Compare your old à la carte spend to the new VVF quote before making a migration decision.
-    </div>
+  <p>
+    Stack those up and you were at $250-330/core before volume discounts — potentially more expensive than VVF's $135/core with everything bundled. For that kind of shop, VVF is the right product at a defensible price. At 72 cores, VVF's vSAN entitlement gives you 72 cores × 0.25 TiB/core = 18 TiB of vSAN capacity. If you needed that storage capacity and would have purchased vSAN anyway, the bundled economics work.
+  </p>
 
-    <div class="callout callout-red">
-      <strong class="text-red-400">VVF doesn't make sense if:</strong> You ran a simple 3-node vSphere Standard cluster with shared NFS/iSCSI storage and basic HA. You're paying for vSAN you can't use (no all-flash nodes) and Aria you don't need. This is exactly the profile that's migrating to Proxmox — and it's a reasonable call.
-    </div>
+  <div class="callout-green">
+    <strong>VVF makes financial sense if:</strong> You were previously licensing vSphere Enterprise Plus + vSAN + Aria Operations separately. The bundle consolidation is real value. Compare your old à la carte spend to the new VVF quote before making a migration decision.
+  </div>
 
-    <!-- Per-Core Minimums -->
-    <h2 class="text-2xl font-bold text-white">The Per-Core Minimums: 16 Cores Per CPU, 72 Cores Per Order</h2>
+  <div class="callout-red">
+    <strong>VVF doesn't make sense if:</strong> You ran a simple 3-node vSphere Standard cluster with shared NFS/iSCSI storage and basic HA. You're paying for vSAN you can't use (no all-flash nodes) and Aria you don't need. This is exactly the profile that's migrating to Proxmox — and it's a reasonable call.
+  </div>
 
-    <p>
-      There are <strong>two minimums</strong> that both apply, and they're independent of each other:
-    </p>
+  <!-- Per-Core Minimums -->
+  <h2>The Per-Core Minimums: 16 Cores Per CPU, 72 Cores Per Order</h2>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Minimum</th>
-          <th>What It Means</th>
-          <th>Still Active?</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td class="font-medium text-slate-300">16 cores per CPU socket</td>
-          <td>If a CPU has fewer than 16 physical cores, billing rounds up to 16</td>
-          <td><strong class="text-green-400">Yes — all orders</strong></td>
-        </tr>
-        <tr>
-          <td class="font-medium text-slate-300">72 cores per license order</td>
-          <td>Each order must include at least 72 billable cores total</td>
-          <td><strong class="text-yellow-400">New orders & tier changes — partially reversed for renewals late 2025</strong></td>
-        </tr>
-      </tbody>
-    </table>
+  <p>
+    There are <strong>two minimums</strong> that both apply, and they're independent of each other:
+  </p>
 
-    <h3 class="text-xl font-semibold text-white">The 16-Core Per-CPU Floor</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Minimum</th>
+        <th>What It Means</th>
+        <th>Still Active?</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>16 cores per CPU socket</strong></td>
+        <td>If a CPU has fewer than 16 physical cores, billing rounds up to 16</td>
+        <td><strong>Yes — all orders</strong></td>
+      </tr>
+      <tr>
+        <td><strong>72 cores per license order</strong></td>
+        <td>Each order must include at least 72 billable cores total</td>
+        <td><strong>New orders & tier changes — partially reversed for renewals late 2025</strong></td>
+      </tr>
+    </tbody>
+  </table>
 
-    <p>
-      This one is simple. If a CPU has fewer than 16 physical cores, Broadcom bills it as 16. Most modern server CPUs have 16 or more cores per socket, so this rarely changes the bill for recent hardware. It does catch shops running older single-socket servers with 8 or 12-core processors — they pay for cores that don't exist.
-    </p>
+  <h3>The 16-Core Per-CPU Floor</h3>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Server Config</th>
-          <th>Actual Cores</th>
-          <th>Billed Cores</th>
-          <th>VVF Cost/Year ($135/core)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Single 8-core CPU</td>
-          <td>8</td>
-          <td class="text-yellow-400 font-semibold">16</td>
-          <td>$2,160</td>
-        </tr>
-        <tr>
-          <td>Single 16-core CPU</td>
-          <td>16</td>
-          <td>16</td>
-          <td>$2,160</td>
-        </tr>
-        <tr>
-          <td>Dual 16-core CPUs</td>
-          <td>32</td>
-          <td>32</td>
-          <td>$4,320</td>
-        </tr>
-        <tr>
-          <td>Dual 32-core CPUs</td>
-          <td>64</td>
-          <td>64</td>
-          <td>$8,640</td>
-        </tr>
-        <tr>
-          <td>Quad 32-core CPUs</td>
-          <td>128</td>
-          <td>128</td>
-          <td>$17,280</td>
-        </tr>
-      </tbody>
-    </table>
+  <p>
+    This one is simple. If a CPU has fewer than 16 physical cores, Broadcom bills it as 16. Most modern server CPUs have 16 or more cores per socket, so this rarely changes the bill for recent hardware. It does catch shops running older single-socket servers with 8 or 12-core processors — they pay for cores that don't exist.
+  </p>
 
-    <h3 class="text-xl font-semibold text-white">The 72-Core Per-Order Minimum</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Server Config</th>
+        <th>Actual Cores</th>
+        <th>Billed Cores</th>
+        <th>VVF Cost/Year ($135/core)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Single 8-core CPU</td>
+        <td>8</td>
+        <td>16</td>
+        <td>$2,160</td>
+      </tr>
+      <tr>
+        <td>Single 16-core CPU</td>
+        <td>16</td>
+        <td>16</td>
+        <td>$2,160</td>
+      </tr>
+      <tr>
+        <td>Dual 16-core CPUs</td>
+        <td>32</td>
+        <td>32</td>
+        <td>$4,320</td>
+      </tr>
+      <tr>
+        <td>Dual 32-core CPUs</td>
+        <td>64</td>
+        <td>64</td>
+        <td>$8,640</td>
+      </tr>
+      <tr>
+        <td>Quad 32-core CPUs</td>
+        <td>128</td>
+        <td>128</td>
+        <td>$17,280</td>
+      </tr>
+    </tbody>
+  </table>
 
-    <p>
-      Introduced in <strong>April 2025</strong>, the 72-core minimum per order is the one that drew the most backlash. A shop with three 16-core hosts (48 billable cores) would be forced to buy 72 cores of licensing — paying for 24 cores they don't have. For small and mid-size environments, this minimum is effectively a floor that pushes the entry-level VVF cost to <strong>$9,720/year</strong> (72 × $135) regardless of actual hardware.
-    </p>
+  <h3>The 72-Core Per-Order Minimum</h3>
 
-    <div class="callout">
-      <strong class="text-yellow-400">Renewals vs. new orders:</strong> The 72-core minimum was <strong>partially reversed for renewals in late 2025</strong> after significant customer backlash — Broadcom now shows flexibility for renewals of existing perpetual support contracts converting to subscription. However, the 72-core minimum <strong>still applies to new orders and tier changes</strong>. If you're renewing (not buying fresh or changing tiers), push back on any quote that enforces 72 cores without discussion.
-    </div>
+  <p>
+    Introduced in <strong>April 2025</strong>, the 72-core minimum per order is the one that drew the most backlash. A shop with three 16-core hosts (48 billable cores) would be forced to buy 72 cores of licensing — paying for 24 cores they don't have. For small and mid-size environments, this minimum is effectively a floor that pushes the entry-level VVF cost to <strong>$9,720/year</strong> (72 × $135) regardless of actual hardware.
+  </p>
 
-    <p>
-      The real sticker shock comes from the <strong>per-core subscription model itself</strong>, not the minimums. Moving from a $4,500 perpetual per-socket license to $135/core/year on a 32-core server means $4,320/year — every year, forever. That's where the price-increase reports come from.
-    </p>
+  <div class="callout">
+    <strong>Renewals vs. new orders:</strong> The 72-core minimum was <strong>partially reversed for renewals in late 2025</strong> after significant customer backlash — Broadcom now shows flexibility for renewals of existing perpetual support contracts converting to subscription. However, the 72-core minimum <strong>still applies to new orders and tier changes</strong>. If you're renewing (not buying fresh or changing tiers), push back on any quote that enforces 72 cores without discussion.
+  </div>
 
-    <!-- Real Cost Examples -->
-    <h2 class="text-2xl font-bold text-white">Real-World Cost Examples</h2>
+  <p>
+    The real sticker shock comes from the <strong>per-core subscription model itself</strong>, not the minimums. Moving from a $4,500 perpetual per-socket license to $135/core/year on a 32-core server means $4,320/year — every year, forever. That's where the price-increase reports come from.
+  </p>
 
-    <p>
-      Specific cost examples from community forums and industry reports:
-    </p>
+  <!-- Real Cost Examples -->
+  <h2>Real-World Cost Examples</h2>
 
-    <h3 class="text-xl font-semibold text-white">Example 1: Small Business (3 Hosts)</h3>
-    <div class="bg-card rounded-xl p-6 border border-slate-700 mb-6">
-      <p class="text-slate-300 mb-2"><strong>Config:</strong> 3 servers, single socket, 16 cores each (48 total cores)</p>
-      <p class="text-slate-300 mb-2"><strong>Old cost:</strong> 3 sockets × $4,500 perpetual = $13,500 one-time + ~$3,000/yr support = <strong>~$3,000/year ongoing</strong></p>
-      <p class="text-slate-300 mb-2"><strong>New cost (VVF):</strong> 48 cores × $135/core = <strong>$6,480/year</strong> — but the 72-core order minimum applies, pushing this to <strong>$9,720/year</strong> (72 × $135) for a new order</p>
-      <p class="text-red-400 font-semibold">Increase: ~3x the annual cost, and you no longer own the license</p>
-    </div>
+  <p>
+    Specific cost examples from community forums and industry reports:
+  </p>
 
-    <h3 class="text-xl font-semibold text-white">Example 2: Mid-Market (9 Hosts)</h3>
-    <div class="bg-card rounded-xl p-6 border border-slate-700 mb-6">
-      <p class="text-slate-300 mb-2"><strong>Config:</strong> 9 Dell servers, single CPU, 16 cores each (144 total cores)</p>
-      <p class="text-slate-300 mb-2"><strong>VVF at $135/core:</strong> 144 × $135 = <strong>$19,440/year</strong></p>
-      <p class="text-slate-300 mb-2"><strong>VCF at $350/core:</strong> 144 × $350 = <strong>$50,400/year</strong></p>
-      <p class="text-slate-400 text-sm">Source: Spiceworks community, September 2025</p>
-    </div>
+  <h3>Example 1: Small Business (3 Hosts)</h3>
+  <div class="callout">
+    <p><strong>Config:</strong> 3 servers, single socket, 16 cores each (48 total cores)</p>
+    <p><strong>Old cost:</strong> 3 sockets × $4,500 perpetual = $13,500 one-time + ~$3,000/yr support = <strong>~$3,000/year ongoing</strong></p>
+    <p><strong>New cost (VVF):</strong> 48 cores × $135/core = <strong>$6,480/year</strong> — but the 72-core order minimum applies, pushing this to <strong>$9,720/year</strong> (72 × $135) for a new order</p>
+    <p><strong>Increase: ~3x the annual cost, and you no longer own the license</strong></p>
+  </div>
 
-    <h3 class="text-xl font-semibold text-white">Example 3: Enterprise (6 Hosts, Dual Socket)</h3>
-    <div class="bg-card rounded-xl p-6 border border-slate-700 mb-6">
-      <p class="text-slate-300 mb-2"><strong>Config:</strong> 6 hosts × 2 sockets × 22 cores = 264 total cores</p>
-      <p class="text-slate-300 mb-2"><strong>VVF at $135/core × 3 years:</strong> 264 × $135 × 3 = <strong>$106,920 every three years</strong></p>
-      <p class="text-slate-400 text-sm">Source: Reddit r/vmware, November 2024</p>
-    </div>
+  <h3>Example 2: Mid-Market (9 Hosts)</h3>
+  <div class="callout">
+    <p><strong>Config:</strong> 9 Dell servers, single CPU, 16 cores each (144 total cores)</p>
+    <p><strong>VVF at $135/core:</strong> 144 × $135 = <strong>$19,440/year</strong></p>
+    <p><strong>VCF at $350/core:</strong> 144 × $350 = <strong>$50,400/year</strong></p>
+    <p>Source: Spiceworks community, September 2025</p>
+  </div>
 
-    <p>
-      AT&T, one of VMware's largest customers, sued Broadcom alleging price increases of <strong>up to 1,050%</strong>. The lawsuit was <strong>settled out of court in December 2024</strong> — terms undisclosed, but the case highlighted how extreme the increases were for large customers on legacy deals. Industry advisory firms report typical increases of 8x to 15x for customers who were on deeply discounted legacy agreements.
-    </p>
+  <h3>Example 3: Enterprise (6 Hosts, Dual Socket)</h3>
+  <div class="callout">
+    <p><strong>Config:</strong> 6 hosts × 2 sockets × 22 cores = 264 total cores</p>
+    <p><strong>VVF at $135/core × 3 years:</strong> 264 × $135 × 3 = <strong>$106,920 every three years</strong></p>
+    <p>Source: Reddit r/vmware, November 2024</p>
+  </div>
 
-    <!-- Calculating Your Cost -->
-    <h2 class="text-2xl font-bold text-white">Calculating Your Real Cost</h2>
+  <p>
+    AT&T, one of VMware's largest customers, sued Broadcom alleging price increases of <strong>up to 1,050%</strong>. The lawsuit was <strong>settled out of court in December 2024</strong> — terms undisclosed, but the case highlighted how extreme the increases were for large customers on legacy deals. Industry advisory firms report typical increases of 8x to 15x for customers who were on deeply discounted legacy agreements.
+  </p>
 
-    <p>
-      Before any conversation with Broadcom or a reseller, you need a precise core count. Use PowerCLI against your vCenter to generate an accurate inventory:
-    </p>
+  <!-- Calculating Your Cost -->
+  <h2>Calculating Your Real Cost</h2>
 
-    <h3 class="text-xl font-semibold text-white">Step 1: Audit Your Physical Core Count</h3>
+  <p>
+    Before any conversation with Broadcom or a reseller, you need a precise core count. Use PowerCLI against your vCenter to generate an accurate inventory:
+  </p>
 
-    <pre class="bg-dark border border-slate-700 rounded-xl p-4 overflow-x-auto text-sm text-slate-300 mb-6"><code># Connect to vCenter first
+  <h3>Step 1: Audit Your Physical Core Count</h3>
+
+  <pre><code># Connect to vCenter first
 Connect-VIServer -Server vcenter.yourdomain.local
 
 # Get physical CPU core count per host (this is what Broadcom counts)
@@ -382,7 +403,7 @@ Get-VMHost | Sort-Object Name | ForEach-Object {
     }
 } | Format-Table -AutoSize</code></pre>
 
-    <pre class="bg-dark border border-slate-700 rounded-xl p-4 overflow-x-auto text-sm text-slate-300 mb-6"><code># Get total billable cores across all hosts
+  <pre><code># Get total billable cores across all hosts
 $totalBillable = Get-VMHost | ForEach-Object {
     $v = $_ | Get-View
     $sockets = $v.Hardware.CpuInfo.NumCpuPackages
@@ -394,282 +415,270 @@ $licenseFloor = [math]::Max($totalBillable.Sum, 72)
 Write-Host "Total billable cores (Broadcom model): $($totalBillable.Sum)"
 Write-Host "Effective license minimum: $licenseFloor cores"</code></pre>
 
-    <div class="callout callout-red">
-      <strong class="text-red-400">Important:</strong> Do NOT use <code>Get-CimInstance Win32_Processor</code> against ESXi hosts — ESXi is not Windows and this query will fail or return garbage. Use <code>Get-View</code> with <code>Hardware.CpuInfo</code> as shown above.
-    </div>
+  <div class="callout-red">
+    <strong>Important:</strong> Do NOT use <code>Get-CimInstance Win32_Processor</code> against ESXi hosts — ESXi is not Windows and this query will fail or return garbage. Use <code>Get-View</code> with <code>Hardware.CpuInfo</code> as shown above.
+  </div>
 
-    <h3 class="text-xl font-semibold text-white">Step 2: Calculate vSAN Storage Requirements</h3>
+  <h3>Step 2: Calculate vSAN Storage Requirements</h3>
 
-    <p>
-      If you're using vSAN, calculate your raw storage against the per-core entitlement. Use William Lam's <a href="https://knowledge.broadcom.com/external/article/313548/counting-cores-for-vmware-cloud-foundati.html" class="text-blue-400 hover:text-blue-300">official Broadcom core/TiB calculator</a> for precise numbers. VVF gives 0.25 TiB per core; VCF gives 1 TiB per core. If your raw vSAN capacity exceeds the per-core entitlement, you'll need vSAN Capacity Add-On licenses.
-    </p>
+  <p>
+    If you're using vSAN, calculate your raw storage against the per-core entitlement. Use William Lam's <a href="https://knowledge.broadcom.com/external/article/313548/counting-cores-for-vmware-cloud-foundati.html">official Broadcom core/TiB calculator</a> for precise numbers. VVF gives 0.25 TiB per core; VCF gives 1 TiB per core. If your raw vSAN capacity exceeds the per-core entitlement, you'll need vSAN Capacity Add-On licenses.
+  </p>
 
-    <h3 class="text-xl font-semibold text-white">Step 3: Model 1-Year vs. 3-Year Costs</h3>
+  <h3>Step 3: Model 1-Year vs. 3-Year Costs</h3>
 
-    <p>
-      Multi-year commitments typically yield 15-20% discount versus annual list price — but they lock you into current pricing and the current feature set. Model both scenarios for your environment.
-    </p>
+  <p>
+    Multi-year commitments typically yield 15-20% discount versus annual list price — but they lock you into current pricing and the current feature set. Model both scenarios for your environment.
+  </p>
 
-    <div class="bg-card rounded-xl p-6 border border-slate-700 mb-6">
-      <p class="text-slate-400 text-sm mb-3"><strong>Real-world example:</strong> 5-host cluster with dual 16-core CPUs (160 billable cores)</p>
-      <table class="text-sm">
-        <thead>
-          <tr>
-            <th class="text-slate-400">Tier</th>
-            <th class="text-slate-400">Term</th>
-            <th class="text-slate-400">Annual Cost</th>
-            <th class="text-slate-400">3-Year Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="text-slate-300">VCF ($350/core)</td>
-            <td class="text-slate-300">1-year</td>
-            <td class="text-slate-300">$56,000</td>
-            <td class="text-slate-300">$168,000</td>
-          </tr>
-          <tr>
-            <td class="text-slate-300">VCF ($350/core)</td>
-            <td class="text-slate-300">3-year</td>
-            <td class="text-slate-300">~$46,200/yr</td>
-            <td class="text-slate-300">~$138,600</td>
-          </tr>
-          <tr>
-            <td class="text-slate-300">VVF ($135/core)</td>
-            <td class="text-slate-300">1-year</td>
-            <td class="text-slate-300">$21,600</td>
-            <td class="text-slate-300">$64,800</td>
-          </tr>
-          <tr>
-            <td class="text-slate-300">VVF ($135/core)</td>
-            <td class="text-slate-300">3-year</td>
-            <td class="text-slate-300">~$17,820/yr</td>
-            <td class="text-slate-300">~$53,460</td>
-          </tr>
-        </tbody>
-      </table>
-      <p class="text-slate-500 text-xs mt-3">List prices. Negotiated rates for large deployments are typically lower — engage your VAR or Broadcom directly.</p>
-    </div>
-
-    <h3 class="text-xl font-semibold text-white">Hidden Costs Checklist</h3>
-
-    <p>Before finalizing any Broadcom quote, verify these frequently-missed line items:</p>
-
+  <div class="callout">
+    <p><strong>Real-world example:</strong> 5-host cluster with dual 16-core CPUs (160 billable cores)</p>
     <table>
       <thead>
         <tr>
-          <th>Cost Item</th>
-          <th>Notes</th>
+          <th>Tier</th>
+          <th>Term</th>
+          <th>Annual Cost</th>
+          <th>3-Year Total</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td class="font-medium text-slate-300">vSAN Capacity Add-On</td>
-          <td>Required when raw storage exceeds per-core entitlement</td>
+          <td>VCF ($350/core)</td>
+          <td>1-year</td>
+          <td>$56,000</td>
+          <td>$168,000</td>
         </tr>
         <tr>
-          <td class="font-medium text-slate-300">NSX Advanced Add-Ons</td>
-          <td>Distributed Firewall, IDS/IPS are add-ons even within VCF</td>
+          <td>VCF ($350/core)</td>
+          <td>3-year</td>
+          <td>~$46,200/yr</td>
+          <td>~$138,600</td>
         </tr>
         <tr>
-          <td class="font-medium text-slate-300">VCF Operations for Networks</td>
-          <td>Some versions require separate license</td>
+          <td>VVF ($135/core)</td>
+          <td>1-year</td>
+          <td>$21,600</td>
+          <td>$64,800</td>
         </tr>
         <tr>
-          <td class="font-medium text-slate-300">ARM/Non-x86 Infrastructure</td>
-          <td>Separate SKU discussion with Broadcom required</td>
-        </tr>
-        <tr>
-          <td class="font-medium text-slate-300">Multi-site/stretched cluster</td>
-          <td>Additional vSAN licensing implications</td>
-        </tr>
-        <tr>
-          <td class="font-medium text-slate-300">Late-renewal penalty</td>
-          <td>20% of first-year cost if you miss anniversary date</td>
-        </tr>
-        <tr>
-          <td class="font-medium text-slate-300">Hardware refresh true-up</td>
-          <td>Adding hosts mid-term requires immediate license amendment</td>
+          <td>VVF ($135/core)</td>
+          <td>3-year</td>
+          <td>~$17,820/yr</td>
+          <td>~$53,460</td>
         </tr>
       </tbody>
     </table>
+    <p>List prices. Negotiated rates for large deployments are typically lower — engage your VAR or Broadcom directly.</p>
+  </div>
 
-    <!-- What Happened to Perpetual Licenses -->
-    <h2 class="text-2xl font-bold text-white">What Happened to Perpetual Licenses?</h2>
+  <h3>Hidden Costs Checklist</h3>
 
-    <p>
-      Broadcom ended new perpetual license sales in early 2024. Existing perpetual licenses and active SnS/support contracts are still honored through their term. Once support expires, you lose patches, support, and upgrade rights.
-    </p>
+  <p>Before finalizing any Broadcom quote, verify these frequently-missed line items:</p>
 
-    <p>What this means for organizations still running on perpetual licenses:</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Cost Item</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>vSAN Capacity Add-On</strong></td>
+        <td>Required when raw storage exceeds per-core entitlement</td>
+      </tr>
+      <tr>
+        <td><strong>NSX Advanced Add-Ons</strong></td>
+        <td>Distributed Firewall, IDS/IPS are add-ons even within VCF</td>
+      </tr>
+      <tr>
+        <td><strong>VCF Operations for Networks</strong></td>
+        <td>Some versions require separate license</td>
+      </tr>
+      <tr>
+        <td><strong>ARM/Non-x86 Infrastructure</strong></td>
+        <td>Separate SKU discussion with Broadcom required</td>
+      </tr>
+      <tr>
+        <td><strong>Multi-site/stretched cluster</strong></td>
+        <td>Additional vSAN licensing implications</td>
+      </tr>
+      <tr>
+        <td><strong>Late-renewal penalty</strong></td>
+        <td>20% of first-year cost if you miss anniversary date</td>
+      </tr>
+      <tr>
+        <td><strong>Hardware refresh true-up</strong></td>
+        <td>Adding hosts mid-term requires immediate license amendment</td>
+      </tr>
+    </tbody>
+  </table>
 
-    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
-      <li><strong>Your software still works</strong> — perpetual licenses don't technically expire. You can keep running vSphere.</li>
-      <li><strong>But you get nothing new</strong> — no patches, no security updates, no support once your existing contract expires.</li>
-      <li><strong>Some reports indicate Broadcom has warned customers</strong> about using patches released after their support expired, though widespread enforcement actions have not been documented.</li>
-      <li><strong>Most existing support contracts expire by October 2027</strong>, coinciding with vSphere 8's expected end-of-life.</li>
-      <li><strong>Running unpatched ESXi carries escalating risk</strong> — ESXi vulnerabilities are actively exploited in the wild (e.g., CVE-2024-37085, used in ransomware campaigns in mid-2024).</li>
-    </ul>
+  <!-- What Happened to Perpetual Licenses -->
+  <h2>What Happened to Perpetual Licenses?</h2>
 
-    <div class="callout">
-      <strong class="text-yellow-400">Timeline:</strong> The practical deadline is roughly October 2027 — when vSphere 8 support expires and perpetual support contracts lapse. After that: subscribe at Broadcom's new pricing, or be running on a different platform.
-    </div>
+  <p>
+    Broadcom ended new perpetual license sales in early 2024. Existing perpetual licenses and active SnS/support contracts are still honored through their term. Once support expires, you lose patches, support, and upgrade rights.
+  </p>
 
-    <!-- Horizon / Omnissa -->
-    <h2 class="text-2xl font-bold text-white">What About Horizon? (Now Omnissa)</h2>
+  <p>What this means for organizations still running on perpetual licenses:</p>
 
-    <p>
-      If you're running VMware Horizon for VDI or virtual apps, your product changed ownership. Broadcom sold the End-User Computing (EUC) division to KKR in May 2024, and it now operates as <strong>Omnissa</strong>. Horizon is no longer a VMware/Broadcom product — your vendor is Omnissa.
-    </p>
+  <ul>
+    <li><strong>Your software still works</strong> — perpetual licenses don't technically expire. You can keep running vSphere.</li>
+    <li><strong>But you get nothing new</strong> — no patches, no security updates, no support once your existing contract expires.</li>
+    <li><strong>Some reports indicate Broadcom has warned customers</strong> about using patches released after their support expired, though widespread enforcement actions have not been documented.</li>
+    <li><strong>Most existing support contracts expire by October 2027</strong>, coinciding with vSphere 8's expected end-of-life.</li>
+    <li><strong>Running unpatched ESXi carries escalating risk</strong> — ESXi vulnerabilities are actively exploited in the wild (e.g., CVE-2024-37085, used in ransomware campaigns in mid-2024).</li>
+  </ul>
 
-    <p>What this means for existing Horizon environments:</p>
+  <div class="callout">
+    <strong>Timeline:</strong> The practical deadline is roughly October 2027 — when vSphere 8 support expires and perpetual support contracts lapse. After that: subscribe at Broadcom's new pricing, or be running on a different platform.
+  </div>
 
-    <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
-      <li>Existing licenses were transitioned during the spinout to a subscription model</li>
-      <li>Horizon remains tightly integrated with vSphere — it still requires VMware infrastructure underneath</li>
-      <li>The transition has been less chaotic than the Broadcom-side changes, but the licensing model is subscription-only going forward</li>
-    </ul>
+  <!-- Horizon / Omnissa -->
+  <h2>What About Horizon? (Now Omnissa)</h2>
 
-    <div class="callout">
-      <strong class="text-yellow-400">Bottom line:</strong> If you're running Horizon, you now have two vendors to deal with — Omnissa for the VDI layer and Broadcom for the underlying vSphere/VVF/VCF infrastructure. Factor both costs into any renewal planning.
-    </div>
+  <p>
+    If you're running VMware Horizon for VDI or virtual apps, your product changed ownership. Broadcom sold the End-User Computing (EUC) division to KKR in May 2024, and it now operates as <strong>Omnissa</strong>. Horizon is no longer a VMware/Broadcom product — your vendor is Omnissa.
+  </p>
 
-    <!-- The Alternatives at a Glance -->
-    <h2 class="text-2xl font-bold text-white">What Are Your Options?</h2>
+  <p>What this means for existing Horizon environments:</p>
 
-    <p>
-      A brief comparison of the main alternatives (detailed comparison articles linked from the homepage):
-    </p>
+  <ul>
+    <li>Existing licenses were transitioned during the spinout to a subscription model</li>
+    <li>Horizon remains tightly integrated with vSphere — it still requires VMware infrastructure underneath</li>
+    <li>The transition has been less chaotic than the Broadcom-side changes, but the licensing model is subscription-only going forward</li>
+  </ul>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Platform</th>
-          <th>Pricing Model</th>
-          <th>Approx. Cost</th>
-          <th>Best For</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td class="font-medium text-slate-300">VMware VVF</td>
-          <td>Per core/year</td>
-          <td>$135/core/yr</td>
-          <td>Staying put (if budget allows)</td>
-        </tr>
-        <tr>
-          <td class="font-medium text-slate-300">VMware VCF</td>
-          <td>Per core/year</td>
-          <td>$350/core/yr</td>
-          <td>Large enterprises needing full stack</td>
-        </tr>
-        <tr>
-          <td class="font-medium text-slate-300">Proxmox VE</td>
-          <td>Per socket/year (or free)</td>
-          <td>€0–€1,060/socket/yr</td>
-          <td>Cost-conscious, Linux-comfortable teams</td>
-        </tr>
+  <div class="callout">
+    <strong>Bottom line:</strong> If you're running Horizon, you now have two vendors to deal with — Omnissa for the VDI layer and Broadcom for the underlying vSphere/VVF/VCF infrastructure. Factor both costs into any renewal planning.
+  </div>
 
-        <tr>
-          <td class="font-medium text-slate-300">Nutanix AHV</td>
-          <td>Per core/year</td>
-          <td>~$300–$1,500/core (negotiable)</td>
-          <td>Enterprise, wants VMware-like experience</td>
-        </tr>
-        <tr>
-          <td class="font-medium text-slate-300">Azure Stack HCI</td>
-          <td>Per core/month</td>
-          <td>$10/core/month (~$120/core/yr)</td>
-          <td>Microsoft shops</td>
-        </tr>
-        <tr>
-          <td class="font-medium text-slate-300">Hyper-V (free)</td>
-          <td>Windows Server license</td>
-          <td>Included with Windows Server</td>
-          <td>Small shops already on Windows</td>
-        </tr>
-      </tbody>
-    </table>
+  <!-- The Alternatives at a Glance -->
+  <h2>What Are Your Options?</h2>
 
-    <p>
-      Detailed comparison articles on each platform are linked from the homepage, with more in progress. Subscribe below for updates.
-    </p>
+  <p>
+    A brief comparison of the main alternatives (detailed comparison articles linked from the homepage):
+  </p>
 
-    <!-- Key Decisions -->
-    <h2 class="text-2xl font-bold text-white">Key Decisions and Timing</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Platform</th>
+        <th>Pricing Model</th>
+        <th>Approx. Cost</th>
+        <th>Best For</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>VMware VVF</strong></td>
+        <td>Per core/year</td>
+        <td>$135/core/yr</td>
+        <td>Staying put (if budget allows)</td>
+      </tr>
+      <tr>
+        <td><strong>VMware VCF</strong></td>
+        <td>Per core/year</td>
+        <td>$350/core/yr</td>
+        <td>Large enterprises needing full stack</td>
+      </tr>
+      <tr>
+        <td><strong>Proxmox VE</strong></td>
+        <td>Per socket/year (or free)</td>
+        <td>€0–€1,060/socket/yr</td>
+        <td>Cost-conscious, Linux-comfortable teams</td>
+      </tr>
+      <tr>
+        <td><strong>Nutanix AHV</strong></td>
+        <td>Per core/year</td>
+        <td>~$300–$1,500/core (negotiable)</td>
+        <td>Enterprise, wants VMware-like experience</td>
+      </tr>
+      <tr>
+        <td><strong>Azure Stack HCI</strong></td>
+        <td>Per core/month</td>
+        <td>$10/core/month (~$120/core/yr)</td>
+        <td>Microsoft shops</td>
+      </tr>
+      <tr>
+        <td><strong>Hyper-V (free)</strong></td>
+        <td>Windows Server license</td>
+        <td>Included with Windows Server</td>
+        <td>Small shops already on Windows</td>
+      </tr>
+    </tbody>
+  </table>
 
-    <p>
-      The math matters, but timing matters more. The decision deadline is your contract expiry date — not Broadcom's. For perpetual license holders, the hard wall is October 2027 when vSphere 8 support ends. Between now and then, there are three realistic paths.
-    </p>
+  <p>
+    Detailed comparison articles on each platform are linked from the homepage, with more in progress. Subscribe below for updates.
+  </p>
 
-    <h3 class="text-xl font-semibold text-white">Staying on VMware (VVF or VCF)</h3>
-    <p>
-      If the budget works and the environment depends on vSphere-specific features, subscription is the path of least resistance. Negotiate from a position of knowledge: know the exact core count, understand the 72-core minimum and its renewal flexibility, and get competitive quotes. Broadcom negotiates harder when they believe you're evaluating alternatives.
-    </p>
+  <!-- Key Decisions -->
+  <h2>Key Decisions and Timing</h2>
 
-    <p>
-      For estates still on vCenter/ESXi 8.x, the supported modernization path is to move through VVF 9.1 and then to VCF 9.1 when adopting the full Cloud Foundation stack. Confirm SKU conversion, upgrade rights, and license-server requirements with your reseller before scheduling the technical upgrade.
-    </p>
+  <p>
+    The math matters, but timing matters more. The decision deadline is your contract expiry date — not Broadcom's. For perpetual license holders, the hard wall is October 2027 when vSphere 8 support ends. Between now and then, there are three realistic paths.
+  </p>
 
-    <h3 class="text-xl font-semibold text-white">Migrating to an Alternative</h3>
-    <p>
-      Proxmox, Nutanix AHV, Hyper-V, and XCP-ng are all actively courting VMware customers with migration promotions and aggressive pricing. Proxmox VE is free to evaluate — it takes 20 minutes to spin up in a lab. Nutanix has run migration promotions offering up to a free year for moving VMware workloads. These offers have real value as negotiation leverage even if the plan is ultimately to stay.
-    </p>
+  <h3>Staying on VMware (VVF or VCF)</h3>
+  <p>
+    If the budget works and the environment depends on vSphere-specific features, subscription is the path of least resistance. Negotiate from a position of knowledge: know the exact core count, understand the 72-core minimum and its renewal flexibility, and get competitive quotes. Broadcom negotiates harder when they believe you're evaluating alternatives.
+  </p>
 
-    <h3 class="text-xl font-semibold text-white">Running Out the Clock</h3>
-    <p>
-      Organizations with active perpetual support contracts can continue running their current vSphere version through the support period. This buys time but carries escalating security risk — ESXi vulnerabilities are actively exploited in the wild, and some reports indicate Broadcom has warned customers about using patches released after support expired.
-    </p>
+  <p>
+    For estates still on vCenter/ESXi 8.x, the supported modernization path is to move through VVF 9.1 and then to VCF 9.1 when adopting the full Cloud Foundation stack. Confirm SKU conversion, upgrade rights, and license-server requirements with your reseller before scheduling the technical upgrade.
+  </p>
 
-    <div class="callout-green callout">
-      <strong class="text-green-400">My take on timing:</strong> The VMware alternatives market is more competitive than it has been in a decade — Proxmox, Nutanix, Microsoft, and XCP-ng are all actively courting VMware customers with migration promotions and aggressive pricing. That competition is useful whether the plan is to stay, switch, or negotiate.
-    </div>
+  <h3>Migrating to an Alternative</h3>
+  <p>
+    Proxmox, Nutanix AHV, Hyper-V, and XCP-ng are all actively courting VMware customers with migration promotions and aggressive pricing. Proxmox VE is free to evaluate — it takes 20 minutes to spin up in a lab. Nutanix has run migration promotions offering up to a free year for moving VMware workloads. These offers have real value as negotiation leverage even if the plan is ultimately to stay.
+  </p>
 
-    <!-- Newsletter CTA -->
-    <div class="mt-16 bg-card border border-slate-700 rounded-2xl p-10 text-center">
-      <h2 class="text-2xl font-bold text-white mb-3" style="-webkit-text-fill-color: white;">Stay ahead of the VMware changes</h2>
-      <p class="text-slate-400 mb-6">We're publishing detailed comparison guides, migration walkthroughs, and cost calculators. Get them in your inbox.</p>
-      <form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" onsubmit="handleSubscribe(event)">
-        <input type="email" placeholder="your@email.com" class="flex-1 bg-dark border border-slate-600 text-white px-5 py-3 rounded-xl focus:outline-none focus:border-blue-500 placeholder-slate-500" required />
-        <button type="submit" class="bg-brand text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-600 transition">Subscribe</button>
-      </form>
-    </div>
+  <h3>Running Out the Clock</h3>
+  <p>
+    Organizations with active perpetual support contracts can continue running their current vSphere version through the support period. This buys time but carries escalating security risk — ESXi vulnerabilities are actively exploited in the wild, and some reports indicate Broadcom has warned customers about using patches released after support expired.
+  </p>
 
-    <!-- Author -->
-    <div class="mt-12 pt-8 border-t border-slate-800">
-      <div class="flex items-start gap-4">
-        <div class="w-12 h-12 bg-slate-700 rounded-full flex items-center justify-center text-xl text-blue-400 font-bold">RN</div>
-        <div>
-          <p class="text-white font-semibold">Written by Rob Notaro</p>
-          <p class="text-slate-400 text-sm mt-1">Rob Notaro is a senior VMware/Horizon engineer with 10+ years deploying vSphere and VCF in production. VCP-DCV certified. Currently working with vSphere, Horizon, and VCF environments.</p>
-        </div>
-      </div>
-    </div>
+  <div class="callout-green">
+    <strong>Our take on timing:</strong> The VMware alternatives market is more competitive than it has been in a decade — Proxmox, Nutanix, Microsoft, and XCP-ng are all actively courting VMware customers with migration promotions and aggressive pricing. That competition is useful whether the plan is to stay, switch, or negotiate.
+  </div>
 
-  </article>
+</div><!-- /.article-body -->
 
-  <!-- Footer -->
-  <footer class="border-t border-slate-800 mt-10">
-    <div class="max-w-4xl mx-auto px-6 py-10 flex flex-col md:flex-row items-center justify-between gap-4">
-      <div class="text-slate-400 text-sm">© 2026 VMwareMadeSimple.com — Independent. Not affiliated with VMware or Broadcom.</div>
-      <div class="flex gap-6 text-slate-400 text-sm">
-        <a href="/" class="hover:text-white transition">Home</a>
-        <a href="/#articles" class="hover:text-white transition">Articles</a>
-        <a href="/#newsletter" class="hover:text-white transition">Newsletter</a>
-      </div>
-    </div>
-    <div class="max-w-4xl mx-auto px-6 pb-8 text-slate-600 text-xs">
-      Some links on this site are affiliate links. If you purchase through them, we may earn a small commission at no extra cost to you.
-    </div>
-  </footer>
+<!-- Newsletter CTA -->
+<div class="newsletter-cta" id="newsletter">
+  <h3>Stay ahead of the VMware changes</h3>
+  <p>We're publishing detailed licensing breakdowns, comparison guides, migration walkthroughs, and cost calculators. Get them in your inbox.</p>
+  <input type="email" placeholder="your@email.com" />
+  <button>Subscribe</button>
+</div>
 
-  <script>
-    function handleSubscribe(e) {
-      e.preventDefault();
-      alert('Thanks! We\\'ll be in touch soon.');
-      e.target.reset();
-    }
-  </script>
+<!-- Footer -->
+<footer>
+  <div>
+    © 2026 VMwareMadeSimple.com — Independent. Not affiliated with VMware or Broadcom.
+    <div class="aff-disclosure" style="margin-top: 0.3rem;">Some links are affiliate links. See our <a href="#">disclosure policy</a>.</div>
+  </div>
+  <div class="footer-links">
+    <a href="#">About</a>
+    <a href="mailto:contact@vmwaremadesimple.com">Contact</a>
+    <a href="/sitemap.xml">RSS</a>
+    <a href="#">Privacy</a>
+    <a href="#">Corrections</a>
+  </div>
+</footer>
+
+<script>
+function searchSite(q) {
+  if (q.length < 2) return;
+  // Simple client-side search — redirect to Google site search
+  if (event && event.key === 'Enter') {
+    window.location.href = 'https://www.google.com/search?q=site:vmwaremadesimple.com+' + encodeURIComponent(q);
+  }
+}
+</script>
 
 </body>
 </html>
