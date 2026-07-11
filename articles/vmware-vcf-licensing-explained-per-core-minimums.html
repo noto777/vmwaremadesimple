@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VMware VCF Licensing Explained: Per-Core Minimums and What They Mean for Your Budget | VMware Made Simple</title>
+  <meta name="description" content="VCF per-core licensing, the 16-core-per-CPU minimum, the 72-core order floor, and what real customers actually pay after negotiation in 2026." />
+  <meta name="keywords" content="vmware,vcf,licensing,per-core,broadcom,72-core minimum,16-core minimum,subscription,pricing,2026" />
+  <link rel="canonical" href="https://vmwaremadesimple.com/articles/vmware-vcf-licensing-explained-per-core-minimums.html" />
+
+  <meta property="og:title" content="VMware VCF Licensing Explained: Per-Core Minimums and What They Mean for Your Budget" />
+  <meta property="og:description" content="VCF per-core licensing, the 16-core-per-CPU minimum, the 72-core order floor, and what real customers actually pay after negotiation in 2026." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://vmwaremadesimple.com/articles/vmware-vcf-licensing-explained-per-core-minimums.html" />
+
+  <!-- Google Analytics — replace G-2NDPP0ZTKC with your measurement ID -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-2NDPP0ZTKC"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-2NDPP0ZTKC');
+  </script>
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "VMware VCF Licensing Explained: Per-Core Minimums and What They Mean for Your Budget",
+    "description": "VCF per-core licensing, the 16-core-per-CPU minimum, the 72-core order floor, and what real customers actually pay after negotiation in 2026.",
+    "author": { "@type": "Person", "name": "Rob Notaro" },
+    "publisher": { "@type": "Organization", "name": "VMware Made Simple" },
+    "datePublished": "2026-07-11",
+    "dateModified": "2026-07-11",
+    "mainEntityOfPage": "https://vmwaremadesimple.com/articles/vmware-vcf-licensing-explained-per-core-minimums.html"
+  }
+  </script>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { colors: { brand: '#1a73e8', dark: '#0f172a', card: '#1e293b' } } }
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .gradient-text { background: linear-gradient(135deg, #1a73e8, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .prose h2 { margin-top: 2.5rem; margin-bottom: 1rem; }
+    .prose h3 { margin-top: 2rem; margin-bottom: 0.75rem; }
+    .prose p { margin-bottom: 1.25rem; line-height: 1.8; }
+    .prose table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+    .prose th { text-align: left; padding: 0.75rem 1rem; border-bottom: 2px solid #334155; color: #94a3b8; font-size: 0.875rem; text-transform: uppercase; }
+    .prose td { padding: 0.75rem 1rem; border-bottom: 1px solid #1e293b; }
+    .prose tr:hover { background: #1e293b40; }
+    .callout { background: #1e293b; border-left: 4px solid #f59e0b; padding: 1.25rem 1.5rem; border-radius: 0 0.5rem 0.5rem 0; margin: 1.5rem 0; }
+    .callout-red { border-left-color: #ef4444; }
+    .callout-green { border-left-color: #22c55e; }
+  </style>
+</head>
+<body class="bg-dark text-slate-100">
+
+  <!-- Nav -->
+  <nav class="border-b border-slate-800 sticky top-0 z-50 bg-dark/95 backdrop-blur">
+    <div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="/" class="text-xl font-bold text-white">VMware<span class="gradient-text">MadeSimple</span></a>
+      <a href="/#newsletter" class="bg-brand text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition text-sm font-medium">Get Updates</a>
+    </div>
+  </nav>
+
+  <!-- Article -->
+  <article class="max-w-4xl mx-auto px-6 py-12 prose">
+
+    <!-- Breadcrumb -->
+    <div class="text-sm text-slate-500 mb-6">
+      <a href="/" class="hover:text-slate-300">Home</a> → <span class="text-slate-400">VMware VCF Licensing Explained: Per-Core Minimums and What They Mean for Your Budget</span>
+    </div>
+
+    <!-- Header -->
+    <div class="mb-10">
+      <div class="text-xs text-blue-400 font-medium uppercase tracking-wide mb-3">Broadcom Licensing</div>
+      <h1 class="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight" style="-webkit-text-fill-color: white;">
+        VMware VCF Licensing Explained: Per-Core Minimums and What They Mean for Your Budget
+      </h1>
+      <p class="text-slate-400 text-lg">
+        July 11, 2026 · 12 min read
+      </p>
+    </div>
+
+    <!--
+      ARTICLE BODY GOES HERE
+
+      Available HTML patterns:
+
+      == PARAGRAPH ==
+      <p>Text here. Use <strong class="text-slate-200">bold text</strong> for emphasis.</p>
+
+      == HEADING H2 ==
+      <h2 class="text-2xl font-bold text-white">Section Title</h2>
+
+      == HEADING H3 ==
+      <h3 class="text-xl font-semibold text-white">Subsection Title</h3>
+
+      == UNORDERED LIST ==
+      <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
+        <li><strong>Item label:</strong> Description</li>
+      </ul>
+
+      == ORDERED LIST ==
+      <ol class="list-decimal list-inside text-slate-300 space-y-3 mb-6">
+        <li><strong>Step label.</strong> Description</li>
+      </ol>
+
+      == TABLE ==
+      <table>
+        <thead>
+          <tr><th>Column 1</th><th>Column 2</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="font-medium text-slate-300">Row label</td><td>Value</td></tr>
+        </tbody>
+      </table>
+
+      == CALLOUT (yellow/warning) ==
+      <div class="callout">
+        <strong class="text-yellow-400">Note:</strong> Message here.
+      </div>
+
+      == CALLOUT (red/important) ==
+      <div class="callout-red callout">
+        <strong class="text-red-400">Important:</strong> Message here.
+      </div>
+
+      == CALLOUT (green/positive) ==
+      <div class="callout-green callout">
+        <strong class="text-green-400">Good news:</strong> Message here.
+      </div>
+
+      == INFO CARD ==
+      <div class="bg-card rounded-xl p-6 border border-slate-700 mb-6">
+        <p class="text-slate-300 mb-2"><strong>Label:</strong> Content</p>
+      </div>
+
+      == AFFILIATE LINK ==
+      <a href="{{AFFILIATE_URL}}" target="_blank" rel="noopener sponsored" class="text-blue-400 hover:text-blue-300 underline">Product Name</a>
+    -->
+
+    <p>Broadcom's per-core licensing includes two minimums that can multiply costs for organizations renewing or purchasing VMware subscriptions. Every physical CPU socket must be licensed for at least 16 cores, and new orders carry a 72-core minimum. Together these can add paid cores without changing hardware. In small environments, the added cores can turn into five-figure subscription increases depending on bundle, term, and discount.</p>
+<p>This replaces the old per-socket model entirely. Perpetual VMware licenses with SnS (Support and Subscription) renewals no longer exist. Everything is subscription now, priced per core, with minimums that can make small environments pay for capacity they do not have.</p>
+<h2>VCF vs. VVF: what each bundle includes</h2>
+<p>VMware now sells two main subscription bundles. Both are per-core, with no perpetual options and no per-VM metering. All physical cores on all ESXi hosts running VMware software must be licensed. There is no exclusion for test or development servers.</p>
+<p>VCF (VMware Cloud Foundation) is the full-stack bundle: vSphere Enterprise Plus, vSAN Enterprise, NSX, Aria Operations, Aria Automation, HCX, and Tanzu Kubernetes Grid. VVF (vSphere Foundation) is the smaller bundle: vSphere Enterprise Plus, vSAN Enterprise, and Aria Operations Standard. No NSX, no Automation, no HCX, and a limited Tanzu tier.</p>
+<p>A third option exists: vSphere Standard (VVS). It is per-core hypervisor licensing only, with no vSAN and no Aria. Organizations running 2- to 3-host environments that need only ESXi and vCenter may find it through their channel partner. Broadcom does not prominently advertise it.</p>
+<p>VCF list price is $350 per core per year. Broadcom cut this from $700 in January 2024, claiming a 50% reduction to promote adoption. VVF lists at $135 per core per year. GoVendorFree reports North American VCF quotes around $420 to $480 per core per year, and UK quotes around £380 to £440 per core per year, though those figures may include partner markup, support, or taxes. Confirm whether a quote includes support, VAT, and partner margin before comparing.</p>
+<p>The vSAN storage allocation is where the bundles split. VCF includes 1 TiB of vSAN capacity per core. VVF includes 100 GiB per core. On a 192-core environment, that is 192 TiB versus 19.2 TiB. Storage-heavy workloads on VVF will require additional vSAN entitlement purchases. vSAN no longer activates automatically through the VCF or VVF solution key as of November 2024, per OTAVA and Broadcom documentation. Confirm current entitlement details with an account rep.</p>
+<p>For many VMware estates, NSX is the clearest functional separator between VCF and VVF. VCF includes full NSX with network virtualization, micro-segmentation, and distributed firewall. VVF includes zero NSX. Within Broadcom's current VMware bundles, VCF is the bundle that includes NSX. If a security team requires micro-segmentation, VCF is the path.</p>
+<p>VCF also includes Aria Suite (Operations, Automation, and Logs) versus Aria Operations Standard in VVF. HCX, the migration tool for moving VMs between vCenters or cloud environments, is VCF-only. The Tanzu Kubernetes Grid entitlement is broader in VCF than the limited Tanzu Standard tier in VVF.</p>
+<h2>The 16-core per CPU minimum</h2>
+<p>Every populated physical CPU socket must be licensed for at least 16 cores, regardless of how many physical cores the CPU actually has. This is documented in Broadcom KB 313548, updated June 17, 2026.</p>
+<p>The KB gives this example: a server with two CPUs that each have 8 physical cores. A reader might expect to license 16 cores total. The customer must instead purchase 32 cores, because the minimum subscription capacity is 16 cores per CPU. The calculation for each host is: take the higher of actual cores per CPU or 16, multiply by the number of populated sockets, then sum across all hosts.</p>
+<p>Count physical cores, not threads or hyperthreads. A 16-core CPU with hyperthreading enabled shows 32 logical processors to the OS, but the license count is 16 cores.</p>
+<p>For a dual-socket host with 8-core CPUs, the licensed core count doubles from 16 to 32. With 6-core CPUs, it rises from 12 to 32. Older hardware magnifies the gap between physical cores and licensed cores.</p>
+<p>To check current core counts via PowerCLI:</p>
+<div class="codehilite"><pre><span></span><code><span class="c"># Audit all ESXi hosts connected to vCenter</span>
+<span class="nb">Get-VMHost</span> <span class="p">|</span> <span class="nb">Select </span><span class="n">Name</span><span class="p">,</span>
+    <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;Sockets&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">ExtensionData</span><span class="p">.</span><span class="n">Hardware</span><span class="p">.</span><span class="n">CpuInfo</span><span class="p">.</span><span class="n">NumCpuPackages</span><span class="p">}},</span>
+    <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;CoresPerSocket&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">ExtensionData</span><span class="p">.</span><span class="n">Hardware</span><span class="p">.</span><span class="n">CpuInfo</span><span class="p">.</span><span class="n">NumCpuCores</span> <span class="p">/</span> <span class="nv">$_</span><span class="p">.</span><span class="n">ExtensionData</span><span class="p">.</span><span class="n">Hardware</span><span class="p">.</span><span class="n">CpuInfo</span><span class="p">.</span><span class="n">NumCpuPackages</span><span class="p">}}</span> <span class="p">|</span> <span class="nb">Format-Table</span> <span class="n">-AutoSize</span>
+</code></pre></div>
+
+<p>For a full audit that applies the 16-core minimum and flags the 72-core order minimum:</p>
+<div class="codehilite"><pre><span></span><code><span class="c"># Full audit: licensed core count with 16-core minimum applied</span>
+<span class="nb">Get-VMHost</span> <span class="p">|</span> <span class="k">ForEach</span><span class="n">-Object</span> <span class="p">{</span>
+    <span class="nv">$sockets</span> <span class="p">=</span> <span class="nv">$_</span><span class="p">.</span><span class="n">ExtensionData</span><span class="p">.</span><span class="n">Hardware</span><span class="p">.</span><span class="n">CpuInfo</span><span class="p">.</span><span class="n">NumCpuPackages</span>
+    <span class="nv">$coresPerSocket</span> <span class="p">=</span> <span class="nv">$_</span><span class="p">.</span><span class="n">ExtensionData</span><span class="p">.</span><span class="n">Hardware</span><span class="p">.</span><span class="n">CpuInfo</span><span class="p">.</span><span class="n">NumCpuCores</span> <span class="p">/</span> <span class="nv">$sockets</span>
+    <span class="nv">$licensedCores</span> <span class="p">=</span> <span class="p">(</span><span class="no">[math]</span><span class="p">::</span><span class="n">Max</span><span class="p">(</span><span class="nv">$coresPerSocket</span><span class="p">,</span> <span class="n">16</span><span class="p">))</span> <span class="p">*</span> <span class="nv">$sockets</span>
+    <span class="no">[PSCustomObject]</span><span class="p">@{</span>
+        <span class="n">Host</span> <span class="p">=</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Name</span>
+        <span class="n">Sockets</span> <span class="p">=</span> <span class="nv">$sockets</span>
+        <span class="n">PhysicalCores</span> <span class="p">=</span> <span class="nv">$coresPerSocket</span> <span class="p">*</span> <span class="nv">$sockets</span>
+        <span class="n">LicensedCores</span> <span class="p">=</span> <span class="nv">$licensedCores</span>
+    <span class="p">}</span>
+<span class="p">}</span> <span class="p">|</span> <span class="nb">Format-Table</span> <span class="n">-AutoSize</span>
+
+<span class="c"># Sum total and check 72-core minimum</span>
+<span class="nv">$total</span> <span class="p">=</span> <span class="nb">Get-VMHost</span> <span class="p">|</span> <span class="k">ForEach</span><span class="n">-Object</span> <span class="p">{</span>
+    <span class="nv">$sockets</span> <span class="p">=</span> <span class="nv">$_</span><span class="p">.</span><span class="n">ExtensionData</span><span class="p">.</span><span class="n">Hardware</span><span class="p">.</span><span class="n">CpuInfo</span><span class="p">.</span><span class="n">NumCpuPackages</span>
+    <span class="nv">$coresPerSocket</span> <span class="p">=</span> <span class="nv">$_</span><span class="p">.</span><span class="n">ExtensionData</span><span class="p">.</span><span class="n">Hardware</span><span class="p">.</span><span class="n">CpuInfo</span><span class="p">.</span><span class="n">NumCpuCores</span> <span class="p">/</span> <span class="nv">$sockets</span>
+    <span class="p">(</span><span class="no">[math]</span><span class="p">::</span><span class="n">Max</span><span class="p">(</span><span class="nv">$coresPerSocket</span><span class="p">,</span> <span class="n">16</span><span class="p">))</span> <span class="p">*</span> <span class="nv">$sockets</span>
+<span class="p">}</span> <span class="p">|</span> <span class="nb">Measure-Object</span> <span class="n">-Sum</span>
+<span class="nb">Write-Host</span> <span class="s2">&quot;Total licensed cores: </span><span class="p">$(</span><span class="nv">$total</span><span class="p">.</span><span class="n">Sum</span><span class="p">)</span><span class="s2">&quot;</span>
+<span class="nb">Write-Host</span> <span class="s2">&quot;72-core minimum applies: </span><span class="p">$(</span><span class="k">if</span> <span class="p">(</span><span class="nv">$total</span><span class="p">.</span><span class="n">Sum</span> <span class="o">-lt</span> <span class="n">72</span><span class="p">)</span> <span class="p">{</span> <span class="s1">&#39;YES - must purchase 72&#39;</span> <span class="p">}</span> <span class="k">else</span> <span class="p">{</span> <span class="s1">&#39;No&#39;</span> <span class="p">})</span><span class="s2">&quot;</span>
+</code></pre></div>
+
+<p>Without vCenter, check each host directly: Host &gt; Hardware &gt; CPU Processors, and look at the Cores per socket value.</p>
+<h2>The 72-core order minimum</h2>
+<p>Broadcom introduced a 72-core minimum purchase per order in April 2025. This applies to VCF, VVF, and VVS (vSphere Standard). If the total licensed cores across all servers is less than 72, the customer must purchase 72 cores worth of licensing anyway.</p>
+<p>Reporting from StarWind (November 2025) suggested the minimum was reversed after industry backlash. That is partially wrong. The minimum still applies to new orders. What changed is that Broadcom allows smaller commitments for renewals under certain conditions, typically when the customer signs a multi-year term.</p>
+<p>For environments below 72 licensed cores, the order minimum can dominate the renewal math. A 3-host cluster with dual 16-core CPUs (96 cores) clears it. A 2-host cluster with the same CPUs (64 cores) does not, and must license 72 cores despite having 64.</p>
+<p>Several reseller and customer reports describe late-renewal penalties around 20% when subscriptions lapse before renewal. This is separate from the core minimums but compounds the cost pressure on small shops deciding whether to renew or migrate.</p>
+<h2>Calculating the actual cost</h2>
+<p>Use this calculation:</p>
+<ol>
+<li>Count physical cores per CPU on each host (not threads)</li>
+<li>Apply the 16-core minimum per CPU (take the higher of actual or 16)</li>
+<li>Multiply by the number of populated sockets per host</li>
+<li>Sum across all hosts</li>
+<li>Apply the 72-core order minimum if the total is below 72</li>
+<li>Multiply by the per-core rate ($350 list for VCF, $135 for VVF)</li>
+<li>Multiply by the number of years in the subscription term</li>
+</ol>
+<p>Worked example: 3 hosts, each dual-socket 32-core Intel Xeon (64 cores per host, 192 total). At VCF list price: $350 × 192 × 3 years = $201,600. At VVF: $135 × 192 × 3 years = $77,760. The $123,840 delta buys NSX, Aria Automation, HCX, a broader Tanzu entitlement, and a larger included vSAN allocation.</p>
+<p>CPU density changes the licensing bill. A server with two 8-core CPUs (16 physical cores) must license 32 cores because of the 16-core-per-socket minimum. A server with one 16-core CPU licenses only 16 cores. Same total physical cores, double the licensing cost. When buying <a href="https://www.amazon.com/s?k=Intel+Xeon+Silver+4314+server&amp;tag=vmwaremadesim-20">server hardware</a> before a renewal, compare socket count and cores per socket before purchase. Do not choose CPUs based only on acquisition price.</p>
+<h2>What customers are paying</h2>
+<p>Public reports suggest many customers negotiate below list, while some reseller quotes land above Broadcom's list price after markup.</p>
+<p>Public forum anecdotes are not a price sheet, but they show the spread customers are seeing. A Reddit user on r/vmware negotiated $165 per core per year on a three-year VCF deal in December 2025. That is 53% off list, and it took months of negotiation. Another user with 256 cores and 448 TB of vSAN saw an 80% increase on a VVF renewal in April 2026. A Spiceworks user reported a renewal going from approximately $1,100 per socket per year to a minimum of $10,000 per year.</p>
+<p>In the AT&amp;T/Broadcom contract dispute, AT&amp;T alleged a 1,050% price increase. That is a legal dispute between two large enterprises, not a typical customer renewal, but it illustrates the direction of pricing under the new model.</p>
+<p>Across the Reddit, Spiceworks, and GoVendorFree reports cited above, VCF runs roughly $165 to $480 per core per year depending on negotiation leverage and region. VVF runs roughly $100 to $190 per core per year. The sample is not a formal market survey.</p>
+<p>Reported negotiation levers include three-year terms, reducing core count before renewal by consolidating VMs and decommissioning hosts, showing a credible migration plan, and working through a Broadcom partner instead of buying direct. Some public customer reports describe support cost increases of 3x to 5x over prior SnS pricing. Treat that as anecdotal unless a reseller quote confirms it.</p>
+<h2>Who should pay for VCF</h2>
+<p>VCF makes sense if the environment needs NSX, is building a private cloud platform, uses Aria Automation for provisioning, needs HCX for migration, or runs substantial Kubernetes workloads through Tanzu.</p>
+<p>VVF makes sense if the environment needs vSphere and vSAN but not NSX, and does not use Aria Automation or HCX.</p>
+<p>Below 72 licensed cores, the order minimum can make VCF and VVF cost more than the features are worth unless the environment specifically needs vSAN, NSX, Aria, or Broadcom support. In that scenario, <a href="https://www.amazon.com/s?k=Proxmox+VE+subscription&amp;tag=vmwaremadesim-20">Proxmox VE</a>, Hyper-V, or Nutanix AHV are worth evaluating. For a home lab or small test environment, a <a href="https://www.vmug.com/membership/vmug-advantage-membership/">VMUG Advantage</a> membership at $200/year provides lab access to the full suite without per-core licensing.</p>
+
+
+    <!-- Newsletter CTA -->
+    <div class="mt-16 bg-card border border-slate-700 rounded-2xl p-10 text-center">
+      <h2 class="text-2xl font-bold text-white mb-3" style="-webkit-text-fill-color: white;">Stay ahead of the VMware changes</h2>
+      <p class="text-slate-400 mb-6">We're publishing detailed comparison guides, migration walkthroughs, and cost calculators. Get them in your inbox.</p>
+      <form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" onsubmit="handleSubscribe(event)">
+        <input type="email" placeholder="your@email.com" class="flex-1 bg-dark border border-slate-600 text-white px-5 py-3 rounded-xl focus:outline-none focus:border-blue-500 placeholder-slate-500" required />
+        <button type="submit" class="bg-brand text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-600 transition">Subscribe</button>
+      </form>
+    </div>
+
+    <!-- Author -->
+    <div class="mt-12 pt-8 border-t border-slate-800">
+      <div class="flex items-start gap-4">
+        <div class="w-12 h-12 bg-slate-700 rounded-full flex items-center justify-center text-xl">🖥️</div>
+        <div>
+          <p class="text-white font-semibold">Written by Rob Notaro</p>
+          <p class="text-slate-400 text-sm mt-1">Senior infrastructure engineer specializing in VMware, Horizon VDI, and enterprise virtualization. Currently deploying Horizon 2512 and VCF in production environments.</p>
+        </div>
+      </div>
+    </div>
+
+  </article>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800 mt-10">
+    <div class="max-w-4xl mx-auto px-6 py-10 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="text-slate-400 text-sm">© 2026 VMwareMadeSimple.com — Independent. Not affiliated with VMware or Broadcom.</div>
+      <div class="flex gap-6 text-slate-400 text-sm">
+        <a href="/" class="hover:text-white transition">Home</a>
+        <a href="/#articles" class="hover:text-white transition">Articles</a>
+        <a href="/#newsletter" class="hover:text-white transition">Newsletter</a>
+      </div>
+    </div>
+    <div class="max-w-4xl mx-auto px-6 pb-8 text-slate-600 text-xs">
+      Some links on this site are affiliate links. If you purchase through them, we may earn a small commission at no extra cost to you.
+    </div>
+  </footer>
+
+  <script>
+    function handleSubscribe(e) {
+      e.preventDefault();
+      alert('Thanks! We\'ll be in touch soon.');
+      e.target.reset();
+    }
+  </script>
+
+</body>
+</html>
+
