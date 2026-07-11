@@ -88,11 +88,11 @@
     </div>
 
     <p>Broadcom's per-core licensing includes two minimums that can multiply costs for organizations renewing or purchasing VMware subscriptions. Every physical CPU socket must be licensed for at least 16 cores, and new orders carry a 72-core minimum. Together these can add paid cores without changing hardware. In small environments, the added cores can turn into five-figure subscription increases depending on bundle, term, and discount.</p>
-<p>This replaces the old per-socket model entirely. Perpetual VMware licenses with SnS (Support and Subscription) renewals no longer exist. Everything is subscription now, priced per core, with minimums that can make small environments pay for capacity they do not have.</p>
+<p>This replaces the old per-socket model entirely. New perpetual VMware licenses are no longer sold. Existing perpetual licenses with active SnS are still honored under contract terms, but new purchases and most transitions are subscription-based, priced per core, with minimums that can make small environments pay for capacity they do not have.</p>
 <h2>VCF vs. VVF: what each bundle includes</h2>
-<p>VMware now sells two main subscription bundles. Both are per-core, with no perpetual options and no per-VM metering. All physical cores on all ESXi hosts running VMware software must be licensed. There is no exclusion for test or development servers.</p>
+<p>Broadcom's current VMware subscription lineup centers on four per-core options: VCF, VVF, vSphere Standard, and vSphere Enterprise Plus. There are no new perpetual purchases and no per-VM metering. All physical cores on all ESXi hosts running VMware software must be licensed. There is no exclusion for test or development servers.</p>
 <p>VCF (VMware Cloud Foundation) is the full-stack bundle: vSphere Enterprise Plus, vSAN Enterprise, NSX, Aria Operations, Aria Automation, HCX, and vSphere Kubernetes Service (VKS). VVF (vSphere Foundation) is the smaller bundle: vSphere Enterprise Plus, vSAN Enterprise, and Aria Operations Standard. No NSX, no Automation, no HCX, and a limited Tanzu tier.</p>
-<p>A third option exists: vSphere Standard. It is per-core hypervisor licensing only, with no vSAN and no Aria. Organizations running 2- to 3-host environments that need only ESXi and vCenter may find it through their channel partner. Broadcom does not prominently advertise it.</p>
+<p>Standalone vSphere options also exist: vSphere Standard and vSphere Enterprise Plus. Both are per-core hypervisor licensing options with no vSAN and no Aria; Enterprise Plus adds the higher-end vSphere feature set and is commonly referenced around $150/core/year. Organizations running 2- to 3-host environments that need only ESXi and vCenter may find these through their channel partner. Broadcom does not prominently advertise them.</p>
 <p>VCF list price is $350 per core per year. Broadcom positioned this as a 50% reduction from the initial post-acquisition pricing of $700 per core per year. VVF lists at $135 per core per year on average, ranging from $150 for 3-year terms to $190 for 1-year MSRP. GoVendorFree reports North American VCF quotes around $420 to $480 per core per year, and UK quotes around £380 to £440 per core per year, though those figures may include partner markup, support, or taxes. Confirm whether a quote includes support, VAT, and partner margin before comparing.</p>
 <p>The vSAN storage allocation is where the bundles split. VCF includes 1 TiB of vSAN capacity per core. VVF includes 0.25 TiB (250 GiB) per core, increased from 100 GiB as of November 2024 (vSphere 8.0 U3e). On a 192-core environment, that is 192 TiB versus 48 TiB. Storage-heavy workloads on VVF will require additional vSAN entitlement purchases. vSAN no longer activates automatically through the VCF or VVF solution key as of November 2024, per OTAVA and Broadcom documentation. Confirm current entitlement details with an account rep.</p>
 <p>For many VMware estates, NSX is the clearest functional separator between VCF and VVF. VCF includes full NSX with network virtualization, micro-segmentation, and distributed firewall. VVF includes zero NSX. Within Broadcom's current VMware bundles, VCF is the bundle that includes NSX. If a security team requires micro-segmentation, VCF is the path.</p>
@@ -103,35 +103,35 @@
 <p>Count physical cores, not threads or hyperthreads. A 16-core CPU with hyperthreading enabled shows 32 logical processors to the OS, but the license count is 16 cores.</p>
 <p>For a dual-socket host with 8-core CPUs, the licensed core count doubles from 16 to 32. With 6-core CPUs, it rises from 12 to 32. Older hardware magnifies the gap between physical cores and licensed cores.</p>
 <p>To check current core counts via PowerCLI:</p>
-<pre><code># Audit all ESXi hosts connected to vCenter
+<pre><code class="language-powershell"># Audit all ESXi hosts connected to vCenter
 Get-VMHost | Select-Object Name,
     @{N='Sockets';E={$_.ExtensionData.Hardware.CpuInfo.NumCpuPackages}},
     @{N='CoresPerSocket';E={[int]($_.ExtensionData.Hardware.CpuInfo.NumCpuCores / $_.ExtensionData.Hardware.CpuInfo.NumCpuPackages)}}
-</code></pre></div>
+</code></pre>
 
 <p>For a full audit that applies the 16-core minimum and flags the 72-core order minimum:</p>
-<div class="codehilite"><pre><span></span><code><span class="c"># Full audit: licensed core count with 16-core minimum applied</span>
-<span class="nb">Get-VMHost</span> <span class="p">|</span> <span class="k">ForEach</span><span class="n">-Object</span> <span class="p">{</span>
-    <span class="nv">$sockets</span> <span class="p">=</span> <span class="nv">$_</span><span class="p">.</span><span class="n">ExtensionData</span><span class="p">.</span><span class="n">Hardware</span><span class="p">.</span><span class="n">CpuInfo</span><span class="p">.</span><span class="n">NumCpuPackages</span>
-    <span class="nv">$coresPerSocket</span> <span class="p">=</span> <span class="nv">$_</span><span class="p">.</span><span class="n">ExtensionData</span><span class="p">.</span><span class="n">Hardware</span><span class="p">.</span><span class="n">CpuInfo</span><span class="p">.</span><span class="n">NumCpuCores</span> <span class="p">/</span> <span class="nv">$sockets</span>
-    <span class="nv">$licensedCores</span> <span class="p">=</span> <span class="p">(</span><span class="no">[math]</span><span class="p">::</span><span class="n">Max</span><span class="p">(</span><span class="nv">$coresPerSocket</span><span class="p">,</span> <span class="n">16</span><span class="p">))</span> <span class="p">*</span> <span class="nv">$sockets</span>
-    <span class="no">[PSCustomObject]</span><span class="p">@{</span>
-        <span class="n">Host</span> <span class="p">=</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Name</span>
-        <span class="n">Sockets</span> <span class="p">=</span> <span class="nv">$sockets</span>
-        <span class="n">PhysicalCores</span> <span class="p">=</span> <span class="nv">$coresPerSocket</span> <span class="p">*</span> <span class="nv">$sockets</span>
-        <span class="n">LicensedCores</span> <span class="p">=</span> <span class="nv">$licensedCores</span>
-    <span class="p">}</span>
-<span class="p">}</span> <span class="p">|</span> <span class="nb">Format-Table</span> <span class="n">-AutoSize</span>
+<pre><code class="language-powershell"># Full audit: licensed core count with 16-core minimum applied
+Get-VMHost | ForEach-Object {
+    $sockets = $_.ExtensionData.Hardware.CpuInfo.NumCpuPackages
+    $coresPerSocket = $_.ExtensionData.Hardware.CpuInfo.NumCpuCores / $sockets
+    $licensedCores = ([math]::Max($coresPerSocket, 16)) * $sockets
+    [PSCustomObject]@{
+        Host = $_.Name
+        Sockets = $sockets
+        PhysicalCores = $coresPerSocket * $sockets
+        LicensedCores = $licensedCores
+    }
+} | Format-Table -AutoSize
 
-<span class="c"># Sum total and check 72-core minimum</span>
-<span class="nv">$total</span> <span class="p">=</span> <span class="nb">Get-VMHost</span> <span class="p">|</span> <span class="k">ForEach</span><span class="n">-Object</span> <span class="p">{</span>
-    <span class="nv">$sockets</span> <span class="p">=</span> <span class="nv">$_</span><span class="p">.</span><span class="n">ExtensionData</span><span class="p">.</span><span class="n">Hardware</span><span class="p">.</span><span class="n">CpuInfo</span><span class="p">.</span><span class="n">NumCpuPackages</span>
-    <span class="nv">$coresPerSocket</span> <span class="p">=</span> <span class="nv">$_</span><span class="p">.</span><span class="n">ExtensionData</span><span class="p">.</span><span class="n">Hardware</span><span class="p">.</span><span class="n">CpuInfo</span><span class="p">.</span><span class="n">NumCpuCores</span> <span class="p">/</span> <span class="nv">$sockets</span>
-    <span class="p">(</span><span class="no">[math]</span><span class="p">::</span><span class="n">Max</span><span class="p">(</span><span class="nv">$coresPerSocket</span><span class="p">,</span> <span class="n">16</span><span class="p">))</span> <span class="p">*</span> <span class="nv">$sockets</span>
-<span class="p">}</span> <span class="p">|</span> <span class="nb">Measure-Object</span> <span class="n">-Sum</span>
-<span class="nb">Write-Host</span> <span class="s2">&quot;Total licensed cores: </span><span class="p">$(</span><span class="nv">$total</span><span class="p">.</span><span class="n">Sum</span><span class="p">)</span><span class="s2">&quot;</span>
-<span class="nb">Write-Host</span> <span class="s2">&quot;72-core minimum applies: </span><span class="p">$(</span><span class="k">if</span> <span class="p">(</span><span class="nv">$total</span><span class="p">.</span><span class="n">Sum</span> <span class="o">-lt</span> <span class="n">72</span><span class="p">)</span> <span class="p">{</span> <span class="s1">&#39;YES - must purchase 72&#39;</span> <span class="p">}</span> <span class="k">else</span> <span class="p">{</span> <span class="s1">&#39;No&#39;</span> <span class="p">})</span><span class="s2">&quot;</span>
-</code></pre></div>
+# Sum total and check 72-core minimum
+$total = Get-VMHost | ForEach-Object {
+    $sockets = $_.ExtensionData.Hardware.CpuInfo.NumCpuPackages
+    $coresPerSocket = $_.ExtensionData.Hardware.CpuInfo.NumCpuCores / $sockets
+    ([math]::Max($coresPerSocket, 16)) * $sockets
+} | Measure-Object -Sum
+Write-Host "Total licensed cores: $($total.Sum)"
+Write-Host "72-core minimum applies: $(if ($total.Sum -lt 72) { 'YES - must purchase 72' } else { 'No' })"
+</code></pre>
 
 <p>Without vCenter, check each host directly: Host &gt; Hardware &gt; CPU Processors, and look at the Cores per socket value.</p>
 <h2>The 72-core order minimum</h2>

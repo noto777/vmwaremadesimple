@@ -97,7 +97,7 @@
     <p>This guide covers a fresh deployment of <strong class="text-slate-200">vCenter Server 8.0 Update 3i</strong> (the current release as of March 2026) using the official VCSA Installer method. We'll walk through every step — downloading from the Broadcom Support Portal, sizing your appliance correctly, running the installer, and validating the result.</p>
 
     <div class="callout">
-      <strong class="text-yellow-400">Licensing Note (March 2026):</strong> Broadcom has retired the standalone vSphere perpetual license model. vCenter 8 requires either a <strong>VMware vSphere Foundation (VVF)</strong> or <strong>VMware Cloud Foundation (VCF)</strong> subscription license. If you're evaluating, a 60-day trial is available from the Broadcom Support Portal. Budget impact is real — plan your licensing before you start.
+      <strong class="text-yellow-400">Licensing Note (March 2026):</strong> vCenter/vSphere licensing is now subscription-based. Current bundle options include <strong>vSphere Standard</strong>, <strong>vSphere Enterprise Plus</strong>, <strong>VMware vSphere Foundation (VVF)</strong>, and <strong>VMware Cloud Foundation (VCF)</strong>. If you're evaluating, a 60-day trial is available from the Broadcom Support Portal. Budget impact is real — plan your licensing before you start.
     </div>
 
     <h2 class="text-2xl font-bold text-white">Prerequisites Checklist</h2>
@@ -110,7 +110,7 @@
       <li><strong>NTP:</strong> ESXi host synced to a reliable NTP source. Clock drift causes Kerberos failures.</li>
       <li><strong>Network:</strong> Static IP reserved for vCenter, dedicated management VLAN recommended.</li>
       <li><strong>Storage:</strong> See the sizing table below — minimum 579 GB. SSD or NVMe required.</li>
-      <li><strong>License key:</strong> VVF or VCF subscription from Broadcom. Trial activation available.</li>
+      <li><strong>License key:</strong> Subscription-based vCenter/vSphere license from Broadcom. Current bundle options include vSphere Standard, vSphere Enterprise Plus, VVF, and VCF. Trial activation available.</li>
       <li><strong>Installer machine:</strong> A Windows, macOS, or Linux workstation from which you'll run the VCSA installer UI (needs network line-of-sight to the ESXi host).</li>
     </ul>
 
@@ -254,7 +254,7 @@ nslookup vcenter01.lab.local</code></pre>
           <td>HTTPS management, vSphere API</td>
         </tr>
         <tr>
-          <td class="font-medium text-slate-300">9443</td>
+          <td class="font-medium text-slate-300">5480</td>
           <td>TCP</td>
           <td>Client → vCenter</td>
           <td>VCSA Appliance Management UI</td>
@@ -403,7 +403,7 @@ sudo mount -o loop VMware-VCSA-all-8.0.3-xxxxxxxx.iso /mnt/vcsa-installer
 
     <h3 class="text-xl font-semibold text-white">Check Appliance Health</h3>
 
-    <p>Navigate to <code>https://vcenter01.lab.local:9443</code> — this is the <strong class="text-slate-200">VCSA Appliance Management UI</strong> (VAMI). Log in with <code>root</code>.</p>
+    <p>Navigate to <code>https://vcenter01.lab.local:5480</code> — this is the <strong class="text-slate-200">VCSA Appliance Management UI</strong> (VAMI). Log in with <code>root</code>.</p>
 
     <p>Check:</p>
 
@@ -435,7 +435,7 @@ chronyc tracking</code></pre>
     <p>Before you touch anything else:</p>
 
     <ol class="list-decimal list-inside text-slate-300 space-y-3 mb-6">
-      <li>In VAMI (<code>https://vcenter01.lab.local:9443</code>), go to <strong>Backup</strong></li>
+      <li>In VAMI (<code>https://vcenter01.lab.local:5480</code>), go to <strong>Backup</strong></li>
       <li>Configure a backup destination (SFTP, FTP, or SMB share)</li>
       <li>Run a manual backup immediately</li>
     </ol>
@@ -521,7 +521,7 @@ nmap -sn 192.168.10.0/24 | grep -A1 "Nmap scan"</code></pre>
         </tr>
         <tr>
           <td class="font-medium text-slate-300">"vCenter Standard license required"</td>
-          <td>Requires <strong>VVF or VCF subscription</strong> from Broadcom (perpetual standalone is EOL)</td>
+          <td>vCenter/vSphere licensing is now subscription-based. Current bundle options include <strong>vSphere Standard</strong>, <strong>vSphere Enterprise Plus</strong>, <strong>VVF</strong>, and <strong>VCF</strong>.</td>
         </tr>
         <tr>
           <td class="font-medium text-slate-300">"Port 902 for vCenter API"</td>

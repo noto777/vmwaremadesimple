@@ -106,11 +106,11 @@
       <li><strong>Raised — then partially reversed — the minimum core requirement:</strong> In April 2025, Broadcom mandated a 72-core minimum per purchase order. After significant industry backlash, they <strong>partially reversed the decision for renewals in late 2025</strong> — the 72-core minimum still applies to new orders and tier changes. The existing <strong>16-core minimum per CPU socket</strong> remains in effect for all orders. A small three-node cluster with dual 16-core CPUs = 96 cores × $190 = $18,240/year for entry-level VVF (new order).</li>
       <li><strong>Added a 20% late renewal penalty:</strong> Miss your anniversary renewal date? That's an automatic 20% surcharge on top of whatever your new quote is.</li>
       <li><strong>Cut the channel:</strong> Ingram Micro — one of VMware's largest distributors — dropped VMware entirely. The sales and support ecosystem got smaller overnight.</li>
-      <li><strong>Locked vSphere 9 to VVF/VCF:</strong> The next major release of vSphere will only be available to customers on VVF (vSphere Foundation) or VCF (VMware Cloud Foundation). If you're on anything else, you're on a dead-end branch.</li>
+      <li><strong>vSphere 9 upgrade rights require verification:</strong> Broadcom is steering customers toward VVF and VCF for full-stack vSphere 9 adoption, but vSphere Standard and vSphere Enterprise Plus remain current subscription bundles. Verify upgrade rights for your specific SKU and contract with your reseller.</li>
     </ul>
 
     <div class="callout-red callout">
-      <strong class="text-red-400">vSphere 9 Lock-in Alert:</strong> Broadcom has confirmed that vSphere 9 will only be available to VVF and VCF subscribers. If you're on a legacy license or purchased vSphere Enterprise Plus without upgrading to VVF, you will not be able to upgrade to vSphere 9. This is the clearest signal yet that staying on anything below VVF is a dead end.
+      <strong class="text-red-400">vSphere 9 upgrade note:</strong> Legacy perpetual licenses do not provide automatic vSphere 9 upgrade rights after support/subscription coverage ends. Customers on current subscription bundles should verify upgrade rights by SKU and contract.
     </div>
 
     <h3 class="text-xl font-semibold text-white">The Real Numbers</h3>
@@ -172,7 +172,6 @@
     </table>
 
     <p>Source: Proxmox official pricing page and Vinchin.com (current as of 2025). Prices shown in EUR; Proxmox charges in euros.</p>
-    <!-- <a href="https://www.amazon.com/s?k=Proxmox+VE+Basic+Subscription" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-amber-400 hover:text-amber-300 font-medium"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.3 2.3c-.4.4-.1 1.1.5 1.1H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>Proxmox VE Basic Subscription</a>-->
 
     <p>To put this in perspective: a three-node cluster with dual-socket servers (6 sockets total) at Proxmox Basic costs <strong class="text-slate-200">€2,130/year (~$2,300 USD)</strong>. The same cluster on VMware VVF at 96 cores × $190 = $18,240/year. That's roughly an 87% cost reduction, and you're getting more features for free than most teams ever unlocked in vSphere.</p>
 
@@ -184,7 +183,7 @@
 
     <h3 class="text-xl font-semibold text-white">Proxmox Backup Server — A Hidden TCO Factor</h3>
 
-    <p>A cost that rarely shows up in VMware alternative comparisons: backup software. VMware environments typically run Veeam, Nakivo, or Commvault — often $2,000-10,000+/year depending on VM count. Proxmox ships with <strong class="text-slate-200">Proxmox Backup Server (PBS)</strong>, a free, open-source backup solution with incremental backups, client-side deduplication, encryption, and off-site replication built in. Multiple community members on r/Proxmox have cited PBS as a significant factor in their total cost calculation. <!-- <a href="https://www.amazon.com/s?k=Veeam+Backup+for+Proxmox+VE" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-amber-400 hover:text-amber-300 font-medium"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.3 2.3c-.4.4-.1 1.1.5 1.1H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>Veeam Backup for Proxmox VE</a>--></p>
+    <p>A cost that rarely shows up in VMware alternative comparisons: backup software. VMware environments typically run Veeam, Nakivo, or Commvault — often $2,000-10,000+/year depending on VM count. Proxmox ships with <strong class="text-slate-200">Proxmox Backup Server (PBS)</strong>, a free, open-source backup solution with incremental backups, client-side deduplication, encryption, and off-site replication built in. Multiple community members on r/Proxmox have cited PBS as a significant factor in their total cost calculation.</p>
 
     <h3 class="text-xl font-semibold text-white">Proxmox Datacenter Manager (PDM)</h3>
 

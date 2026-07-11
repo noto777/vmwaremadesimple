@@ -69,14 +69,14 @@
     </p>
 
     <div class="callout-red callout">
-      <strong class="text-red-400">The short version:</strong> Reported price increases range from 150% to over 1,000% depending on configuration and prior discounting (source: ColocationPlus, June 2025; AT&T federal court filing, 2024). Existing perpetual license support contracts expire by October 2027, after which the choice is: subscribe at the new pricing, or migrate off VMware.
+      <strong class="text-red-400">The short version:</strong> Reported price increases range from 150% to over 1,000% depending on configuration and prior discounting (source: ColocationPlus, June 2025; AT&T federal court filing, 2024). Broadcom ended new perpetual license sales in early 2024; existing perpetual licenses and active SnS/support contracts are honored through their term, but once support expires you lose patches, support, and upgrade rights.
     </div>
 
     <!-- What Changed -->
     <h2 class="text-2xl font-bold text-white">What Actually Changed</h2>
 
     <p>
-      Broadcom collapsed VMware's portfolio from roughly 8,000 SKUs and 168 bundles down to essentially two products:
+      Broadcom collapsed VMware's portfolio from roughly 8,000 SKUs and 168 bundles down to four primary subscription bundles: VMware Cloud Foundation (VCF), vSphere Foundation (VVF), vSphere Standard, and vSphere Enterprise Plus.
     </p>
 
     <table>
@@ -101,7 +101,7 @@
         <tr>
           <td class="font-medium text-slate-300">Typical cost</td>
           <td>~$4,500/socket perpetual + ~$1,000/yr support</td>
-          <td>$135 (VVF) – $350 (VCF) per core per year</td>
+          <td>~$50 (vSphere Standard) – $350 (VCF) per core per year</td>
         </tr>
         <tr>
           <td class="font-medium text-slate-300">Minimum purchase</td>
@@ -121,8 +121,8 @@
       </tbody>
     </table>
 
-    <!-- The Two Products -->
-    <h2 class="text-2xl font-bold text-white">The Two Products: VCF and VVF</h2>
+    <!-- Primary Bundles -->
+    <h2 class="text-2xl font-bold text-white">The Four Primary Bundles: VCF, VVF, Standard, and Enterprise Plus</h2>
 
     <h3 class="text-xl font-semibold text-white">VMware Cloud Foundation (VCF) — $350/core/year (list)</h3>
 
@@ -169,6 +169,12 @@
       <strong class="text-yellow-400">Update:</strong> Broadcom initially consolidated everything into VCF and VVF bundles only. After significant customer backlash, they expanded the portfolio back to four subscription tiers: <strong>VMware Cloud Foundation (VCF)</strong>, <strong>vSphere Foundation (VVF)</strong>, <strong>vSphere Standard</strong>, and <strong>vSphere Enterprise Plus</strong>. The standalone options are subscription-based (per core, per year) — not perpetual — but they do give smaller shops a path that doesn't require the full VCF/VVF stack.
     </div>
 
+    <h3 class="text-xl font-semibold text-white">vSphere Standard and vSphere Enterprise Plus — standalone subscription bundles</h3>
+
+    <p>
+      vSphere Standard remains available as a subscription bundle at approximately <strong>$50/core/year</strong>, though some customers report sales pressure toward VVF or VCF. vSphere Enterprise Plus also remains a current subscription bundle for customers that need the higher-end vSphere feature set without adopting the full VVF or VCF stack. Verify the exact SKU, term, and upgrade rights with your reseller because Broadcom packaging and discounting can vary by contract.
+    </p>
+
     <!-- VCF 9 Hardware Minimums -->
     <h3 class="text-xl font-semibold text-white">VCF 9 Hardware Requirements: The 7-Node Myth</h3>
 
@@ -187,7 +193,7 @@
     </p>
 
     <div class="callout callout-red">
-      <strong class="text-red-400">The VVF discontinuation risk:</strong> As of early 2026, multiple r/vmware threads report that Broadcom sales reps are steering customers away from VVF. Some shops report difficulty getting VVF quoted at all, with reps quoting VCF instead. A November 2025 r/vmware thread included a rep's statement that "VVF will be phased out within 18 months." Broadcom hasn't made an official announcement, but the pattern matches what happened to vSphere Standard (end-of-sale July 2025 with no replacement below VVF). If you're building a 3-5 year infrastructure plan, factor this in — architect for a migration path to VCF without needing to rip out NSX-incompatible network configs if the time comes.
+      <strong class="text-red-400">Sales-pressure risk:</strong> As of early 2026, multiple r/vmware threads report that Broadcom sales reps are steering customers toward larger bundles. Some shops report difficulty getting VVF quoted, with reps quoting VCF instead. vSphere Standard remains available as a subscription bundle at approximately $50/core/year, though some customers report sales pressure toward VVF or VCF. If you're building a 3-5 year infrastructure plan, verify current SKU availability, upgrade rights, and renewal terms with your reseller before committing.
     </div>
 
     <!-- Break-Even Analysis -->
@@ -488,7 +494,7 @@ Write-Host "Effective license minimum: $licenseFloor cores"</code></pre>
     <h2 class="text-2xl font-bold text-white">What Happened to Perpetual Licenses?</h2>
 
     <p>
-      They're dead. Broadcom stopped selling perpetual licenses shortly after the acquisition. As of April 2025, no new perpetual license purchases or support renewals are available.
+      Broadcom ended new perpetual license sales in early 2024. Existing perpetual licenses and active SnS/support contracts are still honored through their term. Once support expires, you lose patches, support, and upgrade rights.
     </p>
 
     <p>What this means for organizations still running on perpetual licenses:</p>
@@ -559,7 +565,7 @@ Write-Host "Effective license minimum: $licenseFloor cores"</code></pre>
           <td>€0–€1,060/socket/yr</td>
           <td>Cost-conscious, Linux-comfortable teams</td>
         </tr>
-        <!-- <a href="https://www.amazon.com/s?k=Proxmox+VE+Community+Subscription" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-amber-400 hover:text-amber-300 font-medium"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.3 2.3c-.4.4-.1 1.1.5 1.1H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>Proxmox VE Community Subscription</a>-->
+
         <tr>
           <td class="font-medium text-slate-300">Nutanix AHV</td>
           <td>Per core/year</td>
@@ -627,7 +633,7 @@ Write-Host "Effective license minimum: $licenseFloor cores"</code></pre>
         <div class="w-12 h-12 bg-slate-700 rounded-full flex items-center justify-center text-xl text-blue-400 font-bold">RN</div>
         <div>
           <p class="text-white font-semibold">Written by Rob Notaro</p>
-          <p class="text-slate-400 text-sm mt-1">Rob Notaro is a senior VMware/Horizon engineer with 10+ years deploying vSphere and VCF in production. VCP-DCV certified. Currently running vSphere 9.</p>
+          <p class="text-slate-400 text-sm mt-1">Rob Notaro is a senior VMware/Horizon engineer with 10+ years deploying vSphere and VCF in production. VCP-DCV certified. Currently working with vSphere, Horizon, and VCF environments.</p>
         </div>
       </div>
     </div>

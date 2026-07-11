@@ -93,7 +93,7 @@
     <!-- Article Body -->
     <p>Broadcom changed the compliance rules and the tooling at the same time. If you're still running quarterly manual audits — or worse, relying on the old <code>VMware.PowerCLI</code> module — you're behind on both counts.</p>
 
-    <p>Since April 10, 2025, every VMware product purchase carries a 72-core minimum per license instance (up from 16). The 72-core minimum was partially reversed for renewals after customer pushback, but it still applies to all new orders. Add to that a 20% penalty for late renewals and Broadcom's telemetry actively phoning home on vSphere+ and cloud-connected deployments, and the cost of being out of compliance at renewal has gone up significantly. (<a href="https://www.crn.com/news/data-center/2025/broadcom-vmware-ups-minimum-core-purchase-substantially-levies-late-renewal-penalties" target="_blank" rel="noopener" class="text-blue-400 hover:text-blue-300 underline">CRN reporting from March 2025</a>)</p>
+    <p>Since April 10, 2025, every VMware product purchase carries a 72-core per-order minimum (up from 16). The 72-core per-order minimum was introduced April 2025, partially reversed for some renewals, and still applies to new orders, subscription transitions, and tier changes. Add to that a 20% penalty for late renewals and Broadcom's telemetry actively phoning home on vSphere+ and cloud-connected deployments, and the cost of being out of compliance at renewal has gone up significantly. (<a href="https://www.crn.com/news/data-center/2025/broadcom-vmware-ups-minimum-core-purchase-substantially-levies-late-renewal-penalties" target="_blank" rel="noopener" class="text-blue-400 hover:text-blue-300 underline">CRN reporting from March 2025</a>)</p>
 
     <p>The script I'm running pulls core counts, license keys, and host inventory from every production cluster, flags any host with an eval license or no assigned key, and exports a timestamped CSV. Takes 30 seconds on 40 hosts.</p>
 
@@ -125,7 +125,7 @@ Get-Module VCF.PowerCLI | Select-Object Name, Version</code></pre>
     <ol class="list-decimal list-inside text-slate-300 space-y-3 mb-6">
       <li><strong>Is it running an eval license?</strong> Eval keys are <code>00000-00000-00000-00000-00000</code>. If you have hosts on eval in production you've got a problem.</li>
       <li><strong>What license key is assigned?</strong> You need this for reconciliation against your Broadcom contract.</li>
-      <li><strong>How many physical cores does this host have?</strong> Broadcom licenses per core. Your contracted core count needs to cover all physical cores across licensed hosts. The 72-core-per-product minimum applies to new orders (it was partially relaxed for renewals).</li>
+      <li><strong>How many physical cores does this host have?</strong> Broadcom licenses per core. Your contracted core count needs to cover all physical cores across licensed hosts. The 72-core per-order minimum applies to new orders, subscription transitions, and tier changes (it was partially relaxed for some renewals).</li>
     </ol>
 
     <p>There is no PowerCLI cmdlet that directly queries Broadcom's licensing backend and returns a subscription compliance status. Anyone who tells you otherwise is either hallucinating or referring to a feature that doesn't exist in the public tooling. What you <em>can</em> do — and what Broadcom's own audit process does — is inventory your deployed core counts and compare them to your contract.</p>
@@ -204,7 +204,7 @@ $clusterSummary = $reportData |
 
 $clusterSummary | Format-Table -AutoSize</code></pre>
 
-    <p>The 72-core minimum applies per product purchase on new orders (it was partially relaxed for renewals), not per cluster — but running this check per cluster gives you the data you need if Broadcom asks for a breakdown by workload grouping.</p>
+    <p>The 72-core per-order minimum applies to new orders, subscription transitions, and tier changes (it was partially relaxed for some renewals), not per cluster — but running this check per cluster gives you the data you need if Broadcom asks for a breakdown by workload grouping.</p>
 
     <h3 class="text-xl font-semibold text-white">Export and Alert</h3>
 
@@ -264,7 +264,7 @@ The key is written to the host when vCenter assigns it. If the host temporarily 
 
     <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
       <li>Verify that your assigned keys are valid against Broadcom's backend (that requires the Broadcom Customer Portal or a support case)</li>
-      <li>Check vSAN capacity licensing separately — vSAN has its own per-TiB licensing under VCF that you need to audit with <code>Get-VsanClusterConfiguration</code></li>
+      <li>Check vSAN entitlement consumption separately — VCF includes 1 TiB per core and VVF includes 0.25 TiB per core.</li>
       <li>Cover NSX licensing — NSX Manager has its own license status under System → Licenses</li>
     </ul>
 

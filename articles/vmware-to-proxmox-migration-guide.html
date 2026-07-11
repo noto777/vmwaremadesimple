@@ -129,7 +129,7 @@
         <tr>
           <td class="font-medium text-slate-300">Minimum core commitment</td>
           <td>72 cores</td>
-          <td>New orders only; partially reversed for renewals</td>
+          <td>Applies to new orders, subscription transitions, and tier changes; partially reversed for some existing renewals</td>
         </tr>
         <tr>
           <td class="font-medium text-slate-300">Late renewal surcharge</td>
@@ -140,7 +140,7 @@
     </table>
 
     <div class="callout-red callout">
-      <strong class="text-red-400">Do the math:</strong> On a 3-host cluster with dual-socket servers (say, 2×20-core CPUs per host = 120 cores), you're looking at 120 cores × $190/core = <strong>$22,800/year</strong> for VVF at the 1-year rate. And that's if Broadcom accepts your core count — new orders still carry the 72-core minimum.
+      <strong class="text-red-400">Do the math:</strong> On a 3-host cluster with dual-socket servers (say, 2×20-core CPUs per host = 120 cores), you're looking at 120 cores × $190/core = <strong>$22,800/year</strong> for VVF at the 1-year rate. And that's if Broadcom accepts your core count — the 72-core minimum applies to new orders, subscription transitions, and tier changes; it was partially reversed for some existing renewals.
     </div>
 
     <p>A Spiceworks thread from January 2026 captures the SMB experience perfectly: one user reported their VMware Essentials+ renewal went from approximately $1,900/year to over $14,000/year for the equivalent vSphere Foundation tier. That's not a price increase — that's a different product category entirely.</p>
@@ -283,7 +283,7 @@
       <li>Granular file-level restore without restoring the full VM</li>
     </ul>
 
-    <p>In the Virtualization Howto year-long comparison, PBS was described as "a totally free enterprise data protection solution that VMware doesn't have at this price point." VMware's equivalent backup capabilities require third-party backup platforms such as Veeam — which is now a real product, with Veeam adding official Proxmox VE support in 2025. <!-- <a href="https://www.amazon.com/s?k=Veeam+Backup+for+Proxmox+VE" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-amber-400 hover:text-amber-300 font-medium"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.3 2.3c-.4.4-.1 1.1.5 1.1H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>Veeam Backup for Proxmox VE</a>--></p>
+    <p>In the Virtualization Howto year-long comparison, PBS was described as "a totally free enterprise data protection solution that VMware doesn't have at this price point." VMware environments commonly rely on third-party backup platforms such as Veeam, which added official Proxmox VE support in 2025.</p>
 
     <div class="callout-green callout">
       <strong class="text-green-400">Consider running PBS on a small dedicated box.</strong> An Intel N100 mini PC with 4–8 TB of storage makes an excellent PBS appliance for under $300. This gives you network-isolated backup infrastructure that's independent of your Proxmox cluster. <a href="https://www.amazon.com/s?k=Beelink+EQ12+mini+PC" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-amber-400 hover:text-amber-300 font-medium"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.3 2.3c-.4.4-.1 1.1.5 1.1H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>Beelink EQ12 mini PC</a></div>
@@ -347,9 +347,9 @@
       </thead>
       <tbody>
         <tr>
-          <td class="font-medium text-slate-300">VMware VVF @ $190/core (1-yr), 72-core minimum (new orders)</td>
+          <td class="font-medium text-slate-300">VMware VVF @ $190/core (1-yr), 72-core minimum</td>
           <td>$13,680/year</td>
-          <td>Minimum new order; 3 hosts at 72-core floor</td>
+          <td>Minimum applies to new orders, subscription transitions, and tier changes; partially reversed for some existing renewals</td>
         </tr>
         <tr>
           <td class="font-medium text-slate-300">VMware VVF @ $190/core, 3×2×20-core hosts (120 cores)</td>
