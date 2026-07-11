@@ -90,7 +90,7 @@
     <!-- Intro -->
     <p>Broadcom's VMware acquisition went through in November 2023. Since then I've had more renewal conversations than I can count, and the pattern is consistent — quotes coming back at 150% to 1,000% over prior year. AT&T publicly alleged 1,050%. A Spiceworks user reported their Essentials+ renewal jumped from $1,900 to over $14,000. The alternatives deserve a real evaluation.</p>
 
-    <p>I've been deploying and managing VMware environments professionally for over a decade, including VCF and Horizon in production right now. For some organizations, the math on staying with VMware still works. For others — particularly smaller shops that lost access to vSphere Standard, or anyone facing a renewal quote several multiples higher than last year — the alternatives deserve a detailed, sourced evaluation.</p>
+    <p>I've been deploying and managing VMware environments professionally for over a decade, including VCF and Horizon in production right now. For some organizations, the math on staying with VMware still works. For others — particularly smaller shops, or anyone facing a renewal quote several multiples higher than last year — the alternatives deserve a detailed, sourced evaluation.</p>
 
     <!-- Section 1: Why Everyone's Leaving -->
     <h2 class="text-2xl font-bold text-white">Why Everyone Is Leaving VMware Right Now</h2>
@@ -102,8 +102,8 @@
     <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
       <li><strong>Collapsed the product catalog:</strong> VMware had ~8,000 SKUs. Broadcom reduced this to a handful of bundles centered on VMware Cloud Foundation (VCF) and vSphere Foundation (VVF). If your environment used a specific mix of point products, that option is gone.</li>
       <li><strong>Eliminated perpetual licenses entirely:</strong> All new VMware sales are subscription-only. If you were planning to buy a perpetual license and ride it out, that ship sailed.</li>
-      <li><strong>Discontinued vSphere Standard:</strong> End of Sale was confirmed as <strong class="text-slate-200">July 31, 2025</strong>, via a Broadcom partner rep on Reddit's r/vmware (the January 2025 date cited in some articles was when resellers informally stopped quoting it — the official EoS date is July 31). No new sales, no renewals, no upgrades at that tier. The new entry point is vSphere Enterprise Plus or VVF at $190/core/year.</li>
-      <li><strong>Raised — then reversed — the minimum core requirement:</strong> In April 2025, Broadcom briefly mandated a 72-core minimum per purchase order. After significant industry backlash, they reversed the decision and returned to the existing <strong>16-core minimum per CPU socket</strong>. A small three-node cluster with dual 16-core CPUs = 96 cores × $190 = $18,240/year for entry-level VVF.</li>
+      <li><strong>vSphere Standard availability:</strong> Contrary to earlier reports of discontinuation, vSphere Standard is available at $50/core/year. It is not prominently advertised by Broadcom sales reps, who steer customers toward VVF instead. A Broadcom partner rep on Reddit's r/vmware had cited a July 31, 2025 End of Sale date, but the product remains orderable. The widely-promoted entry point is vSphere Enterprise Plus or VVF at $190/core/year (1-year).</li>
+      <li><strong>Raised — then partially reversed — the minimum core requirement:</strong> In April 2025, Broadcom mandated a 72-core minimum per purchase order. After significant industry backlash, they <strong>partially reversed the decision for renewals in late 2025</strong> — the 72-core minimum still applies to new orders and tier changes. The existing <strong>16-core minimum per CPU socket</strong> remains in effect for all orders. A small three-node cluster with dual 16-core CPUs = 96 cores × $190 = $18,240/year for entry-level VVF (new order).</li>
       <li><strong>Added a 20% late renewal penalty:</strong> Miss your anniversary renewal date? That's an automatic 20% surcharge on top of whatever your new quote is.</li>
       <li><strong>Cut the channel:</strong> Ingram Micro — one of VMware's largest distributors — dropped VMware entirely. The sales and support ecosystem got smaller overnight.</li>
       <li><strong>Locked vSphere 9 to VVF/VCF:</strong> The next major release of vSphere will only be available to customers on VVF (vSphere Foundation) or VCF (VMware Cloud Foundation). If you're on anything else, you're on a dead-end branch.</li>
@@ -126,7 +126,7 @@
         <tr><td class="font-medium text-slate-300">vSphere Foundation (VVF) — 1-year</td><td>$190/core/year</td><td>Available (entry point)</td></tr>
         <tr><td class="font-medium text-slate-300">vSphere Foundation (VVF) — multi-year</td><td>$150/core/year</td><td>Available</td></tr>
         <tr><td class="font-medium text-slate-300">vSphere Enterprise Plus — 1-year</td><td>$150/core/year</td><td>Available</td></tr>
-        <tr><td class="font-medium text-slate-300">vSphere Standard</td><td>$50/core/year</td><td>❌ Discontinued July 31, 2025</td></tr>
+        <tr><td class="font-medium text-slate-300">vSphere Standard</td><td>$50/core/year</td><td>Available — not prominently advertised</td></tr>
       </tbody>
     </table>
 
@@ -278,8 +278,8 @@
       </thead>
       <tbody>
         <tr><td class="font-medium text-slate-300">VMware VCF 5</td><td>$33,600/year</td><td>Per core</td><td>$350/core × 96 cores; full stack bundle</td></tr>
-        <tr><td class="font-medium text-slate-300">VMware VVF (1yr)</td><td>$18,240/year</td><td>Per core</td><td>$190/core × 96; entry point post-Standard EoS</td></tr>
-        <tr><td class="font-medium text-slate-300">VMware vSphere Standard</td><td>—</td><td>—</td><td>❌ Discontinued July 31, 2025</td></tr>
+        <tr><td class="font-medium text-slate-300">VMware VVF (1yr)</td><td>$18,240/year</td><td>Per core</td><td>$190/core × 96; entry point promoted by Broadcom</td></tr>
+        <tr><td class="font-medium text-slate-300">VMware vSphere Standard</td><td>$4,800/year</td><td>Per core</td><td>$50/core × 96; available but not prominently advertised</td></tr>
         <tr><td class="font-medium text-slate-300">Proxmox (no subscription)</td><td>$0</td><td>Free / open-source</td><td>Full features; community repo; forum support</td></tr>
         <tr><td class="font-medium text-slate-300">Proxmox Community</td><td>~€690/year (~$745)</td><td>Per socket</td><td>€115 × 6 sockets; enterprise repo, no ticket support</td></tr>
         <tr><td class="font-medium text-slate-300">Proxmox Basic</td><td>~€2,130/year (~$2,300)</td><td>Per socket</td><td>€355 × 6 sockets; 3 tickets/year, business hours</td></tr>

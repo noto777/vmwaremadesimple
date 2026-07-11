@@ -107,9 +107,14 @@
       </thead>
       <tbody>
         <tr>
+          <td class="font-medium text-slate-300">vSphere Foundation (VVF) — Average</td>
+          <td>$135/core</td>
+          <td>Blended average across contract terms</td>
+        </tr>
+        <tr>
           <td class="font-medium text-slate-300">vSphere Foundation (VVF) — Multi-Year</td>
           <td>$150/core</td>
-          <td>Multi-year subscription rate</td>
+          <td>3-year subscription rate</td>
         </tr>
         <tr>
           <td class="font-medium text-slate-300">vSphere Foundation (VVF) — 1-Year</td>
@@ -124,7 +129,7 @@
         <tr>
           <td class="font-medium text-slate-300">Minimum core commitment</td>
           <td>72 cores</td>
-          <td>Enforced April 10, 2025 (up from 16)</td>
+          <td>New orders only; partially reversed for renewals</td>
         </tr>
         <tr>
           <td class="font-medium text-slate-300">Late renewal surcharge</td>
@@ -135,14 +140,14 @@
     </table>
 
     <div class="callout-red callout">
-      <strong class="text-red-400">Do the math:</strong> On a 3-host cluster with dual-socket servers (say, 2×20-core CPUs per host = 120 cores), you're looking at 120 cores × $190/core = <strong>$22,800/year</strong> for VVF at the 1-year rate. And that's if Broadcom accepts your core count — the 72-core minimum means you pay for 72 cores regardless.
+      <strong class="text-red-400">Do the math:</strong> On a 3-host cluster with dual-socket servers (say, 2×20-core CPUs per host = 120 cores), you're looking at 120 cores × $190/core = <strong>$22,800/year</strong> for VVF at the 1-year rate. And that's if Broadcom accepts your core count — new orders still carry the 72-core minimum.
     </div>
 
     <p>A Spiceworks thread from January 2026 captures the SMB experience perfectly: one user reported their VMware Essentials+ renewal went from approximately $1,900/year to over $14,000/year for the equivalent vSphere Foundation tier. That's not a price increase — that's a different product category entirely.</p>
 
     <p>According to community estimates across Spiceworks, r/vmware, and r/sysadmin, effective price increases since the Broadcom acquisition have ranged from 150% to over 1,000% depending on org size, licensing tier, and whether you got grandfathered into older terms.</p>
 
-    <p>Meanwhile, vSphere Standard — the entry-level product many SMBs relied on — reached end-of-sale on July 31, 2025. Renewals are pushing customers toward VVF.</p>
+    <p>Meanwhile, vSphere Standard still exists at $50/core/year, but Broadcom is actively pushing renewals toward VVF and it offers limited value for most production environments.</p>
 
     <h2 class="text-2xl font-bold text-white">Is Proxmox Right for You? (Be Honest)</h2>
 
@@ -278,7 +283,7 @@
       <li>Granular file-level restore without restoring the full VM</li>
     </ul>
 
-    <p>In the Virtualization Howto year-long comparison, PBS was described as "a totally free enterprise data protection solution that VMware doesn't have at this price point." VMware's equivalent backup capabilities require vSphere Data Protection or a third-party product like Veeam — which is now a real product, with Veeam adding official Proxmox VE support in 2025. <!-- <a href="https://www.amazon.com/s?k=Veeam+Backup+for+Proxmox+VE" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-amber-400 hover:text-amber-300 font-medium"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.3 2.3c-.4.4-.1 1.1.5 1.1H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>Veeam Backup for Proxmox VE</a>--></p>
+    <p>In the Virtualization Howto year-long comparison, PBS was described as "a totally free enterprise data protection solution that VMware doesn't have at this price point." VMware's equivalent backup capabilities require third-party backup platforms such as Veeam — which is now a real product, with Veeam adding official Proxmox VE support in 2025. <!-- <a href="https://www.amazon.com/s?k=Veeam+Backup+for+Proxmox+VE" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-amber-400 hover:text-amber-300 font-medium"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.3 2.3c-.4.4-.1 1.1.5 1.1H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>Veeam Backup for Proxmox VE</a>--></p>
 
     <div class="callout-green callout">
       <strong class="text-green-400">Consider running PBS on a small dedicated box.</strong> An Intel N100 mini PC with 4–8 TB of storage makes an excellent PBS appliance for under $300. This gives you network-isolated backup infrastructure that's independent of your Proxmox cluster. <a href="https://www.amazon.com/s?k=Beelink+EQ12+mini+PC" target="_blank" rel="noopener" class="inline-flex items-center gap-1 text-amber-400 hover:text-amber-300 font-medium"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.3 2.3c-.4.4-.1 1.1.5 1.1H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>Beelink EQ12 mini PC</a></div>
@@ -342,9 +347,9 @@
       </thead>
       <tbody>
         <tr>
-          <td class="font-medium text-slate-300">VMware VVF @ $190/core (1-yr), 72-core minimum</td>
+          <td class="font-medium text-slate-300">VMware VVF @ $190/core (1-yr), 72-core minimum (new orders)</td>
           <td>$13,680/year</td>
-          <td>Minimum order; 3 hosts at 72-core floor</td>
+          <td>Minimum new order; 3 hosts at 72-core floor</td>
         </tr>
         <tr>
           <td class="font-medium text-slate-300">VMware VVF @ $190/core, 3×2×20-core hosts (120 cores)</td>
@@ -376,7 +381,7 @@
 
     <p>Even at Proxmox's most expensive tier — Premium, with 24/7 enterprise support — you're looking at roughly a third of what VMware VVF costs at list price on a 1-year subscription. In practice, most SMBs will land somewhere between Community and Basic, making the cost delta even more dramatic.</p>
 
-    <h2 class="text-2xl font-bold text-white">Real-World Scale: What Others Have Done</h2>
+    <h2 class="text-2xl font-bold text-white">Community Scale: What Others Have Done</h2>
 
     <p>Some documented examples from the community:</p>
 

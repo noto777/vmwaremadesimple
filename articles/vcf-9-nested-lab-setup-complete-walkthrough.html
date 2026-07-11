@@ -194,7 +194,7 @@ esxcli network vswitch standard portgroup policy security get \
 <pre><code class="language-bash">
 # Configure management IP (adjust to your network)
 esxcli network ip interface ipv4 set \
-  -i vmkernel0 \
+  -i vmk0 \
   -I 192.168.1.10 \
   -N 255.255.255.0 \
   -t static
@@ -205,7 +205,7 @@ esxcli network ip route ipv4 add \
 </code></pre>
 <pre><code class="language-bash">
 # Verify connectivity
-vmkping -I vmkernel0 192.168.1.1
+vmkping -I vmk0 192.168.1.1
 </code></pre>
 <h3>Step 2 — Critical Foundation Host Tuning</h3>
 <p>Before deploying any VCF components, tune the foundation host for nested workloads. This step is consistently missing from beginner guides.</p>
@@ -254,7 +254,7 @@ ovftool \
   VCF-SDDC-Manager-Appliance-9.0.0.0.24703748.ova \
   "vi://root@192.168.1.10/"
 </code></pre>
-<p>Once powered on, access the VCF Installer UI at <code>https://<installer-ip></code>.</p>
+<p>Once powered on, access the VCF Installer UI at <code>https://&lt;installer-ip&gt;</code>.</p>
 <h3>Step 4 — Single-Host Override (Lab Only)</h3>
 <p>By default, VCF 9 requires a minimum of 3 ESXi hosts for vSAN or 2 for external storage. For a single physical machine lab, apply this unsupported-but-community-validated override:</p>
 <pre><code class="language-bash">

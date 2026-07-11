@@ -87,7 +87,7 @@
     </div>
 
     <!-- Lead -->
-    <p>Broadcom killed vSphere Standard, pushed VVF pricing to $190/core/year with a 72-core minimum, and locked vSphere 9 behind the new subscriptions. A home lab has always been useful for VMware engineers. In 2026, it's close to essential — whether for VCP study, testing upgrade paths before production, or staying current on a platform that's changing fast.</p>
+    <p>Broadcom consolidated the VMware portfolio, pushed VVF pricing to $135 to $190 per core depending on term, and added per-core minimums that hit small environments hardest. A home lab has always been useful for VMware engineers. In 2026, it's close to essential — whether for VCP study, testing upgrade paths before production, or staying current on a platform that's changing fast.</p>
 
     <p>The good news: <strong class="text-slate-200">Broadcom brought back free ESXi.</strong> ESXi 8.0 Update 3e is available as a <a href="https://knowledge.broadcom.com/external/article/399823/vmware-esxi-80-update-3e-now-available-a.html" class="text-blue-400 hover:text-blue-300" target="_blank" rel="noopener">free download</a> with the license embedded in the ISO &mdash; no separate key needed. You get unlimited VMs (hardware-limited), up to 2 physical CPUs, and 8 vCPUs per VM. No vCenter, no vMotion, no HA &mdash; but for a single-host learning lab, it's everything you need at zero cost.</p>
 
@@ -110,7 +110,7 @@
 
     <h3 class="text-xl font-semibold text-white">RAM</h3>
 
-    <p>This is where most home labs are actually constrained. vCenter Server alone wants 14GB RAM in its default deployment size. Add ESXi overhead and a few workload VMs, and <strong class="text-slate-200">64GB is the realistic sweet spot</strong> for a single-host lab. The exciting news: <a href="https://williamlam.com/2025/02/128gb-memory-mini-pcs-is-now-a-reality-with-64gb-ddr5-sodimm.html" class="text-blue-400 hover:text-blue-300" target="_blank" rel="noopener">128GB is now possible</a> in mini PCs thanks to 64GB DDR5 SO-DIMMs from Crucial (CT2K64G56C46S5, verified at ~$279). If you want to run nested ESXi clusters, that 128GB ceiling is a significant improvement.</p>
+    <p>This is where most home labs are actually constrained. vCenter Server alone wants 14GB RAM in its default deployment size. Add ESXi overhead and a few workload VMs, and <strong class="text-slate-200">64GB is the realistic sweet spot</strong> for a single-host lab. The exciting news: <a href="https://williamlam.com/2025/02/128gb-memory-mini-pcs-is-now-a-reality-with-64gb-ddr5-sodimm.html" class="text-blue-400 hover:text-blue-300" target="_blank" rel="noopener">128GB is now possible</a> in mini PCs thanks to 64GB DDR5 SO-DIMMs from Crucial (CT2K64G56C46S5, verified at ~$279). If you want to run nested ESXi clusters, that 128GB ceiling is a big deal.</p>
 
     <h3 class="text-xl font-semibold text-white">Storage</h3>
 
@@ -131,7 +131,7 @@
     <!-- Section: The $500 Budget Build -->
     <h2 class="text-2xl font-bold text-white">The $500 Budget Build</h2>
 
-    <p>Here's the specific build I recommend for a single-host ESXi lab in 2026. Every component is available on Amazon, and the total comes in under $500.</p>
+    <p>Here's the specific build I recommend for a single-host ESXi lab in 2026. Every component is available on Amazon, and the base total comes in under $500. <strong class="text-slate-200">Note:</strong> the K11 ships with 16-32GB RAM depending on config — a 64GB RAM upgrade adds ~$120-150, making a realistic build ~$620-650. The $500 figure covers the base hardware only.</p>
 
     <h3 class="text-xl font-semibold text-white">The Host: GMKtec NucBox K11</h3>
 

@@ -92,12 +92,12 @@
 
     <!-- ARTICLE BODY -->
 
-    <p>Managing a vSphere environment without vCenter is like flying a 747 by looking out a porthole. You <em>can</em> manage individual ESXi hosts directly, but the moment you need live migration, HA, DRS, or centralized alerting, you need vCenter. The <strong class="text-slate-200">vCenter Server Appliance (vCSA)</strong> is VMware's Linux-based management platform — and in 2026, deploying it properly is more important than ever as Broadcom continues reshaping the licensing landscape.</p>
+    <p>Managing a vSphere environment without vCenter is like flying a 747 by looking out a porthole. You <em>can</em> manage individual ESXi hosts directly, but the moment you need live migration, HA, DRS, or centralized alerting, you need vCenter. The <strong class="text-slate-200">vCenter Server Appliance (vCSA)</strong> is VMware's Linux-based management platform — and deploying it properly matters as Broadcom continues reshaping the licensing landscape.</p>
 
     <p>This guide covers a fresh deployment of <strong class="text-slate-200">vCenter Server 8.0 Update 3i</strong> (the current release as of March 2026) using the official VCSA Installer method. We'll walk through every step — downloading from the Broadcom Support Portal, sizing your appliance correctly, running the installer, and validating the result.</p>
 
     <div class="callout">
-      <strong class="text-yellow-400">Licensing Note (March 2026):</strong> Broadcom has retired the standalone vSphere perpetual license model. vCenter 8 requires either a <strong>VMware vSphere Foundation (VVF)</strong> or <strong>VMware Cloud Foundation (VCF)</strong> subscription license. If you're evaluating, a 60-day trial is available from the Broadcom Support Portal. Budget impact is real — factor this in before you start.
+      <strong class="text-yellow-400">Licensing Note (March 2026):</strong> Broadcom has retired the standalone vSphere perpetual license model. vCenter 8 requires either a <strong>VMware vSphere Foundation (VVF)</strong> or <strong>VMware Cloud Foundation (VCF)</strong> subscription license. If you're evaluating, a 60-day trial is available from the Broadcom Support Portal. Budget impact is real — plan your licensing before you start.
     </div>
 
     <h2 class="text-2xl font-bold text-white">Prerequisites Checklist</h2>
@@ -444,7 +444,7 @@ chronyc tracking</code></pre>
 
     <h2 class="text-2xl font-bold text-white">Troubleshooting Common Issues</h2>
 
-    <h3 class="text-xl font-semibold text-white">❌ "SSL Certificate Verification Failed" / Can't Access UI</h3>
+    <h3 class="text-xl font-semibold text-white">"SSL Certificate Verification Failed" / Can't Access UI</h3>
 
     <p><strong class="text-slate-200">Cause:</strong> DNS mismatch. The certificate was generated with the FQDN you entered in Stage 1, but your browser or client can't resolve it.</p>
 
@@ -455,7 +455,7 @@ chronyc tracking</code></pre>
       <li>If DNS is wrong post-deploy, you may need to regenerate certificates via <code>certificate-manager</code> in the appliance shell — or redeploy</li>
     </ol>
 
-    <h3 class="text-xl font-semibold text-white">❌ Stage 2 Fails / Services Won't Start</h3>
+    <h3 class="text-xl font-semibold text-white">Stage 2 Fails / Services Won't Start</h3>
 
     <p><strong class="text-slate-200">Common causes:</strong> Clock skew between ESXi host and vCenter (NTP not synced), datastore fills during deployment (thin provisioning with insufficient headroom), or duplicate IP address on the management network.</p>
 
@@ -463,7 +463,7 @@ chronyc tracking</code></pre>
 journalctl -u vmware-vmon --since "1 hour ago" | grep -i error
 tail -200 /var/log/vmware/vmon/vmon.log</code></pre>
 
-    <h3 class="text-xl font-semibold text-white">❌ "IP Address Conflict" Error During Stage 1</h3>
+    <h3 class="text-xl font-semibold text-white">"IP Address Conflict" Error During Stage 1</h3>
 
     <p>The static IP you assigned is already in use. Check your DHCP server's lease table and ARP cache:</p>
 
@@ -475,7 +475,7 @@ nmap -sn 192.168.10.0/24 | grep -A1 "Nmap scan"</code></pre>
 
     <p>Assign a truly free IP and re-run Stage 1.</p>
 
-    <h3 class="text-xl font-semibold text-white">❌ Installer "Cannot Connect to ESXi Host"</h3>
+    <h3 class="text-xl font-semibold text-white">Installer "Cannot Connect to ESXi Host"</h3>
 
     <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
       <li>Verify TCP 443 is accessible from your workstation to the ESXi host</li>
@@ -533,11 +533,11 @@ nmap -sn 192.168.10.0/24 | grep -A1 "Nmap scan"</code></pre>
     <h2 class="text-2xl font-bold text-white">Resources</h2>
 
     <ul class="list-disc list-inside text-slate-300 space-y-2 mb-6">
-      <li>📄 <a href="https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/vcenter-installation-and-setup/deploying-the-vcenter-server-appliance/vcenter-server-appliance-requirements.html" class="text-blue-400 hover:text-blue-300" target="_blank" rel="noopener">Broadcom TechDocs: vCSA System Requirements</a></li>
-      <li>📄 <a href="https://ports.broadcom.com" class="text-blue-400 hover:text-blue-300" target="_blank" rel="noopener">Broadcom Ports and Protocols Tool</a></li>
-      <li>📄 <a href="https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/release-notes/vcenter-server-update-and-patch-release-notes/vsphere-vcenter-server-80u3i-release-notes.html" class="text-blue-400 hover:text-blue-300" target="_blank" rel="noopener">vCenter 8.0 Update 3i Release Notes</a></li>
-      <li>📄 <a href="https://williamlam.com/2022/09/homelab-considerations-for-vsphere-8.html" class="text-blue-400 hover:text-blue-300" target="_blank" rel="noopener">William Lam's Blog — Homelab Considerations for vSphere 8</a></li>
-      <li>🔗 <a href="https://support.broadcom.com" class="text-blue-400 hover:text-blue-300" target="_blank" rel="noopener">Broadcom Support Portal</a></li>
+      <li><a href="https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/vcenter-installation-and-setup/deploying-the-vcenter-server-appliance/vcenter-server-appliance-requirements.html" class="text-blue-400 hover:text-blue-300" target="_blank" rel="noopener">Broadcom TechDocs: vCSA System Requirements</a></li>
+      <li><a href="https://ports.broadcom.com" class="text-blue-400 hover:text-blue-300" target="_blank" rel="noopener">Broadcom Ports and Protocols Tool</a></li>
+      <li><a href="https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/release-notes/vcenter-server-update-and-patch-release-notes/vsphere-vcenter-server-80u3i-release-notes.html" class="text-blue-400 hover:text-blue-300" target="_blank" rel="noopener">vCenter 8.0 Update 3i Release Notes</a></li>
+      <li><a href="https://williamlam.com/2022/09/homelab-considerations-for-vsphere-8.html" class="text-blue-400 hover:text-blue-300" target="_blank" rel="noopener">William Lam's Blog — Homelab Considerations for vSphere 8</a></li>
+      <li><a href="https://support.broadcom.com" class="text-blue-400 hover:text-blue-300" target="_blank" rel="noopener">Broadcom Support Portal</a></li>
     </ul>
 
     <p class="text-slate-500 text-sm"><em>Last updated: March 2026 | Verified against vCenter Server 8.0 Update 3i</em></p>
@@ -555,7 +555,7 @@ nmap -sn 192.168.10.0/24 | grep -A1 "Nmap scan"</code></pre>
     <!-- Author -->
     <div class="mt-12 pt-8 border-t border-slate-800">
       <div class="flex items-start gap-4">
-        <div class="w-12 h-12 bg-slate-700 rounded-full flex items-center justify-center text-xl">🖥️</div>
+        <div class="w-12 h-12 bg-slate-700 rounded-full flex items-center justify-center text-xl"></div>
         <div>
           <p class="text-white font-semibold">Written by Rob Notaro</p>
           <p class="text-slate-400 text-sm mt-1">Senior infrastructure engineer specializing in VMware, Horizon VDI, and enterprise virtualization. Currently deploying Horizon 2512 and VCF in production environments.</p>
