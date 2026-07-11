@@ -32,7 +32,7 @@
     "author": { "@type": "Person", "name": "Rob Notaro" },
     "publisher": { "@type": "Organization", "name": "VMware Made Simple" },
     "datePublished": "2026-03-30",
-    "dateModified": "2026-03-30",
+    "dateModified": "2026-07-11",
     "mainEntityOfPage": "https://vmwaremadesimple.com/articles/vcf-9-nested-lab-setup-complete-walkthrough.html"
   }
   </script>
@@ -83,21 +83,22 @@
         VCF 9 Nested Lab Setup: The Complete Walkthrough
       </h1>
       <p class="text-slate-400 text-lg">
-        March 30, 2026 · 15 min read
+        Updated July 11, 2026 · 15 min read
       </p>
     </div>
 
     <h2>VCF 9 Nested Lab Setup: The Complete Walkthrough</h2>
 <h2>Introduction: Nested Virtualization Grows Up</h2>
 <p>In the early days of virtualization, running a "nested" environment — an entire enterprise infrastructure stack simulating production inside a single physical host — was a niche experiment. Today it's the standard path for VMware Certified Professional (VCP) candidates, infrastructure architects, and anyone who wants to explore VMware Cloud Foundation (VCF) without a $50,000 hardware bill.</p>
-<p><strong>VMware Cloud Foundation 9.0</strong>, released June 2025, represents the biggest architectural leap since Broadcom's acquisition. It ships with ESXi 9.0, replaces the old Cloud Builder with a unified <strong>VCF Installer</strong> appliance, and introduces the <strong>VCF Fleet</strong> management model — consolidating what was previously a patchwork of SDDC Manager, NSX Manager, vCenter, and Aria/vROps into a coherent hierarchy. If you last played with VCF 5.x, you're in for a surprise.</p>
-<p>Building a fully functional, nested VCF 9 environment on a single host — verified against William Lam's official lab resources, Broadcom's TechDocs, and real community deployments — is entirely feasible with the right preparation.</p>
-<blockquote><strong>Quick note on licensing:</strong> As of December 2025, VMUG Advantage members with VCP-VCF certification can access VCF 9.0 tokens directly from the <a href="https://www.vmug.com/vmug-advantage/">VMUG Advantage portal</a>. This is the fastest legitimate path to a licensed lab. Annual VMUG Advantage membership runs ~$200/year.</blockquote>
+<p><strong>VMware Cloud Foundation 9.1</strong>, shipped in mid-2026, builds on the VCF 9.0 architectural reset that followed Broadcom's acquisition. It ships alongside ESXi 9.1, keeps the unified <strong>VCF Installer</strong> appliance, and expands the <strong>VCF Fleet</strong> management model with clearer fleet-level versus instance-level responsibilities. If you last played with VCF 5.x, you're in for a surprise.</p>
+<p>Building a fully functional, nested VCF 9.1 environment on a single host — verified against William Lam's official lab resources, Broadcom's TechDocs, and real community deployments — is entirely feasible with the right preparation.</p>
+<blockquote><strong>Quick note on licensing:</strong> As of mid-2026, VMUG Advantage members with VCP-VCF certification can access VCF lab tokens directly from the <a href="https://www.vmug.com/vmug-advantage/">VMUG Advantage portal</a>. For VCF 9.1, verify the current entitlement and token workflow in the portal before starting your build. Annual VMUG Advantage membership runs ~$200/year.</blockquote>
 <h2>Part I: Know Before You Build</h2>
-<h3>The New VCF 9 Architecture</h3>
-<p>VCF 9 drops the old "Bring Up" + SDDC Manager model. The new structure is:</p>
+<h3>The New VCF 9.1 Architecture</h3>
+<p>VCF 9.x drops the old "Bring Up" + SDDC Manager model. In 9.1, Broadcom tightened management-plane consolidation: fleet-level services coordinate inventory, lifecycle, licensing, and depot content across VCF instances, while instance-level operations remain tied to each deployed environment. The new structure is:</p>
 <ul>
 <li><strong>VCF Fleet</strong> — the top-level management layer, spanning multiple VCF instances</li>
+<li><strong>VCF Fleet Services</strong> — shared fleet-level services introduced with 9.1 for cross-instance coordination</li>
 <li><strong>VCF Installer</strong> — replaces Cloud Builder for initial deployment; can optionally become the SDDC Manager appliance post-deployment</li>
 <li><strong>VCF Operations Fleet Manager</strong> — absorbs what was SDDC Manager; lifecycle and fleet operations live here</li>
 <li><strong>VCF Operations</strong> — monitoring, analytics (formerly vRealize/Aria Operations)</li>
@@ -105,9 +106,9 @@
 <li><strong>NSX Manager</strong> — still NSX, now single-node (Simple deployment) in lab mode</li>
 <li><strong>vSphere Kubernetes Service (VKS)</strong> — replaces Tanzu Kubernetes Grid (TKG) branding</li>
 </ul>
-<p>This matters for your lab: if you're following older VCF 5.x guides, the UI flows, JSON schemas, and component names have changed significantly.</p>
+<p>This matters for your lab: if you're following older VCF 5.x or early 9.0 guides, the UI flows, JSON schemas, component names, and management responsibilities have changed significantly. Expect more tasks to land in Fleet/Fleet Services rather than a classic SDDC Manager-only workflow.</p>
 <h3>Hardware Requirements — The Real Numbers</h3>
-<p>Full VCF 9.0 Simple deployment has materially higher lab requirements than many older VCF 5.x guides imply. A full VCF 9.0 Simple deployment requires:</p>
+<p>Full VCF 9.1 Simple deployment has materially higher lab requirements than many older VCF 5.x guides imply. A full VCF 9.1 Simple deployment requires:</p>
 <table>
 <thead>
 <tr><th>Component</th><th>vCPU</th><th>Memory</th><th>Storage (provisioned)</th><th>Actual Used</th></tr>
@@ -123,7 +124,7 @@
 <tr><td><strong>TOTALS</strong></td><td><strong>~48</strong></td><td><strong>~194 GB</strong></td><td><strong>~3.2 TB</strong></td><td><strong>~330 GB</strong></td></tr>
 </tbody>
 </table>
-<p><em>(Source: <a href="https://williamlam.com/2025/06/minimal-resources-for-deploying-vcf-9-0-in-a-lab.html">William Lam — Minimal Resources for Deploying VCF 9.0 in a Lab</a>)</em></p>
+<p><em>(Baseline source: <a href="https://williamlam.com/2025/06/minimal-resources-for-deploying-vcf-9-0-in-a-lab.html">William Lam — Minimal Resources for Deploying VCF 9.0 in a Lab</a>. Verify current VCF 9.1 appliance sizing before deployment.)</em></p>
 <p><strong>The critical constraint is VCF Automation (VCFA):</strong> it requires a 24 vCPU VM. Your physical host must have <strong>at least 12 cores / 24 threads</strong> to deploy it. Many popular home lab mini-PCs (GMKtec K11, NUC 12s with 8-core CPUs) will hit this wall.</p>
 <p>If you can't meet the 24 vCPU minimum, Broadcom's Tomas Fojta has confirmed you can manually edit the VCFA VM down to 16 vCPU (or even 12) via vSphere Client — YMMV on performance. <strong>Memory cannot be reduced without breaking VCFA entirely.</strong></p>
 <p><strong>Practical minimums for a nested lab:</strong></p>
@@ -132,29 +133,29 @@
 <li><strong>RAM:</strong> 256 GB recommended for comfortable nested operation; 192 GB absolute minimum</li>
 <li><strong>Storage:</strong> 2 TB NVMe SSD for the foundation host datastore (thin provisioning helps; ~330 GB actually consumed)</li>
 </ul>
-<blockquote><strong>Community hardware picks:</strong> The Minisforum MS-A2 (16C/32T AMD Ryzen 9) runs full VCF 9 including VCFA. Two units needed for a 2-node vSAN cluster with comfortable headroom. The ASUS NUC 15 Pro is another solid option. See <a href="https://lamw.github.io/community-lab-hardware-for-esxi9/">William Lam's community survey</a> for 50+ tested configurations.</blockquote>
+<blockquote><strong>Community hardware picks:</strong> The Minisforum MS-A2 (16C/32T AMD Ryzen 9) runs full VCF 9.x including VCFA. Two units needed for a 2-node vSAN cluster with comfortable headroom. The ASUS NUC 15 Pro is another solid option. See <a href="https://lamw.github.io/community-lab-hardware-for-esxi9/">William Lam's community survey</a> for 50+ tested configurations.</blockquote>
 <h3>CPU Compatibility Warning</h3>
-<p>ESXi 9.0 drops support for several older Intel CPU generations that ESXi 8.x still handled:</p>
+<p>ESXi 9.1 drops support for several older Intel CPU generations that ESXi 8.x still handled:</p>
 <ul>
 <li>Intel Broadwell-DE, Broadwell-EP</li>
 <li>Intel Kabylake-S</li>
 <li>Intel Skylake (all variants: D, S, SP, W)</li>
 </ul>
-<p>If you have one of these, ESXi 9.0 will block installation by default. You can override with the kernel boot option <code>allowLegacyCPU=true</code> (SHIFT+O during boot) — <strong>for lab use only, not Broadcom-supported.</strong> Note: XSAVE CPU instruction support is also mandatory and cannot be bypassed.</p>
+<p>If you have one of these, ESXi 9.1 will block installation by default. You can override with the kernel boot option <code>allowLegacyCPU=true</code> (SHIFT+O during boot) — <strong>for lab use only, not Broadcom-supported.</strong> Note: XSAVE CPU instruction support is also mandatory and cannot be bypassed.</p>
 <h2>Part II: Planning the Nested Architecture</h2>
 <h3>Topology: Single-Node vs. Multi-Node</h3>
-<p>For most lab use cases — cert prep, feature exploration, PoC testing — a <strong>Single-Node deployment</strong> is the right call. VCF 9 simplifies this significantly vs. VCF 5.x:</p>
+<p>For most lab use cases — cert prep, feature exploration, PoC testing — a <strong>Single-Node deployment</strong> is the right call. VCF 9.1 keeps the VCF 9 simplifications vs. VCF 5.x:</p>
 <ul>
-<li><strong>Simple (Single-node) deployment</strong> — lab and learning mode; one NSX Manager, one vCenter, one SDDC Manager. Full VCF 9 feature set accessible.</li>
+<li><strong>Simple (Single-node) deployment</strong> — lab and learning mode; one NSX Manager, one vCenter, one VCF Operations/Fleet management plane. Full VCF 9.1 feature set accessible.</li>
 <li><strong>High Availability (Three-node) deployment</strong> — full HA with three NSX Managers, clustered components.</li>
 </ul>
-<p>VCF 9 now requires a minimum of <strong>3 ESXi hosts for vSAN (OSA or ESA)</strong>, or <strong>2 ESXi hosts for external storage (FC/NFS)</strong>. This is an improvement over VCF 5.x's 4-host vSAN minimum. For a single physical host lab, you'll use the <strong>single-host override</strong> (covered in the deployment steps).</p>
+<p>VCF 9.1 still requires a minimum of <strong>3 ESXi hosts for vSAN (OSA or ESA)</strong>, or <strong>2 ESXi hosts for external storage (FC/NFS)</strong>. This is an improvement over VCF 5.x's 4-host vSAN minimum. For a single physical host lab, you'll use the <strong>single-host override</strong> (covered in the deployment steps).</p>
 <h3>Two Nested Lab Flavors</h3>
 <ol>
 <li>1. <strong>vSphere Foundation (VVF) Lab</strong> — ESXi + vCenter + basic networking and storage. Good for VCP-DV prep with lighter hardware demands.</li>
-<li>2. <strong>Full VCF 9 Lab</strong> — Complete stack: ESXi 9, NSX, VCF Operations, VCF Automation, vSphere Kubernetes Service. Requires the full 194 GB RAM+ commitment. Essential for VCF-related certifications.</li>
+<li>2. <strong>Full VCF 9.1 Lab</strong> — Complete stack: ESXi 9.1, NSX, VCF Operations, VCF Automation, VCF Fleet Services, vSphere Kubernetes Service. Requires the full 194 GB RAM+ commitment. Essential for VCF-related certifications.</li>
 </ol>
-<h3>Critical: What Does NOT Work in Nested VCF 9</h3>
+<h3>Critical: What Does NOT Work in Nested VCF 9.1</h3>
 <p>Before diving into deployment, know these hard limits:</p>
 <table>
 <thead>
@@ -164,7 +165,7 @@
 <tr><td>vSAN OSA</td><td>✅ Yes</td><td>Thin provisioned against host datastore</td></tr>
 <tr><td>vSAN ESA</td><td>✅ Yes (with workaround)</td><td>Requires <a href="https://williamlam.com/2025/06/vsan-esa-disk-hcl-workaround-for-vcf-9-0.html">vSAN ESA Hardware Mock VIB</a></td></tr>
 <tr><td>NVMe Tiering</td><td>❌ No</td><td><strong>Incompatible with nested virtualization entirely</strong></td></tr>
-<tr><td>IDE Controller on nested ESXi VMs</td><td>❌ No</td><td>Removed in ESXi 9.0; use SATA or SCSI</td></tr>
+<tr><td>IDE Controller on nested ESXi VMs</td><td>❌ No</td><td>Removed in ESXi 9.1; use SATA or SCSI</td></tr>
 <tr><td>NSX Edge on AMD Ryzen (physical host)</td><td>⚠️ Workaround</td><td>Requires <a href="https://williamlam.com/2025/06/powercli-remediation-script-for-running-nsx-edge-on-amd-ryzen-for-vcf-9-0.html">PowerCLI remediation script</a></td></tr>
 </tbody>
 </table>
@@ -188,8 +189,8 @@ esxcli network vswitch standard portgroup policy security get \
 </code></pre>
 <p>Ensure MTU is consistent at 1500 across your lab unless your physical switch explicitly supports jumbo frames end-to-end.</p>
 <h2>Part III: Step-by-Step Deployment</h2>
-<h3>Step 1 — Install ESXi 9.0 on the Foundation Host</h3>
-<p>Download ESXi 9.0 from the <a href="https://support.broadcom.com/">Broadcom Support Portal</a> (VMUG Advantage members: use the VMUG portal instead). Boot from USB or ISO.</p>
+<h3>Step 1 — Install ESXi 9.1 on the Foundation Host</h3>
+<p>Download ESXi 9.1 from the <a href="https://support.broadcom.com/">Broadcom Support Portal</a> (VMUG Advantage members: use the VMUG portal instead). VMware's FAQ confirms free ESXi availability through 8.x; for 9.x, verify access and entitlement in the Broadcom/VMUG portal before planning a lab build. Boot from USB or ISO.</p>
 <p>During install, dedicate one NIC for management and leave others available for nested VM bridging. After booting, set a static IP via ESXCLI:</p>
 <pre><code class="language-bash">
 # Configure management IP (adjust to your network)
@@ -236,8 +237,8 @@ esxcli network vswitch standard portgroup add -p "MGMT-Nested" -v vSwitch-Lab
 esxcli network vswitch standard portgroup add -p "vSAN-Nested" -v vSwitch-Lab
 esxcli network vswitch standard portgroup add -p "NSX-Nested" -v vSwitch-Lab
 </code></pre>
-<h3>Step 3 — Deploy the VCF 9 Installer Appliance</h3>
-<p>In VCF 9, the old <strong>Cloud Builder</strong> is gone. It's replaced by the <strong>VCF Installer</strong> (OVA filename: <code>VCF-SDDC-Manager-Appliance-9.0.0.0.24703748.ova</code>). This appliance handles the initial bringup and can optionally transform itself into the VCF Operations Fleet Manager post-deployment.</p>
+<h3>Step 3 — Deploy the VCF 9.1 Installer Appliance</h3>
+<p>In VCF 9.x, the old <strong>Cloud Builder</strong> is gone. It's replaced by the <strong>VCF Installer</strong> (OVA filename changes by release and build; verify the current VCF 9.1 OVA/build number in the Broadcom download portal before scripting deployment). This appliance handles the initial bringup and can optionally transform itself into the VCF Operations Fleet Manager post-deployment.</p>
 <p>Deploy via OVFTool or the vSphere Client OVA deploy wizard:</p>
 <pre><code class="language-bash">
 # Deploy via OVFTool
@@ -251,15 +252,15 @@ ovftool \
   --prop:guestinfo.netmask0="255.255.255.0" \
   --prop:guestinfo.gateway="192.168.10.1" \
   --prop:guestinfo.DNS="192.168.10.53" \
-  VCF-SDDC-Manager-Appliance-9.0.0.0.24703748.ova \
+  VCF-SDDC-Manager-Appliance-9.1.x.x-&lt;verify-current-build&gt;.ova \
   "vi://root@192.168.1.10/"
 </code></pre>
 <p>Once powered on, access the VCF Installer UI at <code>https://&lt;installer-ip&gt;</code>.</p>
 <h3>Step 4 — Single-Host Override (Lab Only)</h3>
-<p>By default, VCF 9 requires a minimum of 3 ESXi hosts for vSAN or 2 for external storage. For a single physical machine lab, apply this unsupported-but-community-validated override:</p>
+<p>By default, VCF 9.1 requires a minimum of 3 ESXi hosts for vSAN or 2 for external storage. For a single physical machine lab, apply this unsupported-but-community-validated override, but verify the feature flag for your exact 9.1 build before relying on it:</p>
 <pre><code class="language-bash">
 # SSH into the VCF Installer appliance
-# For VCF 9.0.1:
+# For VCF 9.0.1 and later 9.x builds reported by the community — verify for 9.1:
 echo "feature.vcf.vgl-29121.single.host.domain=true" &gt;&gt; /home/vcf/feature.properties
 
 # For VCF 9.0.0 (original GA):
@@ -276,15 +277,16 @@ echo 'y' | /opt/vmware/vcf/operationsmanager/scripts/cli/sddcmanager_restart_ser
 <li>1. <strong>Specify ESXi hosts</strong> — enter your nested ESXi host(s) with their credentials</li>
 <li>2. <strong>Choose storage:</strong> vSAN (OSA or ESA) or external. For nested labs, <strong>vSAN ESA is preferred</strong> — it uses NVMe-class storage policies and gives better lab parity with production. Apply the vSAN ESA Hardware Mock VIB if your disks aren't on the HCL.</li>
 <li>3. <strong>Network topology</strong> — assign your pre-created port groups to the management, vSAN, and NSX transport roles</li>
-<li>4. <strong>Licenses</strong> — enter your VMUG Advantage VCF 9 token</li>
-<li>5. <strong>Deploy</strong> — the installer provisions vCenter, NSX Manager, SDDC Manager, and VCF Operations in sequence. Budget 90–120 minutes.</li>
+<li>4. <strong>Licenses</strong> — enter your VMUG Advantage VCF 9.1 token; VCF Operations License Server handling changed in 9.1, so confirm the Fleet/Operations license server workflow during bringup</li>
+<li>5. <strong>Depot</strong> — VCF 9.1 adds HTTP Offline Depot support, useful for isolated labs without direct Broadcom portal access</li>
+<li>6. <strong>Deploy</strong> — the installer provisions vCenter, NSX Manager, VCF Operations/Fleet management components, and VCF Fleet Services in sequence. Budget 90–120 minutes.</li>
 </ol>
 <pre><code class="language-bash">
 # Monitor deployment progress (SSH to installer appliance)
 tail -f /var/log/vmware/vcf/vcf-bringup/vcf-bringup.log | grep -E "(INFO|WARN|ERROR)"
 </code></pre>
 <h3>Step 6 — Verify the VCF Fleet</h3>
-<p>Once bringup completes, log in to the VCF Operations UI (formerly the SDDC Manager UI):</p>
+<p>Once bringup completes, log in to the VCF Operations UI (formerly the SDDC Manager UI) and verify that Fleet Services are healthy:</p>
 <pre><code>
 https://&lt;vcf-operations-fleet-manager-ip&gt;/ui
 </code></pre>
@@ -294,9 +296,10 @@ https://&lt;vcf-operations-fleet-manager-ip&gt;/ui
 <li>NSX Manager: Connected ✅  </li>
 <li>All hosts: Healthy ✅</li>
 <li>vSAN cluster: Healthy ✅</li>
+<li>VCF Fleet Services: Healthy ✅</li>
 </ul>
 <h3>Step 7 — Add vSphere Kubernetes Service (Optional)</h3>
-<p>VCF 9 ships with <strong>vSphere Kubernetes Service (VKS)</strong> — the renamed successor to Tanzu Kubernetes Grid (TKG). Enabling it requires the Supervisor to be activated on your vSphere cluster.</p>
+<p>VCF 9.1 ships with <strong>vSphere Kubernetes Service (VKS)</strong> — the renamed successor to Tanzu Kubernetes Grid (TKG). Enabling it requires the Supervisor to be activated on your vSphere cluster.</p>
 <p>From vCenter, navigate to <strong>Workload Management > Enable</strong>:</p>
 <ol>
 <li>1. Select your VCF cluster</li>
@@ -345,8 +348,8 @@ esxcli system memory list
 </code></pre>
 <p>If memory is genuinely tight, reduce VCFA vCPU to 16 via vSphere Client (Settings → Edit Settings → CPU). Memory reduction is not viable — the 96 GB is a hard requirement.</p>
 <h3>Issue 2: Nested ESXi Boot Fails — "Failed to Locate Kickstart on CD-ROM"</h3>
-<p><strong>Symptom:</strong> Nested ESXi 9.0 VMs fail to boot with a kickstart error referencing the CD-ROM.</p>
-<p><strong>Cause:</strong> ESXi 9.0 dropped support for the <strong>IDE Controller</strong>. If your nested ESXi VM templates still have an IDE CD-ROM device, they will fail to locate the installation media.</p>
+<p><strong>Symptom:</strong> Nested ESXi 9.1 VMs fail to boot with a kickstart error referencing the CD-ROM.</p>
+<p><strong>Cause:</strong> ESXi 9.1 dropped support for the <strong>IDE Controller</strong>. If your nested ESXi VM templates still have an IDE CD-ROM device, they will fail to locate the installation media.</p>
 <p><strong>Fix:</strong> Remove the IDE controller from your nested ESXi VM config. Use SATA or SCSI for any virtual disks, and attach the ESXi ISO via a SATA CD-ROM device:</p>
 <pre><code class="language-bash">
 # Check VM's controller configuration via PowerCLI
@@ -381,7 +384,7 @@ esxcli software vib install -v \
 # Verify installation
 esxcli software vib list | grep vsan-esa-mock
 </code></pre>
-<p><em>(Download from William Lam's blog: <a href="https://williamlam.com/2025/06/vsan-esa-disk-hcl-workaround-for-vcf-9-0.html">vSAN ESA Disk HCL Workaround for VCF 9.0</a>)</em></p>
+<p><em>(Download from William Lam's blog: <a href="https://williamlam.com/2025/06/vsan-esa-disk-hcl-workaround-for-vcf-9-0.html">vSAN ESA Disk HCL Workaround for VCF 9.1</a>)</em></p>
 <h3>Issue 5: NSX Transport Node Failures on AMD Ryzen Hosts</h3>
 <p><strong>Symptom:</strong> NSX Edge services fail to deploy on a physical AMD Ryzen host.</p>
 <p><strong>Fix:</strong> Apply Broadcom's officially documented PowerCLI remediation script for AMD Ryzen NSX Edge compatibility:</p>
@@ -395,12 +398,12 @@ Connect-VIServer -Server "vcenter.lab.local" -User "admin" -Password "VMware1!"
 <h2>Conclusion: What You've Built</h2>
 <p>If you've followed this guide to completion, you're running:</p>
 <ul>
-<li><strong>ESXi 9.0</strong> as the foundation hypervisor</li>
-<li><strong>VCF Fleet</strong> — the VCF 9 management plane with vCenter, NSX, and VCF Operations</li>
+<li><strong>ESXi 9.1</strong> as the foundation hypervisor</li>
+<li><strong>VCF Fleet and Fleet Services</strong> — the VCF 9.1 management plane with vCenter, NSX, VCF Operations, and fleet-level services</li>
 <li><strong>vSAN ESA</strong> — NVMe-optimized storage, policy-driven, with global deduplication</li>
 <li>Optionally, <strong>vSphere Kubernetes Service</strong> for container workload practice</li>
 </ul>
-<p>This is a genuine, full-fidelity VCF 9 environment for:</p>
+<p>This is a genuine, full-fidelity VCF 9.1 environment for:</p>
 <ul>
 <li><strong>VCP-DCV or VCF Administrator exam prep</strong> — practice real workflows, not simulations</li>
 <li><strong>Proof-of-Concept testing</strong> — validate configurations before touching prod</li>
@@ -418,19 +421,19 @@ $vcfBringupSpec = @{
   # ... full spec
 } | ConvertTo-Json -Depth 10
 </code></pre>
-<p><strong>2. Practice Lifecycle Management:</strong> Use the VCF Installer to upgrade from 9.0.0 to 9.0.1 — understanding the update cadence is itself a certification exam topic.</p>
+<p><strong>2. Practice Lifecycle Management:</strong> Use VCF lifecycle workflows to practice an 8.x → VVF 9.1 → VCF 9.1 upgrade path and future 9.1 patching. Understanding the update cadence is itself a certification exam topic.</p>
 <p><strong>3. Explore NVMe Tiering on Physical:</strong> If you have a second physical host, NVMe Tiering (incompatible with nested) becomes available and dramatically changes vSAN performance characteristics. Worth a standalone lab post.</p>
 <h2>Resources</h2>
 <ul>
-<li><a href="https://williamlam.com/2025/06/ultimate-lab-resource-for-vcf-9-0.html">William Lam: Ultimate Lab Resource for VCF 9.0</a> — the definitive nested lab reference</li>
-<li><a href="https://williamlam.com/2025/06/minimal-resources-for-deploying-vcf-9-0-in-a-lab.html">William Lam: Minimal Resources for VCF 9.0 Lab</a> — hardware planning numbers</li>
-<li><a href="https://williamlam.com/2025/06/deploying-vcf-9-0-on-a-single-esxi-host.html">William Lam: Deploying VCF 9.0 on a Single ESXi Host</a> — single-host override</li>
-<li><a href="https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-0/licensing/licensing-overview/offerings-and-components.html">Broadcom TechDocs: VCF 9.0 Licensing Overview</a></li>
+<li><a href="https://williamlam.com/2025/06/ultimate-lab-resource-for-vcf-9-0.html">William Lam: Ultimate Lab Resource for VCF 9.1</a> — the definitive nested lab reference</li>
+<li><a href="https://williamlam.com/2025/06/minimal-resources-for-deploying-vcf-9-0-in-a-lab.html">William Lam: Minimal Resources for VCF 9.1 Lab</a> — hardware planning numbers</li>
+<li><a href="https://williamlam.com/2025/06/deploying-vcf-9-0-on-a-single-esxi-host.html">William Lam: Deploying VCF 9.1 on a Single ESXi Host</a> — single-host override</li>
+<li><a href="https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-0/licensing/licensing-overview/offerings-and-components.html">Broadcom TechDocs: VCF 9.1 Licensing Overview</a></li>
 <li><a href="https://lamw.github.io/community-lab-hardware-for-esxi9/">Community Lab Hardware for ESXi 9</a> — crowdsourced hardware compatibility</li>
-<li><a href="https://www.vmug.com/vmug-advantage/">VMUG Advantage Portal</a> — VCF 9 lab licenses for members</li>
+<li><a href="https://www.vmug.com/vmug-advantage/">VMUG Advantage Portal</a> — VCF 9.x lab licenses for members</li>
 <li><a href="https://github.com/lamw/vcf-9x-in-box">VCF 9.x In-A-Box (GitHub)</a> — William Lam's automated deployment scripts</li>
 </ul>
-<p><em>Last verified: March 2026. VCF 9.0.1 current as of publication. Always check <a href="https://docs.vmware.com/en/VMware-Cloud-Foundation/index.html">Broadcom's release notes</a> for the latest version compatibility information.</em></p>
+<p><em>Last updated: July 2026 for VCF 9.1 context. Always check <a href="https://docs.vmware.com/en/VMware-Cloud-Foundation/index.html">Broadcom's release notes</a> and download portal for the latest build numbers, OVA filenames, license-server behavior, and compatibility information.</em></p>
 
     <!-- Newsletter CTA -->
     <div class="mt-16 bg-card border border-slate-700 rounded-2xl p-10 text-center">

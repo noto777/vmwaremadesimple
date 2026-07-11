@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Best Hardware for a VMware Home Lab in 2026 (Under $500) | VMware Made Simple</title>
-  <meta name="description" content="The best mini PCs, SSDs, and network gear for a VMware vSphere 8 home lab in 2026. Real recommendations from a working VMware engineer, all under $500." />
+  <title>Best Hardware for a VMware Home Lab in 2026: Budget and 128GB Picks | VMware Made Simple</title>
+  <meta name="description" content="The best mini PCs, SSDs, and network gear for a VMware vSphere 8 home lab in 2026, updated for July with current budget and 128GB picks." />
   <meta name="keywords" content="VMware home lab, vSphere home lab, best mini PC for ESXi, VMware home lab hardware 2026, ESXi compatible hardware, home lab under 500, Beelink ESXi, mini PC vSphere, Minisforum ESXi, GMKtec ESXi" />
   <link rel="canonical" href="https://vmwaremadesimple.com/articles/best-vmware-home-lab-hardware-2026.html" />
 
-  <meta property="og:title" content="Best Hardware for a VMware Home Lab in 2026 (Under $500)" />
-  <meta property="og:description" content="The best mini PCs, SSDs, and network gear for a VMware vSphere 8 home lab in 2026. Real recommendations from a working VMware engineer, all under $500." />
+  <meta property="og:title" content="Best Hardware for a VMware Home Lab in 2026: Budget and 128GB Picks" />
+  <meta property="og:description" content="The best mini PCs, SSDs, and network gear for a VMware vSphere 8 home lab in 2026, updated for July with current budget and 128GB picks." />
   <meta property="og:type" content="article" />
   <meta property="og:url" content="https://vmwaremadesimple.com/articles/best-vmware-home-lab-hardware-2026.html" />
 
@@ -26,12 +26,12 @@
   {
     "@context": "https://schema.org",
     "@type": "Article",
-    "headline": "Best Hardware for a VMware Home Lab in 2026 (Under $500)",
-    "description": "The best mini PCs, SSDs, and network gear for a VMware vSphere 8 home lab in 2026. Real recommendations from a working VMware engineer, all under $500.",
+    "headline": "Best Hardware for a VMware Home Lab in 2026: Budget and 128GB Picks",
+    "description": "The best mini PCs, SSDs, and network gear for a VMware vSphere 8 home lab in 2026, updated for July with current budget and 128GB picks.",
     "author": { "@type": "Person", "name": "Rob Notaro" },
     "publisher": { "@type": "Organization", "name": "VMware Made Simple" },
     "datePublished": "2026-03-04",
-    "dateModified": "2026-03-04",
+    "dateModified": "2026-07-11",
     "mainEntityOfPage": "https://vmwaremadesimple.com/articles/best-vmware-home-lab-hardware-2026.html"
   }
   </script>
@@ -79,10 +79,10 @@
     <div class="mb-10">
       <div class="text-xs text-blue-400 font-medium uppercase tracking-wide mb-3">Home Lab</div>
       <h1 class="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight" style="-webkit-text-fill-color: white;">
-        Best Hardware for a VMware Home Lab in 2026 (Under $500)
+        Best Hardware for a VMware Home Lab in 2026: Budget and 128GB Picks
       </h1>
       <p class="text-slate-400 text-lg">
-        March 2026 &middot; 10 min read
+        Updated July 2026 &middot; 11 min read
       </p>
     </div>
 
@@ -91,9 +91,9 @@
 
     <p>The good news: <strong class="text-slate-200">Broadcom brought back free ESXi.</strong> As of July 2026, Broadcom's Support Portal provides ESXi 8.0 Update 3e as a <a href="https://knowledge.broadcom.com/external/article/399823/vmware-esxi-80-update-3e-now-available-a.html" class="text-blue-400 hover:text-blue-300" target="_blank" rel="noopener">free download</a> with licensing embedded in the ISO. Verify current availability before planning a lab around it. You get unlimited VMs (hardware-limited), up to 2 physical CPUs, and 8 vCPUs per VM. No vCenter, no vMotion, no HA &mdash; but for a single-host learning lab, it's everything you need at zero cost.</p>
 
-    <p>Meanwhile, the hardware market has never been better. Mini PCs with 8-16 core mobile Ryzen processors, 128GB DDR5 SO-DIMM support, and 2TB NVMe drives under $160 mean you can build a capable ESXi lab for under $500. William Lam &mdash; the VMware engineer who literally <a href="https://williamlam.com/home-lab" class="text-blue-400 hover:text-blue-300" target="_blank" rel="noopener">wrote the book on VMware home labs</a> &mdash; runs his entire VCF 9 lab on mini PCs. If it's good enough for his lab, it's good enough for yours.</p>
+    <p>Meanwhile, the hardware market has never been better. Mini PCs with 8-16 core mobile Ryzen processors, 128GB DDR5 SO-DIMM support, and 2TB NVMe drives under $160 mean you can still build a capable base ESXi host for under $500 before RAM upgrades. Realistically, a 64GB lab lands closer to $620-650, and a 128GB build costs more. William Lam &mdash; the VMware engineer who literally <a href="https://williamlam.com/home-lab" class="text-blue-400 hover:text-blue-300" target="_blank" rel="noopener">wrote the book on VMware home labs</a> &mdash; runs his entire VCF 9 lab on mini PCs. If it's good enough for his lab, it's good enough for yours.</p>
 
-    <p>Below: what to buy, what to avoid, and the compatibility issues that will save you hours of troubleshooting. Every recommendation is based on hardware validated by the VMware community with documented ESXi installs.</p>
+    <p>Below: what to buy, what to avoid, and the compatibility issues that will save you hours of troubleshooting. The default recommendations are based on hardware validated by the VMware community with documented ESXi installs. Newer July 2026 options are called out separately where ESXi testing is not public yet.</p>
 
     <!-- Section: What You Actually Need -->
     <h2 class="text-2xl font-bold text-white">What You Actually Need</h2>
@@ -128,10 +128,10 @@
       <p class="text-slate-300"><strong>NIC:</strong> Intel i225/i226 (native) or USB Ethernet with ASIX AX88179 chipset</p>
     </div>
 
-    <!-- Section: The $500 Budget Build -->
-    <h2 class="text-2xl font-bold text-white">The $500 Budget Build</h2>
+    <!-- Section: The Budget Build -->
+    <h2 class="text-2xl font-bold text-white">The Budget Build: Under $500 Before RAM Upgrades</h2>
 
-    <p>Here's the specific build I recommend for a single-host ESXi lab in 2026. Every component is available on Amazon, and the base total comes in under $500. <strong class="text-slate-200">Note:</strong> the K11 ships with 16-32GB RAM depending on config — a 64GB RAM upgrade adds ~$120-150, making a realistic build ~$620-650. The $500 figure covers the base hardware only.</p>
+    <p>Here's the specific build I recommend for a single-host ESXi lab in July 2026. Every component is available on Amazon, and the base total comes in under $500. <strong class="text-slate-200">Note:</strong> the K11 ships with 16-32GB RAM depending on config &mdash; a 64GB RAM upgrade adds ~$120-150, making a realistic build ~$620-650. The $500 figure covers the base hardware only.</p>
 
     <h3 class="text-xl font-semibold text-white">The Host: GMKtec NucBox K11</h3>
 
@@ -214,6 +214,20 @@
 
     <p>Key details from Lam's testing: ESXi 8 and 9 install without issues. Both Intel NICs are auto-detected. The one Realtek 2.5GbE port is not recognized (use the <a href="https://williamlam.com/2025/11/realtek-network-driver-for-esxi.html" class="text-blue-400 hover:text-blue-300" target="_blank" rel="noopener">Realtek PCIe Fling driver</a> if you need it). It also has a half-height PCIe 4.0 x8 expansion slot for additional NICs or storage controllers.</p>
 
+    <h3 class="text-xl font-semibold text-white">Minisforum MS-01 and MS-03</h3>
+
+    <p>The <a href="https://www.amazon.com/s?k=Minisforum+MS-01&tag=vmwaremadesim-20" target="_blank" rel="noopener sponsored" class="text-blue-400 hover:text-blue-300 underline">Minisforum MS-01</a> is still available in July 2026, with Amazon pricing around $655 depending on CPU and RAM configuration. It remains a strong homelab chassis because of its compact size, expansion options, and multi-NIC layout. The caveat: it is no longer the newest model in the line.</p>
+
+    <p>Minisforum announced the <strong class="text-slate-200">MS-03</strong> in March 2026 as the Panther Lake successor. The headline specs are promising for VMware labs: Intel Panther Lake, up to <strong class="text-slate-200">128GB DDR5</strong>, dual USB4, and the same general SFF workstation direction that made the MS-01 attractive. Treat it as a watch-list pick for now. Public ESXi compatibility testing is not available yet, and Panther Lake still means Intel hybrid-core behavior may require the usual ESXi boot-parameter workaround.</p>
+
+    <h3 class="text-xl font-semibold text-white">Minisforum MS-S1 Max: AMD 128GB Alternative</h3>
+
+    <p>The <strong class="text-slate-200">Minisforum MS-S1 Max</strong> is the other new 2026 option to watch. It uses AMD Strix Halo silicon and supports 128GB RAM, which makes it interesting if you want high memory density without Intel hybrid-core quirks. As with the MS-03, do not assume day-one ESXi support. Wait for community validation of the NICs, NVMe behavior, and BIOS settings before making it your primary host.</p>
+
+    <h3 class="text-xl font-semibold text-white">ASUS NUC 14 Pro</h3>
+
+    <p>The ASUS NUC 14 Pro remains current and available in July 2026. William Lam has verified 128GB memory support on the NUC 14/15 Pro family, and Amazon availability is still good. It is not the cheapest path compared with the K11, but it is a safer choice if you prefer the NUC ecosystem and want a platform with more public VMware homelab coverage than brand-new Panther Lake boxes.</p>
+
     <h3 class="text-xl font-semibold text-white">Beelink EQR6 / SER7 ($300-$600)</h3>
 
     <p>The <a href="https://www.amazon.com/s?k=Beelink+EQR6+Ryzen+9+6900HX&tag=vmwaremadesim-20" target="_blank" rel="noopener sponsored" class="text-blue-400 hover:text-blue-300 underline">Beelink EQR6</a> (Ryzen 9 6900HX, ~$300) and <a href="https://www.amazon.com/s?k=Beelink+SER7+Ryzen+7+7840HS&tag=vmwaremadesim-20" target="_blank" rel="noopener sponsored" class="text-blue-400 hover:text-blue-300 underline">SER7</a> (Ryzen 7 7840HS, ~$570) are popular budget options with solid Ryzen processors. The main drawback: <strong class="text-slate-200">Realtek NICs only</strong>. You'll need a USB Ethernet adapter ($15) for ESXi installation and management. The SER7's 7840HS is Zen 4 with better IPC, but neither matches the K11's native Intel NIC advantage at a comparable price.</p>
@@ -222,9 +236,9 @@
 
     <p>You can find used Dell OptiPlex 7080/7090 Micro units on eBay with i7-10700T/11700T processors for $150-200. Legitimate 8-core machines with Intel NICs and excellent build quality. Limitations: most max at 64GB DDR4, NVMe slots are sometimes M.2 2230 (limiting drive options), and you're on an older platform. Good for a budget second node, not my first choice for a primary host.</p>
 
-    <h3 class="text-xl font-semibold text-white">What's Coming: CES 2026 Announcements</h3>
+    <h3 class="text-xl font-semibold text-white">CES 2026 Hardware Now Shipping</h3>
 
-    <p>William Lam <a href="https://williamlam.com/2026/01/every-mini-pc-sff-hardware-announced-at-ces-2026.html" class="text-blue-400 hover:text-blue-300" target="_blank" rel="noopener">tracked every mini PC announced at CES 2026</a>. The standouts for lab builders:</p>
+    <p>William Lam <a href="https://williamlam.com/2026/01/every-mini-pc-sff-hardware-announced-at-ces-2026.html" class="text-blue-400 hover:text-blue-300" target="_blank" rel="noopener">tracked every mini PC announced at CES 2026</a>. By July 2026, the first wave of those systems is shipping or moving through retail availability instead of sitting in announcement-only status. The standouts for lab builders:</p>
 
     <table>
       <thead>
@@ -233,6 +247,7 @@
           <th>CPU</th>
           <th>Max RAM</th>
           <th>NICs</th>
+          <th>July 2026 status</th>
         </tr>
       </thead>
       <tbody>
@@ -241,23 +256,26 @@
           <td>Ryzen AI 9 HX 470</td>
           <td>128GB DDR5</td>
           <td>2x 10GbE</td>
+          <td>Retail rollout; ESXi validation still needed</td>
         </tr>
         <tr>
           <td class="font-medium text-slate-300">Minisforum MS-02 Ultra</td>
           <td>Core Ultra 9 285HX (24c)</td>
           <td>256GB DDR5</td>
           <td>2x 25GbE</td>
+          <td>Shipping/available; watch hybrid-core behavior</td>
         </tr>
         <tr>
           <td class="font-medium text-slate-300">ASUS ExpertCenter PN55</td>
           <td>Ryzen AI 9 HX 470</td>
           <td>128GB DDR5</td>
           <td>2x 2.5GbE</td>
+          <td>Shipping/retail rollout; verify NIC chipset</td>
         </tr>
       </tbody>
     </table>
 
-    <p>Wait for these if you're not in a hurry. The Beelink SER 10 Max with dual 10GbE and upgradeable 128GB RAM looks particularly promising for multi-host vSAN labs.</p>
+    <p>These are no longer just CES slides, but I would still treat them as cautious buys until the VMware community publishes install notes. The Beelink SER 10 Max with dual 10GbE and upgradeable 128GB RAM looks particularly promising for multi-host vSAN labs, but the safer path today is still a validated K11, NUC 14 Pro, MS-A2, or MS-01.</p>
 
     <!-- Section: The RAM Question -->
     <h2 class="text-2xl font-bold text-white">The RAM Question</h2>
@@ -286,7 +304,7 @@
     <p>Almost every mini PC under $400 ships with a Realtek NIC. ESXi doesn't include Realtek drivers. Your options, from simplest to most involved:</p>
 
     <ol class="list-decimal list-inside text-slate-300 space-y-3 mb-6">
-      <li><strong>Buy a mini PC with Intel NICs.</strong> The GMKtec K11 (dual Intel i226-V) and Minisforum MS-A2 (Intel X710 + i226-V) work out of the box. vSphere 8 <a href="https://williamlam.com/2022/09/vsphere-8-productizes-community-networking-driver-fling-for-esxi.html" class="text-blue-400 hover:text-blue-300" target="_blank" rel="noopener">productized the Community Networking Driver</a>, so i225/i226 NICs are natively supported.</li>
+      <li><strong>Buy a mini PC with Intel NICs.</strong> The GMKtec K11 (dual Intel i226-V), Minisforum MS-A2 (Intel X710 + i226-V), and still-available Minisforum MS-01 class of systems are the safer buys. vSphere 8 <a href="https://williamlam.com/2022/09/vsphere-8-productizes-community-networking-driver-fling-for-esxi.html" class="text-blue-400 hover:text-blue-300" target="_blank" rel="noopener">productized the Community Networking Driver</a>, so i225/i226 NICs are natively supported. For brand-new systems like the MS-03, verify the exact NIC chipset before assuming ESXi will see it.</li>
       <li><strong>USB Ethernet adapter ($15).</strong> Any adapter with an <strong class="text-slate-200">ASIX AX88179, Realtek RTL8153/8156/8157, or Aquantia AQC111U</strong> chipset works with the <a href="https://williamlam.com/2025/04/supported-chipsets-for-the-usb-network-native-driver-for-esxi-fling.html" class="text-blue-400 hover:text-blue-300" target="_blank" rel="noopener">USB Network Native Driver Fling</a>. The ASIX AX88179 is the most reliable. ESXi detects it during installation.</li>
       <li><strong>Realtek PCIe Fling driver.</strong> The <a href="https://williamlam.com/2025/11/realtek-network-driver-for-esxi.html" class="text-blue-400 hover:text-blue-300" target="_blank" rel="noopener">Realtek Network Driver for ESXi</a> supports RTL8111 (1GbE), RTL8125 (2.5GbE), RTL8126 (5GbE), and RTL8127 (10GbE). Compatible with ESXi 8.0U3+ and 9.x. Note: version 1.101.00 had connection drops under load &mdash; make sure you're on 1.101.01 or later.</li>
     </ol>
@@ -367,7 +385,7 @@
     <!-- Section: Next Steps -->
     <h2 class="text-2xl font-bold text-white">Get Started</h2>
 
-    <p>A $500 investment gets you a complete, capable VMware home lab running on hardware validated by the community's most trusted voices. Here's the order:</p>
+    <p>A sub-$500 base build still gets you started on hardware validated by the community's most trusted voices. Budget closer to $620-650 once you add the 64GB RAM that makes the lab comfortable. Here's the order:</p>
 
     <ol class="list-decimal list-inside text-slate-300 space-y-3 mb-6">
       <li><strong>Order the hardware.</strong> GMKtec K11 + Samsung 990 EVO 2TB + TP-Link SG108E. Swap the NVMe when it arrives.</li>

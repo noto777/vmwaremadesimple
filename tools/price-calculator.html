@@ -217,7 +217,7 @@
             <div>
               <div class="text-sm font-medium text-slate-200 flex items-center">
                 GPU Passthrough / vGPU
-                <span class="tip"><span class="tip-icon">?</span><span class="tip-box">⚠️ NVIDIA vGPU on VMware requires a separate NVIDIA AI Enterprise license (~$3,500/GPU/yr) ON TOP of vSphere costs. PCIe passthrough is free on all hypervisors but prevents live migration of that VM. Proxmox and Hyper-V support passthrough natively at no extra cost.</span></span>
+                <span class="tip"><span class="tip-icon">?</span><span class="tip-box">NVIDIA vGPU on VMware requires a separate NVIDIA AI Enterprise license (~$3,500/GPU/yr) ON TOP of vSphere costs. PCIe passthrough is free on all hypervisors but prevents live migration of that VM. Proxmox and Hyper-V support passthrough natively at no extra cost.</span></span>
               </div>
               <div class="text-xs text-slate-500">NVIDIA vGPU, AMD MxGPU, or PCIe passthrough</div>
             </div>
@@ -249,7 +249,7 @@
 
       <!-- Disclaimer -->
       <div class="warn-strip rounded-xl px-5 py-3 mb-5 text-sm text-amber-300 flex items-start gap-3">
-        <span class="flex-shrink-0 text-lg">⚠️</span>
+        <span class="flex-shrink-0 text-lg">!</span>
         <span><strong>Estimates only.</strong> Actual pricing varies by region, deal size, and reseller. Proxmox EUR prices converted at 1.08 USD/EUR. Always get a formal quote before budgeting.</span>
       </div>
 
@@ -273,7 +273,7 @@
       <div class="mt-5 bg-card border border-slate-700 rounded-2xl p-6">
         <h3 class="font-bold text-white mb-3 text-sm uppercase tracking-wide">📌 Pricing Sources & Methodology</h3>
         <div class="grid md:grid-cols-2 gap-4 text-xs text-slate-400 leading-relaxed">
-          <div><div class="text-slate-300 font-medium mb-1">VMware VVF / VCF</div>Broadcom list pricing via partner channel. VVF: $150–190/core/yr (shown at $170 mid-range). VCF: $350/core/yr. 72-core minimum enforced per Broadcom's Jan 2024 SKU restructuring. Annual subscription only — perpetual licensing is dead.</div>
+          <div><div class="text-slate-300 font-medium mb-1">VMware vSphere / VVF / VCF</div>Broadcom list pricing via partner channel. vSphere Standard: ~$50/core/yr. vSphere Enterprise Plus: ~$150/core/yr. VVF: average $135/core/yr (market range $150–190/core/yr). VCF: $350/core/yr. The 72-core minimum was introduced April 2025, partially reversed for renewals, and still applies to new orders and tier changes. New perpetual licenses are no longer sold; existing perpetual licenses with active SnS are still honored.</div>
           <div><div class="text-slate-300 font-medium mb-1">Proxmox VE</div>Community edition: free (AGPL open source). Standard sub: €110/socket/yr (~$119 USD). Enterprise sub: €440/socket/yr (~$475 USD). No per-core or per-VM licensing. Ceph storage software is free; only hardware costs apply.</div>
           <div><div class="text-slate-300 font-medium mb-1">Nutanix AHV</div>AHV hypervisor: free with any Nutanix license. NCI/NUS (enterprise features): ~$100–200/node/yr for small environments. Prism Pro: ~$100/node/yr add-on. Pricing is per-node, not per-core.</div>
           <div><div class="text-slate-300 font-medium mb-1">Microsoft Hyper-V</div>WS2025 Standard: $1,069/2-core pack, min 16 cores/server. Datacenter: $7,407/16-core + $463/additional 2-core pack. Shown as 3-yr amortized. CALs ($38/user or $19/device) are NOT included but are required.</div>
@@ -307,15 +307,23 @@
 // ─────────────────────────────────────────────────────────────────
 const PRICING = {
   vvf: {
-    perCorePerYear:     170,   // list price mid-range ($150 volume / $190 small)
+    perCorePerYear:     135,   // average observed price; market range below
     perCorePerYearLow:  150,
     perCorePerYearHigh: 190,
-    coreMin:            72,    // Broadcom 72-core minimum (Jan 2024 SKU change)
+    coreMin:            72,    // 72-core minimum introduced Apr 2025; still applies to new orders/tier changes
     vsanTiBPerCore:     0.25,  // vSAN OSA usable entitlement per licensed core
+  },
+  vsphereStandard: {
+    perCorePerYear:     50,
+    coreMin:            72,    // still applies to new orders/tier changes
+  },
+  vsphereEnterprisePlus: {
+    perCorePerYear:     150,
+    coreMin:            72,    // still applies to new orders/tier changes
   },
   vcf: {
     perCorePerYear:     350,   // full stack: vSphere + vSAN + NSX + Aria + Tanzu
-    coreMin:            72,
+    coreMin:            72,    // still applies to new orders/tier changes
     vsanTiBPerCore:     0.25,  // same entitlement as VVF
   },
   proxmox: {
@@ -404,6 +412,14 @@ function calculate() {
   const vvfVsanTiB = vvfBilled * PRICING.vvf.vsanTiBPerCore;
   const vvfVsanOk  = vvfVsanTiB >= S.storageTB;
 
+  // ── vSphere Standard / Enterprise Plus ──
+  const vsStdBilled = Math.max(totalCores, PRICING.vsphereStandard.coreMin);
+  const vsStdWasted = vsStdBilled - totalCores;
+  const vsStdAnnual = vsStdBilled * PRICING.vsphereStandard.perCorePerYear;
+  const vsEntBilled = Math.max(totalCores, PRICING.vsphereEnterprisePlus.coreMin);
+  const vsEntWasted = vsEntBilled - totalCores;
+  const vsEntAnnual = vsEntBilled * PRICING.vsphereEnterprisePlus.perCorePerYear;
+
   // ── VCF ──
   const vcfBilled = Math.max(totalCores, PRICING.vcf.coreMin);
   const vcfWasted = vcfBilled - totalCores;
@@ -442,23 +458,24 @@ function calculate() {
   // ─────────────────────────────────────────────────────────────
   const cards = [
     {
-      id: 'vvf', name: 'VMware vSphere Foundation', abbr: 'VVF', icon: '🔵',
+      id: 'vvf', name: 'VMware vSphere Foundation', abbr: 'VVF', icon: 'VVF',
       accent: '#3b82f6',
       annualPrimary: vvfAnnual,
+      coreMin: PRICING.vvf.coreMin,
       tco3yr: vvfAnnual * 3,
       tcoLabel: '3-yr subscription',
       sublines: [
-        { k:'Billed Cores', v:`${vvfBilled.toLocaleString()} (min 72)` },
-        vvfWasted > 0 ? { k:'⚠ Wasted Cores', v:`${vvfWasted} paid but unused`, warn:true } : null,
+        { k:'Billed Cores', v:`${vvfBilled.toLocaleString()} (min 72 for new orders/tier changes)` },
+        vvfWasted > 0 ? { k:'Wasted Cores', v:`${vvfWasted} paid but unused`, warn:true } : null,
         { k:'$/core/yr',    v:`$${PRICING.vvf.perCorePerYear}` },
         feat.vsan ? {
           k: 'vSAN Entitlement',
-          v: `${vvfVsanTiB.toFixed(1)} TiB included` + (vvfVsanOk ? ' ✓' : ` — ⚠ need ${S.storageTB} TB (shortfall)`),
+          v: `${vvfVsanTiB.toFixed(1)} TiB included` + (vvfVsanOk ? ' ✓' : ` — need ${S.storageTB} TB (shortfall)`),
           warn: !vvfVsanOk
         } : { k:'Storage', v:'External SAN/NAS (not included)' },
         { k:'Includes', v:'vCenter, HA, DRS, vSAN' },
         { k:'Not included', v:'NSX, Tanzu/K8s, Aria' },
-        feat.gpu ? { k:'⚠ GPU vGPU', v:'Requires NVIDIA AI Enterprise (~$3,500/GPU/yr extra)', warn:true } : null,
+        feat.gpu ? { k:'GPU vGPU', v:'Requires NVIDIA AI Enterprise (~$3,500/GPU/yr extra)', warn:true } : null,
       ].filter(Boolean),
       features: {
         'vSAN Storage':     feat.vsan ? (vvfVsanOk?'yes':'partial') : 'na',
@@ -470,32 +487,95 @@ function calculate() {
       },
       verdict: 'Best for organizations already on VMware that need vSAN but can\'t justify VCF pricing. The minimum viable Broadcom option.',
       gotchas: [
-        '72-core minimum — if you have fewer cores, you pay for 72 anyway',
-        feat.vsan && !vvfVsanOk ? `⚠ vSAN entitlement only covers ${vvfVsanTiB.toFixed(1)} TiB of your ${S.storageTB} TB need — add-on costs extra` : null,
+        '72-core minimum applies to new orders and tier changes; some renewals were partially exempted',
+        feat.vsan && !vvfVsanOk ? `vSAN entitlement only covers ${vvfVsanTiB.toFixed(1)} TiB of your ${S.storageTB} TB need — add-on costs extra` : null,
         'No Tanzu/K8s — that\'s a VCF exclusive',
         'No NSX (network virtualization) — separate purchase',
-        'Annual subscription only — perpetual licensing gone',
-        feat.gpu ? '⚠ NVIDIA AI Enterprise required for vGPU: ~$3,500/GPU/yr on top' : null,
+        'New perpetual licenses no longer sold; existing perpetual + active SnS are still honored',
+        feat.gpu ? 'NVIDIA AI Enterprise required for vGPU: ~$3,500/GPU/yr on top' : null,
       ].filter(Boolean),
     },
     {
-      id: 'vcf', name: 'VMware Cloud Foundation', abbr: 'VCF', icon: '☁️',
+      id: 'vsphere-standard', name: 'VMware vSphere Standard', abbr: 'Std', icon: 'Std',
+      accent: '#60a5fa',
+      annualPrimary: vsStdAnnual,
+      coreMin: PRICING.vsphereStandard.coreMin,
+      tco3yr: vsStdAnnual * 3,
+      tcoLabel: '3-yr subscription',
+      sublines: [
+        { k:'Billed Cores', v:`${vsStdBilled.toLocaleString()} (min 72 for new orders/tier changes)` },
+        vsStdWasted > 0 ? { k:'Wasted Cores', v:`${vsStdWasted} paid but unused`, warn:true } : null,
+        { k:'$/core/yr', v:`$${PRICING.vsphereStandard.perCorePerYear}` },
+        { k:'Storage', v:'External SAN/NAS (vSAN not included)' },
+        { k:'Includes', v:'vSphere Standard hypervisor features' },
+        { k:'Not included', v:'vSAN, DRS, NSX, Tanzu/K8s, Aria' },
+      ].filter(Boolean),
+      features: {
+        'vSAN Storage':     feat.vsan ? 'no' : 'na',
+        'HA':               'yes',
+        'DRS':              feat.drs ? 'no' : 'na',
+        'vCenter':          feat.vcenter ? 'partial' : 'na',
+        'GPU (passthru)':   feat.gpu  ? 'partial' : 'na',
+        'Kubernetes':       feat.k8s  ? 'no'      : 'na',
+      },
+      verdict: 'Best for basic VMware virtualization when you do not need vSAN or the full VVF/VCF stack.',
+      gotchas: [
+        '72-core minimum applies to new orders and tier changes; some renewals were partially exempted',
+        feat.vsan ? 'vSAN is not included — use VVF/VCF or buy storage separately' : null,
+        feat.drs ? 'DRS is not included in Standard' : null,
+        'New perpetual licenses no longer sold; existing perpetual + active SnS are still honored',
+      ].filter(Boolean),
+    },
+    {
+      id: 'vsphere-enterprise-plus', name: 'VMware vSphere Enterprise Plus', abbr: 'E+', icon: 'E+',
+      accent: '#2563eb',
+      annualPrimary: vsEntAnnual,
+      coreMin: PRICING.vsphereEnterprisePlus.coreMin,
+      tco3yr: vsEntAnnual * 3,
+      tcoLabel: '3-yr subscription',
+      sublines: [
+        { k:'Billed Cores', v:`${vsEntBilled.toLocaleString()} (min 72 for new orders/tier changes)` },
+        vsEntWasted > 0 ? { k:'Wasted Cores', v:`${vsEntWasted} paid but unused`, warn:true } : null,
+        { k:'$/core/yr', v:`$${PRICING.vsphereEnterprisePlus.perCorePerYear}` },
+        { k:'Storage', v:'External SAN/NAS (vSAN not included)' },
+        { k:'Includes', v:'vCenter/HA/DRS/vMotion feature tier' },
+        { k:'Not included', v:'vSAN, NSX, Tanzu/K8s, Aria' },
+      ].filter(Boolean),
+      features: {
+        'vSAN Storage':     feat.vsan ? 'no' : 'na',
+        'HA / DRS':         'yes',
+        'vCenter':          'yes',
+        'GPU (passthru)':   feat.gpu  ? 'partial' : 'na',
+        'Kubernetes':       feat.k8s  ? 'no'      : 'na',
+        'NSX Networking':   'no',
+      },
+      verdict: 'Best for traditional vSphere environments that need Enterprise Plus features without VVF/VCF bundle components.',
+      gotchas: [
+        '72-core minimum applies to new orders and tier changes; some renewals were partially exempted',
+        feat.vsan ? 'vSAN is not included — VVF/VCF are the bundled vSAN paths' : null,
+        'No Tanzu/K8s — that remains a VCF bundle differentiator',
+        'New perpetual licenses no longer sold; existing perpetual + active SnS are still honored',
+      ].filter(Boolean),
+    },
+    {
+      id: 'vcf', name: 'VMware Cloud Foundation', abbr: 'VCF', icon: 'VCF',
       accent: '#8b5cf6',
-      badge: '🌐 Full Stack',
+      badge: 'Full Stack',
       annualPrimary: vcfAnnual,
+      coreMin: PRICING.vcf.coreMin,
       tco3yr: vcfAnnual * 3,
       tcoLabel: '3-yr subscription',
       sublines: [
-        { k:'Billed Cores', v:`${vcfBilled.toLocaleString()} (min 72)` },
-        vcfWasted > 0 ? { k:'⚠ Wasted Cores', v:`${vcfWasted} paid but unused`, warn:true } : null,
+        { k:'Billed Cores', v:`${vcfBilled.toLocaleString()} (min 72 for new orders/tier changes)` },
+        vcfWasted > 0 ? { k:'Wasted Cores', v:`${vcfWasted} paid but unused`, warn:true } : null,
         { k:'$/core/yr',    v:`$${PRICING.vcf.perCorePerYear}` },
         feat.vsan ? {
           k: 'vSAN Entitlement',
-          v: `${vcfVsanTiB.toFixed(1)} TiB included` + (vcfVsanOk ? ' ✓' : ` — ⚠ need ${S.storageTB} TB (shortfall)`),
+          v: `${vcfVsanTiB.toFixed(1)} TiB included` + (vcfVsanOk ? ' ✓' : ` — need ${S.storageTB} TB (shortfall)`),
           warn: !vcfVsanOk
         } : { k:'Storage', v:'External SAN/NAS (not included)' },
         { k:'Includes', v:'vCenter, vSAN, NSX, Aria, Tanzu' },
-        feat.gpu ? { k:'⚠ GPU vGPU', v:'Requires NVIDIA AI Enterprise (~$3,500/GPU/yr extra)', warn:true } : null,
+        feat.gpu ? { k:'GPU vGPU', v:'Requires NVIDIA AI Enterprise (~$3,500/GPU/yr extra)', warn:true } : null,
       ].filter(Boolean),
       features: {
         'vSAN Storage':     feat.vsan ? (vcfVsanOk?'yes':'partial') : 'na',
@@ -507,12 +587,12 @@ function calculate() {
       },
       verdict: 'Best for large enterprises that need the full VMware stack — vSphere + vSAN + NSX + Tanzu — and have budget to match. Overkill for most.',
       gotchas: [
-        '72-core minimum at $350/core — small clusters get crushed by this',
-        `${S.hosts} hosts × ${vvfBilled} cores = $${vcfAnnual.toLocaleString()}/yr — that\'s real money`,
-        feat.vsan && !vcfVsanOk ? `⚠ vSAN storage entitlement still short: ${vcfVsanTiB.toFixed(1)} TiB vs ${S.storageTB} TB needed` : null,
+        '72-core minimum applies to new orders and tier changes; some renewals were partially exempted',
+        `${vcfBilled} billed cores × $${PRICING.vcf.perCorePerYear}/core = $${vcfAnnual.toLocaleString()}/yr — that\'s real money`,
+        feat.vsan && !vcfVsanOk ? `vSAN storage entitlement still short: ${vcfVsanTiB.toFixed(1)} TiB vs ${S.storageTB} TB needed` : null,
         'NSX adds significant complexity — team training required',
-        'Annual subscription only — no perpetual option',
-        feat.gpu ? '⚠ vGPU still needs NVIDIA AI Enterprise on top of VCF pricing' : null,
+        'New perpetual licenses no longer sold; existing perpetual + active SnS are still honored',
+        feat.gpu ? 'vGPU still needs NVIDIA AI Enterprise on top of VCF pricing' : null,
       ].filter(Boolean),
     },
     {
@@ -600,7 +680,7 @@ function calculate() {
       sublines: [
         { k:'Standard/yr',   v:`$${Math.round(stdAnnual).toLocaleString()} amortized ($${stdTotal.toLocaleString()} perpetual)` },
         { k:'Datacenter/yr', v:`$${Math.round(dcAnnual).toLocaleString()} amortized ($${dcTotal.toLocaleString()} perpetual)` },
-        { k:'⚠ CALs EXTRA', v:`$38/user or $19/device — required, not included`, warn:true },
+        { k:'CALs EXTRA', v:`$38/user or $19/device — required, not included`, warn:true },
         { k:'Storage (S2D)',  v: feat.vsan ? 'Datacenter only (Standard = external storage)' : 'External SAN/NAS' },
         { k:'Management',    v:'Windows Admin Center (free) or SCVMM ($1,323/OSE)' },
       ],
@@ -614,7 +694,7 @@ function calculate() {
       },
       verdict: 'Best for Microsoft shops with existing Windows EA agreements and Windows-fluent admins. Lowest learning curve if your team already knows Windows Server.',
       gotchas: [
-        '⚠ CALs required for every user/device accessing VMs — easily doubles real cost for large user counts',
+        'CALs required for every user/device accessing VMs — easily doubles real cost for large user counts',
         'Standard: only covers 2 Hyper-V VMs per license — need multiple licenses for dense VM environments',
         'S2D (Storage Spaces Direct) requires Datacenter edition — not Standard',
         'SCVMM needed for vCenter-like cross-host management ($1,323/OSE) — WAC is simpler',
@@ -669,11 +749,11 @@ function renderCards(cards, totalCores) {
     const hasVsanWarn = c.sublines.some(s => s.warn && s.k.includes('vSAN'));
 
     const wastedBanner = hasWasted
-      ? `<div class="bg-amber-950 border border-amber-800 rounded-lg px-3 py-2 mb-3 text-xs text-amber-300 flex items-start gap-1.5"><span class="flex-shrink-0">⚠️</span><span>72-core minimum — paying for ${c.id==='vvf'?Math.max(totalCores,PRICING.vvf.coreMin)-totalCores:Math.max(totalCores,PRICING.vcf.coreMin)-totalCores} unused cores</span></div>`
+      ? `<div class="bg-amber-950 border border-amber-800 rounded-lg px-3 py-2 mb-3 text-xs text-amber-300 flex items-start gap-1.5"><span>72-core minimum for new orders/tier changes — paying for ${Math.max(totalCores, c.coreMin || 72)-totalCores} unused cores</span></div>`
       : '';
 
     const vsanWarnBanner = hasVsanWarn && !hasWasted
-      ? `<div class="bg-amber-950 border border-amber-800 rounded-lg px-3 py-2 mb-3 text-xs text-amber-300 flex items-start gap-1.5"><span>⚠️</span><span>vSAN entitlement insufficient — extra storage add-on costs apply</span></div>`
+      ? `<div class="bg-amber-950 border border-amber-800 rounded-lg px-3 py-2 mb-3 text-xs text-amber-300 flex items-start gap-1.5"><span>vSAN entitlement insufficient — extra storage add-on costs apply</span></div>`
       : '';
 
     const altLine = c.annualAlt != null
@@ -808,7 +888,7 @@ function renderSummary(totalCores, totalSockets) {
     <div class="flex justify-between"><span class="text-slate-500">Total sockets:</span><span class="text-slate-200 font-medium">${totalSockets}</span></div>
     <div class="flex justify-between"><span class="text-slate-500">Storage:</span><span class="text-slate-200 font-medium">${S.storageTB} TB</span></div>
     <div class="flex justify-between"><span class="text-slate-500">Features:</span><span class="text-slate-200 font-medium text-right max-w-[140px]">${featureList}</span></div>
-    ${totalCores < 72 ? `<div class="text-xs text-amber-400 mt-1 pt-1 border-t border-slate-800">⚠ Below VMware 72-core min — you'll pay for ${72-totalCores} unused cores on VMware</div>` : ''}
+    ${totalCores < 72 ? `<div class="text-xs text-amber-400 mt-1 pt-1 border-t border-slate-800">Below VMware 72-core minimum for new orders/tier changes — you'll pay for ${72-totalCores} unused cores on new VMware subscription orders</div>` : ''}
   `;
 }
 
@@ -838,7 +918,7 @@ function renderRec(cards) {
   let recs = [];
 
   if (isTinyCluster) {
-    recs.push(`<strong>⚠️ 72-Core Minimum Alert:</strong> Your environment has ${totalCores} physical cores — below Broadcom's 72-core minimum. VMware charges for 72 cores regardless. You'd be paying for ${72 - totalCores} unused cores on both VVF and VCF.`);
+    recs.push(`<strong>72-Core Minimum Alert:</strong> Your environment has ${totalCores} physical cores — below Broadcom's 72-core minimum for new orders and tier changes. Some renewals were partially exempted, but new VMware subscription orders still bill at 72 cores. You'd be paying for ${72 - totalCores} unused cores on VMware options that carry the minimum.`);
   }
 
   if (feat.k8s && !feat.vsan) {

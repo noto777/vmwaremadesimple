@@ -120,7 +120,7 @@
     </p>
 
     <p>
-      Under Broadcom, the preferred model is now VMware Cloud Foundation (VCF) — the full stack in a single subscription. VCF 9.0 includes vSphere, vCenter, vSAN (1 TiB per licensed core), NSX, HCX, and Aria Operations/Automation in one SKU. VVF (vSphere Foundation) is the cut-down version — you get vSAN at 0.25 TiB/core but <strong class="text-slate-200">no NSX, no HCX, no Aria Automation</strong> — and it's still a per-core subscription with a 16-core minimum per socket. <em>(Sources: <a href="https://www.vmware.com/docs/vmware-cloud-foundation-9-0-feature-comparison-and-upgrade-paths" target="_blank" rel="noopener" class="text-blue-400 hover:text-blue-300">VCF 9.0 Feature Comparison</a>; <a href="https://www.vmware.com/docs/vmw-datasheet-vsphere-product-line-comparison" target="_blank" rel="noopener" class="text-blue-400 hover:text-blue-300">vSphere Product Line Comparison</a>)</em>
+      Under Broadcom, the preferred model is now VMware Cloud Foundation (VCF) — the full stack in a single subscription. VCF 9.1 includes vSphere/ESXi 9.1, vCenter, vSAN (1 TiB per licensed core), NSX, HCX, VCF Operations/Automation, VCF Fleet Services, and the updated VCF Operations License Server workflow in one SKU. VVF (vSphere Foundation) is the cut-down version — you get vSAN at 0.25 TiB/core but <strong class="text-slate-200">no NSX, no HCX, no Aria Automation</strong> — and it's still a per-core subscription with a 16-core minimum per socket. <em>(Sources: <a href="https://www.vmware.com/docs/vmware-cloud-foundation-9-0-feature-comparison-and-upgrade-paths" target="_blank" rel="noopener" class="text-blue-400 hover:text-blue-300">VCF 9.x Feature Comparison</a>; <a href="https://www.vmware.com/docs/vmw-datasheet-vsphere-product-line-comparison" target="_blank" rel="noopener" class="text-blue-400 hover:text-blue-300">vSphere Product Line Comparison</a>)</em>
     </p>
 
     <p>
@@ -177,7 +177,7 @@
     <h3 class="text-xl font-semibold text-white">VMware VCF Pricing</h3>
 
     <p>
-      VCF 9.0 is per-core subscription with a 16-core minimum per CPU socket. VCF gets you everything: vSphere, vSAN at 1 TiB/core, NSX, HCX, and Aria. VVF drops to 0.25 TiB vSAN/core and cuts NSX, HCX, and Aria Automation entirely. <em>(Source: VCF 9.0 Feature Comparison, Broadcom, Nov 2025)</em>
+      VCF 9.1 is per-core subscription with a 16-core minimum per CPU socket. VCF gets you everything: vSphere/ESXi 9.1, vSAN at 1 TiB/core, NSX, HCX, VCF Operations/Automation, Fleet Services, and the 9.1 license-server workflow. VVF drops to 0.25 TiB vSAN/core and cuts NSX, HCX, and Aria Automation entirely. The pricing model is unchanged from VCF 9.0. <em>(Source: VCF 9.x Feature Comparison, Broadcom)</em>
     </p>
 
     <p>
@@ -193,13 +193,13 @@
     <!-- FEATURE COMPARISON TABLE -->
     <h2 class="text-2xl font-bold text-white">Feature-by-Feature Comparison</h2>
 
-    <p>This table compares VMware VCF 9.0 (the full-stack product) against Nutanix NCI Pro (the most common enterprise tier). Where VVF differs materially from VCF, that's called out.</p>
+    <p>This table compares VMware VCF 9.1 (the full-stack product) against Nutanix NCI Pro (the most common enterprise tier). Where VVF differs materially from VCF, that's called out.</p>
 
     <table>
       <thead>
         <tr>
           <th>Feature</th>
-          <th>VMware (VCF 9.0)</th>
+          <th>VMware (VCF 9.1)</th>
           <th>Nutanix (NCI Pro / AHV)</th>
           <th>Edge</th>
         </tr>
@@ -297,13 +297,13 @@
         </tr>
         <tr>
           <td class="font-medium text-slate-300">Edge / Small Deployments</td>
-          <td>VCF 9 minimum: 3 hosts (vSAN) or 2 hosts (external storage) using Consolidated Architecture. Standard Architecture = 7 hosts.</td>
+          <td>VCF 9.1 minimum: 3 hosts (vSAN) or 2 hosts (external storage) using consolidated architecture. Standard Architecture = 7 hosts.</td>
           <td>3-node minimum for standard AHV cluster. 2-node clusters supported. NCI-Edge tier for true edge/robo use cases.</td>
           <td class="win-nutanix">Nutanix</td>
         </tr>
       </tbody>
     </table>
-    <p class="source-note"><em>Sources: VCF 9.0 Feature Comparison (Broadcom, Nov 2025); vSphere Product Line Comparison (Broadcom); Nutanix Cloud Platform Software Options (nutanix.com, Feb 2025); Nutanix Bible AHV Architecture; Omnissa blog (Aug 2025).</em></p>
+    <p class="source-note"><em>Sources: VCF 9.x Feature Comparison (Broadcom); vSphere Product Line Comparison (Broadcom); Nutanix Cloud Platform Software Options (nutanix.com, Feb 2025); Nutanix Bible AHV Architecture; Omnissa blog (Aug 2025).</em></p>
 
     <!-- SECTION: WHERE NUTANIX WINS -->
     <h2 class="text-2xl font-bold text-white">Where Nutanix Genuinely Wins</h2>
@@ -330,7 +330,7 @@
 
     <h3 class="text-xl font-semibold text-white">5. The Starter Point for HCI is Lower</h3>
     <p>
-      Three nodes produce a functional AHV cluster. VCF's minimum footprint for a Standard Architecture is 7 hosts (4 management + 3 workload), though VCF 9's Consolidated Architecture reduces this to 3 hosts (vSAN) or 2 hosts (external storage). Nutanix also supports 2-node clusters and has an NCI-Edge tier for remote/branch deployments. For smaller sites, Nutanix requires less hardware to get started.
+      Three nodes produce a functional AHV cluster. VCF's minimum footprint for a Standard Architecture is 7 hosts (4 management + 3 workload), though VCF 9.1's consolidated architecture reduces this to 3 hosts (vSAN) or 2 hosts (external storage). Nutanix also supports 2-node clusters and has an NCI-Edge tier for remote/branch deployments. For smaller sites, Nutanix requires less hardware to get started.
     </p>
 
     <!-- SECTION: WHERE VMware STILL WINS -->
@@ -343,7 +343,7 @@
 
     <h3 class="text-xl font-semibold text-white">2. NSX vs. Flow — This Is Not a Tie</h3>
     <p>
-      If you're running NSX today — distributed routing, L7 firewall, IDS/IPS, BGP peer relationships — Nutanix Flow is not a replacement. Flow does microsegmentation well. It does not do distributed routing, load balancing, or the advanced security features NSX provides. To be fair, VVF doesn't include NSX either — that's VCF territory. But if NSX is in your architecture today, this is a real migration blocker that Nutanix sales will gloss over. <em>(Source: TechTarget Flow vs NSX comparison; VCF 9.0 Feature Comparison, Broadcom)</em>
+      If you're running NSX today — distributed routing, L7 firewall, IDS/IPS, BGP peer relationships — Nutanix Flow is not a replacement. Flow does microsegmentation well. It does not do distributed routing, load balancing, or the advanced security features NSX provides. To be fair, VVF doesn't include NSX either — that's VCF territory. But if NSX is in your architecture today, this is a real migration blocker that Nutanix sales will gloss over. <em>(Source: TechTarget Flow vs NSX comparison; VCF 9.x Feature Comparison, Broadcom)</em>
     </p>
 
     <h3 class="text-xl font-semibold text-white">3. VDI — Horizon on ESXi Is Still the More Mature Deployment Path</h3>
