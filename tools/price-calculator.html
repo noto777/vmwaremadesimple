@@ -102,7 +102,7 @@
     <span class="text-slate-400">Price Calculator</span>
   </div>
   <div class="inline-flex items-center gap-2 bg-blue-950 text-blue-400 text-sm px-4 py-2 rounded-full mb-5 border border-blue-800">
-    <span class="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></span> Pricing updated March 2026
+    <span class="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></span> Pricing updated July 2026
   </div>
   <h1 class="text-4xl md:text-5xl font-bold text-white mb-3 leading-tight">
     Virtualization <span class="gradient-text">Price Calculator</span>
@@ -140,7 +140,7 @@
         <div class="mb-6">
           <label class="text-sm font-medium text-slate-300 mb-2.5 flex items-center">
             CPUs per Host (Sockets)
-            <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Physical CPU sockets. Most NUC/mini PCs are 1-socket. Rack servers are commonly 2-socket. Proxmox Standard subscription is per socket — 1P vs 2P makes a meaningful difference.</span></span>
+            <span class="tip"><span class="tip-icon">?</span><span class="tip-box">Physical CPU sockets. Most NUC/mini PCs are 1-socket. Rack servers are commonly 2-socket. Proxmox paid subscriptions (Basic/Standard/Premium) are per socket — 1P vs 2P makes a meaningful difference.</span></span>
           </label>
           <div class="flex gap-3">
             <button id="cpu1btn" onclick="setCPU(1)" class="flex-1 py-3 rounded-xl font-semibold text-sm border transition btn-active">1 CPU</button>
@@ -250,7 +250,7 @@
       <!-- Disclaimer -->
       <div class="warn-strip rounded-xl px-5 py-3 mb-5 text-sm text-amber-300 flex items-start gap-3">
         <span class="flex-shrink-0 text-lg">!</span>
-        <span><strong>Estimates only.</strong> Actual pricing varies by region, deal size, and reseller. Proxmox EUR prices converted at 1.08 USD/EUR. Always get a formal quote before budgeting.</span>
+        <span><strong>Estimates only.</strong> Actual pricing varies by region, deal size, and reseller. Proxmox USD figures are rounded approximations from EUR list pricing. Always get a formal quote before budgeting.</span>
       </div>
 
       <!-- Cards grid -->
@@ -259,7 +259,7 @@
       <!-- Bar chart -->
       <div id="chartSection" class="hidden mt-8 bg-card border border-slate-700 rounded-2xl p-6">
         <h3 class="font-bold text-white mb-1">Annual Cost Comparison</h3>
-        <p class="text-xs text-slate-500 mb-5">Proxmox community = $0 (free). Hyper-V = Standard amortized cost. Nutanix = low-end estimate.</p>
+        <p class="text-xs text-slate-500 mb-5">Proxmox community = $0 (free). Hyper-V = Standard amortized cost. Nutanix = NCI per-core estimate.</p>
         <div id="chartBars" class="space-y-3"></div>
       </div>
 
@@ -274,11 +274,11 @@
         <h3 class="font-bold text-white mb-3 text-sm uppercase tracking-wide">📌 Pricing Sources & Methodology</h3>
         <div class="grid md:grid-cols-2 gap-4 text-xs text-slate-400 leading-relaxed">
           <div><div class="text-slate-300 font-medium mb-1">VMware vSphere / VVF / VCF</div>Broadcom list pricing via partner channel. vSphere Standard: ~$50/core/yr. vSphere Enterprise Plus: ~$150/core/yr. VVF: average $135/core/yr (market range $150–190/core/yr). VCF: $350/core/yr. The 72-core minimum was introduced April 2025, partially reversed for renewals, and still applies to new orders and tier changes. New perpetual licenses are no longer sold; existing perpetual licenses with active SnS are still honored.</div>
-          <div><div class="text-slate-300 font-medium mb-1">Proxmox VE</div>Community edition: free (AGPL open source). Standard sub: €110/socket/yr (~$119 USD). Enterprise sub: €440/socket/yr (~$475 USD). No per-core or per-VM licensing. Ceph storage software is free; only hardware costs apply.</div>
-          <div><div class="text-slate-300 font-medium mb-1">Nutanix AHV</div>AHV hypervisor: free with any Nutanix license. NCI/NUS (enterprise features): ~$100–200/node/yr for small environments. Prism Pro: ~$100/node/yr add-on. Pricing is per-node, not per-core.</div>
+          <div><div class="text-slate-300 font-medium mb-1">Proxmox VE</div>Community subscription: free (AGPL open source, community repository). Paid subscriptions are per physical CPU socket: Basic ~€355/socket/yr (~$390), Standard ~€500/socket/yr (~$540), Premium ~€1,060/socket/yr (~$1,160). No per-core or per-VM licensing. Ceph storage software is free; only hardware costs apply.</div>
+          <div><div class="text-slate-300 font-medium mb-1">Nutanix AHV</div>AHV hypervisor: free with any Nutanix license. NCI is licensed per physical CPU core; community reports cluster around ~$300/core/yr before discounts and add-ons. This calculator models NCI on physical cores, not per-node pricing.</div>
           <div><div class="text-slate-300 font-medium mb-1">Microsoft Hyper-V</div>WS2025 Standard: $1,069/2-core pack, min 16 cores/server. Datacenter: $7,407/16-core + $463/additional 2-core pack. Shown as 3-yr amortized. CALs ($38/user or $19/device) are NOT included but are required.</div>
         </div>
-        <div class="mt-4 pt-4 border-t border-slate-700 text-xs text-slate-500">Last updated: March 2026. To update pricing, edit the <code class="bg-slate-900 px-1 py-0.5 rounded">PRICING</code> config object in the page source (top of the &lt;script&gt; block).</div>
+        <div class="mt-4 pt-4 border-t border-slate-700 text-xs text-slate-500">Last updated: July 2026. To update pricing, edit the <code class="bg-slate-900 px-1 py-0.5 rounded">PRICING</code> config object in the page source (top of the &lt;script&gt; block).</div>
       </div>
 
     </div>
@@ -303,7 +303,7 @@
 <!-- ===== SCRIPT ===== -->
 <script>
 // ─────────────────────────────────────────────────────────────────
-// PRICING CONFIG — edit these when prices change (last: Mar 2026)
+// PRICING CONFIG — edit these when prices change (last: Jul 2026)
 // ─────────────────────────────────────────────────────────────────
 const PRICING = {
   vvf: {
@@ -328,14 +328,13 @@ const PRICING = {
   },
   proxmox: {
     communityPerYear:     0,
-    standardPerSocketPerYear:   119,  // €110 × 1.08 USD/EUR
-    enterprisePerSocketPerYear: 475,  // €440 × 1.08 USD/EUR
+    basicPerSocketPerYear:      390,  // ~€355/socket/year
+    standardPerSocketPerYear:   540,  // ~€500/socket/year
+    premiumPerSocketPerYear:   1160,  // ~€1,060/socket/year
   },
   nutanix: {
     ahvCost:                0,    // hypervisor is free
-    nciLowPerNodePerYear:   100,  // NCI Starter
-    nciHighPerNodePerYear:  200,  // NCI Pro / NUS
-    prismProPerNodePerYear: 100,  // Prism Pro (multi-host mgmt)
+    nciPerCorePerYear:      300,  // community-reported NCI estimate per physical CPU core
   },
   hyperv: {
     std2CorePackPrice:      1069,  // WS2025 Standard, per 2-core pack
@@ -429,15 +428,13 @@ function calculate() {
 
   // ── Proxmox ──
   const pxComm  = 0;
+  const pxBasic = totalSockets * PRICING.proxmox.basicPerSocketPerYear;
   const pxStd   = totalSockets * PRICING.proxmox.standardPerSocketPerYear;
-  const pxEnt   = totalSockets * PRICING.proxmox.enterprisePerSocketPerYear;
+  const pxPrem  = totalSockets * PRICING.proxmox.premiumPerSocketPerYear;
 
   // ── Nutanix ──
   const needNCI  = feat.vsan || feat.drs || feat.vcenter;
-  const ntxLow   = S.hosts * (needNCI ? PRICING.nutanix.nciLowPerNodePerYear  : 0)
-                 + S.hosts * (feat.vcenter ? PRICING.nutanix.prismProPerNodePerYear : 0);
-  const ntxHigh  = S.hosts * (needNCI ? PRICING.nutanix.nciHighPerNodePerYear : 0)
-                 + S.hosts * (feat.vcenter ? PRICING.nutanix.prismProPerNodePerYear : 0);
+  const ntxNci   = needNCI ? totalCores * PRICING.nutanix.nciPerCorePerYear : 0;
 
   // ── Hyper-V ──
   const coresPerSrv     = S.cpus * S.cores;
@@ -600,16 +597,17 @@ function calculate() {
       accent: '#f97316',
       badge: '🆓 Free Tier',
       annualPrimary: pxComm,
-      annualAlt: pxStd,
-      annualAltLabel: 'w/ Standard subscription',
+      annualAlt: pxBasic,
+      annualAltLabel: 'w/ Basic subscription',
       tco3yr: pxComm * 3,
-      tco3yrAlt: pxStd * 3,
+      tco3yrAlt: pxBasic * 3,
       tcoLabel: '3-yr community',
-      tcoAltLabel: '3-yr standard sub',
+      tcoAltLabel: '3-yr basic sub',
       sublines: [
         { k:'Community', v:'FREE — open source (AGPL)', highlight:true },
-        { k:'Standard Sub', v:`$${pxStd.toLocaleString()}/yr (€110/socket — ${totalSockets} sockets)` },
-        { k:'Enterprise Sub', v:`$${pxEnt.toLocaleString()}/yr (€440/socket)` },
+        { k:'Basic Sub',   v:`$${pxBasic.toLocaleString()}/yr (~€355/socket — ${totalSockets} sockets)` },
+        { k:'Standard Sub', v:`$${pxStd.toLocaleString()}/yr (~€500/socket)` },
+        { k:'Premium Sub',  v:`$${pxPrem.toLocaleString()}/yr (~€1,060/socket)` },
         { k:'Ceph Storage', v:'Included — software free, hardware cost only' },
         { k:'No Core Min', v:'Pay for what you have — zero minimums' },
         { k:'GPU Passthru', v: feat.gpu ? 'Native, no extra license' : 'Supported natively' },
@@ -629,25 +627,21 @@ function calculate() {
         'No predictive DRS equivalent — manual or scripted balancing',
         'Migration from VMware requires effort (Import Wizard helps, but not all VMs convert cleanly)',
         'Smaller ecosystem: fewer backup vendor integrations vs VMware',
-        'Subscription per socket — 2P servers cost 2× — but still far cheaper than VMware',
+        'Paid subscriptions are per physical CPU socket — 2P servers cost 2× — but still far cheaper than VMware',
       ],
     },
     {
       id: 'nutanix', name: 'Nutanix AHV', abbr: 'Nutanix', icon: '🟢',
       accent: '#22c55e',
-      annualPrimary: ntxLow,
-      annualAlt: ntxHigh,
-      annualAltLabel: 'NCI Pro estimate',
-      tco3yr: ntxLow * 3,
-      tco3yrAlt: ntxHigh * 3,
-      tcoLabel: `3-yr NCI Starter (${S.hosts} nodes)`,
-      tcoAltLabel: '3-yr NCI Pro',
+      annualPrimary: ntxNci,
+      tco3yr: ntxNci * 3,
+      tcoLabel: `3-yr NCI estimate (${totalCores} physical cores)`,
       sublines: [
         { k:'AHV Hypervisor', v:'Free with any Nutanix license', highlight:true },
-        { k:'NCI License',    v:`$${ntxLow.toLocaleString()}–$${ntxHigh.toLocaleString()}/yr (${S.hosts} nodes × $100–200)` },
-        { k:'Prism Pro',      v: feat.vcenter ? `$${PRICING.nutanix.prismProPerNodePerYear * S.hosts}/yr add-on (${S.hosts} nodes)` : 'Prism Element free' },
+        { k:'NCI License',    v: needNCI ? `$${ntxNci.toLocaleString()}/yr (${totalCores} physical cores × ~$300/core)` : 'Not modeled unless NCI features selected' },
+        { k:'Prism',          v:'Prism Element included; Prism Central/Pro may add cost depending on bundle' },
         { k:'Storage',        v:'Nutanix DSF — HCI built-in, highly optimized' },
-        { k:'Pricing Model',  v:'Per node, NOT per core — predictable scaling' },
+        { k:'Pricing Model',  v:'Per physical CPU core, NOT per node' },
       ],
       features: {
         'Nutanix DSF':    feat.vsan  ? 'yes'     : 'na',
@@ -657,14 +651,14 @@ function calculate() {
         'NKE (K8s)':      feat.k8s   ? 'partial' : 'na',
         'Flow SDN':       'partial',
       },
-      verdict: 'Best for orgs buying new HCI hardware or those wanting a VMware-like experience with simpler, node-based pricing. Strongest enterprise support story after VMware.',
+      verdict: 'Best for orgs buying new HCI hardware or those wanting a VMware-like experience with integrated HCI operations. Strongest enterprise support story after VMware, but validate per-core NCI quotes carefully.',
       gotchas: [
         'AHV is free but NCI is required for HA, snapshots, and enterprise features',
         'Typically sold as validated hardware appliance — harder on commodity gear',
         'Nutanix Kubernetes Engine (NKE) is an extra cost add-on',
         'Flow networking (NSX equivalent) is also add-on',
         'Fewer backup vendor integrations vs VMware vSphere',
-        'Scale-out pricing: more hosts = more NCI licenses at per-node rate',
+        'Scale-out pricing follows physical CPU cores: more hosts, sockets, or cores increase NCI subscription cost',
       ],
     },
     {

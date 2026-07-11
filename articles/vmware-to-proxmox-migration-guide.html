@@ -203,7 +203,7 @@
 
     <p>In the Proxmox Datacenter Manager, navigate to: <strong>Datacenter → Storage → Add → ESXi</strong>. Enter the IP address or hostname of your ESXi host, your ESXi credentials, and click the "Skip Certificate Verification" checkbox if you're using self-signed certs (you are). Give it an ID name like <code>esxi-source</code>.</p>
 
-    <p><strong>Note on vCenter:</strong> You can point the wizard at a vCenter IP instead of a direct ESXi host. The wizard supports this, but community experience reports that vCenter-sourced migrations run slower. For most SMB environments, connecting directly to the ESXi host is faster and more predictable. For vCenter-managed clusters, test this in your environment before running production workloads through it.</p>
+    <p><strong>Note on vCenter:</strong> The ESXi Import Wizard connects directly to ESXi hosts. For environments managed by vCenter, you may need to connect to individual hosts or explore third-party migration tools that support vCenter as a source.</p>
 
     <h3 class="text-xl font-semibold text-white">Step 2: Browse the Datastore and Import</h3>
 
@@ -217,7 +217,7 @@
     </ul>
 
     <div class="callout">
-      <strong class="text-yellow-400">"Start Migration" checkbox:</strong> The wizard presents a "Start Migration" option that boots the VM while disk data is still streaming. This is sometimes described as "live migration" in documentation — it is not live-migrating a running VM. It means Proxmox starts the VM before the full disk transfer is complete. <strong>Unless you've tested this in a lab with your specific workload, leave it unchecked.</strong> Let the full disk transfer complete before booting.
+      <strong class="text-yellow-400">"Start after import" checkbox:</strong> Leave "Start after import" disabled until you have reviewed disk bus, NIC mapping, and boot order. This avoids booting into the wrong virtual hardware assumptions immediately after the disk transfer completes.
     </div>
 
     <h3 class="text-xl font-semibold text-white">Step 3: Boot and Validate</h3>

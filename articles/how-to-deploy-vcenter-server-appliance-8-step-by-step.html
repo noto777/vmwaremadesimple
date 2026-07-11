@@ -109,7 +109,7 @@
       <li><strong>DNS:</strong> Forward <em>and</em> reverse DNS records configured for your vCenter FQDN. This is non-negotiable — vCenter's SSO and certificate stack will fail without it.</li>
       <li><strong>NTP:</strong> ESXi host synced to a reliable NTP source. Clock drift causes Kerberos failures.</li>
       <li><strong>Network:</strong> Static IP reserved for vCenter, dedicated management VLAN recommended.</li>
-      <li><strong>Storage:</strong> See the sizing table below — minimum 579 GB. SSD or NVMe required.</li>
+      <li><strong>Storage:</strong> See the sizing table below — minimum 579 GB. SSD or NVMe strongly recommended (HDD works but is painfully slow for vSAN).</li>
       <li><strong>License key:</strong> Subscription-based vCenter/vSphere license from Broadcom. Current bundle options include vSphere Standard, vSphere Enterprise Plus, VVF, and VCF. Trial activation available.</li>
       <li><strong>Installer machine:</strong> A Windows, macOS, or Linux workstation from which you'll run the VCSA installer UI (needs network line-of-sight to the ESXi host).</li>
     </ul>
@@ -176,7 +176,7 @@
     <p><strong class="text-slate-200">For 99% of readers:</strong> Start with <strong class="text-slate-200">Tiny</strong>. It handles up to 10 hosts cleanly and still gives you the full vCenter feature set. You can always redeploy at a larger size — you cannot shrink in-place.</p>
 
     <div class="callout-green callout">
-      <strong class="text-green-400">Performance tip:</strong> Store the vCSA on SSD or NVMe. The vPostgres database is write-intensive during inventory operations, snapshot chains, and vSphere Lifecycle Manager image syncs. An HDD-backed datastore will cause intermittent lockups under load.
+      <strong class="text-green-400">Performance tip:</strong> Store the vCSA on SSD or NVMe. HDD works but is painfully slow for vSAN and vCenter operations. The vPostgres database is write-intensive during inventory operations, snapshot chains, and vSphere Lifecycle Manager image syncs. An HDD-backed datastore will cause intermittent lockups under load.
     </div>
 
     <h2 class="text-2xl font-bold text-white">Step 2: Download the VCSA Installer from Broadcom Support Portal</h2>
