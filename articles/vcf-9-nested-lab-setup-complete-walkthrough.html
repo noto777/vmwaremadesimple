@@ -132,12 +132,13 @@
 </tbody>
 </table>
 <p><em>(Baseline source: <a href="https://williamlam.com/2025/06/minimal-resources-for-deploying-vcf-9-0-in-a-lab.html">William Lam — Minimal Resources for Deploying VCF 9.0 in a Lab</a>. Verify current VCF 9.1 appliance sizing before deployment.)</em></p>
-<p><strong>The critical constraint is VCF Automation (VCFA):</strong> it requires a 24 vCPU VM. Your physical host must have <strong>at least 12 cores / 24 threads</strong> to deploy it. Many popular home lab mini-PCs (GMKtec K11, NUC 12s with 8-core CPUs) will hit this wall.</p>
+<blockquote><strong>VCF Automation is optional for lab purposes.</strong> VCFA (formerly vRealize Automation) is not required to learn VCF core operations, NSX, vSAN, or lifecycle management. If your goal is cert prep, feature exploration, or vSAN/NSX testing, skip VCFA entirely — it adds 24 vCPU and 96 GB RAM to your resource footprint for functionality most labs never use. The rest of this article works with or without VCFA deployed. Only deploy it if you specifically need to test automation/orchestration workflows.</blockquote>
+<p><strong>If you do deploy VCF Automation (VCFA):</strong> it requires a 24 vCPU VM. Your physical host must have <strong>at least 12 cores / 24 threads</strong>. Many popular home lab mini-PCs (GMKtec K11, NUC 12s with 8-core CPUs) will hit this wall.</p>
 <p>If you can't meet the 24 vCPU minimum, Broadcom's Tomas Fojta has confirmed you can manually edit the VCFA VM down to 16 vCPU (or even 12) via vSphere Client — YMMV on performance. <strong>Memory cannot be reduced without breaking VCFA entirely.</strong></p>
 <p><strong>Practical minimums for a nested lab:</strong></p>
 <ul>
-<li><strong>CPU:</strong> 12+ cores / 24+ threads (Intel i9/Xeon, AMD Ryzen 9/Threadripper — modern generation required)</li>
-<li><strong>RAM:</strong> 256 GB recommended for comfortable nested operation; 192 GB absolute minimum</li>
+<li><strong>CPU:</strong> 12+ cores / 24+ threads if deploying VCFA. 8+ cores / 16+ threads if skipping VCFA (most labs).</li>
+<li><strong>RAM:</strong> 256 GB recommended with VCFA; 128-160 GB sufficient without VCFA for comfortable nested operation.</li>
 <li><strong>Storage:</strong> 2 TB NVMe SSD for the foundation host datastore (thin provisioning helps; ~330 GB actually consumed)</li>
 </ul>
 <blockquote><strong>Community hardware picks:</strong> The Minisforum MS-A2 (16C/32T AMD Ryzen 9) runs full VCF 9.x including VCFA. Two units needed for a 2-node vSAN cluster with comfortable headroom. The ASUS NUC 15 Pro is another solid option. See <a href="https://lamw.github.io/community-lab-hardware-for-esxi9/">William Lam's community survey</a> for 50+ tested configurations.</blockquote>
