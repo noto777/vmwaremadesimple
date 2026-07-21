@@ -129,7 +129,8 @@
 <tr><td>VCF Operations Fleet Manager</td><td>4</td><td>12 GB</td><td>206 GB</td><td>~117 GB</td></tr>
 <tr><td>VCF Operations Collector</td><td>4</td><td>16 GB</td><td>280 GB</td><td>~11 GB</td></tr>
 <tr><td>VCF Automation (VCFA)</td><td>24</td><td>96 GB</td><td>626 GB</td><td>~72 GB</td></tr>
-<tr><td><strong>TOTALS</strong></td><td><strong>~48</strong></td><td><strong>~194 GB</strong></td><td><strong>~3.2 TB</strong></td><td><strong>~330 GB</strong></td></tr>
+<tr><td><strong>TOTAL (with VCFA)</strong></td><td><strong>~48</strong></td><td><strong>~194 GB</strong></td><td><strong>~3.2 TB</strong></td><td><strong>~330 GB</strong></td></tr>
+<tr><td><strong>TOTAL (without VCFA)</strong></td><td><strong>~24</strong></td><td><strong>~98 GB</strong></td><td><strong>~2.6 TB</strong></td><td><strong>~260 GB</strong></td></tr>
 </tbody>
 </table>
 <p><em>(Baseline source: <a href="https://williamlam.com/2025/06/minimal-resources-for-deploying-vcf-9-0-in-a-lab.html">William Lam — Minimal Resources for Deploying VCF 9.0 in a Lab</a>. Verify current VCF 9.1 appliance sizing before deployment.)</em></p>
@@ -161,8 +162,8 @@
 <p>VCF 9.1 still requires a minimum of <strong>3 ESXi hosts for vSAN (OSA or ESA)</strong>, or <strong>2 ESXi hosts for external storage (FC/NFS)</strong>. This is an improvement over VCF 5.x's 4-host vSAN minimum. For a single physical host lab, you'll use the <strong>single-host override</strong> (covered in the deployment steps).</p>
 <h3>Two Nested Lab Flavors</h3>
 <ol>
-<li>1. <strong>vSphere Foundation (VVF) Lab</strong> — ESXi + vCenter + basic networking and storage. Good for VCP-DV prep with lighter hardware demands.</li>
-<li>2. <strong>Full VCF 9.1 Lab</strong> — Complete stack: ESXi 9.1, NSX, VCF Operations, VCF Fleet Services, vSphere Kubernetes Service, with VCF Automation optional. Requires the full 194 GB RAM+ commitment only if you deploy VCFA. Best for VCF-related certifications and private-cloud operations practice.</li>
+<li>1. <strong>vSphere Foundation (VVF) Lab</strong> — ESXi + vCenter + basic networking and storage. No NSX required. Good for VCP-DV prep with lighter hardware demands (~24 vCPU, ~98 GB RAM without VCFA).</li>
+<li>2. <strong>Full VCF 9.1 Lab</strong> — Complete stack: ESXi 9.1, NSX, VCF Operations, VCF Fleet Services, vSphere Kubernetes Service, with VCF Automation optional. Most core VCF workflows are accessible in single-node mode, but HA behavior, scale testing, and some production topology features are not represented. Best for VCF-related certifications.</li>
 </ol>
 <h3>Critical: What Does NOT Work in Nested VCF 9.1</h3>
 <p>Before diving into deployment, know these hard limits:</p>
@@ -190,13 +191,13 @@
 <tr><td>NSX Transport</td><td>NSX control plane and data plane</td><td>VLAN 30</td></tr>
 </tbody>
 </table>
-<p><strong>On the foundation host, set port groups for NSX transport to Promiscuous Mode = Accept.</strong> Without this, nested nodes cannot communicate through NSX overlays.</p>
+<p><strong>On the foundation host, set port groups for NSX transport to Promiscuous Mode = Accept.</strong> Without this, nested nodes cannot communicate through NSX overlays. For nested ESXi host uplink port groups (management, vSAN, and NSX), enable Promiscuous Mode, MAC Address Changes, and Forged Transmits:</p>
 <pre><code class="language-bash">
-# Verify promiscuous mode via ESXCLI
+# Verify promiscuous mode via ESXCLI (use same port group name as creation)
 esxcli network vswitch standard portgroup policy security get \
   --portgroup-name "NSX-Transport"
 </code></pre>
-<p>Ensure MTU is consistent at 1500 across your lab unless your physical switch explicitly supports jumbo frames end-to-end.</p>
+<p><strong>MTU requirements:</strong> The NSX Tunnel Endpoint (TEP) requires <strong>minimum 1600 MTU</strong> for Geneve overlay traffic — standard 1500 will fail the VCF Installer network validation. Best practice is <strong>9000 (jumbo frames) end-to-end</strong> across all lab segments. If your physical switch doesn't support jumbo frames, see the TEP MTU bypass in the troubleshooting section.</p>
 <h2>Part III: Step-by-Step Deployment</h2>
 <h3>Step 1 — Install ESXi 9.1 on the Foundation Host</h3>
 <p>Download ESXi 9.1 from the <a href="https://support.broadcom.com/">Broadcom Support Portal</a> (VMUG Advantage members: use the VMUG portal instead). VMware's FAQ confirms free ESXi availability through 8.x; for 9.x, verify access and entitlement in the Broadcom/VMUG portal before planning a lab build. Boot from USB or ISO.</p>
@@ -236,21 +237,31 @@ Get-VirtualPortGroup -Name "NSX-Transport" | `
   Set-SecurityPolicy -AllowPromiscuous $true -ForgedTransmits $true -MacChanges $true
 </code></pre>
 <p><strong>Configure Virtual Switch for Nested Traffic:</strong></p>
+<p><strong>LAB HOST ONLY. Do not run on a production ESXi host.</strong></p>
 <pre><code class="language-bash">
-# ESXCLI: Create a vSwitch for nested lab traffic
+# ESXCLI: Create a vSwitch for nested lab traffic (9000 MTU for NSX TEP)
 esxcli network vswitch standard add -v vSwitch-Lab
-esxcli network vswitch standard set -v vSwitch-Lab -m 1500
+esxcli network vswitch standard set -v vSwitch-Lab -m 9000
 
-# Add port groups for each segment
+# Add port groups with VLAN IDs (use same names everywhere)
 esxcli network vswitch standard portgroup add -p "MGMT-Nested" -v vSwitch-Lab
+esxcli network vswitch standard portgroup set -p "MGMT-Nested" -v 10
+
 esxcli network vswitch standard portgroup add -p "vSAN-Nested" -v vSwitch-Lab
-esxcli network vswitch standard portgroup add -p "NSX-Nested" -v vSwitch-Lab
+esxcli network vswitch standard portgroup set -p "vSAN-Nested" -v 20
+
+esxcli network vswitch standard portgroup add -p "NSX-Transport" -v vSwitch-Lab
+esxcli network vswitch standard portgroup set -p "NSX-Transport" -v 30
 </code></pre>
+<blockquote><strong>VLAN model:</strong> These VLAN IDs are used by the outer (foundation) host's physical switch. If your physical switch handles VLAN tagging at the trunk port, match these to your actual switch config. If you're not using VLANs (simple lab switch), omit the <code>-v</code> flag — but VLAN separation is recommended for production-like NSX behavior.</blockquote>
 <h3>Step 3 — Deploy the VCF 9.1 Installer Appliance</h3>
 <p>In VCF 9.x, the old <strong>Cloud Builder</strong> is gone. It's replaced by the <strong>VCF Installer</strong> (OVA filename changes by release and build; verify the current VCF 9.1 OVA/build number in the Broadcom download portal before scripting deployment). This appliance handles the initial bringup and can optionally transform itself into the VCF Operations Fleet Manager post-deployment.</p>
-<p>Deploy via OVFTool or the vSphere Client OVA deploy wizard:</p>
+<p>Deploy via OVFTool or the vSphere Client OVA deploy wizard. <strong>Inspect the OVA properties first</strong> — property keys are case-sensitive and vary by appliance:</p>
 <pre><code class="language-bash">
-# Deploy via OVFTool
+# List OVF properties before deploying (verify exact keys)
+ovftool VCF-Installer-9.1.x.x-<verify-current-build>.ova | grep -i "Property"
+
+# Deploy via OVFTool (use property keys from output above)
 ovftool \
   --name="VCF-Installer" \
   --diskMode=thin \
@@ -261,30 +272,34 @@ ovftool \
   --prop:guestinfo.netmask0="255.255.255.0" \
   --prop:guestinfo.gateway="192.168.10.1" \
   --prop:guestinfo.DNS="192.168.10.53" \
-  VCF-SDDC-Manager-Appliance-9.1.x.x-&lt;verify-current-build&gt;.ova \
+  VCF-Installer-9.1.x.x-<verify-current-build>.ova \
   "vi://root@192.168.1.10/"
 </code></pre>
+<blockquote><strong>OVA filename note:</strong> The installer OVA may be named "VCF-Installer" or "VCF-SDDC-Manager-Appliance" depending on the Broadcom download portal build. They are the same appliance — the VCF Installer transforms into the SDDC Manager / VCF Operations Fleet Manager post-deployment. Check the download portal for the current filename.</blockquote>
 <p>Once powered on, access the VCF Installer UI at <code>https://&lt;installer-ip&gt;</code>. During the deployment workflow, choose <strong>VCF</strong> for the full Cloud Foundation stack or <strong>VVF</strong> for the smaller vSphere Foundation path. The host prep, nested ESXi networking, DNS/NTP, and datastore work in this guide still apply either way; NSX and workload-domain sections are only relevant to full VCF.</p>
 <h3>Step 4 — Single-Host Override (Lab Only)</h3>
-<p>By default, VCF 9.1 requires a minimum of 3 ESXi hosts for vSAN or 2 for external storage. For a single physical machine lab, apply this unsupported-but-community-validated override, but verify the feature flag for your exact 9.1 build before relying on it:</p>
+<p><strong>LAB HOST ONLY. Do not run on any production VCF Installer or management appliance.</strong> By default, VCF 9.1 requires a minimum of 3 ESXi hosts for vSAN or 2 for external storage. For a single physical machine lab, apply this unsupported-but-community-validated override. <strong>Use only ONE flag</strong> based on your build — check William Lam's resources for your specific VCF 9.x release:</p>
 <pre><code class="language-bash">
-# SSH into the VCF Installer appliance
-# For VCF 9.0.1 and later 9.x builds reported by the community — verify for 9.1:
-echo "feature.vcf.vgl-29121.single.host.domain=true" &gt;&gt; /home/vcf/feature.properties
+# SSH into the VCF Installer appliance as 'vcf' user
+# BACKUP FIRST:
+cp /home/vcf/feature.properties /home/vcf/feature.properties.bak.$(date +%F-%H%M)
 
-# For VCF 9.0.0 (original GA):
-echo "feature.vcf.internal.single.host.domain=true" &gt;&gt; /home/vcf/feature.properties
+# For VCF 9.0.1+ (including 9.1) — use ONLY this flag:
+echo "feature.vcf.vgl-29121.single.host.domain=true" >> /home/vcf/feature.properties
+
+# For VCF 9.0.0 (original GA only) — use this flag INSTEAD:
+# echo "feature.vcf.internal.single.host.domain=true" >> /home/vcf/feature.properties
 
 # Restart VCF Installer services
 echo 'y' | /opt/vmware/vcf/operationsmanager/scripts/cli/sddcmanager_restart_services.sh
 </code></pre>
-<blockquote><strong>Disclaimer:</strong> This override is not officially supported by Broadcom. Use exclusively for lab/learning purposes. Do not apply to production environments.</blockquote>
+<blockquote><strong>Disclaimer:</strong> This override is not officially supported by Broadcom. Use exclusively for lab/learning purposes. Do not apply to production environments. The wrong flag for your build will either be silently ignored or cause validation errors — verify before relying on it.</blockquote>
 <p>After restarting services, use the <strong>JSON deployment method</strong> instead of the interactive wizard — the UI still enforces the 3-host minimum at the front-end level. Upload your JSON with a single host reference and proceed directly to validation.</p>
 <h3>Step 5 — Deploy the VCF Fleet</h3>
 <p>With the installer configured, proceed through the bringup:</p>
 <ol>
 <li>1. <strong>Specify ESXi hosts</strong> — enter your nested ESXi host(s) with their credentials</li>
-<li>2. <strong>Choose storage:</strong> vSAN (OSA or ESA) or external. For nested labs, <strong>vSAN ESA is preferred</strong> — it uses NVMe-class storage policies and gives better lab parity with production. Apply the vSAN ESA Hardware Mock VIB if your disks aren't on the HCL.</li>
+<li>2. <strong>Choose storage:</strong> vSAN (OSA or ESA) or external. For first-time nested bringup, <strong>vSAN OSA is simpler</strong> — fewer validation gotchas. Use vSAN ESA only if you specifically want to learn ESA storage policies, and apply the vSAN ESA Hardware Mock VIB if your disks aren't on the HCL.</li>
 <li>3. <strong>Network topology</strong> — assign your pre-created port groups to the management, vSAN, and NSX transport roles</li>
 <li>4. <strong>Licenses</strong> — enter your VMUG Advantage VCF 9.1 token; VCF Operations License Server handling changed in 9.1, so confirm the Fleet/Operations license server workflow during bringup</li>
 <li>5. <strong>Depot</strong> — VCF 9.1 adds HTTP Offline Depot support, useful for isolated labs without direct Broadcom portal access</li>
@@ -295,7 +310,7 @@ echo 'y' | /opt/vmware/vcf/operationsmanager/scripts/cli/sddcmanager_restart_ser
 tail -f /var/log/vmware/vcf/vcf-bringup/vcf-bringup.log | grep -E "(INFO|WARN|ERROR)"
 </code></pre>
 <h3>Step 6 — Verify the VCF Fleet</h3>
-<p>Once bringup completes, log in to the VCF Operations UI (formerly the SDDC Manager UI) and verify that Fleet Services are healthy:</p>
+<p>Once bringup completes, log in to the VCF management UI exposed by your deployed management appliance (the VCF Operations Fleet Manager, which consolidates lifecycle and fleet management functions):</p>
 <pre><code>
 https://&lt;vcf-operations-fleet-manager-ip&gt;/ui
 </code></pre>
@@ -369,19 +384,32 @@ Get-VM "Nested-ESXi-01" | Get-HardDisk | Select Name, StorageFormat, DiskType
 <p><strong>Symptom:</strong> Nested hosts can't ping each other; vMotion fails; NSX shows transport nodes as Disconnected.</p>
 <p><strong>Fix checklist:</strong></p>
 <pre><code class="language-bash">
-# 1. Confirm Promiscuous Mode = Accept on NSX port groups
+# 1. Confirm Promiscuous Mode = Accept on NSX port groups (name must match creation)
 esxcli network vswitch standard portgroup policy security get \
-  --portgroup-name "NSX-Nested"
+  --portgroup-name "NSX-Transport"
 # macChanges, forgedTransmits, allowPromiscuous should all = true
 
-# 2. Check MTU consistency
+# 2. Check MTU consistency — must be 9000 (or minimum 1600) end-to-end
 esxcli network vswitch standard list
-# All vSwitches should show same MTU (typically 1500)
+# All vSwitches should show same MTU (9000 recommended)
 
 # 3. Check VLAN tagging
 esxcli network vswitch standard portgroup list
 # Ensure correct VLAN IDs match your physical switch config
 </code></pre>
+<h3>Issue 3b: VCF Installer Fails MTU Validation (TEP 1600 Check)</h3>
+<p><strong>Symptom:</strong> VCF Installer blocks deployment with MTU validation error on the NSX Tunnel Endpoint.</p>
+<p><strong>Cause:</strong> VCF requires minimum 1600 MTU for NSX TEP traffic. If your physical switch only supports 1500, the validation fails.</p>
+<p><strong>Fix (lab only):</strong> Bypass the MTU validation check on the VCF Installer (<a href="https://williamlam.com/2026/01/bypassing-the-esx-tunnel-endpoint-tep-1600-mtu-check-in-the-vcf-installer.html">source: William Lam</a>):</p>
+<pre><code class="language-bash">
+# SSH to VCF Installer as 'vcf' user
+sudo echo "validation.disable.network.connectivity.check=true" >> /etc/vmware/vcf/domainmanager/application.properties
+sudo echo "nsxt.mtu.validation.skip=true" >> /etc/vmware/vcf/domainmanager/application.properties
+
+# Restart services
+echo 'y' | /opt/vmware/vcf/operationsmanager/scripts/cli/sddcmanager_restart_services.sh
+</code></pre>
+<blockquote><strong>Warning:</strong> This bypasses a real validation. NSX overlay traffic will be fragmented at 1500 MTU, which can cause performance issues and packet drops under load. Use only for lab testing where jumbo frames are not available. Fix the underlying MTU if at all possible.</blockquote>
 <h3>Issue 4: vSAN ESA Shows "No Certified Disks Found"</h3>
 <p><strong>Symptom:</strong> VCF Installer fails vSAN ESA validation with disk HCL errors.</p>
 <p><strong>Fix:</strong> Deploy William Lam's <strong>vSAN ESA Hardware Mock VIB</strong> — compatible with both VCF 5.x and 9.0, works on physical and nested ESXi hosts:</p>
