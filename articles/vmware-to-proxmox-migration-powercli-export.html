@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VMware to Proxmox Migration: A Working Procedure With PowerCLI Export | VMwareMadeSimple</title>
+<meta name="description" content="Step-by-step VMware to Proxmox VE migration using PowerCLI export, qm importdisk, and Windows VirtIO driver fixes." />
+<meta name="keywords" content="vmware,proxmox,migration,powercli,vmdk,qcow2" />
+<link rel="canonical" href="https://vmwaremadesimple.com/articles/vmware-to-proxmox-migration-powercli-export.html" />
+<link rel="stylesheet" href="/css/style.css" />
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2NDPP0ZTKC"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-2NDPP0ZTKC');
+</script>
+
+<!-- Open Graph -->
+<meta property="og:title" content="VMware to Proxmox Migration: A Working Procedure With PowerCLI Export" />
+<meta property="og:description" content="Step-by-step VMware to Proxmox VE migration using PowerCLI export, qm importdisk, and Windows VirtIO driver fixes." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://vmwaremadesimple.com/articles/vmware-to-proxmox-migration-powercli-export.html" />
+
+<!-- Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "VMware to Proxmox Migration: A Working Procedure With PowerCLI Export",
+  "description": "Step-by-step VMware to Proxmox VE migration using PowerCLI export, qm importdisk, and Windows VirtIO driver fixes.",
+  "author": { "@type": "Organization", "name": "VMwareMadeSimple Editorial" },
+  "publisher": { "@type": "Organization", "name": "VMwareMadeSimple" },
+  "datePublished": "2026-07-21",
+  "dateModified": "2026-07-21",
+  "mainEntityOfPage": "https://vmwaremadesimple.com/articles/vmware-to-proxmox-migration-powercli-export.html"
+}
+</script>
+</head>
+<body>
+
+<!-- Alert strip -->
+<div class="alert-strip">
+  VCF 9.1 released — <a href="/articles/vcf-9-nested-lab-setup-complete-walkthrough.html">licensing and upgrade paths changed. Here's what's new →</a>
+</div>
+
+<!-- Masthead -->
+<div class="masthead">
+  <div class="masthead-inner">
+    <h1><a href="/">VMware<span class="red">MadeSimple</span></a></h1>
+    <div class="tagline">Independent VMware analysis for IT professionals. No vendor spin.</div>
+    <div class="credibility-bar">
+      <div class="creds">
+        <span><span class="dot">●</span> Independent</span>
+        <span><span class="dot">●</span> Sources linked</span>
+        <span><span class="dot">●</span> Updated weekly</span>
+        <span><span class="dot">●</span> Not affiliated with VMware/Broadcom</span>
+      </div>
+      <div class="social">
+        <a href="/sitemap.xml">RSS</a>
+        <a href="#newsletter">Newsletter</a>
+        <a href="mailto:contact@vmwaremadesimple.com">Contact</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Category nav -->
+<div class="navbar">
+  <div class="navbar-inner">
+    <a href="/">Home</a>
+    <a href="/#licensing" class="active">Licensing</a>
+    <a href="/#migration">Migration</a>
+    <a href="/#vcf">VCF 9.1</a>
+    <a href="/#homelab">Home Lab</a>
+    <a href="/#powercli">PowerCLI</a>
+    <a href="/#alternatives">Alternatives</a>
+    <a href="/tools/price-calculator.html">Tools</a>
+    <div class="nav-search">
+      <input type="text" placeholder="Search..." onkeyup="searchSite(this.value)" />
+    </div>
+  </div>
+</div>
+
+<!-- Article header -->
+<div class="article-header">
+  <div class="breadcrumb"><a href="/">Home</a> → Migration</div>
+  <div class="cat-label">Migration</div>
+  <h1>VMware to Proxmox Migration: A Working Procedure With PowerCLI Export</h1>
+  <div class="byline">
+    <span>Updated July 21, 2026</span>
+    <span>·</span>
+    <span>11 min read</span>
+    <span class="verified">Fact-checked</span>
+  </div>
+</div>
+
+<!-- Article body -->
+<div class="article-body">
+
+<h1>VMware to Proxmox Migration: A Working Procedure With PowerCLI Export</h1>
+<p>The Broadcom renewal quote is what brings shops here. A three-host environment that used to pay $3,000 a year in support can be staring at $9,720 a year for VVF if the renewal lands under the 72-core minimum, and the math stops working. Proxmox VE is the first alternative I would evaluate for this size of shop. The migration itself is less painful than the licensing conversation that preceded it, but less painful is not the same as painless, and the places it hurts are predictable if you know where to look.</p>
+<p>This is the procedure I run when moving VMs off ESXi onto Proxmox VE 9.0. It uses PowerCLI on the source side to export disks cleanly and Proxmox on the target side to import them. Which of the two paths through this you take depends on whether your ESXi host is still reachable over the network when you do the move.</p>
+<h2>What you are actually moving</h2>
+<p>A VMware VM is three things: a config file (.vmx), one or more disks (.vmdk), and a network identity. Proxmox does not care about your .vmx file. It generates its own config from scratch when you create the target VM. The disks are the only payload that has to physically cross the boundary, and they are also the only part that can corrupt if you rush it.</p>
+<p>Network identity is where people lose time. ESXi VMs run VMware Paravirtual SCSI controllers and E1000 or VMXNET3 NICs. Proxmox speaks VirtIO SCSI and VirtIO Net. Linux guests re-detect hardware on first boot and survive the swap in most cases. Windows guests do not, and that problem gets its own section below.</p>
+<h2>Two paths: the import wizard versus manual export</h2>
+<p>Proxmox VE 8.2 added the ESXi import wizard through the web UI, backed by the <code>pve-esxi-import-tools</code> package. It connects Proxmox directly to your ESXi host, lists the VMs, and pulls disks across with automatic VMDK-to-QCOW2 conversion. If your ESXi host is powered on and reachable from the Proxmox node, this is the faster path and the one Proxmox documents first.</p>
+<p>You take the manual path when the ESXi host is already powered down, when you are migrating from cold storage or a backup archive, or when the import wizard chokes on a specific VM. The manual path is also what you want if you need an auditable export artifact, an OVA you can re-import to VMware later as a rollback. Manual export works regardless of host state, and PowerCLI export is the part many migration notes skip.</p>
+<h2>Step 1: Inventory and export with PowerCLI</h2>
+<p>Connect to vCenter and get a clean inventory before you touch anything. You need to know which VMs have snapshots, because a VM with snapshots exports as a chain of delta files and the base disk alone is not a valid standalone VMDK.</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">Connect-VIServer</span> <span class="n">-Server</span> <span class="n">vcenter</span><span class="p">.</span><span class="n">yourdomain</span><span class="p">.</span><span class="n">local</span>
+
+<span class="c"># Snapshot check — do not export VMs with active snapshots</span>
+<span class="nb">Get-VM</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">ExtensionData</span><span class="p">.</span><span class="n">Snapshot</span> <span class="o">-ne</span> <span class="nv">$null</span> <span class="p">}</span> <span class="p">|</span>
+    <span class="nb">Select-Object</span> <span class="n">Name</span><span class="p">,</span> <span class="n">PowerState</span> <span class="p">|</span>
+    <span class="nb">Format-Table</span> <span class="n">-AutoSize</span>
+
+<span class="c"># Consolidate or commit snapshots first, then re-run the check</span>
+</code></pre></div>
+
+<p>Do not export VMs with active snapshots. Consolidate first so the exported VMDK is a clean standalone disk, not a delta-chain surprise discovered during import. I have watched someone lose four hours to this because the export "completed" and the imported VM would not boot.</p>
+<p>With the snapshot list empty, export the VM to OVA, which is a single tarball and easier to move than the loose OVF folder:</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">$vm</span> <span class="p">=</span> <span class="nb">Get-VM</span> <span class="n">-Name</span> <span class="s2">&quot;app-server-01&quot;</span>
+<span class="nv">$exportPath</span> <span class="p">=</span> <span class="s2">&quot;D:\migrations\app-server-01&quot;</span>
+
+<span class="c"># Export-VApp writes to the machine running PowerCLI, not the vCenter</span>
+<span class="nb">Export-VApp</span> <span class="n">-VM</span> <span class="nv">$vm</span> <span class="n">-Destination</span> <span class="nv">$exportPath</span> <span class="n">-Format</span> <span class="n">Ova</span>
+</code></pre></div>
+
+<p>Two warnings the cmdlet will not give you. Export-VApp stages the OVA in <code>$env:TEMP</code> on the PowerCLI host before writing the final file, so the temp drive needs free space equal to roughly twice the VM's provisioned disk size. A 12 TB VM ate someone's C: drive this way; point <code>$env:TEMP</code> at a volume with room before you run the export. Second, the VM does not need to be powered off to export, but a powered-on export captures the disk in a crash-consistent state. Shut the VM down first unless you have a specific reason not to.</p>
+<p>For environments where you want to script the whole estate, this loops every VM into its own OVA:</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">$targets</span> <span class="p">=</span> <span class="nb">Get-VM</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span>
+    <span class="nv">$_</span><span class="p">.</span><span class="n">ExtensionData</span><span class="p">.</span><span class="n">Snapshot</span> <span class="o">-eq</span> <span class="nv">$null</span> <span class="o">-and</span> <span class="nv">$_</span><span class="p">.</span><span class="n">PowerState</span> <span class="o">-eq</span> <span class="s2">&quot;PoweredOff&quot;</span>
+<span class="p">}</span>
+
+<span class="k">foreach</span> <span class="p">(</span><span class="nv">$vm</span> <span class="k">in</span> <span class="nv">$targets</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nv">$safe</span> <span class="p">=</span> <span class="s2">&quot;{0}-{1}&quot;</span> <span class="o">-f</span> <span class="p">(</span><span class="nv">$vm</span><span class="p">.</span><span class="n">Name</span> <span class="o">-replace</span> <span class="s1">&#39;[^\w\-]&#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">),</span> <span class="nv">$vm</span><span class="p">.</span><span class="n">Id</span><span class="p">.</span><span class="n">Split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)[-</span><span class="n">1</span><span class="p">]</span>
+    <span class="nb">Export-VApp</span> <span class="n">-VM</span> <span class="nv">$vm</span> <span class="n">-Destination</span> <span class="s2">&quot;D:\migrations\$safe&quot;</span> <span class="n">-Format</span> <span class="n">Ova</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>The character replacement matters. Proxmox VM names tolerate a smaller character set than vCenter, and spaces or parentheses in the source name will bite you later in the shell.</p>
+<h2>Step 2: Stage the disks on the Proxmox node</h2>
+<p>Move the OVA to the Proxmox node by SCP or a staging share. Extract the tarball to get at the VMDK inside:</p>
+<div class="codehilite"><pre><span></span><code>mkdir<span class="w"> </span>-p<span class="w"> </span>/mnt/staging/app-server-01
+tar<span class="w"> </span>-xvf<span class="w"> </span>/mnt/staging/app-server-01.ova<span class="w"> </span>-C<span class="w"> </span>/mnt/staging/app-server-01
+</code></pre></div>
+
+<p>You are left with a .ovf descriptor and one or more .vmdk files. The descriptor is readable text; open it once to confirm the disk format. ESXi exports thick-provisioned VMDKs by default, and <code>qm importdisk</code> handles those directly without a separate <code>qemu-img convert</code> step. Run the convert step only if you need a target format the importer will not produce on its own.</p>
+<p>If the staging volume and the Proxmox VM disk storage share the same physical disk, you need free space equal to roughly twice the VM size during import, because the VMDK is read while Proxmox writes the target disk. On directory storage that may be QCOW2; on ZFS it is usually a zvol. Compression may soften this, but check <code>zfs list</code> and <code>df -h</code> before starting a 500 GB import on a 600 GB pool.</p>
+<p>For moving the OVA offsite or to a colocation cabinet, a fast external SSD is worth the money. A USB 3.2 SSD is enough for small migrations; a Samsung T7-class drive keeps a 500 GB transfer from turning into a spinning-disk wait.</p>
+<h2>Step 3: Create the target VM and import the disk</h2>
+<p>Create the target VM in Proxmox first, without a disk. Match CPU count and memory, and pick VirtIO SCSI for the disk controller even though there is no disk yet. Note the VM ID, 102 in this example.</p>
+<div class="codehilite"><pre><span></span><code>qm<span class="w"> </span>importdisk<span class="w"> </span><span class="m">102</span><span class="w"> </span>/mnt/staging/app-server-01/app-server-01-disk0.vmdk<span class="w"> </span>local-zfs
+</code></pre></div>
+
+<p><code>local-zfs</code> is the storage pool name from <code>pvesm status</code>. The import attaches the disk as an unused disk on VM 102. Open VM 102 in the Proxmox web UI, find the unused disk under Hardware, and attach it to the SCSI bus with the VirtIO SCSI controller. Set it as the boot device under Options, Boot Order.</p>
+<p>For Linux guests, this is enough. Power on the VM. The guest re-detects the disk controller, the network card shows up as a new interface, and you log in via the Proxmox console to fix <code>/etc/netplan</code> or <code>/etc/sysconfig/network-scripts</code> for the new MAC. Downtime for a small Linux VM, from ESXi shutdown to Proxmox boot, is the disk transfer time plus five minutes.</p>
+<p>For a batch migration where you want the commands in one place, this is the full sequence after the OVA is extracted:</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">VMID</span><span class="o">=</span><span class="m">102</span>
+<span class="nv">STORAGE</span><span class="o">=</span>local-zfs
+qm<span class="w"> </span>create<span class="w"> </span><span class="nv">$VMID</span><span class="w"> </span>--name<span class="w"> </span>app-server-01<span class="w"> </span>--memory<span class="w"> </span><span class="m">8192</span><span class="w"> </span>--cores<span class="w"> </span><span class="m">4</span><span class="w"> </span>--ostype<span class="w"> </span>l26
+qm<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="nv">$VMID</span><span class="w"> </span>--scsihw<span class="w"> </span>virtio-scsi-pci<span class="w"> </span>--scsi0<span class="w"> </span><span class="si">${</span><span class="nv">STORAGE</span><span class="si">}</span>:0,import-from<span class="o">=</span>/mnt/staging/app-server-01/app-server-01-disk0.vmdk
+qm<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="nv">$VMID</span><span class="w"> </span>--net0<span class="w"> </span>virtio,bridge<span class="o">=</span>vmbr0
+qm<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="nv">$VMID</span><span class="w"> </span>--boot<span class="w"> </span><span class="nv">order</span><span class="o">=</span>scsi0
+</code></pre></div>
+
+<p>The <code>import-from</code> parameter on the disk definition handles the conversion inline, no separate <code>importdisk</code> call needed. This is the cleaner path on PVE 8.4 and later.</p>
+<h2>The Windows boot problem</h2>
+<p>Windows VMs commonly fail with <code>INACCESSIBLE_BOOT_DEVICE</code> when the boot disk moves from VMware PVSCSI to VirtIO SCSI without the VirtIO driver loaded first. The cause is that the Windows boot driver for the VMware Paravirtual SCSI controller loads at boot, and when the disk is suddenly on a VirtIO SCSI controller Windows has no driver for, the boot partition vanishes.</p>
+<p>The fix, documented by StarWind and on the Proxmox forums, is to stage the VirtIO storage drivers in Windows before migration or plan a SATA-first boot in Proxmox. Download the stable VirtIO ISO from Fedora People and place the storage, network, and Balloon drivers where Windows can load them after cutover. If that is not reliable in the source environment, import the VM, attach the boot disk as SATA for the first Proxmox boot, install VirtIO drivers from the ISO, shut down, then move the disk to VirtIO SCSI.</p>
+<p>Then shut down, export, and import. If the VM is already failing to boot, temporarily attach the disk to IDE or SATA instead of SCSI, boot Windows, install the VirtIO drivers, shut down, move the disk to the VirtIO SCSI bus, and reboot. It works but costs an extra cycle.</p>
+<p>Uninstall VMware Tools before the first Proxmox boot. Leftover Tools services cause hangs and the VMware network adapter shows up as a phantom device in Device Manager.</p>
+<h2>Networking translation</h2>
+<p>VMXNET3 maps cleanly to VirtIO Net. E1000 can also be replaced with VirtIO Net, but E1000 is emulated hardware, not paravirtualized. The guest-visible MAC address and interface name change either way, which means DHCP leases break and anything pinned to a MAC, such as VMware reservations, switch port security, or monitoring, needs to be re-pinned.</p>
+<p>If your VMware environment used VLAN trunking on a distributed switch, the Proxmox equivalent is a Linux bridge with VLAN awareness enabled, or a separate bridge per VLAN. For the migration window, a managed switch that can present the same VLANs to the Proxmox node saves re-cabling. A low-cost option like a <a href="https://www.amazon.com/s?k=tp-link+omada+managed+switch&amp;tag=vmwaremadesim-20">TP-Link Omada managed switch</a> handles VLAN trunking for a small rack without the enterprise price.</p>
+<p>Proxmox has no direct equivalent to VMware's distributed switch. Multi-host clusters use Corosync for cluster communication, and bridge configuration is per-node, synchronized through the cluster filesystem. It works, but the mental model is different, and network engineers used to dvSwitches should expect a short adjustment.</p>
+<h2>What it costs to land here</h2>
+<p>Proxmox VE is AGPL-licensed and free to run with no feature gating. The optional subscription buys access to the Enterprise repository and support, and is priced per occupied CPU socket per year. 2026 list prices, from Proxmox's pricing page and resellers, run approximately €355 per socket for Basic, €500 for Standard, and €1,060 for Premium. No per-core meter, no 72-core order minimum. The Community repository is free but Proxmox displays a nag on login if no subscription key is installed, which is cosmetic.</p>
+<p>Against VVF at the $135/core/year average list figure, a new order or subscription transition subject to the 72-core minimum would cost a three-host cluster of single-socket 16-core servers $9,720 a year with Broadcom and roughly €1,065 to €3,180 a year to Proxmox for the same three sockets, depending on tier. The math is what drives the migration, and it is not close. Verify current Proxmox and VMware list prices before quoting internally; reseller pricing in euros, dollar conversion, VMware term length, and Broadcom discounts all move the final number.</p>
+<p>For a structured reference on the Proxmox side, <a href="https://www.amazon.com/s?k=proxmox+ve+administration+book&amp;tag=vmwaremadesim-20">Proxmox VE Administration</a> covers clustering, storage, and backup in more depth than the wiki. It earns shelf space if Proxmox becomes the platform of record.</p>
+<h2>Where this procedure fails</h2>
+<p>The import path breaks in three places I have personally hit. Thin-provisioned source disks that were never consolidated import at their full provisioned size on the Proxmox side, which can blow up a pool sized for actual usage. Run <code>Get-HardDisk -DiskType Thin</code> and check the committed versus uncommitted values before you plan storage. Shared-disk VMs using VMware's physical or virtual RDM do not migrate through this path at all; they need a storage-level migration or re-architecture. And VMs with NVMe controllers or passthrough devices in ESXi require reconfiguration on the Proxmox side, because the device paths and passthrough mechanics are different.</p>
+<p>Rollback during the migration window is clean as long as you keep the source VM powered off and unmodified in ESXi until you have validated the Proxmox copy. The moment you power on and modify the Proxmox VM, the two diverge, and rolling back means losing whatever changed since cutover. Plan the validation window in advance, decide what success looks like, then decommission the source.</p>
+
+    <!-- Newsletter CTA -->
+<div class="newsletter-cta" id="newsletter">
+  <h3>Stay ahead of the VMware changes</h3>
+  <p>We're publishing detailed licensing breakdowns, comparison guides, migration walkthroughs, and cost calculators. Get them in your inbox.</p>
+  <input type="email" placeholder="your@email.com" />
+  <button>Subscribe</button>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div>
+    © 2026 VMwareMadeSimple.com — Independent. Not affiliated with VMware or Broadcom.
+    <div class="aff-disclosure" style="margin-top: 0.3rem;">Some links are affiliate links. See our <a href="#">disclosure policy</a>.</div>
+  </div>
+  <div class="footer-links">
+    <a href="#">About</a>
+    <a href="mailto:contact@vmwaremadesimple.com">Contact</a>
+    <a href="/sitemap.xml">RSS</a>
+    <a href="#">Privacy</a>
+    <a href="#">Corrections</a>
+  </div>
+</footer>
+
+<script>
+function searchSite(q) {
+  if (q.length < 2) return;
+  if (event && event.key === 'Enter') {
+    window.location.href = 'https://www.google.com/search?q=site:vmwaremadesimple.com+' + encodeURIComponent(q);
+  }
+}
+</script>
+
+</body>
+</html>
+
