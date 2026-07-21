@@ -40,23 +40,24 @@ sed \
     "$TEMPLATE" > "$OUTPUT.tmp"
 
 # Insert the body HTML before the newsletter CTA
-python3 -c "
+BODY_FILE=$(mktemp)
+printf '%s' "$BODY" > "$BODY_FILE"
+python3 - "$OUTPUT.tmp" "$BODY_FILE" > "$OUTPUT" <<'PY'
 import sys
-template = open('${OUTPUT}.tmp').read()
-body = '''${BODY}'''
-# Actually read body from file to avoid shell escaping issues
-body = sys.stdin.read()
+from pathlib import Path
+
+template_path = Path(sys.argv[1])
+body_path = Path(sys.argv[2])
+template = template_path.read_text()
+body = body_path.read_text()
 marker = '<!-- Newsletter CTA -->'
 if marker in template:
     result = template.replace(marker, body + '\n\n    ' + marker)
 else:
-    # Fallback: insert before closing article tag
     result = template.replace('</article>', body + '\n</article>')
 print(result)
-" < /dev/stdin > "$OUTPUT" 2>/dev/null || {
-    # Simpler fallback
-    cp "$OUTPUT.tmp" "$OUTPUT"
-}
+PY
+rm -f "$BODY_FILE"
 
 rm -f "$OUTPUT.tmp"
 
