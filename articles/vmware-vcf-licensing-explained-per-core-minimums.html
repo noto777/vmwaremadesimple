@@ -3,16 +3,11 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>VMware VCF Licensing Explained: Per-Core Minimums and What They Mean for Your Budget | VMwareMadeSimple</title>
-<meta name="description" content="VCF per-core licensing, the 16-core-per-CPU minimum, the 72-core order floor, and what real customers actually pay after negotiation in 2026." />
-<meta name="keywords" content="vmware,vcf,licensing,per-core,broadcom,72-core minimum,16-core minimum,subscription,pricing,2026" />
+<title>VCF Licensing Explained: Per-Core Minimums and Budget Impact | VMwareMadeSimple</title>
+<meta name="description" content="How VMware Cloud Foundation per-core pricing works with 16-core and 72-core minimums, and what it does to your budget." />
+<meta name="keywords" content="vmware,vcf,licensing,per-core,broadcom,pricing" />
 <link rel="canonical" href="https://vmwaremadesimple.com/articles/vmware-vcf-licensing-explained-per-core-minimums.html" />
 <link rel="stylesheet" href="/css/style.css" />
-
-<meta property="og:title" content="VMware VCF Licensing Explained: Per-Core Minimums and What They Mean for Your Budget" />
-<meta property="og:description" content="VCF per-core licensing, the 16-core-per-CPU minimum, the 72-core order floor, and what real customers actually pay after negotiation in 2026." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://vmwaremadesimple.com/articles/vmware-vcf-licensing-explained-per-core-minimums.html" />
 
 <!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-2NDPP0ZTKC"></script>
@@ -23,17 +18,23 @@
   gtag('config', 'G-2NDPP0ZTKC');
 </script>
 
+<!-- Open Graph -->
+<meta property="og:title" content="VCF Licensing Explained: Per-Core Minimums and Budget Impact" />
+<meta property="og:description" content="How VMware Cloud Foundation per-core pricing works with 16-core and 72-core minimums, and what it does to your budget." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://vmwaremadesimple.com/articles/vmware-vcf-licensing-explained-per-core-minimums.html" />
+
 <!-- Structured Data -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "VMware VCF Licensing Explained: Per-Core Minimums and What They Mean for Your Budget",
-  "description": "VCF per-core licensing, the 16-core-per-CPU minimum, the 72-core order floor, and what real customers actually pay after negotiation in 2026.",
+  "headline": "VCF Licensing Explained: Per-Core Minimums and Budget Impact",
+  "description": "How VMware Cloud Foundation per-core pricing works with 16-core and 72-core minimums, and what it does to your budget.",
   "author": { "@type": "Organization", "name": "VMwareMadeSimple Editorial" },
   "publisher": { "@type": "Organization", "name": "VMwareMadeSimple" },
-  "datePublished": "2026-07-11",
-  "dateModified": "2026-07-11",
+  "datePublished": "2026-07-21",
+  "dateModified": "2026-07-21",
   "mainEntityOfPage": "https://vmwaremadesimple.com/articles/vmware-vcf-licensing-explained-per-core-minimums.html"
 }
 </script>
@@ -70,7 +71,7 @@
 <div class="navbar">
   <div class="navbar-inner">
     <a href="/">Home</a>
-    <a href="/#licensing">Licensing</a>
+    <a href="/#licensing" class="active">Licensing</a>
     <a href="/#migration">Migration</a>
     <a href="/#vcf">VCF 9.1</a>
     <a href="/#homelab">Home Lab</a>
@@ -85,13 +86,13 @@
 
 <!-- Article header -->
 <div class="article-header">
-  <div class="breadcrumb"><a href="/">Home</a> → Broadcom Licensing</div>
-  <div class="cat-label">Broadcom Licensing</div>
-  <h1>VMware VCF Licensing Explained: Per-Core Minimums and What They Mean for Your Budget</h1>
+  <div class="breadcrumb"><a href="/">Home</a> → Licensing</div>
+  <div class="cat-label">Licensing</div>
+  <h1>VCF Licensing Explained: Per-Core Minimums and Budget Impact</h1>
   <div class="byline">
-    <span>July 11, 2026</span>
+    <span>Updated July 21, 2026</span>
     <span>·</span>
-    <span>12 min read</span>
+    <span>10 min read</span>
     <span class="verified">Fact-checked</span>
   </div>
 </div>
@@ -99,94 +100,229 @@
 <!-- Article body -->
 <div class="article-body">
 
-<p>Broadcom's per-core licensing includes two minimums that can multiply costs for organizations renewing or purchasing VMware subscriptions. Every physical CPU socket must be licensed for at least 16 cores, and new orders carry a 72-core minimum. Together these can add paid cores without changing hardware. In small environments, the added cores can turn into five-figure subscription increases depending on bundle, term, and discount.</p>
-<p>This replaces the old per-socket model entirely. New perpetual VMware licenses are no longer sold. Existing perpetual licenses with active SnS are still honored under contract terms, but new purchases and most transitions are subscription-based, priced per core, with minimums that can make small environments pay for capacity they do not have.</p>
-<p><strong>VCF 9.1 update:</strong> The licensing economics did not change with VCF 9.1. VCF remains per-core subscription licensing with the same 16-core-per-CPU minimum and 72-core order-minimum considerations. The 9.1 changes are operational — especially around VCF Operations License Server handling and Fleet-level management — not a reset of the pricing model.</p>
-<h2>VCF vs. VVF: what each bundle includes</h2>
-<p>Broadcom's current VMware subscription lineup centers on four per-core options: VCF, VVF, vSphere Standard, and vSphere Enterprise Plus. There are no new perpetual purchases and no per-VM metering. All physical cores on all ESXi hosts running VMware software must be licensed. There is no exclusion for test or development servers.</p>
-<p>VCF (VMware Cloud Foundation) is the full-stack bundle: vSphere Enterprise Plus, vSAN Enterprise, NSX, Aria Operations, Aria Automation, HCX, and vSphere Kubernetes Service (VKS). VVF (vSphere Foundation) is the smaller bundle: vSphere Enterprise Plus, vSAN Enterprise, and Aria Operations Standard. No NSX, no Automation, no HCX, and a limited Tanzu tier.</p>
-<p>Standalone vSphere options also exist: vSphere Standard and vSphere Enterprise Plus. Both are per-core hypervisor licensing options with no vSAN and no Aria; Enterprise Plus adds the higher-end vSphere feature set and is commonly referenced around $150/core/year. Organizations running 2- to 3-host environments that need only ESXi and vCenter may find these through their channel partner. Broadcom does not prominently advertise them.</p>
-<p>VCF list price is $350 per core per year. Broadcom positioned this as a 50% reduction from the initial post-acquisition pricing of $700 per core per year. VVF lists at $135 per core per year on average, ranging from $150 for 3-year terms to $190 for 1-year MSRP. GoVendorFree reports North American VCF quotes around $420 to $480 per core per year, and UK quotes around £380 to £440 per core per year, though those figures may include partner markup, support, or taxes. Confirm whether a quote includes support, VAT, and partner margin before comparing.</p>
-<p>The vSAN storage allocation is where the bundles split. VCF includes 1 TiB of vSAN capacity per core. VVF includes 0.25 TiB (250 GiB) per core, increased from 100 GiB as of November 2024 (vSphere 8.0 U3e). On a 192-core environment, that is 192 TiB versus 48 TiB. Storage-heavy workloads on VVF will require additional vSAN entitlement purchases. vSAN no longer activates automatically through the VCF or VVF solution key as of November 2024, per OTAVA and Broadcom documentation. Confirm current entitlement details with an account rep.</p>
-<p>For many VMware estates, NSX is the clearest functional separator between VCF and VVF. VCF includes full NSX with network virtualization, micro-segmentation, and distributed firewall. VVF includes zero NSX. Within Broadcom's current VMware bundles, VCF is the bundle that includes NSX. If a security team requires micro-segmentation, VCF is the path.</p>
-<p>VCF also includes Aria Suite/VCF Operations capabilities (Operations, Automation, and Logs) versus Aria Operations Standard in VVF. HCX, the migration tool for moving VMs between vCenters or cloud environments, is VCF-only. The vSphere Kubernetes Service (VKS) entitlement (renamed from Tanzu Kubernetes Grid in VCF 9 and carried forward in VCF 9.1) is broader in VCF than the limited Tanzu Standard tier in VVF.</p>
-<h2>The 16-core per CPU minimum</h2>
-<p>Every populated physical CPU socket must be licensed for at least 16 cores, regardless of how many physical cores the CPU actually has. This is documented in Broadcom KB 313548, updated June 17, 2026.</p>
-<p>The KB gives this example: a server with two CPUs that each have 8 physical cores. A reader might expect to license 16 cores total. The customer must instead purchase 32 cores, because the minimum subscription capacity is 16 cores per CPU. The calculation for each host is: take the higher of actual cores per CPU or 16, multiply by the number of populated sockets, then sum across all hosts.</p>
-<p>Count physical cores, not threads or hyperthreads. A 16-core CPU with hyperthreading enabled shows 32 logical processors to the OS, but the license count is 16 cores.</p>
-<p>For a dual-socket host with 8-core CPUs, the licensed core count doubles from 16 to 32. With 6-core CPUs, it rises from 12 to 32. Older hardware magnifies the gap between physical cores and licensed cores.</p>
-<p>To check current core counts via PowerCLI:</p>
-<pre><code class="language-powershell"># Audit all ESXi hosts connected to vCenter
-Get-VMHost | Select-Object Name,
-    @{N='Sockets';E={$_.ExtensionData.Hardware.CpuInfo.NumCpuPackages}},
-    @{N='CoresPerSocket';E={[int]($_.ExtensionData.Hardware.CpuInfo.NumCpuCores / $_.ExtensionData.Hardware.CpuInfo.NumCpuPackages)}}
-</code></pre>
+<h1>VMware VCF licensing explained: per-core minimums and what they mean for your budget</h1>
+<p>Broadcom's VMware licensing math is no longer socket math. For VMware Cloud Foundation, the number that matters is physical CPU cores, then the minimum rules get applied on top. That sounds like a small accounting change until a 3-host cluster with 48 real cores turns into a 72-core quote.</p>
+<p>I would not treat any VCF quote as complete until the core count has been rebuilt from hardware inventory. A renewal spreadsheet that still says "6 sockets" is missing the thing Broadcom now charges for.</p>
+<p>This article uses the latest licensing numbers in the site canonical facts file as of July 2026. The commercial model remains subscription-based and counted per physical core.</p>
+<h2>the numbers that drive the quote</h2>
+<p>Broadcom's own KB 313548 says VCF and VMware vSphere Foundation core licensing is based on the total number of physical CPU cores across all ESXi hosts being licensed. It also states the 16-core rule directly: each physical CPU must be licensed for at least 16 physical cores, even when the processor has fewer than 16.</p>
+<p>That means the licensing formula starts at the host, not the cluster:</p>
+<div class="codehilite"><pre><span></span><code>Billable cores per host = max(actual physical cores, physical CPU sockets x 16)
+</code></pre></div>
 
-<p>For a full audit that applies the 16-core minimum and flags the 72-core order minimum:</p>
-<pre><code class="language-powershell"># Full audit: licensed core count with 16-core minimum applied
-Get-VMHost | ForEach-Object {
-    $sockets = $_.ExtensionData.Hardware.CpuInfo.NumCpuPackages
-    $coresPerSocket = $_.ExtensionData.Hardware.CpuInfo.NumCpuCores / $sockets
-    $licensedCores = ([math]::Max($coresPerSocket, 16)) * $sockets
-    [PSCustomObject]@{
-        Host = $_.Name
-        Sockets = $sockets
-        PhysicalCores = $coresPerSocket * $sockets
-        LicensedCores = $licensedCores
-    }
-} | Format-Table -AutoSize
+<p>For a host with one 8-core CPU, the billable count is 16. For a host with two 12-core CPUs, the real count is 24 but the billable count is 32. For a host with two 24-core CPUs, the billable count is 48 because each CPU is already above the floor.</p>
+<p>Canonical pricing puts VCF at $350 per core per year at list. I would use $350 for worst-case budget modeling unless a reseller has provided a written discount. Discounts that appear in one renewal do not mean the same rate appears in the next term.</p>
+<p>Using the list number:</p>
+<table>
+<thead>
+<tr>
+<th>host design</th>
+<th style="text-align: right;">real cores</th>
+<th style="text-align: right;">billable cores</th>
+<th style="text-align: right;">VCF list per year</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3 hosts, 1 x 8-core CPU</td>
+<td style="text-align: right;">24</td>
+<td style="text-align: right;">48</td>
+<td style="text-align: right;">$16,800</td>
+</tr>
+<tr>
+<td>3 hosts, 1 x 16-core CPU</td>
+<td style="text-align: right;">48</td>
+<td style="text-align: right;">48</td>
+<td style="text-align: right;">$16,800</td>
+</tr>
+<tr>
+<td>3 hosts, 2 x 12-core CPU</td>
+<td style="text-align: right;">72</td>
+<td style="text-align: right;">96</td>
+<td style="text-align: right;">$33,600</td>
+</tr>
+<tr>
+<td>4 hosts, 2 x 16-core CPU</td>
+<td style="text-align: right;">128</td>
+<td style="text-align: right;">128</td>
+<td style="text-align: right;">$44,800</td>
+</tr>
+<tr>
+<td>6 hosts, 2 x 24-core CPU</td>
+<td style="text-align: right;">288</td>
+<td style="text-align: right;">288</td>
+<td style="text-align: right;">$100,800</td>
+</tr>
+</tbody>
+</table>
+<p>That table does not include support uplift, add-ons, partner services, taxes, or any term discount. It is list math only.</p>
+<h2>the 16-core floor is not a footnote</h2>
+<p>The 16-core-per-CPU rule hurts small hosts and older dual-socket systems. It also changes hardware refresh planning.</p>
+<p>A single-socket 16-core server and a single-socket 8-core server both license as 16 cores. If the workload can run on the 16-core part, the 8-core part saves no licensing money under VCF. It may still save hardware cost or power, but it does not reduce the VCF subscription line.</p>
+<p>Dual-socket low-core hosts are worse. A two-socket server with 10-core CPUs has 20 real cores but bills as 32. A two-socket server with 12-core CPUs has 24 real cores and also bills as 32. In a 4-host cluster, that is 128 billable cores even though the estate may have only 80 to 96 real cores.</p>
+<p>This is where I have seen bad renewal data start. Someone exports sockets from vCenter, multiplies by a rough old per-socket number, then compares that to a Broadcom per-core quote. The comparison is wrong twice. The old metric is gone for new subscription purchases, and the 16-core floor can add cores that are not physically installed.</p>
+<p>Use PowerCLI to pull the data from vCenter:</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">Connect-VIServer</span> <span class="n">-Server</span> <span class="n">vcenter</span><span class="p">.</span><span class="n">example</span><span class="p">.</span><span class="n">com</span>
 
-# Sum total and check 72-core minimum
-$total = Get-VMHost | ForEach-Object {
-    $sockets = $_.ExtensionData.Hardware.CpuInfo.NumCpuPackages
-    $coresPerSocket = $_.ExtensionData.Hardware.CpuInfo.NumCpuCores / $sockets
-    ([math]::Max($coresPerSocket, 16)) * $sockets
-} | Measure-Object -Sum
-Write-Host "Total licensed cores: $($total.Sum)"
-Write-Host "72-core minimum applies: $(if ($total.Sum -lt 72) { 'YES - must purchase 72' } else { 'No' })"
-</code></pre>
+<span class="nb">Get-VMHost</span> <span class="p">|</span> <span class="nb">Sort-Object</span> <span class="n">Name</span> <span class="p">|</span> <span class="k">ForEach</span><span class="n">-Object</span> <span class="p">{</span>
+    <span class="nv">$view</span> <span class="p">=</span> <span class="nv">$_</span> <span class="p">|</span> <span class="nb">Get-View</span>
+    <span class="nv">$sockets</span> <span class="p">=</span> <span class="nv">$view</span><span class="p">.</span><span class="n">Hardware</span><span class="p">.</span><span class="n">CpuInfo</span><span class="p">.</span><span class="n">NumCpuPackages</span>
+    <span class="nv">$cores</span> <span class="p">=</span> <span class="nv">$view</span><span class="p">.</span><span class="n">Hardware</span><span class="p">.</span><span class="n">CpuInfo</span><span class="p">.</span><span class="n">NumCpuCores</span>
+    <span class="nv">$billable</span> <span class="p">=</span> <span class="no">[math]</span><span class="p">::</span><span class="n">Max</span><span class="p">(</span><span class="nv">$cores</span><span class="p">,</span> <span class="nv">$sockets</span> <span class="p">*</span> <span class="n">16</span><span class="p">)</span>
 
-<p>Without vCenter, check each host directly: Host &gt; Hardware &gt; CPU Processors, and look at the Cores per socket value.</p>
-<h2>The 72-core order minimum</h2>
-<p>Broadcom introduced a 72-core minimum purchase per order in April 2025. This applies to VCF, VVF, and vSphere Standard. If the total licensed cores across all servers is less than 72, the customer must purchase 72 cores worth of licensing anyway.</p>
-<p>Reporting from StarWind (November 2025) suggested the minimum was reversed after industry backlash. That is partially wrong. The minimum still applies to new orders, subscription transitions, and tier changes. What changed is that Broadcom allows smaller commitments for renewals under certain conditions, typically when the customer signs a multi-year term.</p>
-<p>For environments below 72 licensed cores, the order minimum can dominate the renewal math. A 3-host cluster with dual 16-core CPUs (96 cores) clears it. A 2-host cluster with the same CPUs (64 cores) does not, and must license 72 cores despite having 64.</p>
-<p>Several reseller and customer reports describe late-renewal penalties around 20% when subscriptions lapse before renewal. This is separate from the core minimums but compounds the cost pressure on small shops deciding whether to renew or migrate.</p>
-<h2>Calculating the actual cost</h2>
-<p>Use this calculation:</p>
-<ol>
-<li>Count physical cores per CPU on each host (not threads)</li>
-<li>Apply the 16-core minimum per CPU (take the higher of actual or 16)</li>
-<li>Multiply by the number of populated sockets per host</li>
-<li>Sum across all hosts</li>
-<li>Apply the 72-core order minimum if the total is below 72</li>
-<li>Multiply by the per-core rate ($350 list for VCF, $135 for VVF)</li>
-<li>Multiply by the number of years in the subscription term</li>
-</ol>
-<p>Worked example: 3 hosts, each dual-socket 32-core Intel Xeon (64 cores per host, 192 total). At VCF list price: $350 × 192 × 3 years = $201,600. At VVF: $135 × 192 × 3 years = $77,760. The $123,840 delta buys NSX, Aria Automation, HCX, a broader Tanzu entitlement, and a larger included vSAN allocation.</p>
-<p>CPU density changes the licensing bill. A server with two 8-core CPUs (16 physical cores) must license 32 cores because of the 16-core-per-socket minimum. A server with one 16-core CPU licenses only 16 cores. Same total physical cores, double the licensing cost. When buying <a href="https://www.amazon.com/s?k=Intel+Xeon+Silver+4314+server&amp;tag=vmwaremadesim-20">server hardware</a> before a renewal, compare socket count and cores per socket before purchase. Do not choose CPUs based only on acquisition price.</p>
-<h2>What customers are paying</h2>
-<p>Public reports suggest many customers negotiate below list, while some reseller quotes land above Broadcom's list price after markup.</p>
-<p>Public forum anecdotes are not a price sheet, but they show the spread customers are seeing. A Reddit user on r/vmware negotiated $165 per core per year on a three-year VCF deal in December 2025. That is 53% off list, and it took months of negotiation. Another user with 256 cores and 448 TB of vSAN saw an 80% increase on a VVF renewal in April 2026. A Spiceworks user reported a renewal going from approximately $1,100 per socket per year to a minimum of $10,000 per year.</p>
-<p>In the AT&amp;T/Broadcom contract dispute, AT&amp;T alleged a 1,050% price increase. That is a legal dispute between two large enterprises, not a typical customer renewal, but it illustrates the direction of pricing under the new model.</p>
-<p>Across the Reddit, Spiceworks, and GoVendorFree reports cited above, VCF runs roughly $165 to $480 per core per year depending on negotiation leverage and region. VVF runs roughly $100 to $190 per core per year. The sample is not a formal market survey.</p>
-<p>Reported negotiation levers include three-year terms, reducing core count before renewal by consolidating VMs and decommissioning hosts, showing a credible migration plan, and working through a Broadcom partner instead of buying direct. Some public customer reports describe support cost increases of 3x to 5x over prior SnS pricing. Treat that as anecdotal unless a reseller quote confirms it.</p>
-<h2>Who should pay for VCF</h2>
-<p>VCF makes sense if the environment needs NSX, is building a private cloud platform, uses Aria Automation for provisioning, needs HCX for migration, or runs substantial Kubernetes workloads through Tanzu.</p>
-<p>VVF makes sense if the environment needs vSphere and vSAN but not NSX, and does not use Aria Automation or HCX.</p>
-<p>Below 72 licensed cores, the order minimum can make VCF and VVF cost more than the features are worth unless the environment specifically needs vSAN, NSX, Aria, or Broadcom support. In that scenario, <a href="https://www.amazon.com/s?k=Proxmox+VE+subscription&amp;tag=vmwaremadesim-20">Proxmox VE</a>, Hyper-V, or Nutanix AHV are worth evaluating. For a home lab or small test environment, a <a href="https://www.vmug.com/membership/vmug-advantage-membership/">VMUG Advantage</a> membership at $200/year provides lab access to the full suite without per-core licensing.</p>
+    <span class="no">[PSCustomObject]</span><span class="p">@{</span>
+        <span class="n">Host</span> <span class="p">=</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Name</span>
+        <span class="n">Sockets</span> <span class="p">=</span> <span class="nv">$sockets</span>
+        <span class="n">PhysicalCores</span> <span class="p">=</span> <span class="nv">$cores</span>
+        <span class="n">BillableCores</span> <span class="p">=</span> <span class="nv">$billable</span>
+    <span class="p">}</span>
+<span class="p">}</span> <span class="p">|</span> <span class="nb">Format-Table</span> <span class="n">-AutoSize</span>
+</code></pre></div>
 
-</div>
-<!-- /article-body -->
+<p>Then total it:</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">$total</span> <span class="p">=</span> <span class="nb">Get-VMHost</span> <span class="p">|</span> <span class="k">ForEach</span><span class="n">-Object</span> <span class="p">{</span>
+    <span class="nv">$view</span> <span class="p">=</span> <span class="nv">$_</span> <span class="p">|</span> <span class="nb">Get-View</span>
+    <span class="nv">$sockets</span> <span class="p">=</span> <span class="nv">$view</span><span class="p">.</span><span class="n">Hardware</span><span class="p">.</span><span class="n">CpuInfo</span><span class="p">.</span><span class="n">NumCpuPackages</span>
+    <span class="nv">$cores</span> <span class="p">=</span> <span class="nv">$view</span><span class="p">.</span><span class="n">Hardware</span><span class="p">.</span><span class="n">CpuInfo</span><span class="p">.</span><span class="n">NumCpuCores</span>
+    <span class="no">[math]</span><span class="p">::</span><span class="n">Max</span><span class="p">(</span><span class="nv">$cores</span><span class="p">,</span> <span class="nv">$sockets</span> <span class="p">*</span> <span class="n">16</span><span class="p">)</span>
+<span class="p">}</span> <span class="p">|</span> <span class="nb">Measure-Object</span> <span class="n">-Sum</span>
 
-<!-- Newsletter CTA -->
+<span class="s2">&quot;Billable cores before any order floor: </span><span class="p">$(</span><span class="nv">$total</span><span class="p">.</span><span class="n">Sum</span><span class="p">)</span><span class="s2">&quot;</span>
+<span class="s1">&#39;VCF list budget at $350/core/year: {0:N0}&#39;</span> <span class="o">-f</span> <span class="p">(</span><span class="nv">$total</span><span class="p">.</span><span class="n">Sum</span> <span class="p">*</span> <span class="n">350</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Do not use Windows WMI or CIM queries for ESXi hosts. ESXi is not Windows. The data is already in the vSphere API.</p>
+<h2>the 72-core order problem is messy</h2>
+<p>Broadcom introduced a 72-core per-order minimum in April 2025. After backlash, it was partially reversed for some existing renewals, but it still applies to new orders, subscription transitions, and tier changes. Treat reseller quotes below 72 cores as something to verify in writing.</p>
+<p>Those statements are not identical, and that matters. Public documentation and reseller behavior have not lined up cleanly across every region, partner, and transaction type.</p>
+<p>For budgeting, I would model two numbers for any small environment:</p>
+<div class="codehilite"><pre><span></span><code>Scenario A: total billable cores after 16-core CPU floor
+Scenario B: max(total billable cores, 72)
+</code></pre></div>
+
+<p>A 3-host cluster with one 16-core CPU per host has 48 billable cores after the 16-core CPU rule. At VCF list, that is $16,800 per year. If a 72-core order floor is applied, the same cluster becomes $25,200 per year. That is an extra $8,400 per year for cores that do not exist in the rack.</p>
+<p>A 2-host edge cluster with one 12-core CPU per host has 24 real cores, 32 billable cores after the CPU floor, and potentially 72 cores if the order floor appears. At $350 per core per year, that range is $11,200 to $25,200 per year.</p>
+<p>Ask the reseller to state the rule in writing for the exact transaction:</p>
+<div class="codehilite"><pre><span></span><code>Does this quote enforce a 72-core minimum?
+Is that minimum per order, per site, per product, or per ELA?
+Does it apply to renewals, new subscriptions, tier changes, or all three?
+If the quote is below 72 cores, will Broadcom accept the order?
+</code></pre></div>
+
+<p>If the answer is verbal, it is not enough for budget approval. The CFO will see the invoice, not the call notes.</p>
+<h2>VCF versus VVF changes the storage math</h2>
+<p>VCF is not only vSphere. It bundles the larger private cloud stack, including vSphere, vSAN, NSX, Aria components, SDDC Manager, and related lifecycle tooling. The licensing decision should include whether those components are deployed or planned.</p>
+<p>The vSAN entitlement is different between VCF and VVF. Broadcom KB 313548 states VCF provides 1 TiB of vSAN entitlement for each VCF core purchased. The same KB states VVF provides 0.25 TiB of vSAN entitlement for each VVF core purchased.</p>
+<p>On 96 licensed cores:</p>
+<table>
+<thead>
+<tr>
+<th>bundle</th>
+<th style="text-align: right;">vSAN entitlement</th>
+<th style="text-align: right;">included vSAN capacity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VCF</td>
+<td style="text-align: right;">1 TiB per core</td>
+<td style="text-align: right;">96 TiB</td>
+</tr>
+<tr>
+<td>VVF</td>
+<td style="text-align: right;">0.25 TiB per core</td>
+<td style="text-align: right;">24 TiB</td>
+</tr>
+</tbody>
+</table>
+<p>That does not mean every shop should buy VCF for storage. It means a vSAN-heavy environment can have a different answer from a vSphere-only cluster on an external array. A small cluster booting VMs from Fibre Channel or NFS may be paying for storage and networking features it will not run.</p>
+<p>Raw vSAN capacity matters here, not usable capacity after failures-to-tolerate policy overhead. Broadcom's KB describes vSAN capacity licensing as total raw physical storage in TiB contributed by hosts to vSAN clusters. If a cluster has 120 TiB raw and only 96 TiB is entitled by the core subscription, the gap has to be handled with additional vSAN capacity licensing.</p>
+<h2>budget examples that expose the trap</h2>
+<p>Here are three budget models using VCF list pricing at $350 per core per year. They are not quotes. They are arithmetic checks before quote review.</p>
+<table>
+<thead>
+<tr>
+<th>environment</th>
+<th>hardware</th>
+<th style="text-align: right;">billable cores</th>
+<th style="text-align: right;">VCF list/year</th>
+<th style="text-align: right;">3-year list</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>small vSphere cluster</td>
+<td>3 hosts, 1 x 16-core CPU</td>
+<td style="text-align: right;">48</td>
+<td style="text-align: right;">$16,800</td>
+<td style="text-align: right;">$50,400</td>
+</tr>
+<tr>
+<td>same cluster with 72-core floor</td>
+<td>3 hosts, 1 x 16-core CPU</td>
+<td style="text-align: right;">72</td>
+<td style="text-align: right;">$25,200</td>
+<td style="text-align: right;">$75,600</td>
+</tr>
+<tr>
+<td>edge cluster</td>
+<td>2 hosts, 2 x 8-core CPU</td>
+<td style="text-align: right;">64</td>
+<td style="text-align: right;">$22,400</td>
+<td style="text-align: right;">$67,200</td>
+</tr>
+<tr>
+<td>midmarket cluster</td>
+<td>5 hosts, 2 x 24-core CPU</td>
+<td style="text-align: right;">240</td>
+<td style="text-align: right;">$84,000</td>
+<td style="text-align: right;">$252,000</td>
+</tr>
+<tr>
+<td>dense cluster</td>
+<td>4 hosts, 2 x 64-core CPU</td>
+<td style="text-align: right;">512</td>
+<td style="text-align: right;">$179,200</td>
+<td style="text-align: right;">$537,600</td>
+</tr>
+</tbody>
+</table>
+<p>The edge example is easy to underestimate. Two hosts with two 8-core CPUs each have only 32 real cores across the site, but the 16-core-per-CPU floor doubles the licensing count to 64. If a 72-core order floor is enforced, the cost rises again to $25,200 per year.</p>
+<p>The dense cluster has the opposite issue. The 16-core floor does nothing because the CPUs are far above 16 cores. The bill is large because the actual core count is large. This is where old "per socket" thinking breaks hardest: two sockets can now mean 32 cores, 64 cores, 128 cores, or more.</p>
+<h2>hardware choices now affect software spend</h2>
+<p>Server design now has a direct subscription cost effect. Before buying refresh hardware, run the licensing math against the CPU SKUs.</p>
+<p>A 2-socket host with two 16-core CPUs and a 1-socket host with one 32-core CPU both license as 32 cores. The single-socket design may lose memory channels, PCIe lanes, or vendor-supported configurations, so the licensing answer cannot be the only answer. But if both designs meet the workload requirement, the VMware bill is identical.</p>
+<p>A 2-socket host with two 8-core CPUs is different. It licenses as 32 cores even though it has 16 real cores. If that host exists because of an older purchasing pattern, it may be a bad fit for VCF subscription economics.</p>
+<p>For lab planning or admin refresh work, I would separate training gear from production licensing decisions. A <a href="https://www.amazon.com/s?k=VMware+vSphere+8+administration&amp;tag=vmwaremadesim-20">VMware vSphere 8 administration book</a> may help staff get through the new operational model, but it will not answer the commercial question. For home labs, used <a href="https://www.amazon.com/s?k=used+Dell+PowerEdge+server&amp;tag=vmwaremadesim-20">Dell PowerEdge servers</a> can be useful, but do not model a production VCF budget from random lab hardware with old low-core CPUs.</p>
+<h2>what to verify before signing</h2>
+<p>Before approving a VCF renewal or migration quote, I would ask for these items in writing:</p>
+<ul>
+<li>Product bundle: VCF, VVF, vSphere Standard, or another SKU.</li>
+<li>Term: 1, 3, or 5 years.</li>
+<li>Per-core price before and after discount.</li>
+<li>Physical hosts included in the license count.</li>
+<li>Core count per host and the 16-core-per-CPU calculation.</li>
+<li>Whether any 72-core minimum is applied.</li>
+<li>vSAN raw TiB included and any add-on capacity required.</li>
+<li>Upgrade rights for VCF 9.1 and later releases.</li>
+<li>Support level and renewal date.</li>
+<li>True-up process for adding hosts or replacing CPUs mid-term.</li>
+</ul>
+<p>The risky quote is the one that only shows a total. A total without core math cannot be checked against vCenter inventory, cannot be reconciled against a hardware refresh plan, and cannot show whether the reseller applied a floor.</p>
+<h2>sources</h2>
+<ul>
+<li>Broadcom KB 313548, "Counting Cores for VMware Cloud Foundation and vSphere Foundation and TiBs for vSAN" - 16-core-per-CPU rule, VCF 1 TiB/core vSAN entitlement, VVF 0.25 TiB/core vSAN entitlement.</li>
+<li>Broadcom TechDocs, "VMware Cloud Foundation 9.1 Release Notes" - VCF 9.1, May 12, 2026, build 25377994.</li>
+<li>Atonement Licensing, "VMware Cloud Foundation Licensing 2026: Per-Core Rules" - VCF list price around $350/core/year and 2026 discount observations.</li>
+<li>Licenseware, "VMware Walks Back Controversial Licensing Change After Industry Backlash" - May 2025 reporting on the disputed 72-core minimum and rollback.</li>
+</ul>
+
+    <!-- Newsletter CTA -->
 <div class="newsletter-cta" id="newsletter">
   <h3>Stay ahead of the VMware changes</h3>
-  <p>We're publishing detailed comparison guides, migration walkthroughs, and cost calculators. Get them in your inbox.</p>
-  <form onsubmit="handleSubscribe(event)">
-    <input type="email" placeholder="your@email.com" required />
-    <button type="submit">Subscribe</button>
-  </form>
+  <p>We're publishing detailed licensing breakdowns, comparison guides, migration walkthroughs, and cost calculators. Get them in your inbox.</p>
+  <input type="email" placeholder="your@email.com" />
+  <button>Subscribe</button>
 </div>
 
 <!-- Footer -->
@@ -211,12 +347,8 @@ function searchSite(q) {
     window.location.href = 'https://www.google.com/search?q=site:vmwaremadesimple.com+' + encodeURIComponent(q);
   }
 }
-function handleSubscribe(e) {
-  e.preventDefault();
-  alert('Thanks! We\'ll be in touch soon.');
-  e.target.reset();
-}
 </script>
 
 </body>
 </html>
+
