@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VMware Subscription vs Perpetual License: What Happens to Your Existing Licenses | VMwareMadeSimple</title>
+<meta name="description" content="Broadcom killed perpetual VMware licenses. What survives, what lapses, and how to plan the subscription transition." />
+<meta name="keywords" content="vmware,subscription,perpetual license,broadcom,licensing,renewal" />
+<link rel="canonical" href="https://vmwaremadesimple.com/articles/vmware-subscription-vs-perpetual-license.html" />
+<link rel="stylesheet" href="/css/style.css" />
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2NDPP0ZTKC"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-2NDPP0ZTKC');
+</script>
+
+<!-- Open Graph -->
+<meta property="og:title" content="VMware Subscription vs Perpetual License: What Happens to Your Existing Licenses" />
+<meta property="og:description" content="Broadcom killed perpetual VMware licenses. What survives, what lapses, and how to plan the subscription transition." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://vmwaremadesimple.com/articles/vmware-subscription-vs-perpetual-license.html" />
+
+<!-- Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "VMware Subscription vs Perpetual License: What Happens to Your Existing Licenses",
+  "description": "Broadcom killed perpetual VMware licenses. What survives, what lapses, and how to plan the subscription transition.",
+  "author": { "@type": "Organization", "name": "VMwareMadeSimple Editorial" },
+  "publisher": { "@type": "Organization", "name": "VMwareMadeSimple" },
+  "datePublished": "2026-07-21",
+  "dateModified": "2026-07-21",
+  "mainEntityOfPage": "https://vmwaremadesimple.com/articles/vmware-subscription-vs-perpetual-license.html"
+}
+</script>
+</head>
+<body>
+
+<!-- Alert strip -->
+<div class="alert-strip">
+  VCF 9.1 released — <a href="/articles/vcf-9-nested-lab-setup-complete-walkthrough.html">licensing and upgrade paths changed. Here's what's new →</a>
+</div>
+
+<!-- Masthead -->
+<div class="masthead">
+  <div class="masthead-inner">
+    <h1><a href="/">VMware<span class="red">MadeSimple</span></a></h1>
+    <div class="tagline">Independent VMware analysis for IT professionals. No vendor spin.</div>
+    <div class="credibility-bar">
+      <div class="creds">
+        <span><span class="dot">●</span> Independent</span>
+        <span><span class="dot">●</span> Sources linked</span>
+        <span><span class="dot">●</span> Updated weekly</span>
+        <span><span class="dot">●</span> Not affiliated with VMware/Broadcom</span>
+      </div>
+      <div class="social">
+        <a href="/sitemap.xml">RSS</a>
+        <a href="#newsletter">Newsletter</a>
+        <a href="mailto:contact@vmwaremadesimple.com">Contact</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Category nav -->
+<div class="navbar">
+  <div class="navbar-inner">
+    <a href="/">Home</a>
+    <a href="/#licensing" class="active">Licensing</a>
+    <a href="/#migration">Migration</a>
+    <a href="/#vcf">VCF 9.1</a>
+    <a href="/#homelab">Home Lab</a>
+    <a href="/#powercli">PowerCLI</a>
+    <a href="/#alternatives">Alternatives</a>
+    <a href="/tools/price-calculator.html">Tools</a>
+    <div class="nav-search">
+      <input type="text" placeholder="Search..." onkeyup="searchSite(this.value)" />
+    </div>
+  </div>
+</div>
+
+<!-- Article header -->
+<div class="article-header">
+  <div class="breadcrumb"><a href="/">Home</a> → Licensing</div>
+  <div class="cat-label">Licensing</div>
+  <h1>VMware Subscription vs Perpetual License: What Happens to Your Existing Licenses</h1>
+  <div class="byline">
+    <span>Updated July 21, 2026</span>
+    <span>·</span>
+    <span>10 min read</span>
+    <span class="verified">Fact-checked</span>
+  </div>
+</div>
+
+<!-- Article body -->
+<div class="article-body">
+
+<h1>VMware subscription vs perpetual license: what happens to existing licenses</h1>
+<p>The renewal quote arriving in 2026 is not a renewal in the old VMware sense. It is a per-core subscription offer, commonly for VMware Cloud Foundation or vSphere Foundation, though vSphere Standard and vSphere Enterprise Plus still exist as subscription bundles, and the perpetual license bought in 2019 or 2021 is not on the table anymore as a thing to extend. Broadcom stopped selling perpetual VMware licenses in early 2024 and is not renewing Support and Subscription (SnS) contracts on existing perpetual estates. What arrives instead is a per-core subscription quote, and the number on it is commonly two to three times the prior annual SnS spend, sometimes far more on deeply discounted legacy deals.</p>
+<p>What confuses people is that the perpetual license itself did not vanish. The useful questions are what still works, what gets threatened, and where the compliance line sits.</p>
+<h2>What perpetual still means after the acquisition</h2>
+<p>A perpetual VMware license is a permanent right to run the software version you are entitled to. That right did not lapse when Broadcom closed the acquisition, and it does not lapse when your SnS contract expires. Broadcom's own community staff have confirmed this directly: perpetual means you are entitled to run it forever, there is no conversion, and the license key remains valid for the version it covers.</p>
+<p>What lapses is everything wrapped around the right to run. Security patches, bug fixes, version upgrades, and someone to call all stop when SnS ends. The software on the host keeps booting. vCenter keeps managing. VMs keep running. You simply stop getting anything new, and you lose the entitlement to apply anything Broadcom released after your expiration date.</p>
+<p>There is a hard constraint on those old keys that catches people during planning. Perpetual license keys cannot be upgraded, downgraded, divided, or combined after the fact. The key set you hold is the key set you are stuck with. If you bought eight single-CPU vSphere Enterprise Plus keys in 2019 and now want to consolidate onto four dual-CPU hosts, you cannot recombine them. You would need to go to subscription to restructure the entitlement.</p>
+<h2>The SnS contract runs to term, then the offer changes</h2>
+<p>Existing SnS contracts are honored through their committed term. Entitlement to patches, updates, and support continues exactly as contracted until the expiry date printed on the agreement. Treat that agreement date as the operative date unless Broadcom or the reseller gives written contract language saying otherwise.</p>
+<p>The one-way door opens on the day after expiry. Instead of a renewal quote for support, the account team sends a subscription quote. There is no "renew my SnS" line item to sign anymore. The choice becomes one of three end states, and which one you land in depends almost entirely on when you start the evaluation relative to that expiry date.</p>
+<p>Buyers who begin the evaluation twelve months out usually get to choose. Buyers who start three months out tend to have a choice made for them, usually subscription under time pressure. The clock is the entire negotiation. Leverage exists while SnS is live and decays toward zero as expiry approaches, because freezing, subscribing on defensible terms, and migrating are all cheaper and calmer with support still in place.</p>
+<h2>The cease-and-desist letters</h2>
+<p>Starting around May 2025, Broadcom began sending cease-and-desist letters to customers whose SnS contracts had recently expired. Ars Technica reported on the letters in detail. The wording matters because it shows where Broadcom is drawing the compliance line.</p>
+<p>The letter tells recipients they must stop using any maintenance releases, minor releases, major releases, upgrades, extensions, enhancements, patches, bug fixes, or security patches issued since their support contract ended, with an exception only for zero-day security patches. Any updates applied past the expiration date, the letter states, must be immediately removed or uninstalled. It calls such use a material breach of the agreement and an infringement of VMware's intellectual property, with potential claims for enhanced damages and attorneys' fees.</p>
+<p>The letters also reserve Broadcom's right to audit the recipient.</p>
+<p>Two details from the Ars reporting are worth flagging. First, some recipients had not actually applied any post-expiry patches. The CTO of a Canadian MSP told Ars that one of his customers received a letter six days after their support contract expired, despite having taken no updates. Second, at least one recipient had already migrated off VMware entirely and was running Proxmox. The letters appear to be triggered by expiration status rather than by confirmed post-expiry patching. Treat the letter as Broadcom asserting its position on paper, not as proof you did something wrong, but also do not ignore it. Get your legal or licensing team involved before responding.</p>
+<h2>Trading perpetual in for subscription</h2>
+<p>There is no automatic conversion. Perpetual licenses do not transform into subscription entitlements. What happens commercially is a trade-in: you exchange the perpetual estate for a subscription term, usually VCF or VVF in Broadcom-led renewal motions, though Standard and Enterprise Plus subscription bundles still exist, and the perpetual licenses are retired from active use as part of that deal.</p>
+<p>Trade-in credit exists but is set deal by deal. There is no published tariff, no fixed percentage, and no guarantee that two customers with identical estates receive similar recognition for their prior perpetual investment. The credit is one negotiable lever alongside term length, core count, bundle tier, and co-termination dates. The only reliable way to capture value is to treat the credit as something you negotiate for explicitly and get written into the order paperwork, not something the account manager volunteers at full value.</p>
+<p>The dangerous assumption is that perpetual licenses have guaranteed value outside the trade-in. They may not. If the subscription order treats the perpetual estate as traded in or retired, the old keys may no longer be a fallback at the end of the subscription term. Get that retirement language in writing before signing. If preserving the option to run unsupported later matters, ask whether the subscription can be purchased without trading in the perpetual licenses, or whether a separate subscription estate is possible.</p>
+<p>The practical question is whether subscription economics work at all. Broadcom's per-core model with a 16-core-per-CPU floor means a shop on older low-density hardware pays for cores that do not physically exist. Use canonical list pricing as the first pass: VCF at $350/core/year, VVF ranging from $135/core/year average list to $190/core/year for 1-year MSRP, vSphere Enterprise Plus at $150/core/year, and vSphere Standard at $50/core/year. Also account for the 72-core per-order minimum Broadcom introduced in April 2025. It was partially reversed for some existing renewals after backlash, but current canonical guidance is that it still applies to new orders, subscription transitions, and tier changes. Verify the minimum with the reseller before treating a small estate quote as final. First renewals off perpetual commonly multiply annual cost by two to three times according to advisory firms that have benchmarked dozens of deals, with the steepest movements on small and mid-size estates that previously ran vSphere Standard or Essentials Plus.</p>
+<h2>Running unsupported: what actually happens to vCenter</h2>
+<p>VMware software does not phone home and shut itself off when SnS expires. vCenter Server continues to run. ESXi hosts continue to boot. VMs continue to power on and serve traffic. There is no kill switch in the product.</p>
+<p>What does change is functional, not punitive. SnS expiry is not the same thing as an expired evaluation or subscription key in vCenter. A perpetual vSphere key keeps the licensed features available for the version it covers, but the entitlement around that key is frozen: no entitlement to apply patches released after the support date, no upgrade rights, no vendor help, and no supported way to reshape the key inventory. If a time-limited subscription or evaluation key expires inside vCenter, managed operations can degrade; that is a different failure mode from an unsupported perpetual estate.</p>
+<p>The more serious problem is patching. ESXi vulnerabilities are actively exploited in the wild. CVE-2024-37085 was used in ransomware campaigns in mid-2024. Running an unpatched hypervisor exposed to anything beyond a fully isolated management network is an escalating risk over time. If the unsupported freeze is your strategy, the only defensible version of it is on hosts that are network-isolated, running a documented patch level captured at SnS expiry, with repositories locked and an auditable record of what was applied and when.</p>
+<h2>The decision clock: October 2027</h2>
+<p>vSphere 8.0 reaches End of General Support on October 11, 2027, with Technical Guidance continuing until October 11, 2029. Broadcom KB 392942 confirms these dates. Many remaining perpetual support contracts are now being planned against that vSphere 8 support window, so October 2027 becomes the practical planning wall for estates trying to freeze on vSphere 8.</p>
+<p>That makes October 2027 the practical wall. After that date, even customers who want to stay on perpetual vSphere 8 are running a product that no longer receives General Support from the vendor, and the Technical Guidance period through 2029 is a thin, break-fix-only layer that most operations teams should not plan around as a real support path.</p>
+<p>Between now and October 2027, the three end states shake out as follows. Staying perpetual and unsupported preserves maximum optionality but decays as hardware drifts and unpatched vulnerabilities accumulate. Trading into subscription buys a current, supported estate at per-core pricing that is multiples of the old SnS spend. Replatforming onto Proxmox, Nutanix AHV, Hyper-V, or XCP-ng resets the vendor dependency but costs migration effort up front and exposes the estate during the transition window.</p>
+<p>Blended strategies are worth modeling. Strategic clusters subscribe. Stable legacy clusters freeze on perpetual with isolated networking and locked patch levels. Workloads with clean exit paths migrate. The blend is not indecision. It can improve renewal leverage because it proves to the vendor that part of the estate can actually leave.</p>
+<h2>Pull your license position before anyone quotes you</h2>
+<p>The subscription quote gets sized against Broadcom's view of your estate. Their view is often wrong, or at least less precise than yours. An independent effective license position, covering perpetual entitlements, live SnS coverage, and actual physical core counts under the 16-core-per-CPU floor, is the difference between negotiating from your data and negotiating from theirs.</p>
+<p>Start with the core count. This is what Broadcom bills against.</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">Connect-VIServer</span> <span class="n">-Server</span> <span class="n">vcenter</span><span class="p">.</span><span class="n">yourdomain</span><span class="p">.</span><span class="n">local</span>
+
+<span class="c"># Physical core count per host, with the 16-core-per-CPU floor applied</span>
+<span class="nv">$report</span> <span class="p">=</span> <span class="nb">Get-VMHost</span> <span class="p">|</span> <span class="nb">Sort-Object</span> <span class="n">Name</span> <span class="p">|</span> <span class="k">ForEach</span><span class="n">-Object</span> <span class="p">{</span>
+    <span class="nv">$view</span> <span class="p">=</span> <span class="nv">$_</span> <span class="p">|</span> <span class="nb">Get-View</span>
+    <span class="nv">$sockets</span> <span class="p">=</span> <span class="nv">$view</span><span class="p">.</span><span class="n">Hardware</span><span class="p">.</span><span class="n">CpuInfo</span><span class="p">.</span><span class="n">NumCpuPackages</span>
+    <span class="nv">$cores</span>  <span class="p">=</span> <span class="nv">$view</span><span class="p">.</span><span class="n">Hardware</span><span class="p">.</span><span class="n">CpuInfo</span><span class="p">.</span><span class="n">NumCpuCores</span>
+    <span class="nv">$billable</span> <span class="p">=</span> <span class="no">[math]</span><span class="p">::</span><span class="n">Max</span><span class="p">(</span><span class="nv">$cores</span><span class="p">,</span> <span class="nv">$sockets</span> <span class="p">*</span> <span class="n">16</span><span class="p">)</span>
+
+    <span class="no">[PSCustomObject]</span><span class="p">@{</span>
+        <span class="n">Host</span>          <span class="p">=</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Name</span>
+        <span class="n">Sockets</span>       <span class="p">=</span> <span class="nv">$sockets</span>
+        <span class="n">PhysicalCores</span> <span class="p">=</span> <span class="nv">$cores</span>
+        <span class="n">BillableCores</span> <span class="p">=</span> <span class="nv">$billable</span>
+        <span class="n">ESXiVersion</span>   <span class="p">=</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Version</span>
+        <span class="n">ESXiBuild</span>     <span class="p">=</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Build</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nv">$report</span> <span class="p">|</span> <span class="nb">Export-Csv</span> <span class="p">.\</span><span class="n">vmware-core-inventory</span><span class="p">.</span><span class="n">csv</span> <span class="n">-NoTypeInformation</span>
+<span class="nv">$total</span> <span class="p">=</span> <span class="p">(</span><span class="nv">$report</span> <span class="p">|</span> <span class="nb">Measure-Object</span> <span class="n">BillableCores</span> <span class="n">-Sum</span><span class="p">).</span><span class="n">Sum</span>
+<span class="nb">Write-Host</span> <span class="s2">&quot;Total billable cores: $total&quot;</span>
+</code></pre></div>
+
+<p>Then pull the license inventory out of vCenter so deployed keys can be matched against entitlement and contract records.</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">$licenseManager</span> <span class="p">=</span> <span class="nb">Get-View</span> <span class="p">(</span><span class="nv">$global:DefaultVIServer</span><span class="p">.</span><span class="n">ExtensionData</span><span class="p">.</span><span class="n">Content</span><span class="p">.</span><span class="n">LicenseManager</span><span class="p">)</span>
+<span class="nv">$licenseManager</span><span class="p">.</span><span class="n">Licenses</span> <span class="p">|</span>
+    <span class="nb">Select-Object</span> <span class="n">Name</span><span class="p">,</span> <span class="n">LicenseKey</span><span class="p">,</span> <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;Total&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">Total</span><span class="p">}},</span>
+        <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;Used&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">Used</span><span class="p">}},</span> <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;Expiration&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">Properties</span> <span class="p">|</span>
+            <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Key</span> <span class="o">-eq</span> <span class="s1">&#39;expirationDate&#39;</span> <span class="p">}</span> <span class="p">|</span>
+            <span class="nb">Select-Object</span> <span class="n">-ExpandProperty</span> <span class="n">Value</span> <span class="p">}}</span> <span class="p">|</span>
+    <span class="nb">Format-Table</span> <span class="n">-AutoSize</span>
+</code></pre></div>
+
+<p>The expiration column tells whether the license key itself is time-limited. It does not prove the SnS expiry date for a perpetual entitlement. Match the vCenter license inventory against Broadcom portal records, order paperwork, and reseller contract data to find the actual SnS cliff.</p>
+<p>If PowerCLI inventory is going to become a repeatable renewal workflow, document the commands internally and pin the PowerCLI module versions used for the export. If a hardware refresh is part of the subscription-versus-perpetual math, run the quote both ways: current host count with the 16-core/socket and 72-core/order floors, and a refreshed dense-host design.</p>
+<h2>Where this leaves you</h2>
+<p>The perpetual license you own is still yours, in the narrow sense that the software it entitles you to run keeps running. Everything that made owning it useful, the patch stream, the upgrade path, the support line, and the renewal mechanism, is what Broadcom ended. October 2027 is the date that turns the freeze from a tactic into a forced position.</p>
+<p>Decide before the door closes. The worst outcome is not picking the wrong end state. It is letting SnS lapse because the evaluation started late, then discovering the only quote on offer is the one Broadcom wanted to send all along.</p>
+
+    <!-- Newsletter CTA -->
+<div class="newsletter-cta" id="newsletter">
+  <h3>Stay ahead of the VMware changes</h3>
+  <p>We're publishing detailed licensing breakdowns, comparison guides, migration walkthroughs, and cost calculators. Get them in your inbox.</p>
+  <input type="email" placeholder="your@email.com" />
+  <button>Subscribe</button>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div>
+    © 2026 VMwareMadeSimple.com — Independent. Not affiliated with VMware or Broadcom.
+    <div class="aff-disclosure" style="margin-top: 0.3rem;">Some links are affiliate links. See our <a href="#">disclosure policy</a>.</div>
+  </div>
+  <div class="footer-links">
+    <a href="#">About</a>
+    <a href="mailto:contact@vmwaremadesimple.com">Contact</a>
+    <a href="/sitemap.xml">RSS</a>
+    <a href="#">Privacy</a>
+    <a href="#">Corrections</a>
+  </div>
+</footer>
+
+<script>
+function searchSite(q) {
+  if (q.length < 2) return;
+  if (event && event.key === 'Enter') {
+    window.location.href = 'https://www.google.com/search?q=site:vmwaremadesimple.com+' + encodeURIComponent(q);
+  }
+}
+</script>
+
+</body>
+</html>
+
