@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Broadcom Support Portal Guide: How to Get Help After the Acquisition | VMwareMadeSimple</title>
+<meta name="description" content="Navigating Broadcom support portal after VMware: Site IDs, case management, severity levels, and support bundles." />
+<meta name="keywords" content="vmware,broadcom,support,portal,site id,case management" />
+<link rel="canonical" href="https://vmwaremadesimple.com/articles/broadcom-support-portal-guide.html" />
+<link rel="stylesheet" href="/css/style.css" />
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2NDPP0ZTKC"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-2NDPP0ZTKC');
+</script>
+
+<!-- Open Graph -->
+<meta property="og:title" content="Broadcom Support Portal Guide: How to Get Help After the Acquisition" />
+<meta property="og:description" content="Navigating Broadcom support portal after VMware: Site IDs, case management, severity levels, and support bundles." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://vmwaremadesimple.com/articles/broadcom-support-portal-guide.html" />
+
+<!-- Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Broadcom Support Portal Guide: How to Get Help After the Acquisition",
+  "description": "Navigating Broadcom support portal after VMware: Site IDs, case management, severity levels, and support bundles.",
+  "author": { "@type": "Organization", "name": "VMwareMadeSimple Editorial" },
+  "publisher": { "@type": "Organization", "name": "VMwareMadeSimple" },
+  "datePublished": "2026-07-21",
+  "dateModified": "2026-07-21",
+  "mainEntityOfPage": "https://vmwaremadesimple.com/articles/broadcom-support-portal-guide.html"
+}
+</script>
+</head>
+<body>
+
+<!-- Alert strip -->
+<div class="alert-strip">
+  VCF 9.1 released — <a href="/articles/vcf-9-nested-lab-setup-complete-walkthrough.html">licensing and upgrade paths changed. Here's what's new →</a>
+</div>
+
+<!-- Masthead -->
+<div class="masthead">
+  <div class="masthead-inner">
+    <h1><a href="/">VMware<span class="red">MadeSimple</span></a></h1>
+    <div class="tagline">Independent VMware analysis for IT professionals. No vendor spin.</div>
+    <div class="credibility-bar">
+      <div class="creds">
+        <span><span class="dot">●</span> Independent</span>
+        <span><span class="dot">●</span> Sources linked</span>
+        <span><span class="dot">●</span> Updated weekly</span>
+        <span><span class="dot">●</span> Not affiliated with VMware/Broadcom</span>
+      </div>
+      <div class="social">
+        <a href="/sitemap.xml">RSS</a>
+        <a href="#newsletter">Newsletter</a>
+        <a href="mailto:contact@vmwaremadesimple.com">Contact</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Category nav -->
+<div class="navbar">
+  <div class="navbar-inner">
+    <a href="/">Home</a>
+    <a href="/#licensing" class="active">Licensing</a>
+    <a href="/#migration">Migration</a>
+    <a href="/#vcf">VCF 9.1</a>
+    <a href="/#homelab">Home Lab</a>
+    <a href="/#powercli">PowerCLI</a>
+    <a href="/#alternatives">Alternatives</a>
+    <a href="/tools/price-calculator.html">Tools</a>
+    <div class="nav-search">
+      <input type="text" placeholder="Search..." onkeyup="searchSite(this.value)" />
+    </div>
+  </div>
+</div>
+
+<!-- Article header -->
+<div class="article-header">
+  <div class="breadcrumb"><a href="/">Home</a> → Support</div>
+  <div class="cat-label">Support</div>
+  <h1>Broadcom Support Portal Guide: How to Get Help After the Acquisition</h1>
+  <div class="byline">
+    <span>Updated July 21, 2026</span>
+    <span>·</span>
+    <span>11 min read</span>
+    <span class="verified">Fact-checked</span>
+  </div>
+</div>
+
+<!-- Article body -->
+<div class="article-body">
+
+<h1>Broadcom support portal guide: how to actually get help after the acquisition</h1>
+<p>Broadcom changed more than the VMware support logo. On May 6, 2024, VMware Customer Connect and related support tools moved into the Broadcom Support Portal. That date matters because a lot of old muscle memory now sends admins to the wrong place, or to the right place with the wrong account state.</p>
+<p>The portal handles more than cases. Broadcom uses it for case management, product downloads, licenses, entitlements, trials, security advisories, knowledge base articles, and communities. If the account is not tied to the correct Support Site ID, the portal may look empty even when the company has an active contract.</p>
+<p>I would not wait until an outage to test this. The failure mode is ugly: production issue, no Enterprise profile, unknown Site ID, no visible entitlements, and a support case that cannot be opened without Customer Care getting involved first. Broadcom says access processing may take up to 48 hours when approvals are required. That is a long time when vCenter is down.</p>
+<h2>What changed after the portal move</h2>
+<p>Before the migration, many VMware admins lived in Customer Connect. Licenses, downloads, cases, and account access were familiar enough that nobody thought about them until renewal season or patch day. Broadcom moved those workflows to <code>support.broadcom.com</code> as part of the VMware by Broadcom Day 2 transition.</p>
+<p>Broadcom's VMware support FAQ says all VMware support portals, including VMware Customer Connect, and related services, tools, and assets were migrated to the Broadcom Support Portal on May 6, 2024. That same FAQ points users to new workflows for Site IDs, case views, password resets, MFA resets, entitlements, product downloads, case concerns, alternate case contacts, and file uploads.</p>
+<p>The Support Site ID is the operational change that breaks the most workflows when it is missing. Broadcom describes it as the unique identifier required for support access. It may also be called Support ID, Enterprise Site ID, SID, or Site ID. After signing or renewing a contract, the customer should have a Broadcom Support Site ID tied to the contract. For some customers that is a new Enterprise Site ID; for others it is an existing Site ID that needs the correct users and entitlements mapped to it. That Site ID unlocks case management, product downloads, and My Entitlements.</p>
+<p>That means a Broadcom login by itself is not enough. A Basic User account can exist and still be useless for VMware support. For case management, Broadcom says the user must have an Enterprise User profile linked to a Site ID with an active support maintenance contract.</p>
+<h2>Get the Site ID sorted before anything breaks</h2>
+<p>Start with this audit while the environment is healthy:</p>
+<div class="codehilite"><pre><span></span><code>1. Log in to https://support.broadcom.com
+2. Select the VMware Cloud Foundation division from the division selector
+3. Open your profile menu
+4. Confirm whether your account is Basic User or Enterprise User
+5. Confirm the Site IDs attached to the account
+6. Confirm that My Entitlements shows the expected VMware products
+7. Confirm that My Cases opens without access errors
+</code></pre></div>
+
+<p>If the Site ID is missing, use Broadcom's profile build process. The Site ID workflow asks for the Site ID and phone number, then validates the Site ID against Broadcom's records. Broadcom's KB says a green check appears when the Site ID matches. It also says the account can be locked after three unsuccessful Site ID attempts, so do not guess from old PO numbers or serial numbers.</p>
+<p>If the company already has a User Administrator for the Site ID, that administrator can approve access. If no User Administrator exists, Broadcom says the first approved request for a Site ID with no registered users is auto-granted User Administrator and Product Administrator roles. Broadcom lists the effective date for that behavior as August 29, 2024.</p>
+<p>Do not leave this with one person. Broadcom recommends at least one administrator per Support Site ID; I would make that two named humans plus a documented break-glass process. The User Administrator role is the difference between fixing access internally and waiting for Customer Care during a maintenance window.</p>
+<h2>Why entitlements disappear</h2>
+<p>A common complaint after the migration was, "I logged in and nothing is there." William Lam's May 2024 portal notes called out the same pattern: users were still reporting entitlement issues after the Day 2 transition, and some entitlements later appeared after account work with support or account teams.</p>
+<p>There are several different problems that look identical from the admin chair:</p>
+<ul>
+<li>The user has a Basic profile, not an Enterprise profile.</li>
+<li>The account is attached to the wrong Site ID.</li>
+<li>The company has multiple Site IDs and the product lives under a different one.</li>
+<li>The user is in the wrong Broadcom division selector.</li>
+<li>The contract is expired or not mapped to that account.</li>
+<li>The download is under a product SKU path the user did not expect.</li>
+</ul>
+<p>Broadcom's entitlement KB says My Entitlements can be searched by serial number, Site ID, customer name, contract number, or customer number. That helps when browsing does not surface the product. Some entitlements show a download icon; other entitlement types may not because there is no software package to retrieve.</p>
+<p>For vSphere downloads, Lam's portal notes are more practical than the generic KB wording. To download ESXi, you may need to go through the specific vSphere SKU, such as Enterprise Plus, Essentials, or another entitlement-backed SKU, then expand the version list. Drivers, tools, witness appliances, and non-primary downloads may sit under a Drivers &amp; Tools section after the SKU is selected.</p>
+<h2>Open the case with evidence attached</h2>
+<p>Broadcom has a February 2026 KB on creating VMware support requests for VCF, vSphere, vSAN, NSX, and Aria Suite. The useful part is not the portal navigation. It is what Broadcom expects in the first submission.</p>
+<p>Attach diagnostics when the case is created. Do not open a blank case that says "vSAN broken" and then wait for the engineer to ask for logs. Broadcom specifically calls out these collection paths:</p>
+<div class="codehilite"><pre><span></span><code>vSphere / ESXi:
+vSphere Client &gt; host or vCenter object &gt; Actions &gt; Logs &gt; Export System Logs
+
+NSX:
+NSX Manager &gt; System &gt; Support Bundle
+</code></pre></div>
+
+<p>For ESXi hosts, you can also generate a support bundle from the shell when the UI is not cooperating:</p>
+<div class="codehilite"><pre><span></span><code>mkdir<span class="w"> </span>-p<span class="w"> </span>/vmfs/volumes/datastore1/support-bundles
+vm-support<span class="w"> </span>-w<span class="w"> </span>/vmfs/volumes/datastore1/support-bundles
+</code></pre></div>
+
+<p>Replace <code>datastore1</code> with a datastore that exists and has enough free space for the bundle.</p>
+<p>For vCenter Server Appliance, use <code>vc-support</code> from an SSH session:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># If SSH opens the VCSA appliance shell first:</span>
+shell
+
+vc-support<span class="w"> </span>-l
+</code></pre></div>
+
+<p>If SSH already drops into bash, skip <code>shell</code>. Note the generated bundle path and upload that file to the case.</p>
+<p>If you can still reach vCenter with PowerCLI, grab a quick inventory snapshot before the outage state changes. Treat the task list as a quick view, not a replacement for vCenter events or support bundles:</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">Connect-VIServer</span> <span class="n">-Server</span> <span class="n">vcenter</span><span class="p">.</span><span class="n">company</span><span class="p">.</span><span class="n">local</span>
+
+<span class="nb">Get-VMHost</span> <span class="p">|</span> <span class="nb">Sort-Object</span> <span class="n">Name</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">Name</span><span class="p">,</span><span class="n">ConnectionState</span><span class="p">,</span><span class="n">PowerState</span><span class="p">,</span><span class="n">Version</span><span class="p">,</span><span class="n">Build</span><span class="p">,</span>
+    <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;Cluster&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">Parent</span><span class="p">.</span><span class="n">Name</span><span class="p">}}</span> <span class="p">|</span>
+    <span class="nb">Export-Csv</span> <span class="p">.\</span><span class="n">vmhost-inventory</span><span class="p">.</span><span class="n">csv</span> <span class="n">-NoTypeInformation</span>
+
+<span class="nb">Get-Cluster</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">Name</span><span class="p">,</span><span class="n">HAEnabled</span><span class="p">,</span><span class="n">DrsEnabled</span><span class="p">,</span><span class="n">VsanEnabled</span> <span class="p">|</span>
+    <span class="nb">Export-Csv</span> <span class="p">.\</span><span class="n">cluster-state</span><span class="p">.</span><span class="n">csv</span> <span class="n">-NoTypeInformation</span>
+
+<span class="nb">Get-Task</span> <span class="p">|</span> <span class="nb">Sort-Object</span> <span class="n">StartTime</span> <span class="n">-Descending</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">-First</span> <span class="n">50</span> <span class="n">Name</span><span class="p">,</span><span class="n">State</span><span class="p">,</span><span class="n">StartTime</span><span class="p">,</span><span class="n">FinishTime</span><span class="p">,</span><span class="n">Description</span> <span class="p">|</span>
+    <span class="nb">Export-Csv</span> <span class="p">.\</span><span class="n">recent-vcenter-tasks</span><span class="p">.</span><span class="n">csv</span> <span class="n">-NoTypeInformation</span>
+</code></pre></div>
+
+<p>That does not replace support bundles, but it gives the engineer a timestamped picture of the estate. It also protects you from arguing from memory two days later.</p>
+<p>If junior admins only touch PowerCLI during incidents, keep an internal runbook with the exact commands your team uses. A book is fine for training, but it will not beat a tested local runbook during an outage.</p>
+<h2>Pick the right severity and know what it commits you to</h2>
+<p>Broadcom's severity labels are Critical P1, High P2, Medium P3, and Low P4. Their VMware support request KB defines them this way:</p>
+<table>
+<thead>
+<tr>
+<th>Severity</th>
+<th>Broadcom wording from KB 429027</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P1 critical</td>
+<td>Production system down; total loss of service; requires 24x7 availability of a customer contact</td>
+</tr>
+<tr>
+<td>P2 high</td>
+<td>Production system severely degraded; core functions impacted but operational</td>
+</tr>
+<tr>
+<td>P3 medium</td>
+<td>Non-critical issue; system operational</td>
+</tr>
+<tr>
+<td>P4 low</td>
+<td>General questions or documentation clarifications</td>
+</tr>
+</tbody>
+</table>
+<p>The P1 line is the one people miss. If the case is Critical P1, Broadcom expects a customer contact available 24x7. Do not set P1 at 4:55 PM and then have the only useful admin go offline. That gives support a reason to downgrade, stall, or lose the thread.</p>
+<p>Broadcom's severity-change KB says the severity can be changed from the case page by editing the severity field. It also says the severity will be re-categorized if it does not align with Broadcom's Software and Maintenance Policy Handbook. For P1, the portal asks for confirmation that the case meets the Severity 1 definition.</p>
+<p>Use P1 when production is down or there is total loss of service. Use P2 when production is badly degraded but still operating. Do not inflate every annoying bug to P1. That may feel good for five minutes, then it burns credibility when the next actual outage happens.</p>
+<h2>Escalation is not the same as changing severity</h2>
+<p>Broadcom's case FAQ separates severity changes from case concerns. If the business impact changes, update severity. If the concern is that service levels are not being met, use the Raise Concern button to notify Broadcom Support Management. Broadcom explicitly says the Raise Concern path is not intended for Severity 1 escalation.</p>
+<p>That distinction matters. A case can be correctly marked P2 and still need management attention because it has gone stale, missed a promised update, or bounced between owners. Raising concern is the cleaner move in that situation.</p>
+<p>When raising concern, write like an incident manager, not like a forum post:</p>
+<div class="codehilite"><pre><span></span><code>Case: 12345678
+Product: VMware vSAN 8.0 U3
+Current severity: P2
+Business impact: 42 production VMs running degraded after disk group failure; no data loss; rebuild not progressing
+Last useful update: 2026-07-15 09:20 UTC
+Requested action: assign vSAN escalation engineer and confirm next update time
+Customer availability: John Smith, +1-555-0100, available until 23:00 UTC
+</code></pre></div>
+
+<p>Short, dated, and specific beats three paragraphs of frustration.</p>
+<h2>Add alternate contacts before the primary admin leaves</h2>
+<p>Broadcom says alternate case contacts can be added, with up to three email addresses copied on case communications. The FAQ also says a user's email address must be added to the case contact to view the case under My Cases. To view cases opened by colleagues, use the All Cases tab, assuming the account and permissions allow it.</p>
+<p>This is another item to test before an outage. Open a low-severity administrative case if you need to validate process. Confirm that the infrastructure lead, backup admin, and manager can see the case history. Confirm that the NOC mailbox is not the only address receiving updates. Confirm that the person who can approve a remote session is not excluded from the thread.</p>
+<h2>Build a support packet once, then reuse it</h2>
+<p>Create a folder in your internal documentation system called something boring like <code>Broadcom support packet</code>. Put these items in it:</p>
+<ul>
+<li>Company legal name used on the Broadcom contract</li>
+<li>All Broadcom Support Site IDs</li>
+<li>Contract numbers and renewal dates</li>
+<li>User Administrator names</li>
+<li>Product Administrator names</li>
+<li>VAR or Broadcom account team contacts</li>
+<li>vCenter FQDNs, versions, and build numbers</li>
+<li>ESXi version and build report</li>
+<li>NSX Manager version if used</li>
+<li>vSAN ESA or OSA layout if used</li>
+<li>Standard location for support bundles</li>
+<li>Internal bridge number for P1 and P2 incidents</li>
+</ul>
+<p>Generate the version report with PowerCLI:</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">Connect-VIServer</span> <span class="n">-Server</span> <span class="n">vcenter</span><span class="p">.</span><span class="n">company</span><span class="p">.</span><span class="n">local</span>
+
+<span class="nv">$report</span> <span class="p">=</span> <span class="k">foreach</span> <span class="p">(</span><span class="nv">$vmhost</span> <span class="k">in</span> <span class="nb">Get-VMHost</span> <span class="p">|</span> <span class="nb">Sort-Object</span> <span class="n">Name</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nv">$view</span> <span class="p">=</span> <span class="nv">$vmhost</span> <span class="p">|</span> <span class="nb">Get-View</span>
+    <span class="no">[pscustomobject]</span><span class="p">@{</span>
+        <span class="n">Host</span> <span class="p">=</span> <span class="nv">$vmhost</span><span class="p">.</span><span class="n">Name</span>
+        <span class="n">Cluster</span> <span class="p">=</span> <span class="nv">$vmhost</span><span class="p">.</span><span class="n">Parent</span><span class="p">.</span><span class="n">Name</span>
+        <span class="n">ESXiVersion</span> <span class="p">=</span> <span class="nv">$vmhost</span><span class="p">.</span><span class="n">Version</span>
+        <span class="n">ESXiBuild</span> <span class="p">=</span> <span class="nv">$vmhost</span><span class="p">.</span><span class="n">Build</span>
+        <span class="n">Sockets</span> <span class="p">=</span> <span class="nv">$view</span><span class="p">.</span><span class="n">Hardware</span><span class="p">.</span><span class="n">CpuInfo</span><span class="p">.</span><span class="n">NumCpuPackages</span>
+        <span class="n">Cores</span> <span class="p">=</span> <span class="nv">$view</span><span class="p">.</span><span class="n">Hardware</span><span class="p">.</span><span class="n">CpuInfo</span><span class="p">.</span><span class="n">NumCpuCores</span>
+        <span class="n">Model</span> <span class="p">=</span> <span class="nv">$view</span><span class="p">.</span><span class="n">Hardware</span><span class="p">.</span><span class="n">SystemInfo</span><span class="p">.</span><span class="n">Model</span>
+        <span class="n">Vendor</span> <span class="p">=</span> <span class="nv">$view</span><span class="p">.</span><span class="n">Hardware</span><span class="p">.</span><span class="n">SystemInfo</span><span class="p">.</span><span class="n">Vendor</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nv">$report</span> <span class="p">|</span> <span class="nb">Export-Csv</span> <span class="p">.\</span><span class="n">broadcom-support-host-report</span><span class="p">.</span><span class="n">csv</span> <span class="n">-NoTypeInformation</span>
+</code></pre></div>
+
+<p>Refresh that report after patching, hardware refreshes, cluster moves, and renewals. A six-month-old inventory file is still better than nothing, but a current one saves time.</p>
+<h2>What to do this week</h2>
+<p>Treat Broadcom portal readiness as an operations control, not an admin preference. The work is small compared with the cost of discovering access problems during an incident.</p>
+<p>Verify Enterprise User access for at least two people, then test Site IDs, My Entitlements, My Cases, product downloads for the SKUs actually owned, user approvals, Raise Concern access, and P1 coverage when Broadcom asks for 24x7 customer availability.</p>
+<p>The acquisition changed pricing, packaging, and account handling. The support portal is where those changes become operational. If the portal is ready, support still may not be fast. If the portal is not ready, support may not even start.</p>
+
+    <!-- Newsletter CTA -->
+<div class="newsletter-cta" id="newsletter">
+  <h3>Stay ahead of the VMware changes</h3>
+  <p>We're publishing detailed licensing breakdowns, comparison guides, migration walkthroughs, and cost calculators. Get them in your inbox.</p>
+  <input type="email" placeholder="your@email.com" />
+  <button>Subscribe</button>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div>
+    © 2026 VMwareMadeSimple.com — Independent. Not affiliated with VMware or Broadcom.
+    <div class="aff-disclosure" style="margin-top: 0.3rem;">Some links are affiliate links. See our <a href="#">disclosure policy</a>.</div>
+  </div>
+  <div class="footer-links">
+    <a href="#">About</a>
+    <a href="mailto:contact@vmwaremadesimple.com">Contact</a>
+    <a href="/sitemap.xml">RSS</a>
+    <a href="#">Privacy</a>
+    <a href="#">Corrections</a>
+  </div>
+</footer>
+
+<script>
+function searchSite(q) {
+  if (q.length < 2) return;
+  if (event && event.key === 'Enter') {
+    window.location.href = 'https://www.google.com/search?q=site:vmwaremadesimple.com+' + encodeURIComponent(q);
+  }
+}
+</script>
+
+</body>
+</html>
+
