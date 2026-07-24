@@ -7,16 +7,16 @@
 ## High Priority — Licensing/Business (highest search volume)
 
 - [ ] How Much Does VMware Cost Now? A 2026 Pricing Calculator
-- [ ] VMware VCF Licensing Explained: Per-Core Minimums and What They Mean for Your Budget
-- [ ] Broadcom Support Portal Guide: How to Actually Get Help After the Acquisition
-- [ ] VMware Subscription vs Perpetual License: What Happens to Your Existing Licenses
+- [x] VMware VCF Licensing Explained: Per-Core Minimums and What They Mean for Your Budget *(published Jul 21)*
+- [x] Broadcom Support Portal Guide: How to Actually Get Help After the Acquisition *(published Jul 21)*
+- [x] VMware Subscription vs Perpetual License: What Happens to Your Existing Licenses *(published Jul 21)*
 
 ## High Priority — Migration Guides (affiliate potential)
 
-- [ ] VMware to Proxmox Migration: Step-by-Step with PowerCLI Export
+- [x] VMware to Proxmox Migration: Step-by-Step with PowerCLI Export *(published Jul 21)*
 - [ ] How to Migrate from ESXi Free to Proxmox VE 8
 - [ ] VMware to Hyper-V Migration Guide for Small Businesses
-- [ ] Setting Up VMware PowerCLI: The Complete Guide (2026)
+- [x] Setting Up VMware PowerCLI: The Complete Guide (2026) *(published Jul 23)*
 
 ## High Priority — How-To/Troubleshooting (SEO long-tail)
 
@@ -45,6 +45,56 @@
 - [ ] vSAN 8 vs vSAN ESA: Performance Comparison
 - [ ] Automating vSphere Compliance Checks with PowerCLI
 - [ ] Building a VMware DR Strategy with SRM and Zerto
+
+## Wave 2 — High-Intent Search Terms (added Jul 21)
+
+### Pricing/Licensing (bottom-of-funnel)
+- [ ] Broadcom VMware Renewal Cost: How to Calculate Your 2026 Quote
+- [ ] VCF vs vSphere Foundation: Which License Makes Sense
+- [ ] VMware VVF vs vSphere Enterprise Plus: Real Cost Difference
+- [ ] How Broadcom VMwares Per-Core Pricing Works (With Examples)
+- [ ] VMware Support Tiers Explained: Basic vs Standard vs Premium
+- [ ] What Happens If You Stop Paying VMware Support: Subscription Enforcement
+- [ ] Broadcom VMware Contract Negotiation: What You Can Actually Negotiate
+- [ ] VMware 72-Core Minimum: Who Pays It and Who Got Exempted
+- [ ] Third-Party VMware Support: Rimini Street vs CSS vs SUSE
+- [ ] VMware License Audit: What Broadcom Checks and How to Prepare
+
+### Migration (comparison intent)
+- [ ] VMware to Proxmox: Total Cost of Ownership Comparison
+- [ ] VMware to Hyper-V: Step-by-Step Migration Guide
+- [ ] VMware to Nutanix AHV Migration: What Actually Breaks
+- [ ] VMware to XCP-ng: The Open Source Migration Path
+- [ ] Migrating VMware VMs to Cloud: AWS VM Import vs Azure Migrate
+- [ ] Proxmox vs Hyper-V vs Nutanix: Honest Comparison for Former VMware Users
+- [ ] ovftool vs VDDK vs qm importdisk: Export Methods Compared
+- [ ] Running Windows VMs on Proxmox After Migrating from VMware
+
+### Troubleshooting (long-tail search)
+- [ ] ESXi Host Disconnected from vCenter: 7 Causes and Fixes
+- [ ] How to Reset ESXi Root Password (3 Methods That Still Work)
+- [ ] VMware Snapshot Consolidation Stuck: How to Fix Without Data Loss
+- [ ] vMotion Fails at 10%: Network Configuration Checklist
+- [ ] vCenter Server Appliance is Slow: Performance Tuning Guide
+- [ ] ESXi Purple Screen of Death: Diagnosing PSOD Causes
+- [ ] vSAN Health Check Failures: What Each Warning Actually Means
+- [ ] VMware Tools Installation Stuck or Failing: Fixes
+
+### How-To/Operations (reference traffic)
+- [ ] Setting Up VMware PowerCLI: Complete 2026 Installation Guide
+- [ ] How to Check VMware License Expiration with PowerCLI
+- [ ] vCenter Server Appliance Backup: VAMI Configuration Guide
+- [ ] ESXi Host Replacement Procedure: Moving VMs to New Hardware
+- [ ] How to Enable and Configure vSAN ESA
+- [ ] VMware vDS vs Standard vSwitch: When to Use Each
+- [ ] PowerCLI Scripts Every VMware Admin Needs in Their Toolkit
+- [ ] How to Downgrade from VCF to VVF (If Broadcom Lets You)
+
+### Home Lab (affiliate revenue)
+- [ ] Intel NUC vs Mini PC for VMware Home Lab: 2026 Hardware Guide
+- [ ] Building a 3-Node Proxmox Cluster from Old VMware Hardware
+- [ ] ESXi on ARM: Running VMware in a Home Lab in 2026
+- [ ] Best Network Switches for a VMware Home Lab (Under $200)
 
 ## Completed
 (topics move here after article is published)
