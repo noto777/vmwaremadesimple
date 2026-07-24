@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Setting up VCF PowerCLI: the complete guide (2026) | VMwareMadeSimple</title>
+<meta name="description" content="How to install and configure VCF PowerCLI in 2026. Covers the rebrand from VMware PowerCLI, offline installs, certificate handling, and working automation examples." />
+<meta name="keywords" content="VCF PowerCLI,VMware PowerCLI,PowerShell automation,vSphere automation,Connect-VIServer,Install-Module" />
+<link rel="canonical" href="https://vmwaremadesimple.com/articles/vcf-powercli-complete-guide.html" />
+<link rel="stylesheet" href="/css/style.css" />
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2NDPP0ZTKC"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-2NDPP0ZTKC');
+</script>
+
+<!-- Open Graph -->
+<meta property="og:title" content="Setting up VCF PowerCLI: the complete guide (2026)" />
+<meta property="og:description" content="How to install and configure VCF PowerCLI in 2026. Covers the rebrand from VMware PowerCLI, offline installs, certificate handling, and working automation examples." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://vmwaremadesimple.com/articles/vcf-powercli-complete-guide.html" />
+
+<!-- Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Setting up VCF PowerCLI: the complete guide (2026)",
+  "description": "How to install and configure VCF PowerCLI in 2026. Covers the rebrand from VMware PowerCLI, offline installs, certificate handling, and working automation examples.",
+  "author": { "@type": "Organization", "name": "VMwareMadeSimple Editorial" },
+  "publisher": { "@type": "Organization", "name": "VMwareMadeSimple" },
+  "datePublished": "2026-07-23",
+  "dateModified": "2026-07-23",
+  "mainEntityOfPage": "https://vmwaremadesimple.com/articles/vcf-powercli-complete-guide.html"
+}
+</script>
+</head>
+<body>
+
+<!-- Alert strip -->
+<div class="alert-strip">
+  VCF 9.1 released — <a href="/articles/vcf-9-nested-lab-setup-complete-walkthrough.html">licensing and upgrade paths changed. Here's what's new →</a>
+</div>
+
+<!-- Masthead -->
+<div class="masthead">
+  <div class="masthead-inner">
+    <h1><a href="/">VMware<span class="red">MadeSimple</span></a></h1>
+    <div class="tagline">Independent VMware analysis for IT professionals. No vendor spin.</div>
+    <div class="credibility-bar">
+      <div class="creds">
+        <span><span class="dot">●</span> Independent</span>
+        <span><span class="dot">●</span> Sources linked</span>
+        <span><span class="dot">●</span> Updated weekly</span>
+        <span><span class="dot">●</span> Not affiliated with VMware/Broadcom</span>
+      </div>
+      <div class="social">
+        <a href="/sitemap.xml">RSS</a>
+        <a href="#newsletter">Newsletter</a>
+        <a href="mailto:contact@vmwaremadesimple.com">Contact</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Category nav -->
+<div class="navbar">
+  <div class="navbar-inner">
+    <a href="/">Home</a>
+    <a href="/#licensing" class="active">Licensing</a>
+    <a href="/#migration">Migration</a>
+    <a href="/#vcf">VCF 9.1</a>
+    <a href="/#homelab">Home Lab</a>
+    <a href="/#powercli">PowerCLI</a>
+    <a href="/#alternatives">Alternatives</a>
+    <a href="/tools/price-calculator.html">Tools</a>
+    <div class="nav-search">
+      <input type="text" placeholder="Search..." onkeyup="searchSite(this.value)" />
+    </div>
+  </div>
+</div>
+
+<!-- Article header -->
+<div class="article-header">
+  <div class="breadcrumb"><a href="/">Home</a> → PowerCLI</div>
+  <div class="cat-label">PowerCLI</div>
+  <h1>Setting up VCF PowerCLI: the complete guide (2026)</h1>
+  <div class="byline">
+    <span>Updated July 23, 2026</span>
+    <span>·</span>
+    <span>12 min min read</span>
+    <span class="verified">Fact-checked</span>
+  </div>
+</div>
+
+<!-- Article body -->
+<div class="article-body">
+
+<p>If you manage a VMware environment and you're still clicking through the vSphere Client for routine tasks, you're spending hours every week on work that scripts can do in seconds. VCF PowerCLI (the tool formerly known as VMware PowerCLI) is the standard automation tool for vSphere admins, and the setup story changed materially over the last year. This guide walks through installing the current version, handling the gotchas that trip people up, and running your first real automation.</p>
+<p>Version note: commands below assume VCF PowerCLI 9.x. Check the latest available version on the PowerShell Gallery with <code>Find-Module VCF.PowerCLI</code> or <code>Find-PSResource VCF.PowerCLI</code> before pinning anything in build standards.</p>
+<h2>The rename: VMware PowerCLI is now VCF PowerCLI</h2>
+<p>The first thing that confuses everyone is the package name. The module you've been installing for years, <code>VMware.PowerCLI</code>, has been rebranded to <code>VCF.PowerCLI</code>. This happened alongside the VCF 9.0 release and carried through to the current VCF 9.1 release. Broadcom's documentation now points to <code>VCF.PowerCLI</code> as the current package.</p>
+<p>The older <code>VMware.PowerCLI</code> package may still be present on the Gallery for compatibility, but new installs should use <code>VCF.PowerCLI</code>. The cmdlets you already know (Get-VM, Connect-VIServer, New-VM, Start-VM) all work the same way under the new package. The rebrand is mostly cosmetic at the module level.</p>
+<p>For traditional vSphere operations, familiar cmdlets such as <code>Get-VM</code> and <code>Connect-VIServer</code> remain the main interface. Separately, newer VCF-specific modules expose more of the VCF REST API surface, which means VCF-level operations (managing SDDC Manager, working with VCF inventory, lifecycle operations) now have native cmdlets instead of requiring you to hand-roll REST calls.</p>
+<p>The practical split: if you're managing a traditional vSphere cluster (ESXi hosts, vCenter, VMs), you're using the same core cmdlets you've always used. If you're running full VCF with SDDC Manager and the lifecycle tooling, you now have first-class automation for that layer too. For a deeper look at the VCF 9 platform itself, see the <a href="/articles/vcf-9-nested-lab-setup-complete-walkthrough.html">VCF 9 nested lab walkthrough</a>.</p>
+<h2>Prerequisites: what you need before installing</h2>
+<p>VCF PowerCLI runs on PowerShell 5.1 (Windows) and PowerShell 7.x (cross-platform). Check the module's supported PowerShell versions in the current Broadcom or PowerShell Gallery documentation for your specific case. For anything new, prefer PowerShell 7.x unless you have a Windows PowerShell 5.1 dependency. Microsoft is not adding features to Windows PowerShell 5.1, and several newer modules behave better on PowerShell 7.</p>
+<p>The cross-platform support is genuine: PowerCLI can run from Windows, macOS, or Linux when installed in PowerShell 7. You need a machine with internet access to the PowerShell Gallery for online installation, or a way to transfer the offline package for air-gapped environments. You do not need a VMware/Broadcom account to install from the Gallery. That trips people up because Broadcom has put download walls in front of so many things since the acquisition, but the PSGallery modules are public.</p>
+<h2>Installing VCF PowerCLI</h2>
+<p>The install is one command. Open PowerShell (as your normal user; no admin required if you use the CurrentUser scope) and run:</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">Install-Module</span> <span class="n">-Name</span> <span class="n">VCF</span><span class="p">.</span><span class="n">PowerCLI</span> <span class="n">-Scope</span> <span class="n">CurrentUser</span>
+</code></pre></div>
+
+<p>If you're on PowerShell 7.x and prefer the newer PSResourceGet cmdlet (which is replacing PowerShellGet over time):</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">Install-PSResource</span> <span class="n">-Name</span> <span class="n">VCF</span><span class="p">.</span><span class="n">PowerCLI</span> <span class="n">-Scope</span> <span class="n">CurrentUser</span>
+</code></pre></div>
+
+<p>Either works. The first time you run either, you'll get a prompt about trusting the PowerShell Gallery repository. The PSGallery is not trusted by default in fresh PowerShell installations. Answer Yes, or unblock it once.</p>
+<p>For PowerShellGet (Install-Module):</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">Set-PSRepository</span> <span class="n">-Name</span> <span class="n">PSGallery</span> <span class="n">-InstallationPolicy</span> <span class="n">Trusted</span>
+</code></pre></div>
+
+<p>For PSResourceGet (Install-PSResource), the cmdlet is different:</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">Set-PSResourceRepository</span> <span class="n">-Name</span> <span class="n">PSGallery</span> <span class="n">-Trusted</span>
+</code></pre></div>
+
+<p>If you previously installed the old <code>VMware.PowerCLI</code> package, both can coexist. Do not remove the older package from shared automation hosts until you have tested existing scripts. On a workstation, you can inspect what's installed first:</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">Get-Module</span> <span class="n">-ListAvailable</span> <span class="n">VMware</span><span class="p">.</span><span class="n">PowerCLI</span><span class="p">,</span> <span class="n">VCF</span><span class="p">.</span><span class="n">PowerCLI</span>
+</code></pre></div>
+
+<p>Depending on how the modules were installed, shared <code>VMware.*</code> submodules (VMware.VimAutomation.Core, VMware.VimAutomation.Vds, etc.) may remain as dependencies of the newer package. That's normal.</p>
+<p>Confirm the install and check your version:</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">Get-Module</span> <span class="n">-ListAvailable</span> <span class="n">VCF</span><span class="p">.</span><span class="n">PowerCLI</span>
+</code></pre></div>
+
+<p>As of this writing, the current release is 9.1. If you're upgrading from an older VMware PowerCLI release, the update path is the same command:</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">Update-Module</span> <span class="n">-Name</span> <span class="n">VCF</span><span class="p">.</span><span class="n">PowerCLI</span>
+</code></pre></div>
+
+<p>Or with PSResourceGet:</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">Update-PSResource</span> <span class="n">-Name</span> <span class="n">VCF</span><span class="p">.</span><span class="n">PowerCLI</span>
+</code></pre></div>
+
+<h2>The offline install path (air-gapped environments)</h2>
+<p>A lot of VMware environments don't have direct internet access from the management network. For those, you need the offline package.</p>
+<p>The simplest approach doesn't require the Broadcom portal at all. From an internet-connected machine, use <code>Save-Module</code> or <code>Save-PSResource</code> to pull the package locally:</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">Save-Module</span> <span class="n">-Name</span> <span class="n">VCF</span><span class="p">.</span><span class="n">PowerCLI</span> <span class="n">-Path</span> <span class="n">C</span><span class="p">:\</span><span class="n">Temp</span><span class="p">\</span><span class="n">PowerCLI-Offline</span>
+</code></pre></div>
+
+<p>Then transfer that folder to your target machine and copy it into one of your PowerShell module paths. Find those paths with <code>$env:PSModulePath</code>. The CurrentUser module path on Windows is typically <code>C:\Users\&lt;you&gt;\Documents\PowerShell\Modules</code>.</p>
+<p>The expected layout after copying:</p>
+<div class="codehilite"><pre><span></span><code>C:\Users\&lt;you&gt;\Documents\PowerShell\Modules\VCF.PowerCLI\&lt;version&gt;\VCF.PowerCLI.psd1
+</code></pre></div>
+
+<p>The module folder name must match the module name exactly (VCF.PowerCLI) and must sit directly under a path listed in <code>$env:PSModulePath</code>. If <code>Get-Module -ListAvailable VCF.PowerCLI</code> returns nothing after an offline install, the folder is in the wrong place or the version subfolder is missing.</p>
+<p>Broadcom also hosts a VCF PowerCLI zip on the developer portal for offline download. Access there may require a Broadcom account depending on the download location. If you need help finding downloads inside the Broadcom portal, the <a href="/articles/broadcom-support-portal-guide.html">Broadcom support portal guide</a> covers where things live after the reorganization.</p>
+<h2>First-time configuration: two settings you should change</h2>
+<p>After installation, PowerCLI has two default behaviors you should change before doing anything else. Both are one-time settings scoped to your user that persist across sessions.</p>
+<p>The first is CEIP, the Customer Experience Improvement Program. By default, PowerCLI may prompt you about CEIP participation on first use. If you're in an environment where telemetry needs explicit approval, handle it explicitly:</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">Set-PowerCLIConfiguration</span> <span class="n">-ParticipateInCEIP</span> <span class="nv">$false</span> <span class="n">-Scope</span> <span class="n">User</span> <span class="n">-Confirm</span><span class="p">:</span><span class="nv">$false</span>
+</code></pre></div>
+
+<p>The second is certificate validation. If your vCenter uses the VMware default self-signed certificate (which it does out of the box, and which many shops never replace), PowerCLI will refuse to connect by default because the cert isn't trusted. For labs, set InvalidCertificateAction to Ignore:</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">Set-PowerCLIConfiguration</span> <span class="n">-InvalidCertificateAction</span> <span class="n">Ignore</span> <span class="n">-Scope</span> <span class="n">User</span> <span class="n">-Confirm</span><span class="p">:</span><span class="nv">$false</span>
+</code></pre></div>
+
+<p>For production, do it properly: export the vCenter certificate and add it to the trusted root certification authorities on whatever machine runs your PowerCLI scripts. The ignore setting is fine for a lab or a throwaway workstation. It is not fine for a production admin machine that touches multiple environments.</p>
+<p>One more configuration that matters if you work across multiple vCenters simultaneously. By default, PowerCLI operates in single-server mode: connecting to a second vCenter disconnects the first. If you regularly work across two or more vCenters, switch to multiple mode:</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">Set-PowerCLIConfiguration</span> <span class="n">-DefaultVIServerMode</span> <span class="n">Multiple</span> <span class="n">-Scope</span> <span class="n">User</span> <span class="n">-Confirm</span><span class="p">:</span><span class="nv">$false</span>
+</code></pre></div>
+
+<p>In multiple mode, your <code>$global:defaultVIServers</code> array holds every connected vCenter, and cmdlets like Get-VM return results from all of them unless you scope with the <code>-Server</code> parameter.</p>
+<h2>Connecting to vCenter</h2>
+<p>For interactive use, prompt for credentials. Don't hardcode passwords in scripts.</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">$cred</span> <span class="p">=</span> <span class="nb">Get-Credential</span>
+<span class="nb">Connect-VIServer</span> <span class="n">-Server</span> <span class="n">vcenter</span><span class="p">.</span><span class="n">domain</span><span class="p">.</span><span class="n">local</span> <span class="n">-Credential</span> <span class="nv">$cred</span>
+</code></pre></div>
+
+<p>If you're deploying vCenter fresh, the <a href="/articles/how-to-deploy-vcenter-server-appliance-8-step-by-step.html">vCenter Server Appliance deployment walkthrough</a> covers getting to the point where you have something to connect to.</p>
+<p>Once connected, a quick health check:</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">Get-VM</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">Name</span><span class="p">,</span> <span class="n">PowerState</span><span class="p">,</span> <span class="n">NumCpu</span><span class="p">,</span> <span class="n">MemoryGB</span>
+</code></pre></div>
+
+<p>That returns every VM on the connected vCenter with its name, power state, CPU count, and memory allocation. If that returns data, your installation and connection are working.</p>
+<h2>Common first automation tasks</h2>
+<p>Here are three tasks I've seen admins need in their first week with PowerCLI. These are the building blocks for everything else.</p>
+<p>Report on all powered-off VMs across the environment:</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">Get-VM</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">PowerState</span> <span class="o">-eq</span> <span class="s1">&#39;PoweredOff&#39;</span> <span class="p">}</span> <span class="p">|</span>
+  <span class="nb">Select-Object</span> <span class="n">Name</span><span class="p">,</span>
+    <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;Folder&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">Folder</span><span class="p">.</span><span class="n">Name</span><span class="p">}},</span>
+    <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;Host&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span> <span class="k">if</span> <span class="p">(</span><span class="nv">$_</span><span class="p">.</span><span class="n">VMHost</span><span class="p">)</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">VMHost</span><span class="p">.</span><span class="n">Name</span> <span class="p">}</span> <span class="k">else</span> <span class="p">{</span> <span class="s1">&#39;&#39;</span> <span class="p">}</span> <span class="p">}}</span> <span class="p">|</span>
+  <span class="nb">Export-Csv</span> <span class="n">-Path</span> <span class="n">C</span><span class="p">:\</span><span class="n">temp</span><span class="p">\</span><span class="n">powered-off-vms</span><span class="p">.</span><span class="n">csv</span> <span class="n">-NoTypeInformation</span>
+</code></pre></div>
+
+<p>Powered-off VMs still consume datastore capacity and create operational overhead. Cleaning them up reclaims storage and makes consolidation easier, which matters under <a href="/articles/broadcom-vmware-licensing-breakdown.html">Broadcom's VVF/VCF licensing</a> where every host core is a paid asset whether those VMs are running or not.</p>
+<p>Create a new VM from a template (the most common provisioning pattern):</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">$template</span> <span class="p">=</span> <span class="nb">Get-Template</span> <span class="n">-Name</span> <span class="s2">&quot;WindowsServer2022_Template&quot;</span>
+<span class="nv">$rp</span> <span class="p">=</span> <span class="nb">Get-ResourcePool</span> <span class="n">-Name</span> <span class="s2">&quot;Production&quot;</span>
+<span class="nv">$datastore</span> <span class="p">=</span> <span class="nb">Get-Datastore</span> <span class="n">-Name</span> <span class="s2">&quot;vsanDatastore&quot;</span>
+<span class="nv">$spec</span> <span class="p">=</span> <span class="nb">Get-OSCustomizationSpec</span> <span class="n">-Name</span> <span class="s2">&quot;Windows-Domain-Join&quot;</span>
+
+<span class="nb">New-VM</span> <span class="n">-Name</span> <span class="s2">&quot;web-srv-01&quot;</span> <span class="n">-Template</span> <span class="nv">$template</span> <span class="n">-ResourcePool</span> <span class="nv">$rp</span> <span class="p">`</span>
+  <span class="n">-Datastore</span> <span class="nv">$datastore</span> <span class="n">-OSCustomizationSpec</span> <span class="nv">$spec</span>
+</code></pre></div>
+
+<p>The <code>-OSCustomizationSpec</code> applies your sysprep configuration (domain join, IP assignment, admin password) automatically. Without guest customization, you risk duplicate hostname, network identity, and domain-join problems unless your template and post-clone process handle that separately.</p>
+<p>Take a snapshot of every VM in a specific folder before a maintenance window:</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">$folder</span> <span class="p">=</span> <span class="nb">Get-Folder</span> <span class="n">-Name</span> <span class="s2">&quot;Pre-Maintenance&quot;</span>
+<span class="nb">Get-VM</span> <span class="n">-Location</span> <span class="nv">$folder</span> <span class="p">|</span> <span class="nb">New-Snapshot</span> <span class="n">-Name</span> <span class="s2">&quot;Pre-Patch-</span><span class="p">$(</span><span class="nb">Get-Date</span> <span class="n">-Format</span> <span class="n">yyyyMMdd</span><span class="p">)</span><span class="s2">&quot;</span> <span class="n">-Description</span> <span class="s2">&quot;Pre-maintenance rollback point&quot;</span>
+</code></pre></div>
+
+<p>Snapshots are not backups, but a pre-maintenance snapshot is a fast rollback point. Just remember to delete them after you've confirmed the patches applied cleanly, because snapshots grow and degrade performance over time.</p>
+<h2>Running PowerCLI from Linux and macOS</h2>
+<p>The cross-platform support is one of the genuine improvements since the rebrand. Install PowerShell 7 on a Linux management box and you have the same cmdlet set. On Ubuntu 24.04, you need Microsoft's package repository first:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Add Microsoft&#39;s package repository (Ubuntu 24.04 example)</span>
+wget<span class="w"> </span>https://packages.microsoft.com/config/ubuntu/24.04/packages-microsoft-prod.deb
+sudo<span class="w"> </span>dpkg<span class="w"> </span>-i<span class="w"> </span>packages-microsoft-prod.deb
+sudo<span class="w"> </span>apt<span class="w"> </span>update
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>powershell
+pwsh
+</code></pre></div>
+
+<p>Then inside the pwsh session:</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">Install-Module</span> <span class="n">-Name</span> <span class="n">VCF</span><span class="p">.</span><span class="n">PowerCLI</span> <span class="n">-Scope</span> <span class="n">CurrentUser</span>
+<span class="nb">Set-PowerCLIConfiguration</span> <span class="n">-InvalidCertificateAction</span> <span class="n">Ignore</span> <span class="n">-Scope</span> <span class="n">User</span> <span class="n">-Confirm</span><span class="p">:</span><span class="nv">$false</span>
+<span class="nb">Connect-VIServer</span> <span class="n">-Server</span> <span class="n">vcenter</span><span class="p">.</span><span class="n">domain</span><span class="p">.</span><span class="n">local</span>
+</code></pre></div>
+
+<p>This matters because a lot of automation infrastructure runs on Linux. If your CI/CD pipeline, scheduled job runner, or Ansible control node is already Linux, you don't need to stand up a Windows VM just to run PowerCLI.</p>
+<h2>Common problems and fixes</h2>
+<p>The most common error after a fresh install is a certificate validation failure when connecting. You'll see something like "The server certificate on 'vcenter.domain.local' could not be validated." That's the InvalidCertificateAction setting covered above. For labs, set it to Ignore. For production, import the vCenter certificate into the trusted root store.</p>
+<p>The second most common is a module load failure after the offline install path, usually because the zip was extracted to the wrong directory. The module folder name must match the module name exactly (VCF.PowerCLI) and must sit directly under a path listed in <code>$env:PSModulePath</code>. If <code>Get-Module -ListAvailable VCF.PowerCLI</code> returns nothing after an offline install, the folder is in the wrong place or the version subfolder is missing.</p>
+<p>The third is running an old script that references <code>VMware.VimAutomation.Core</code> explicitly in an <code>Import-Module</code> line at the top. That submodule still exists under VCF.PowerCLI, so the import will work, but if you're modernizing the script, drop the explicit Import-Module line entirely. PowerShell auto-loads modules when you use a cmdlet from them, and the explicit import is legacy from the PowerCLI 5.x days.</p>
+<h2>Migrating your existing scripts</h2>
+<p>If you have a library of VMware PowerCLI scripts, most will work unchanged under VCF PowerCLI. The cmdlet names are identical. What you should do:</p>
+<ul>
+<li>Replace <code>Import-Module VMware.PowerCLI</code> or <code>Import-Module VMware.VimAutomation.Core</code> with <code>Import-Module VCF.PowerCLI</code>, or remove the line entirely.</li>
+<li>Test each script against a non-production vCenter first. The core vSphere cmdlets are stable, but Broadcom has been pruning deprecated cmdlets across releases. Review the Broadcom release notes for removed or deprecated cmdlets before upgrading production automation.</li>
+<li>Update your module install steps in any documentation or build scripts from <code>VMware.PowerCLI</code> to <code>VCF.PowerCLI</code>.</li>
+</ul>
+<p>If a script breaks after upgrade, check the release notes on the Broadcom developer portal before assuming a bug.</p>
+<h2>When to use PowerCLI vs other tools</h2>
+<p>VCF PowerCLI is the right tool for vSphere and VCF automation. It is not the right tool for everything. If you're scripting guest-OS-level operations (installing software, managing services inside Windows or Linux VMs), use the native OS tooling: PowerShell remoting or DSC for Windows, Ansible or SSH-based bash for Linux. PowerCLI manages the VM as an object in vSphere; it doesn't replace guest-level config management.</p>
+<p>For infrastructure-as-code across large deployments, Terraform is often a better fit when you need declarative state, repeatable builds, and dependency tracking. PowerCLI is usually better for reporting, one-off remediation, and imperative day-2 operations on an existing environment. Most mature teams use both: Terraform to build, PowerCLI to operate.</p>
+<h2>Keeping it updated</h2>
+<p>VCF PowerCLI 9.x is aligned with the VCF 9.x generation. Always check the PowerShell Gallery and Broadcom release notes for the current version and compatibility details. The update is a single command:</p>
+<div class="codehilite"><pre><span></span><code><span class="c"># PowerShellGet</span>
+<span class="nb">Update-Module</span> <span class="n">-Name</span> <span class="n">VCF</span><span class="p">.</span><span class="n">PowerCLI</span>
+
+<span class="c"># PSResourceGet</span>
+<span class="nb">Update-PSResource</span> <span class="n">-Name</span> <span class="n">VCF</span><span class="p">.</span><span class="n">PowerCLI</span>
+</code></pre></div>
+
+<p>Check your installed version before and after with <code>Get-Module -ListAvailable VCF.PowerCLI</code>. Older PowerCLI versions will connect to newer vCenters, but newer features and properties won't be available, and you may hit API compatibility warnings.</p>
+<p>The setup is a one-time investment. Once VCF PowerCLI is installed and configured, every report, bulk change, and inventory export you'd otherwise do by hand becomes a script you write once and run forever. That's the entire value proposition, and it pays back the setup time within the first week of real use.</p>
+
+    <!-- Newsletter CTA -->
+<div class="newsletter-cta" id="newsletter">
+  <h3>Stay ahead of the VMware changes</h3>
+  <p>We're publishing detailed licensing breakdowns, comparison guides, migration walkthroughs, and cost calculators. Get them in your inbox.</p>
+  <input type="email" placeholder="your@email.com" />
+  <button>Subscribe</button>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div>
+    © 2026 VMwareMadeSimple.com — Independent. Not affiliated with VMware or Broadcom.
+    <div class="aff-disclosure" style="margin-top: 0.3rem;">Some links are affiliate links. See our <a href="#">disclosure policy</a>.</div>
+  </div>
+  <div class="footer-links">
+    <a href="#">About</a>
+    <a href="mailto:contact@vmwaremadesimple.com">Contact</a>
+    <a href="/sitemap.xml">RSS</a>
+    <a href="#">Privacy</a>
+    <a href="#">Corrections</a>
+  </div>
+</footer>
+
+<script>
+function searchSite(q) {
+  if (q.length < 2) return;
+  if (event && event.key === 'Enter') {
+    window.location.href = 'https://www.google.com/search?q=site:vmwaremadesimple.com+' + encodeURIComponent(q);
+  }
+}
+</script>
+
+</body>
+</html>
+
