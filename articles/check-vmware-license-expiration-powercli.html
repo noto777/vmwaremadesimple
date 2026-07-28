@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>How to Check VMware License Expiration Dates with PowerCLI | VMwareMadeSimple</title>
+<meta name="description" content="Check VMware license expiration dates with PowerCLI: query vCenter and ESXi for subscription terms, monitor for expiring keys, automate alerts." />
+<meta name="keywords" content="vmware license expiration, powercli license check, vsphere license expiration, broadcom subscription expiration, esxi license check powercli" />
+<link rel="canonical" href="https://vmwaremadesimple.com/articles/check-vmware-license-expiration-powercli.html" />
+<link rel="stylesheet" href="/css/style.css" />
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2NDPP0ZTKC"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-2NDPP0ZTKC');
+</script>
+
+<!-- Open Graph -->
+<meta property="og:title" content="How to Check VMware License Expiration Dates with PowerCLI" />
+<meta property="og:description" content="Check VMware license expiration dates with PowerCLI: query vCenter and ESXi for subscription terms, monitor for expiring keys, automate alerts." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://vmwaremadesimple.com/articles/check-vmware-license-expiration-powercli.html" />
+
+<!-- Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "How to Check VMware License Expiration Dates with PowerCLI",
+  "description": "Check VMware license expiration dates with PowerCLI: query vCenter and ESXi for subscription terms, monitor for expiring keys, automate alerts.",
+  "author": { "@type": "Organization", "name": "VMwareMadeSimple Editorial" },
+  "publisher": { "@type": "Organization", "name": "VMwareMadeSimple" },
+  "datePublished": "2026-07-27",
+  "dateModified": "2026-07-27",
+  "mainEntityOfPage": "https://vmwaremadesimple.com/articles/check-vmware-license-expiration-powercli.html"
+}
+</script>
+</head>
+<body>
+
+<!-- Alert strip -->
+<div class="alert-strip">
+  VCF 9.1 released — <a href="/articles/vcf-9-nested-lab-setup-complete-walkthrough.html">licensing and upgrade paths changed. Here's what's new →</a>
+</div>
+
+<!-- Masthead -->
+<div class="masthead">
+  <div class="masthead-inner">
+    <h1><a href="/">VMware<span class="red">MadeSimple</span></a></h1>
+    <div class="tagline">Independent VMware analysis for IT professionals. No vendor spin.</div>
+    <div class="credibility-bar">
+      <div class="creds">
+        <span><span class="dot">●</span> Independent</span>
+        <span><span class="dot">●</span> Sources linked</span>
+        <span><span class="dot">●</span> Updated weekly</span>
+        <span><span class="dot">●</span> Not affiliated with VMware/Broadcom</span>
+      </div>
+      <div class="social">
+        <a href="/sitemap.xml">RSS</a>
+        <a href="#newsletter">Newsletter</a>
+        <a href="mailto:contact@vmwaremadesimple.com">Contact</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Category nav -->
+<div class="navbar">
+  <div class="navbar-inner">
+    <a href="/">Home</a>
+    <a href="/#licensing" class="active">Licensing</a>
+    <a href="/#migration">Migration</a>
+    <a href="/#vcf">VCF 9.1</a>
+    <a href="/#homelab">Home Lab</a>
+    <a href="/#powercli">PowerCLI</a>
+    <a href="/#alternatives">Alternatives</a>
+    <a href="/tools/price-calculator.html">Tools</a>
+    <div class="nav-search">
+      <input type="text" placeholder="Search..." onkeyup="searchSite(this.value)" />
+    </div>
+  </div>
+</div>
+
+<!-- Article header -->
+<div class="article-header">
+  <div class="breadcrumb"><a href="/">Home</a> → PowerCLI</div>
+  <div class="cat-label">PowerCLI</div>
+  <h1>How to Check VMware License Expiration Dates with PowerCLI</h1>
+  <div class="byline">
+    <span>Updated July 27, 2026</span>
+    <span>·</span>
+    <span>8 min read</span>
+    <span class="verified">Fact-checked</span>
+  </div>
+</div>
+
+<!-- Article body -->
+<div class="article-body">
+
+<h2>How to Check VMware License Expiration Dates with PowerCLI</h2>
+<p>Under Broadcom's subscription model, VMware license keys encode an expiration date that reflects the subscription term. The vSphere Client shows you a license list, but it buries expiration dates in property dialogs that you have to click into one at a time. If you're managing multiple vCenter servers and dozens of ESXi hosts, checking each license through the UI is tedious and easy to forget until renewal becomes urgent.</p>
+<p>The PowerCLI approach queries the vSphere LicenseManager API directly and returns the expiration date for every license key known to vCenter. This works for evaluation licenses, subscription keys, and legacy perpetual keys with active Support and Subscription terms. The expiration date comes from the license key itself, not from your Broadcom contract, so there's a gap between what the API reports and what your actual entitlement covers. I'll address that gap at the end.</p>
+<p>If you haven't set up PowerCLI yet, the <a href="/articles/vcf-powercli-complete-guide.html">VCF PowerCLI complete guide</a> covers installation and the Broadcom module transition. The short version: <code>Install-Module VCF.PowerCLI</code>, then <code>Import-Module VCF.PowerCLI</code>.</p>
+<h2>What the LicenseManager API returns</h2>
+<p>Every vCenter server exposes a LicenseManager managed object through the vSphere API. Its <code>Licenses</code> property contains an array of <code>LicenseManagerLicenseInfo</code> objects, each representing one license key added to that vCenter. Each object has a <code>Properties</code> collection of key-value pairs. The property names vary by license type, but the ones that matter for expiration checking are:</p>
+<ul>
+<li><code>expirationDate</code> — the date the key expires, if applicable</li>
+<li><code>expirationHours</code> — hours remaining, primarily for evaluation licenses</li>
+<li><code>evaluation</code> — boolean, true for the built-in 60-day evaluation license</li>
+</ul>
+<p>Not all licenses populate <code>expirationDate</code>. Perpetual licenses with active SnS may or may not include it depending on when and how the key was generated. Subscription keys typically do. Evaluation keys always do. The <code>Properties</code> collection is where the data lives. There is no dedicated <code>ExpirationDate</code> property on the license object itself. You have to dig into the key-value array.</p>
+<h2>Querying vCenter for license expiration</h2>
+<p>Connect to vCenter first:</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">$vcenter</span> <span class="p">=</span> <span class="s2">&quot;vcenter.lab.local&quot;</span>
+<span class="nv">$credential</span> <span class="p">=</span> <span class="nb">Get-Credential</span> <span class="n">-Message</span> <span class="s2">&quot;vCenter credentials&quot;</span>
+<span class="nb">Connect-VIServer</span> <span class="n">-Server</span> <span class="nv">$vcenter</span> <span class="n">-Credential</span> <span class="nv">$credential</span>
+</code></pre></div>
+
+<p>Then query the LicenseManager through the ServiceInstance:</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">$si</span> <span class="p">=</span> <span class="nb">Get-View</span> <span class="n">ServiceInstance</span>
+<span class="nv">$lm</span> <span class="p">=</span> <span class="nb">Get-View</span> <span class="nv">$si</span><span class="p">.</span><span class="n">Content</span><span class="p">.</span><span class="n">LicenseManager</span>
+
+<span class="nv">$licenses</span> <span class="p">=</span> <span class="nv">$lm</span><span class="p">.</span><span class="n">Licenses</span> <span class="p">|</span> <span class="k">ForEach</span><span class="n">-Object</span> <span class="p">{</span>
+    <span class="nv">$expProp</span> <span class="p">=</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Properties</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Key</span> <span class="o">-eq</span> <span class="s2">&quot;expirationDate&quot;</span> <span class="p">}</span>
+    <span class="nv">$isEval</span>  <span class="p">=</span> <span class="p">(</span><span class="nv">$_</span><span class="p">.</span><span class="n">Properties</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Key</span> <span class="o">-eq</span> <span class="s2">&quot;evaluation&quot;</span> <span class="p">}).</span><span class="n">Value</span> <span class="o">-eq</span> <span class="nv">$true</span>
+
+    <span class="nv">$expirationDate</span> <span class="p">=</span> <span class="k">if</span> <span class="p">(</span><span class="nv">$expProp</span><span class="p">)</span> <span class="p">{</span> <span class="no">[DateTime]</span><span class="nv">$expProp</span><span class="p">.</span><span class="n">Value</span> <span class="p">}</span> <span class="k">else</span> <span class="p">{</span> <span class="nv">$null</span> <span class="p">}</span>
+    <span class="nv">$daysRemaining</span>  <span class="p">=</span> <span class="k">if</span> <span class="p">(</span><span class="nv">$expirationDate</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="nv">$expirationDate</span> <span class="p">-</span> <span class="p">(</span><span class="nb">Get-Date</span><span class="p">)).</span><span class="n">Days</span> <span class="p">}</span> <span class="k">else</span> <span class="p">{</span> <span class="nv">$null</span> <span class="p">}</span>
+
+    <span class="no">[PSCustomObject]</span><span class="p">@{</span>
+        <span class="n">Name</span>           <span class="p">=</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Name</span>
+        <span class="n">LicenseKey</span>     <span class="p">=</span> <span class="nv">$_</span><span class="p">.</span><span class="n">LicenseKey</span>
+        <span class="n">Edition</span>        <span class="p">=</span> <span class="nv">$_</span><span class="p">.</span><span class="n">EditionKey</span>
+        <span class="n">Total</span>          <span class="p">=</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Total</span>
+        <span class="n">Used</span>           <span class="p">=</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Used</span>
+        <span class="n">IsEvaluation</span>   <span class="p">=</span> <span class="nv">$isEval</span>
+        <span class="n">ExpirationDate</span> <span class="p">=</span> <span class="k">if</span> <span class="p">(</span><span class="nv">$expirationDate</span><span class="p">)</span> <span class="p">{</span> <span class="nv">$expirationDate</span><span class="p">.</span><span class="n">ToString</span><span class="p">(</span><span class="s2">&quot;yyyy-MM-dd&quot;</span><span class="p">)</span> <span class="p">}</span> <span class="k">else</span> <span class="p">{</span> <span class="s2">&quot;No expiration encoded&quot;</span> <span class="p">}</span>
+        <span class="n">DaysRemaining</span>  <span class="p">=</span> <span class="k">if</span> <span class="p">(</span><span class="nv">$daysRemaining</span> <span class="o">-ne</span> <span class="nv">$null</span><span class="p">)</span> <span class="p">{</span>
+                            <span class="k">if</span> <span class="p">(</span><span class="nv">$daysRemaining</span> <span class="o">-lt</span> <span class="n">0</span><span class="p">)</span> <span class="p">{</span> <span class="s2">&quot;EXPIRED (</span><span class="p">$(</span><span class="no">[Math]</span><span class="p">::</span><span class="n">Abs</span><span class="p">(</span><span class="nv">$daysRemaining</span><span class="p">))</span><span class="s2"> days ago)&quot;</span> <span class="p">}</span>
+                            <span class="k">else</span> <span class="p">{</span> <span class="nv">$daysRemaining</span> <span class="p">}</span>
+                         <span class="p">}</span> <span class="k">else</span> <span class="p">{</span> <span class="s2">&quot;N/A&quot;</span> <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nv">$licenses</span> <span class="p">|</span> <span class="nb">Format-Table</span> <span class="n">-AutoSize</span>
+</code></pre></div>
+
+<p>This returns a table with the license name, key, edition, total and used counts, whether it's an evaluation license, the expiration date, and days remaining. Licenses that don't have <code>expirationDate</code> encoded show "No expiration encoded" rather than throwing an error.</p>
+<p>The <code>Total</code> and <code>Used</code> columns matter for capacity-based licenses. Under the Broadcom per-core model, VVF and VCF licenses have capacity counts. A VVF key with <code>Total: 192</code> and <code>Used: 192</code> means all 192 cores of capacity are assigned. That's not an expiration issue, but if you're already querying the license manager, include capacity data in the report while you're there. The <a href="/articles/automating-vsphere-license-compliance-powercli.html">license compliance audit script</a> covers the capacity side in detail, including the 72-core per-order minimum and how to reconcile deployed cores against your contract.</p>
+<h2>Filtering for expiring licenses</h2>
+<p>The full list is useful for a snapshot, but for alerting you want to filter to licenses expiring within a window:</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">$warningDays</span> <span class="p">=</span> <span class="n">60</span>
+<span class="nv">$today</span> <span class="p">=</span> <span class="nb">Get-Date</span>
+
+<span class="nv">$expiring</span> <span class="p">=</span> <span class="nv">$licenses</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span>
+    <span class="nv">$_</span><span class="p">.</span><span class="n">DaysRemaining</span> <span class="o">-is</span> <span class="no">[int]</span> <span class="o">-and</span> <span class="nv">$_</span><span class="p">.</span><span class="n">DaysRemaining</span> <span class="o">-le</span> <span class="nv">$warningDays</span>
+<span class="p">}</span> <span class="p">|</span> <span class="nb">Sort-Object</span> <span class="n">DaysRemaining</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="nv">$expiring</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nb">Write-Host</span> <span class="s2">&quot;WARNING: </span><span class="p">$(</span><span class="nv">$expiring</span><span class="p">.</span><span class="n">Count</span><span class="p">)</span><span class="s2"> license(s) expiring within $warningDays days:&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Yellow</span>
+    <span class="nv">$expiring</span> <span class="p">|</span> <span class="nb">Format-Table</span> <span class="n">Name</span><span class="p">,</span> <span class="n">LicenseKey</span><span class="p">,</span> <span class="n">Edition</span><span class="p">,</span> <span class="n">ExpirationDate</span><span class="p">,</span> <span class="n">DaysRemaining</span> <span class="n">-AutoSize</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nb">Write-Host</span> <span class="s2">&quot;No licenses expiring within $warningDays days.&quot;</span> <span class="n">-ForegroundColor</span> <span class="n">Green</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>I set the default warning window to 60 days because Broadcom's late renewal penalty kicks in after the contract expires, and renewal cycles involving procurement and legal review can eat three to four weeks. Sixty days gives enough runway to start the renewal process without hitting the penalty. The <a href="/articles/broadcom-vmware-licensing-breakdown.html">Broadcom licensing breakdown</a> covers the 20% late renewal penalty and per-core pricing in detail.</p>
+<h2>Checking ESXi host licenses directly</h2>
+<p>If you have standalone ESXi hosts not managed by vCenter, or you want to verify the host's local license assignment independently, connect directly to the host:</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">Connect-VIServer</span> <span class="n">-Server</span> <span class="s2">&quot;esxi01.lab.local&quot;</span> <span class="n">-User</span> <span class="n">root</span> <span class="n">-Password</span> <span class="s2">&quot;yourPassword&quot;</span>
+<span class="c"># Or prompt securely: Connect-VIServer -Server &quot;esxi01.lab.local&quot; -Credential (Get-Credential)</span>
+
+<span class="nv">$si</span> <span class="p">=</span> <span class="nb">Get-View</span> <span class="n">ServiceInstance</span>
+<span class="nv">$lm</span> <span class="p">=</span> <span class="nb">Get-View</span> <span class="nv">$si</span><span class="p">.</span><span class="n">Content</span><span class="p">.</span><span class="n">LicenseManager</span>
+
+<span class="c"># The host&#39;s evaluation status</span>
+<span class="nv">$lm</span><span class="p">.</span><span class="n">Evaluation</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="p">`</span>
+    <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s2">&quot;State&quot;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">State</span><span class="p">}},</span>
+    <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s2">&quot;ExpirationHours&quot;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">ExpirationHours</span><span class="p">}},</span>
+    <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s2">&quot;ExpirationDate&quot;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="k">if</span> <span class="p">(</span><span class="nv">$_</span><span class="p">.</span><span class="n">ExpirationDate</span><span class="p">)</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">ExpirationDate</span><span class="p">.</span><span class="n">ToString</span><span class="p">(</span><span class="s2">&quot;yyyy-MM-dd&quot;</span><span class="p">)</span> <span class="p">}</span> <span class="k">else</span> <span class="p">{</span> <span class="s2">&quot;None&quot;</span> <span class="p">}}}</span>
+
+<span class="c"># The host&#39;s assigned licenses</span>
+<span class="nv">$lm</span><span class="p">.</span><span class="n">Licenses</span> <span class="p">|</span> <span class="k">ForEach</span><span class="n">-Object</span> <span class="p">{</span>
+    <span class="nv">$expProp</span> <span class="p">=</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Properties</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Key</span> <span class="o">-eq</span> <span class="s2">&quot;expirationDate&quot;</span> <span class="p">}</span>
+    <span class="no">[PSCustomObject]</span><span class="p">@{</span>
+        <span class="n">LicenseKey</span>     <span class="p">=</span> <span class="nv">$_</span><span class="p">.</span><span class="n">LicenseKey</span>
+        <span class="n">Edition</span>        <span class="p">=</span> <span class="nv">$_</span><span class="p">.</span><span class="n">EditionKey</span>
+        <span class="n">ExpirationDate</span> <span class="p">=</span> <span class="k">if</span> <span class="p">(</span><span class="nv">$expProp</span><span class="p">)</span> <span class="p">{</span> <span class="no">[DateTime]</span><span class="nv">$expProp</span><span class="p">.</span><span class="n">Value</span> <span class="p">}</span> <span class="k">else</span> <span class="p">{</span> <span class="s2">&quot;No expiration&quot;</span> <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>The <code>$lm.Evaluation</code> object is specific to ESXi and tells you whether the host is running in evaluation mode and how many hours remain. Property names can vary by ESXi version, so inspect <code>$lm.Evaluation | Select-Object *</code> first and use the properties present in your version. On a fresh ESXi install, the evaluation period is 60 days, reported as 1440 hours when unused.</p>
+<p>For a standalone host past its evaluation period with no license applied, the state reads expired. The host keeps running existing VMs, but normal management operations such as powering on new VMs or changing many host and VM settings are restricted. If you're building out a <a href="/articles/best-vmware-home-lab-hardware-2026.html">home lab</a> and running ESXi in evaluation mode, this script will tell you how much time you have left before those restrictions apply.</p>
+<h2>What happens when a license expires</h2>
+<p>The behavior depends on whether it's an evaluation license or a subscription lapse. These are fundamentally different mechanisms.</p>
+<p>Evaluation expiration is the harsher case. When a 60-day ESXi evaluation expires, the host continues running existing VMs, but normal management operations such as powering on new VMs or changing many host and VM settings are restricted. vCenter Server evaluation works similarly: after expiration, vCenter enters a read-only state where you can view the inventory but cannot make changes. This is enforced by the product regardless of whether the host is connected to vCenter, and there is no grace period beyond the 60 days.</p>
+<p>A subscription or contract lapse is not the same as ESXi evaluation expiration. In many cases the installed software continues to run, but you may lose entitlement to support, patches, downloads, and renewals, and vCenter may show the key as expired or out of compliance. Confirm enforcement behavior for your specific product and version with Broadcom documentation. The <a href="/articles/vmware-subscription-vs-perpetual-license.html">subscription versus perpetual analysis</a> covers the contractual side of this.</p>
+<p>There's a nuance worth stating plainly: if you apply a subscription license key that has an <code>expirationDate</code> encoded, and that date passes, the vCenter UI may flag the license as expired even though your contract is still active. This happens when the key's encoded date doesn't match your actual contract term. The fix is to reapply the current key from your Broadcom Customer Portal, which refreshes the encoded dates. I've seen this confuse administrators who assumed their infrastructure was about to shut down when the contract was fine.</p>
+<h2>Exporting and scheduling</h2>
+<p>Export to CSV for record-keeping:</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">$ts</span> <span class="p">=</span> <span class="nb">Get-Date</span> <span class="n">-Format</span> <span class="s2">&quot;yyyyMMdd&quot;</span>
+<span class="nv">$reportPath</span> <span class="p">=</span> <span class="s2">&quot;C:\Logs\License_Expiration_$ts.csv&quot;</span>
+<span class="nv">$licenses</span> <span class="p">|</span> <span class="nb">Export-Csv</span> <span class="n">-Path</span> <span class="nv">$reportPath</span> <span class="n">-NoTypeInformation</span> <span class="n">-Encoding</span> <span class="n">UTF8</span>
+<span class="nb">Write-Host</span> <span class="s2">&quot;Report saved: $reportPath&quot;</span>
+</code></pre></div>
+
+<p>For scheduled monitoring, run the script daily via Windows Task Scheduler and alert only when licenses fall inside the warning window. A Teams or Slack webhook replacing the <code>Write-Host</code> lines gives you ops integration without a dedicated monitoring platform. Microsoft's <a href="https://learn.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook">Teams webhook documentation</a> covers the payload format; the Adaptive Card format takes about 15 lines of JSON to produce a readable alert.</p>
+<div class="codehilite"><pre><span></span><code><span class="c"># Scheduled task registration</span>
+<span class="nv">$action</span> <span class="p">=</span> <span class="nb">New-ScheduledTaskAction</span> <span class="n">-Execute</span> <span class="s2">&quot;powershell.exe&quot;</span> <span class="p">`</span>
+    <span class="n">-Argument</span> <span class="s2">&quot;-NonInteractive -File C:\Scripts\check-license-expiration.ps1&quot;</span>
+<span class="nv">$trigger</span> <span class="p">=</span> <span class="nb">New-ScheduledTaskTrigger</span> <span class="n">-Daily</span> <span class="n">-At</span> <span class="s2">&quot;06:00AM&quot;</span>
+<span class="nb">Register-ScheduledTask</span> <span class="n">-TaskName</span> <span class="s2">&quot;License Expiration Check&quot;</span> <span class="p">`</span>
+    <span class="n">-Action</span> <span class="nv">$action</span> <span class="n">-Trigger</span> <span class="nv">$trigger</span> <span class="n">-RunLevel</span> <span class="n">Highest</span>
+</code></pre></div>
+
+<p>The Read-Only role in vCenter is sufficient for this script in most environments. If the script returns no license data, verify the account has permission to view global license information. You don't need administrator privileges to query the LicenseManager, which means you can hand the scheduled task to a monitoring service account without elevated rights.</p>
+<h2>What this cannot tell you</h2>
+<p>The <code>expirationDate</code> property comes from the license key's encoded data, not from Broadcom's contract database. A subscription key might show an expiration date that's shorter or longer than your actual contract term, depending on how the key was generated and when it was applied to vCenter.</p>
+<p>For authoritative expiration dates tied to your contract, log into the Broadcom Support Portal and check your entitlements under the License Management section. The script tells you what's encoded in the keys deployed in your environment. The portal tells you what your contract actually covers. You need both to get an accurate picture, and they won't always agree.</p>
+<p>If you're running VCF with SDDC Manager, check the Administration menu's Licensing view there first. It consolidates vSphere, vSAN, and NSX license status in one dashboard and surfaces expiration warnings for all components. For environments without SDDC Manager, the script above is the fastest way to get expiration data across multiple vCenter servers. Run it in a loop against each vCenter and aggregate the CSVs into a single view.</p>
+
+    <!-- Newsletter CTA -->
+<div class="newsletter-cta" id="newsletter">
+  <h3>Stay ahead of the VMware changes</h3>
+  <p>We're publishing detailed licensing breakdowns, comparison guides, migration walkthroughs, and cost calculators. Get them in your inbox.</p>
+  <input type="email" placeholder="your@email.com" />
+  <button>Subscribe</button>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div>
+    © 2026 VMwareMadeSimple.com — Independent. Not affiliated with VMware or Broadcom.
+    <div class="aff-disclosure" style="margin-top: 0.3rem;">Some links are affiliate links. See our <a href="#">disclosure policy</a>.</div>
+  </div>
+  <div class="footer-links">
+    <a href="#">About</a>
+    <a href="mailto:contact@vmwaremadesimple.com">Contact</a>
+    <a href="/sitemap.xml">RSS</a>
+    <a href="#">Privacy</a>
+    <a href="#">Corrections</a>
+  </div>
+</footer>
+
+<script>
+function searchSite(q) {
+  if (q.length < 2) return;
+  if (event && event.key === 'Enter') {
+    window.location.href = 'https://www.google.com/search?q=site:vmwaremadesimple.com+' + encodeURIComponent(q);
+  }
+}
+</script>
+
+</body>
+</html>
+
