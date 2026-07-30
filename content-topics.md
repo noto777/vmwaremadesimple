@@ -21,7 +21,7 @@
 ## High Priority — How-To/Troubleshooting (SEO long-tail)
 
 - [ ] ESXi Host Shows Disconnected in vCenter: Full Troubleshooting Guide
-- [ ] How to Reset ESXi Root Password Without Reinstalling
+- [x] How to Reset ESXi Root Password Without Reinstalling *(published Jul 29)*
 - [ ] vSphere HA Admission Control Explained: When to Use and When to Disable
 - [ ] VMware Snapshot Best Practices: Why Your VMs Are Slow
 
@@ -72,7 +72,7 @@
 
 ### Troubleshooting (long-tail search)
 - [ ] ESXi Host Disconnected from vCenter: 7 Causes and Fixes
-- [ ] How to Reset ESXi Root Password (3 Methods That Still Work)
+- [x] How to Reset ESXi Root Password (3 Methods That Still Work) *(published Jul 29 — merged into reset-without-reinstalling)*
 - [ ] VMware Snapshot Consolidation Stuck: How to Fix Without Data Loss
 - [ ] vMotion Fails at 10%: Network Configuration Checklist
 - [ ] vCenter Server Appliance is Slow: Performance Tuning Guide
