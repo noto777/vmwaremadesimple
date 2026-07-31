@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ESXi Host Disconnected in vCenter: Diagnosing and Fixing the Connection | VMwareMadeSimple</title>
+<meta name="description" content="ESXi host showing disconnected or not responding in vCenter? Learn how to diagnose management agents, UDP 902 heartbeat drops, and certificate issues with real commands." />
+<meta name="keywords" content="esxi host disconnected,esxi not responding,vcenter troubleshooting,vmware hostd,udp 902 heartbeat" />
+<link rel="canonical" href="https://vmwaremadesimple.com/articles/esxi-host-disconnected-vcenter-troubleshooting.html" />
+<link rel="stylesheet" href="/css/style.css" />
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2NDPP0ZTKC"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-2NDPP0ZTKC');
+</script>
+
+<!-- Open Graph -->
+<meta property="og:title" content="ESXi Host Disconnected in vCenter: Diagnosing and Fixing the Connection" />
+<meta property="og:description" content="ESXi host showing disconnected or not responding in vCenter? Learn how to diagnose management agents, UDP 902 heartbeat drops, and certificate issues with real commands." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://vmwaremadesimple.com/articles/esxi-host-disconnected-vcenter-troubleshooting.html" />
+
+<!-- Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "ESXi Host Disconnected in vCenter: Diagnosing and Fixing the Connection",
+  "description": "ESXi host showing disconnected or not responding in vCenter? Learn how to diagnose management agents, UDP 902 heartbeat drops, and certificate issues with real commands.",
+  "author": { "@type": "Organization", "name": "VMwareMadeSimple Editorial" },
+  "publisher": { "@type": "Organization", "name": "VMwareMadeSimple" },
+  "datePublished": "2026-07-30",
+  "dateModified": "2026-07-30",
+  "mainEntityOfPage": "https://vmwaremadesimple.com/articles/esxi-host-disconnected-vcenter-troubleshooting.html"
+}
+</script>
+</head>
+<body>
+
+<!-- Alert strip -->
+<div class="alert-strip">
+  VCF 9.1 released — <a href="/articles/vcf-9-nested-lab-setup-complete-walkthrough.html">licensing and upgrade paths changed. Here's what's new →</a>
+</div>
+
+<!-- Masthead -->
+<div class="masthead">
+  <div class="masthead-inner">
+    <h1><a href="/">VMware<span class="red">MadeSimple</span></a></h1>
+    <div class="tagline">Independent VMware analysis for IT professionals. No vendor spin.</div>
+    <div class="credibility-bar">
+      <div class="creds">
+        <span><span class="dot">●</span> Independent</span>
+        <span><span class="dot">●</span> Sources linked</span>
+        <span><span class="dot">●</span> Updated weekly</span>
+        <span><span class="dot">●</span> Not affiliated with VMware/Broadcom</span>
+      </div>
+      <div class="social">
+        <a href="/sitemap.xml">RSS</a>
+        <a href="#newsletter">Newsletter</a>
+        <a href="mailto:contact@vmwaremadesimple.com">Contact</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Category nav -->
+<div class="navbar">
+  <div class="navbar-inner">
+    <a href="/">Home</a>
+    <a href="/#licensing" class="active">Licensing</a>
+    <a href="/#migration">Migration</a>
+    <a href="/#vcf">VCF 9.1</a>
+    <a href="/#homelab">Home Lab</a>
+    <a href="/#powercli">PowerCLI</a>
+    <a href="/#alternatives">Alternatives</a>
+    <a href="/tools/price-calculator.html">Tools</a>
+    <div class="nav-search">
+      <input type="text" placeholder="Search..." onkeyup="searchSite(this.value)" />
+    </div>
+  </div>
+</div>
+
+<!-- Article header -->
+<div class="article-header">
+  <div class="breadcrumb"><a href="/">Home</a> → Troubleshooting</div>
+  <div class="cat-label">Troubleshooting</div>
+  <h1>ESXi Host Disconnected in vCenter: Diagnosing and Fixing the Connection</h1>
+  <div class="byline">
+    <span>Updated July 30, 2026</span>
+    <span>·</span>
+    <span>11 min read</span>
+    <span class="verified">Fact-checked</span>
+  </div>
+</div>
+
+<!-- Article body -->
+<div class="article-body">
+
+<h1>ESXi Host Disconnected in vCenter: Diagnosing and Fixing the Connection</h1>
+<p>vCenter reports two different states when it loses contact with an ESXi host, and they mean different things. "Disconnected" is a management-plane decision — vCenter suspended its relationship with the host. "Not responding" is a heartbeat failure — vCenter stopped receiving the UDP packets the host sends every 10 seconds on port 902. The diagnostic path depends entirely on which of those two states is showing.</p>
+<p>Broadcom's documentation and Dell's support KB draw the line explicitly. A disconnected host has been disconnected from the vCenter side, whether manually by an administrator, by a transient failure after which vCenter failed to re-establish its management connection, or by a certificate problem. vCenter stops actively managing a disconnected host until it is reconnected. The host object remains in inventory, but normal management operations through vCenter are unavailable or limited. A not-responding host is one where vCenter has not received a heartbeat within its 60-second window. The host might be completely down, or it might be fine with only the management network unreachable. VMs keep running in both states.</p>
+<h2>How the heartbeat actually works</h2>
+<p>ESXi hosts send UDP heartbeat packets to vCenter on destination port 902 every 10 seconds. vCenter counts these and expects at least one to arrive within a 60-second window. If none arrives, the host transitions to "not responding." This is documented in Broadcom KB 318647 and KB 323612, and confirmed by independent investigation at xkln.net.</p>
+<p>That means the root cause of any "not responding" state is one of three things. The host is actually down (hardware failure, purple screen, power loss). The host is up but its management agents are not sending heartbeats (hostd or vpxa crashed or hung). Or the host is up and sending heartbeats, but they are not reaching vCenter (network path, firewall, routing).</p>
+<p>Figuring out which of those three you are dealing with is the entire diagnostic job.</p>
+<h2>Start with the fastest fix: restart the management agents</h2>
+<p>When a host shows as not responding or disconnected but the host hardware is up — ping responds, VMs on it are still serving traffic, iLO or iDRAC shows it powered on — the management agents are the first thing to check. The <code>hostd</code> daemon is the core ESXi management agent. The <code>vpxa</code> agent is the vCenter proxy that runs on each host and relays communication between hostd and vCenter. If either one crashes or hangs, heartbeats stop.</p>
+<p>To restart both agents from the ESXi shell or SSH:</p>
+<div class="codehilite"><pre><span></span><code>/etc/init.d/hostd restart
+/etc/init.d/vpxa restart
+</code></pre></div>
+
+<p>From the Direct Console User Interface, press F2 to log in, then navigate to Troubleshooting Options and select Restart Management Agents. This restarts hostd, vpxa, and several other management-related services. If SSH and the management network are both unreachable and you need physical console access, a <a href="https://www.amazon.com/s?k=KVM+console+adapter+crash+cart&amp;tag=vmwaremadesim-20">crash cart or KVM console adapter</a> gets you to the DCUI without relying on the network stack.</p>
+<p>The <code>services.sh restart</code> command restarts all ESXi services at once. It is heavier-handed and takes longer, but resolves cases where multiple services have degraded. Broadcom KB 320280 documents all three restart methods.</p>
+<p>I have seen hosts where <code>hostd restart</code> alone fixes the problem within 30 seconds and the host reconnects to vCenter automatically. I have also seen hosts where hostd restarts cleanly but the host stays disconnected because the underlying issue was a certificate problem or a stale network configuration. The agent restart is the starting point, not the guaranteed fix.</p>
+<h2>The UDP 902 firewall problem</h2>
+<p>If a host disconnects at consistent 60-second intervals — reconnects, runs for about a minute, then drops again — that pattern is the signature of UDP port 902 being blocked or rate-limited somewhere in the network path. Broadcom KB 323612 calls this out explicitly.</p>
+<p>The classic heartbeat path runs over UDP port 902. ESXi sends small UDP packets to vCenter roughly every 10 seconds. If vCenter misses those heartbeats for the timeout window, the host transitions to not responding. Other management-plane failures, including DNS, TCP 443, vpxa, hostd, and vpxd issues, can produce similar symptoms, so treat the heartbeat path as one branch of the diagnostic tree, not the whole story.</p>
+<p>To test TCP 902 reachability from the host:</p>
+<div class="codehilite"><pre><span></span><code>nc<span class="w"> </span>-zv<span class="w"> </span>&lt;vcenter-ip&gt;<span class="w"> </span><span class="m">902</span>
+</code></pre></div>
+
+<p>Do not treat a passing TCP netcat test as proof that UDP heartbeat traffic is passing. UDP is connectionless, so netcat results are ambiguous. For UDP verification, run a packet capture on the VCSA instead:</p>
+<div class="codehilite"><pre><span></span><code>tcpdump<span class="w"> </span>-i<span class="w"> </span>any<span class="w"> </span>udp<span class="w"> </span>port<span class="w"> </span><span class="m">902</span><span class="w"> </span>and<span class="w"> </span>host<span class="w"> </span>&lt;esxi-management-ip&gt;
+</code></pre></div>
+
+<p>If tcpdump shows no UDP 902 traffic from the expected ESXi management IP, either the host is not sending heartbeats from that interface or something in the path is dropping or filtering them. The packets are small and infrequent, so they do not trip bandwidth alarms. They just quietly disappear.</p>
+<p>Common culprits include a firewall rule added between segments, a routing change, an IPS that started flagging the traffic as anomalous, or a switch ACL that does not forward UDP 902 across a VLAN boundary. Run tcpdump from both sides to narrow down where the drop happens.</p>
+<p>If tcpdump on the VCSA shows no traffic from the ESXi host's IP on port 902, the packets are being dropped somewhere in between. Check physical switches, firewalls, distributed switch port group security policies, and any network virtualization overlay that might be filtering UDP.</p>
+<p>A related trap: if a host was added to vCenter by IP address and that IP changes through the DCUI, vCenter keeps trying the old address. If DNS or FQDN updates do not resolve it, disconnect and remove the host from vCenter and re-add it using the correct FQDN or IP.</p>
+<h2>Certificate expiry: the silent disconnect</h2>
+<p>ESXi hosts use SSL certificates for the management interface, and these certificates expire. When a host's certificate expires or becomes invalid, vCenter may refuse the connection and mark the host as disconnected. Broadcom KB 414244 documents this failure mode.</p>
+<p>This has become more frequent since vSphere 8.0 because VMware moved to two-year certificate validity for ESXi host certificates by default. Environments that deployed 8.0 in 2023 or 2024 are hitting the expiration window now. The vSphere Client shows a "Host Certificate Status" alert before expiration, but it is easy to miss among other alarms.</p>
+<p>To check a host's certificate dates from SSH:</p>
+<div class="codehilite"><pre><span></span><code>openssl s_client -connect localhost:443 -showcerts 2&gt;/dev/null | openssl x509 -noout -dates
+</code></pre></div>
+
+<p>To renew from vCenter: select the host, go to Configure, then System, then Certificate, and click Renew. On vCenter 8.0 Update 3 and later, Broadcom improved the renewal workflow through the vSphere Client GUI. If renewal fails from the GUI — which it sometimes does when the cert is already fully expired — Broadcom KB 377969 describes a manual process: disconnect the host from vCenter, renew the certificate via shell, then reconnect.</p>
+<p>After any certificate replacement, restart vpxa on the host:</p>
+<div class="codehilite"><pre><span></span><code>/etc/init.d/vpxa restart
+</code></pre></div>
+
+<p>If vCenter itself is having certificate issues after a replacement, the vpxd service on the VCSA may need a restart:</p>
+<div class="codehilite"><pre><span></span><code># On VCSA shell
+service-control --stop vpxd
+service-control --start vpxd
+</code></pre></div>
+
+<p>For a broader look at VCSA lifecycle and management workflows, the <a href="/articles/how-to-deploy-vcenter-server-appliance-8-step-by-step.html">vCenter Server Appliance deployment guide</a> covers initial setup and the certificate plumbing that matters when hosts start dropping.</p>
+<h2>License and entitlement checks</h2>
+<p>Licensing is rarely the first explanation for a host that suddenly goes not responding. ESXi does not immediately stop running workloads just because a subscription renewal is late. Under Broadcom's subscription model, the main risks are compliance, support, updates, and upgrade rights, not a hard shutdown of the host.</p>
+<p>That said, license assignment problems can still create vCenter alarms or management friction, especially after a migration from perpetual keys to subscription entitlements. If a host remains disconnected after you have checked agents, network, DNS, and certificates, verify the assigned license in vCenter under Administration, Licensing, Assets. Confirm the host is assigned the intended vSphere edition and that the entitlement matches the contract. For shops that moved from perpetual to subscription, a transition that ended new perpetual sales in early 2024, this is worth checking after any licensing change.</p>
+<p>PowerCLI can inventory host states across the cluster, which surfaces license-related alarms alongside other states:</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">Connect-VIServer</span> <span class="n">-Server</span> <span class="n">vcenter</span><span class="p">.</span><span class="n">yourdomain</span><span class="p">.</span><span class="n">local</span>
+
+<span class="nb">Get-VMHost</span> <span class="p">|</span> <span class="nb">Sort-Object</span> <span class="n">ConnectionState</span><span class="p">,</span> <span class="n">Name</span> <span class="p">|</span>
+    <span class="nb">Select-Object</span> <span class="n">Name</span><span class="p">,</span> <span class="n">ConnectionState</span><span class="p">,</span> <span class="n">PowerState</span><span class="p">,</span> <span class="n">Version</span> <span class="p">|</span>
+    <span class="nb">Format-Table</span> <span class="n">-AutoSize</span>
+</code></pre></div>
+
+<p>For proactive compliance reporting, the <a href="/articles/check-vmware-license-expiration-powercli.html">license expiration PowerCLI guide</a> and the <a href="/articles/automating-vsphere-license-compliance-powercli.html">license compliance automation article</a> cover scheduled report setups that flag upcoming expirations before they become operational surprises. For the contract mechanics behind entitlement changes under Broadcom, the broader <a href="/articles/broadcom-vmware-licensing-breakdown.html">licensing breakdown</a> is the reference.</p>
+<h2>When the host is truly unreachable</h2>
+<p>If the host does not respond to ping, SSH, and the DCUI is inaccessible through iLO or iDRAC, the host is genuinely down. The causes break into a few categories.</p>
+<p>Hardware failures are the first thing to rule out. Power supply, motherboard, CPU, or memory faults will all take a host down. Check the iLO or iDRAC event log for hardware faults before dispatching anyone to the datacenter. The lights-out controller often has the answer before anyone touches the server.</p>
+<p>The Purple Screen of Death means ESXi hit an unrecoverable error and halted. The purple diagnostic screen stays on the console with a stack trace. Photograph the full PSOD before rebooting, because the log is also captured in <code>/scratch/log/vmkernel.log</code> on persistent storage if the host comes back on its own.</p>
+<p>Storage path loss is sneakier. If the host loses all paths to its storage, VMs may freeze and hostd can hang trying to enumerate datastores. Broadcom KB 416237 documents cases where FC HBA path issues cause hosts to disconnect and VMs to enter a hung state. The KB specifically calls out <code>devloss tmo</code> events on WWPNs, pointing to SAN switch port problems. Check zoning, LUN masking, and HBA firmware.</p>
+<p>Network saturation is the last common cause. If the management network is saturated by a VM gone rogue (backup job, replication storm, malfunctioning NIC teaming), heartbeats cannot get through even though the host and agents are healthy. Check physical switch port utilization on the management VLAN.</p>
+<h2>Batch diagnosis and programmatic reconnect</h2>
+<p>When multiple hosts disconnect simultaneously, manual troubleshooting one host at a time is slow. PowerCLI can inventory the entire cluster's state and flag patterns:</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">Connect-VIServer</span> <span class="n">-Server</span> <span class="n">vcenter</span><span class="p">.</span><span class="n">yourdomain</span><span class="p">.</span><span class="n">local</span>
+
+<span class="nb">Get-VMHost</span> <span class="p">|</span> <span class="nb">Sort-Object</span> <span class="n">ConnectionState</span><span class="p">,</span> <span class="n">Name</span> <span class="p">|</span>
+    <span class="nb">Select-Object</span> <span class="n">Name</span><span class="p">,</span> <span class="n">ConnectionState</span><span class="p">,</span> <span class="n">PowerState</span><span class="p">,</span>
+        <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;UptimeDays&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nv">$_</span><span class="p">.</span><span class="n">ExtensionData</span><span class="p">.</span><span class="n">Runtime</span><span class="p">.</span><span class="n">BootTime</span><span class="p">)</span> <span class="p">{</span>
+                <span class="no">[math]</span><span class="p">::</span><span class="n">Round</span><span class="p">(((</span><span class="nb">Get-Date</span><span class="p">)</span> <span class="p">-</span> <span class="nv">$_</span><span class="p">.</span><span class="n">ExtensionData</span><span class="p">.</span><span class="n">Runtime</span><span class="p">.</span><span class="n">BootTime</span><span class="p">).</span><span class="n">TotalDays</span><span class="p">,</span> <span class="n">1</span><span class="p">)</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span> <span class="s1">&#39;N/A&#39;</span> <span class="p">}</span>
+        <span class="p">}},</span>
+        <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;Version&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">Version</span><span class="p">}}</span> <span class="p">|</span>
+    <span class="nb">Format-Table</span> <span class="n">-AutoSize</span>
+</code></pre></div>
+
+<p>This shows which hosts are down, how long they have been up, and their vSphere version — enough to group the problem by cause. If four hosts on the same top-of-rack switch all went not responding at the same time, the switch is the suspect, not the hosts.</p>
+<p>To reconnect a host programmatically:</p>
+<div class="codehilite"><pre><span></span><code><span class="c"># Reconnect a disconnected host that vCenter still knows about</span>
+<span class="nb">Set-VMHost</span> <span class="n">-VMHost</span> <span class="n">esxi</span><span class="p">-</span><span class="n">04</span><span class="p">.</span><span class="n">lab</span><span class="p">.</span><span class="n">local</span> <span class="n">-State</span> <span class="n">Connected</span>
+
+<span class="c"># If that fails, disconnect fully and re-add with credentials</span>
+<span class="nb">Set-VMHost</span> <span class="n">-VMHost</span> <span class="n">esxi</span><span class="p">-</span><span class="n">04</span><span class="p">.</span><span class="n">lab</span><span class="p">.</span><span class="n">local</span> <span class="n">-State</span> <span class="n">Disconnected</span>
+<span class="nb">Connect-VIServer</span> <span class="n">-Server</span> <span class="n">esxi</span><span class="p">-</span><span class="n">04</span><span class="p">.</span><span class="n">lab</span><span class="p">.</span><span class="n">local</span> <span class="n">-User</span> <span class="n">root</span> <span class="n">-Password</span> <span class="s1">&#39;yourpassword&#39;</span>
+<span class="nb">Add-VMHost</span> <span class="n">-VMHost</span> <span class="n">esxi</span><span class="p">-</span><span class="n">04</span><span class="p">.</span><span class="n">lab</span><span class="p">.</span><span class="n">local</span> <span class="n">-Location</span> <span class="s1">&#39;Production Cluster&#39;</span> <span class="n">-Force</span>
+</code></pre></div>
+
+<h2>Adjusting the heartbeat timeout</h2>
+<p>Some administrators increase vCenter's heartbeat timeout via advanced configuration to reduce false alerts:</p>
+<div class="codehilite"><pre><span></span><code>config.vpxd.heartbeat.notRespondingTimeout
+</code></pre></div>
+
+<p>The default is 60 seconds. MW: Tech's blog documents setting it to 120 or 240. This reduces noise from transient network blips, but it also delays detection of real host failures. Do not assume the change is harmless. It may reduce noisy vCenter alarms, but it does not fix HA isolation, management network, or heartbeat problems. vSphere HA has its own failure-detection mechanisms through FDM agents and datastore and network heartbeating, so validate HA behavior separately before changing timeout values in production.</p>
+<p>If constant false disconnects are the problem, increasing the timeout is treating the symptom. The network issue dropping heartbeats is the actual problem. The timeout adjustment works as a temporary measure during investigation, not as a permanent configuration.</p>
+<h2>The post-patch disconnect</h2>
+<p>A pattern reported in community threads: hosts disconnect from vCenter after applying ESXi or VCSA patches. Administrators have noted this around vSphere 8.0 Update 3-era updates. Treat this as a known pattern to check after patching, not as proof that a specific patch is defective. The fix reported by multiple administrators is logging into the host via SSH and restarting the management network or the management agents:</p>
+<div class="codehilite"><pre><span></span><code># Bounce the management network interface
+esxcli network ip interface set -e false -n vmk0
+esxcli network ip interface set -e true -n vmk0
+
+# Or restart the management agents
+/etc/init.d/hostd restart
+/etc/init.d/vpxa restart
+</code></pre></div>
+
+<p>This suggests the patching process does not always cleanly restart the management networking stack. If you are deploying patches via vSphere Lifecycle Manager, check each host's status immediately after it completes remediation rather than waiting for the whole baseline to finish. For VCF environments, the <a href="/articles/vcf-powercli-complete-guide.html">VCF PowerCLI guide</a> covers lifecycle workflows that can catch these post-patch issues during orchestrated updates rather than discovering them the next morning when someone notices a host is greyed out in the inventory.</p>
+
+    <!-- Newsletter CTA -->
+<div class="newsletter-cta" id="newsletter">
+  <h3>Stay ahead of the VMware changes</h3>
+  <p>We're publishing detailed licensing breakdowns, comparison guides, migration walkthroughs, and cost calculators. Get them in your inbox.</p>
+  <input type="email" placeholder="your@email.com" />
+  <button>Subscribe</button>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div>
+    © 2026 VMwareMadeSimple.com — Independent. Not affiliated with VMware or Broadcom.
+    <div class="aff-disclosure" style="margin-top: 0.3rem;">Some links are affiliate links. See our <a href="#">disclosure policy</a>.</div>
+  </div>
+  <div class="footer-links">
+    <a href="#">About</a>
+    <a href="mailto:contact@vmwaremadesimple.com">Contact</a>
+    <a href="/sitemap.xml">RSS</a>
+    <a href="#">Privacy</a>
+    <a href="#">Corrections</a>
+  </div>
+</footer>
+
+<script>
+function searchSite(q) {
+  if (q.length < 2) return;
+  if (event && event.key === 'Enter') {
+    window.location.href = 'https://www.google.com/search?q=site:vmwaremadesimple.com+' + encodeURIComponent(q);
+  }
+}
+</script>
+
+</body>
+</html>
+
