@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>vSphere HA Admission Control Explained: When to Use and When to Disable | VMwareMadeSimple</title>
+<meta name="description" content="vSphere HA admission control policies compared: slot vs percentage vs dedicated failover hosts, plus when disabling makes sense and when it costs you." />
+<meta name="keywords" content="vsphere ha, admission control, failover capacity, powercli, cluster ha" />
+<link rel="canonical" href="https://vmwaremadesimple.com/articles/vsphere-ha-admission-control-explained.html" />
+<link rel="stylesheet" href="/css/style.css" />
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2NDPP0ZTKC"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-2NDPP0ZTKC');
+</script>
+
+<!-- Open Graph -->
+<meta property="og:title" content="vSphere HA Admission Control Explained: When to Use and When to Disable" />
+<meta property="og:description" content="vSphere HA admission control policies compared: slot vs percentage vs dedicated failover hosts, plus when disabling makes sense and when it costs you." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://vmwaremadesimple.com/articles/vsphere-ha-admission-control-explained.html" />
+
+<!-- Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "vSphere HA Admission Control Explained: When to Use and When to Disable",
+  "description": "vSphere HA admission control policies compared: slot vs percentage vs dedicated failover hosts, plus when disabling makes sense and when it costs you.",
+  "author": { "@type": "Organization", "name": "VMwareMadeSimple Editorial" },
+  "publisher": { "@type": "Organization", "name": "VMwareMadeSimple" },
+  "datePublished": "2026-07-31",
+  "dateModified": "2026-07-31",
+  "mainEntityOfPage": "https://vmwaremadesimple.com/articles/vsphere-ha-admission-control-explained.html"
+}
+</script>
+</head>
+<body>
+
+<!-- Alert strip -->
+<div class="alert-strip">
+  VCF 9.1 released — <a href="/articles/vcf-9-nested-lab-setup-complete-walkthrough.html">licensing and upgrade paths changed. Here's what's new →</a>
+</div>
+
+<!-- Masthead -->
+<div class="masthead">
+  <div class="masthead-inner">
+    <h1><a href="/">VMware<span class="red">MadeSimple</span></a></h1>
+    <div class="tagline">Independent VMware analysis for IT professionals. No vendor spin.</div>
+    <div class="credibility-bar">
+      <div class="creds">
+        <span><span class="dot">●</span> Independent</span>
+        <span><span class="dot">●</span> Sources linked</span>
+        <span><span class="dot">●</span> Updated weekly</span>
+        <span><span class="dot">●</span> Not affiliated with VMware/Broadcom</span>
+      </div>
+      <div class="social">
+        <a href="/sitemap.xml">RSS</a>
+        <a href="#newsletter">Newsletter</a>
+        <a href="mailto:contact@vmwaremadesimple.com">Contact</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Category nav -->
+<div class="navbar">
+  <div class="navbar-inner">
+    <a href="/">Home</a>
+    <a href="/#licensing" class="active">Licensing</a>
+    <a href="/#migration">Migration</a>
+    <a href="/#vcf">VCF 9.1</a>
+    <a href="/#homelab">Home Lab</a>
+    <a href="/#powercli">PowerCLI</a>
+    <a href="/#alternatives">Alternatives</a>
+    <a href="/tools/price-calculator.html">Tools</a>
+    <div class="nav-search">
+      <input type="text" placeholder="Search..." onkeyup="searchSite(this.value)" />
+    </div>
+  </div>
+</div>
+
+<!-- Article header -->
+<div class="article-header">
+  <div class="breadcrumb"><a href="/">Home</a> → vSphere Administration</div>
+  <div class="cat-label">vSphere Administration</div>
+  <h1>vSphere HA Admission Control Explained: When to Use and When to Disable</h1>
+  <div class="byline">
+    <span>Updated July 31, 2026</span>
+    <span>·</span>
+    <span>10 min read</span>
+    <span class="verified">Fact-checked</span>
+  </div>
+</div>
+
+<!-- Article body -->
+<div class="article-body">
+
+<p>Admission control is the mechanism vSphere HA uses to decide whether a virtual machine is allowed to power on. Before any power-on operation, HA checks whether enough unreserved CPU and memory remains in the cluster to satisfy the configured failover level. If the check fails, the power-on is blocked. Without this gate, HA can still attempt restarts after a host failure, but there may not be enough CPU or memory left to restart every protected VM. A cluster can be fully HA-enabled and still fail to recover VMs because nothing prevented capacity from being consumed past the point of recoverability.</p>
+<p>A common misconception is that admission control reserves resources for HA to use. It does not. It reserves capacity by refusing to admit VMs that would breach the failover margin. The failover level is the number of host failures the cluster is sized to tolerate (typically 1, sometimes 2). Admission control blocks new power-ons that would violate the policy. It does not evict or power off VMs that are already running if the cluster later loses capacity; instead, the cluster reports reduced or insufficient failover capacity and leaves the operator to act on that warning.</p>
+<h2>The three admission control policies</h2>
+<p>vSphere 8.0 provides three admission-control policy types, labeled in the UI as "Host failures cluster tolerates" (commonly called slot policy), "Percentage of cluster resources reserved" (cluster resource percentage), and "Specify failover hosts" (dedicated failover hosts). The policy selected changes how failover capacity is calculated, which changes how conservative the reservation math is, which changes how much usable capacity the cluster actually delivers to running workloads. The three types are mutually exclusive: you pick one policy per cluster.</p>
+<h2>Slot policy</h2>
+<p>The slot policy computes a single "slot" representing the resource footprint of the largest powered-on VM in the cluster. CPU slot size equals the largest CPU reservation among running VMs, or 32 MHz (the vSphere default minimum) if no VM carries an explicit reservation. Memory slot size equals the largest memory reservation plus memory overhead. The cluster then reserves enough slots to restart all VMs from the configured number of failed hosts, with each VM counting as one slot regardless of its actual size.</p>
+<p>The slot policy becomes painful when one VM has unusually large reservations. A cluster running 60 small web-tier VMs alongside one database VM with a large CPU reservation and a 256 GB memory reservation will calculate slot size from that database VM's reserved footprint. Each powered-on VM then consumes one slot for admission-control purposes, even if most of those VMs are much smaller. Broadcom's vSphere 8.0 availability documentation describes slot policy as conservative and notes it is suited to clusters where VM reservations are roughly uniform. In mixed-workload clusters the waste is substantial and the policy can block power-on of VMs that would fit comfortably under the percentage policy.</p>
+<h2>Cluster resource percentage</h2>
+<p>This policy calculates failover capacity as a percentage of aggregate cluster CPU and memory. For a failover level of 1 on a four-host cluster of identical hardware, roughly 25% of total capacity is reserved, one host's worth. For failover level 2 on the same cluster, roughly 50%. Unlike slot policy, the percentage policy does not size every VM as if it were the largest reserved VM. It reserves a percentage of aggregate cluster CPU and memory capacity for failover, then checks powered-on VM resource requirements against the remaining capacity. This usually wastes less capacity in mixed-size clusters, and the percentage auto-adjusts as hosts are added or removed from the cluster.</p>
+<p>The tradeoff surfaces during failures and maintenance windows. When a host enters maintenance mode, the reserved percentage recomputes against the smaller cluster, but VMs already powered on are not re-evicted. Admission control only checks at power-on. A host failure that removes significant capacity can leave the cluster temporarily unable to honor its configured failover level for a subsequent failure, even though no new VM technically violated the policy. This is a known property of the policy, documented in Broadcom's HA architecture material, not a defect.</p>
+<h2>Dedicated failover hosts</h2>
+<p>This policy designates specific hosts as failover-only. They run no VMs under normal operation and are kept empty specifically for restarts. The failover capacity is the raw capacity of the designated hosts. Dedicated failover hosts are the easiest policy to explain and audit, because the reserved capacity is visible and concrete: these specific hosts exist solely to absorb failures.</p>
+<p>The cost is direct: dedicated hardware produces no compute work between failures. For a four-host cluster, dedicating one host means 25% of the hardware sits idle by design. In environments with contractual or audit-driven recovery requirements, that visibility is worth the hardware cost. For general-purpose production clusters it is rarely worth the hardware cost, and operators typically use the percentage policy instead.</p>
+<h2>Where the slot policy wastes money</h2>
+<p>The practical cost of slot policy appears when one or two VMs have reservations much larger than the rest of the fleet.</p>
+<p>Take a six-node cluster, each host with 128 logical cores and 512 GB of memory, configured to tolerate one host failure. Under the percentage policy, vSphere reserves roughly one host's worth of aggregate CPU and memory capacity, about 16.6% in a uniform six-host cluster. The remaining capacity is available for workloads.</p>
+<p>Under slot policy, the result depends on the largest CPU and memory reservations among powered-on VMs. If one database VM has a large CPU reservation and a 256 GB memory reservation, the memory slot size is based on that reservation plus overhead. Every powered-on VM then consumes one slot for admission-control purposes, even if most VMs are small web servers with no comparable reservations.</p>
+<p>This is the scenario where administrators reach for the disable switch. A small VM will not power on, the cluster appears to have capacity available, but slot policy's worst-case reservation math says no. The correct response is usually to switch from slot policy to percentage policy, not to remove admission control entirely.</p>
+<h2>Choosing a failover level</h2>
+<p>The failover level is a count of host failures to tolerate, not a percentage. Failover level 1 is the most common configuration and protects against a single host failure. Failover level 2 reserves capacity for two simultaneous failures, which halves available capacity on a four-host cluster and is worth considering only where multiple concurrent failures are a modeled risk: chassis-bound hosts in the same rack, hosts sharing a single network fabric without redundancy, or environments with a history of cascading failures.</p>
+<p>Failover level 2 on a three-host cluster reserves two-thirds of total capacity for failover, which leaves almost nothing for actual workloads. Below four hosts, failover level 1 is the practical ceiling. The <a href="/articles/how-to-deploy-vcenter-server-appliance-8-step-by-step.html">vCenter Server Appliance deployment walkthrough</a> covers initial cluster creation, where the failover level is first set; revisiting it as the cluster grows or shrinks is standard practice.</p>
+<h2>When disabling admission control is defensible</h2>
+<p>Disabling removes the power-on gate. VMs power on regardless of whether the cluster has capacity to restart them after a failure. HA itself continues to attempt restarts, but those restarts are no longer guaranteed resources.</p>
+<p>The defensible cases are specific and narrow. Homelabs and test clusters where density matters more than guaranteed recovery, and where a failed restart is an acceptable outcome. The <a href="/articles/best-vmware-home-lab-hardware-2026.html">best VMware home lab hardware</a> roundup covers the kind of constrained hardware where there is no spare capacity to reserve in the first place. Clusters running overcommitted workloads by design, where operators have explicitly accepted that HA restarts may not all succeed and have layered other recovery mechanisms on top: application-level retry logic, VM-level high availability in the guest, or batch processing that re-queues failed work automatically.</p>
+<p>Stretched clusters can hit edge cases where admission control interacts awkwardly with the two-site topology and site bias settings, though this is configuration-dependent and worth raising with support before disabling broadly.</p>
+<p>What is not defensible: disabling admission control on a production cluster because VMs will not power on, without first determining whether the cluster can actually absorb a host failure. The power-on failures are admission control doing its job. The fix is adding capacity, lowering the failover level, or switching from slot to percentage policy. Removing the check trades a visible problem (blocked power-on during business hours) for an invisible one: failed restarts during an actual outage, when recovery is most time-sensitive.</p>
+<p>As an alternative to full disable, VM Overrides can disable HA restart for disposable VMs, reducing the set of VMs HA is expected to recover. In vSphere 8.0, VMs with HA restart set to "Disabled" in VM Overrides are excluded from admission-control failover capacity calculations, which frees reservation math for the VMs that do require restart guarantees. This is useful for disposable workloads (test VMs, temporary build agents) without compromising protection for production VMs in the same cluster.</p>
+<h2>Configuring and auditing with PowerCLI</h2>
+<p>The cluster object exposes admission control state through standard properties. To audit all clusters in a vCenter:</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">Get-Cluster</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">Name</span><span class="p">,</span> <span class="n">HAEnabled</span><span class="p">,</span> <span class="n">HAAdmissionControlEnabled</span><span class="p">,</span> <span class="n">HAFailoverLevel</span> <span class="p">|</span>
+    <span class="nb">Format-Table</span> <span class="n">-AutoSize</span>
+</code></pre></div>
+
+<p>To enable HA with admission control and a failover level of 1 on a specific cluster:</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">Get-Cluster</span> <span class="s2">&quot;Prod-Cluster-01&quot;</span> <span class="p">|</span> <span class="nb">Set-Cluster</span> <span class="p">`</span>
+    <span class="n">-HAEnabled</span><span class="p">:</span><span class="nv">$true</span> <span class="p">`</span>
+    <span class="n">-HAAdmissionControlEnabled</span><span class="p">:</span><span class="nv">$true</span> <span class="p">`</span>
+    <span class="n">-HAFailoverLevel</span> <span class="n">1</span> <span class="p">`</span>
+    <span class="n">-Confirm</span><span class="p">:</span><span class="nv">$false</span>
+</code></pre></div>
+
+<p>In modern vSphere releases the common default policy after enabling is cluster resource percentage. Set-Cluster exposes basic HA and admission-control state (enabled/disabled, failover level), but not all admission-control policy parameters. Changing the policy type between slot, percentage, and dedicated failover hosts requires the vSphere API through ExtensionData, specifically the <code>Configuration.DasConfig.AdmissionControlPolicy</code> object, and invoking <code>ReconfigureCluster_Task</code>. For policy-type changes the vSphere Client UI is the practical path, while PowerCLI is well suited for auditing admission control state across many clusters and scripting enable or disable operations consistently. The <a href="/articles/vcf-powercli-complete-guide.html">VCF PowerCLI complete guide</a> covers the broader pattern for cluster configuration automation at the API level.</p>
+<p>To read the current policy from a cluster's ExtensionData:</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">$cluster</span> <span class="p">=</span> <span class="nb">Get-Cluster</span> <span class="s2">&quot;Prod-Cluster-01&quot;</span>
+<span class="nv">$cluster</span><span class="p">.</span><span class="n">ExtensionData</span><span class="p">.</span><span class="n">Configuration</span><span class="p">.</span><span class="n">DasConfig</span><span class="p">.</span><span class="n">AdmissionControlPolicy</span>
+</code></pre></div>
+
+<p>This returns the policy object including its type and current parameters. The <code>DasConfig</code> object also exposes <code>Enabled</code>, <code>DefaultVmRestartPriority</code>, and other HA settings useful for configuration auditing.</p>
+<h2>What to check after configuration</h2>
+<p>The vSphere Client provides the operational view that confirms admission control is actually protecting the cluster. Under Cluster → Monitor → vSphere HA, the Admission Control panel shows current slot sizes (if slot policy is active), the configured failover level, and whether the cluster currently has enough capacity to honor the policy. The Cluster Resource Reservations panel shows CPU and memory percentages reserved and available.</p>
+<p>After any cluster change (adding or removing hosts, entering maintenance mode, or changing the failover level), check this panel. The percentage policy in particular can show a cluster that was compliant before a host entered maintenance and is no longer compliant after, even though no VM violated the policy. That state is the signal to either exit maintenance mode, add capacity, or temporarily lower the failover level until the host returns.</p>
+<p>When a host drops out of the cluster unexpectedly (the kind of scenario covered in the <a href="/articles/esxi-host-disconnected-vcenter-troubleshooting.html">ESXi host disconnected troubleshooting</a> guide), the same panel shows whether HA can still meet its failover commitment with the remaining hosts. If the answer is no, that is the moment to prioritize getting the host back online, because the cluster is running without its configured safety margin until it returns.</p>
+<p>The value of admission control is not visible until something fails. The cost, blocked power-ons and reserved capacity sitting empty, is visible every day. That asymmetry is why disabling it is tempting and why re-enabling it after a preventable outage is expensive.</p>
+
+    <!-- Newsletter CTA -->
+<div class="newsletter-cta" id="newsletter">
+  <h3>Stay ahead of the VMware changes</h3>
+  <p>We're publishing detailed licensing breakdowns, comparison guides, migration walkthroughs, and cost calculators. Get them in your inbox.</p>
+  <input type="email" placeholder="your@email.com" />
+  <button>Subscribe</button>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div>
+    © 2026 VMwareMadeSimple.com — Independent. Not affiliated with VMware or Broadcom.
+    <div class="aff-disclosure" style="margin-top: 0.3rem;">Some links are affiliate links. See our <a href="#">disclosure policy</a>.</div>
+  </div>
+  <div class="footer-links">
+    <a href="#">About</a>
+    <a href="mailto:contact@vmwaremadesimple.com">Contact</a>
+    <a href="/sitemap.xml">RSS</a>
+    <a href="#">Privacy</a>
+    <a href="#">Corrections</a>
+  </div>
+</footer>
+
+<script>
+function searchSite(q) {
+  if (q.length < 2) return;
+  if (event && event.key === 'Enter') {
+    window.location.href = 'https://www.google.com/search?q=site:vmwaremadesimple.com+' + encodeURIComponent(q);
+  }
+}
+</script>
+
+</body>
+</html>
+
