@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VMware Snapshots: Why Your VMs Get Slow | VMwareMadeSimple</title>
+<meta name="description" content="VMware snapshots create delta files that throttle disk I/O as they grow. How the delta chain works, why consolidation fails, and the PowerCLI to clean them up." />
+<meta name="keywords" content="vmware snapshot, snapshot consolidation, powercli snapshot, delta disk, vmware vm slow" />
+<link rel="canonical" href="https://vmwaremadesimple.com/articles/vmware-snapshots-why-vms-get-slow.html" />
+<link rel="stylesheet" href="/css/style.css" />
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2NDPP0ZTKC"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-2NDPP0ZTKC');
+</script>
+
+<!-- Open Graph -->
+<meta property="og:title" content="VMware Snapshots: Why Your VMs Get Slow" />
+<meta property="og:description" content="VMware snapshots create delta files that throttle disk I/O as they grow. How the delta chain works, why consolidation fails, and the PowerCLI to clean them up." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://vmwaremadesimple.com/articles/vmware-snapshots-why-vms-get-slow.html" />
+
+<!-- Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "VMware Snapshots: Why Your VMs Get Slow",
+  "description": "VMware snapshots create delta files that throttle disk I/O as they grow. How the delta chain works, why consolidation fails, and the PowerCLI to clean them up.",
+  "author": { "@type": "Organization", "name": "VMwareMadeSimple Editorial" },
+  "publisher": { "@type": "Organization", "name": "VMwareMadeSimple" },
+  "datePublished": "2026-08-03",
+  "dateModified": "2026-08-03",
+  "mainEntityOfPage": "https://vmwaremadesimple.com/articles/vmware-snapshots-why-vms-get-slow.html"
+}
+</script>
+</head>
+<body>
+
+<!-- Alert strip -->
+<div class="alert-strip">
+  VCF 9.1 released — <a href="/articles/vcf-9-nested-lab-setup-complete-walkthrough.html">licensing and upgrade paths changed. Here's what's new →</a>
+</div>
+
+<!-- Masthead -->
+<div class="masthead">
+  <div class="masthead-inner">
+    <h1><a href="/">VMware<span class="red">MadeSimple</span></a></h1>
+    <div class="tagline">Independent VMware analysis for IT professionals. No vendor spin.</div>
+    <div class="credibility-bar">
+      <div class="creds">
+        <span><span class="dot">●</span> Independent</span>
+        <span><span class="dot">●</span> Sources linked</span>
+        <span><span class="dot">●</span> Updated weekly</span>
+        <span><span class="dot">●</span> Not affiliated with VMware/Broadcom</span>
+      </div>
+      <div class="social">
+        <a href="/sitemap.xml">RSS</a>
+        <a href="#newsletter">Newsletter</a>
+        <a href="mailto:contact@vmwaremadesimple.com">Contact</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Category nav -->
+<div class="navbar">
+  <div class="navbar-inner">
+    <a href="/">Home</a>
+    <a href="/#licensing" class="active">Licensing</a>
+    <a href="/#migration">Migration</a>
+    <a href="/#vcf">VCF 9.1</a>
+    <a href="/#homelab">Home Lab</a>
+    <a href="/#powercli">PowerCLI</a>
+    <a href="/#alternatives">Alternatives</a>
+    <a href="/tools/price-calculator.html">Tools</a>
+    <div class="nav-search">
+      <input type="text" placeholder="Search..." onkeyup="searchSite(this.value)" />
+    </div>
+  </div>
+</div>
+
+<!-- Article header -->
+<div class="article-header">
+  <div class="breadcrumb"><a href="/">Home</a> → Troubleshooting</div>
+  <div class="cat-label">Troubleshooting</div>
+  <h1>VMware Snapshots: Why Your VMs Get Slow</h1>
+  <div class="byline">
+    <span>Updated August 3, 2026</span>
+    <span>·</span>
+    <span>10 min read</span>
+    <span class="verified">Fact-checked</span>
+  </div>
+</div>
+
+<!-- Article body -->
+<div class="article-body">
+
+<h1>VMware Snapshots: Why Your VMs Get Slow</h1>
+<h2>What a snapshot actually does on disk</h2>
+<p>When you take a snapshot of a running VM, ESXi does not copy the disk. It freezes guest I/O for a few milliseconds, marks the base disk (<code>vmname-flat.vmdk</code>) read-only, and opens a new redo log called a delta file, <code>vmname-000001-delta.vmdk</code>. Every write after that point lands in the delta. The base disk is never touched.</p>
+<p>This is redirect-on-write, not the copy-on-write pattern storage admins usually mean by that term. The guest sees a normal virtual disk. Underneath, the hypervisor tracks which grains (4 KB or 16 KB blocks) have been modified and answers each read by checking the top delta first, then walking down the chain towards the base disk only if the requested grain is not in a delta layer.</p>
+<p>The consequence that catches people off guard: a single small snapshot adds almost no overhead. The slow death comes from elapsed time and chain depth. As the delta grows, new writes still cost one I/O, but reads that miss in the top delta must traverse the chain. A read that has to fall through to the base disk on a four-level chain is four lookups before the first byte comes back.</p>
+<h2>The two delta formats, and why grain size matters</h2>
+<p>ESXi writes deltas in one of two sparse formats. vmfsSparse is the original, used on VMFS5 datastores and for thick-provisioned disks, with a default grain size of 16 KB. SEsparse is the modern default: every VM on a VMFS6 datastore gets SEsparse deltas regardless of disk provisioning, the grain size drops to 4 KB, and the format supports space reclamation through UNMAP. SEsparse arrived back in vSphere 5.5.</p>
+<p>Grain size matters because it is the unit of write amplification. When a guest writes to a block that has not been touched since the snapshot was taken, ESXi must first copy the existing grain out of the base disk (or a lower delta) into the snapshot layer before redirecting the new write there. A 4 KB write to a fresh grain on a 16 KB-grain delta means a 16 KB read plus the new write, all to preserve the unchanged 12 KB. This read-modify-write penalty is why a VM under snapshot can show double or triple the read IOPS you would expect from the guest's own workload.</p>
+<h2>Why the VM gets slow, and when it gets dangerous</h2>
+<p>The performance curve is not linear. For the first hours or a day, a delta on a healthy datastore is invisible to users. Once the delta passes a few tens of gigabytes, latency climbs in two directions. Read latency climbs because of chain traversal. Write latency climbs because of read-modify-write on a growing set of untouched grains. The exact crossover depends on your spindle count, cache, and how random the write pattern is.</p>
+<p>The dangerous part is space. A delta file only ever grows until you delete the snapshot. There is no auto-shrink. I have seen a 40 GB delta on a 100 GB base disk push a datastore past 95% full, which is the zone where you have almost no room left for delta growth, thin-provisioned disks, swap files, and the working space a consolidation needs. Push it to 100% and ESXi stops accepting new writes from every VM sharing that datastore, not just the snapshotted one. If the datastore fills completely during a consolidation, the VM can stall or power off and the delta chain is left in a half-merged state.</p>
+<h2>The 32-level limit, and why you will never want to test it</h2>
+<p>VMware documents a maximum of 32 snapshots in a single chain. That is a hard limit, not a target. Long before 32, read latency compounds with every level. Most environments feel pain at three to four levels, and anything in the double digits is usually a sign that a backup product or a forgotten change window left snapshots behind. The fix is never to add another level. It is to find out why the existing ones were not committed.</p>
+<p>If you run a third-party image backup product (Veeam, Nakivo, most others) and it fails to clean up after itself, you can end up with dozens of orphaned deltas that the backup console no longer tracks. The VM keeps running on top of them. This is a frequent reason a VM's performance degrades with no obvious configuration change on your side.</p>
+<h2>Memory snapshots and the .vmsn file</h2>
+<p>A snapshot taken on a powered-on VM can optionally capture memory. That state lands in a <code>.vmsn</code> file roughly the size of the VM's configured RAM, so a 64 GB VM produces a near-64 GB .vmsn. That file sits on the datastore next to the delta and counts against your free space.</p>
+<p>When you quiesce the guest filesystem (the checkbox in the vSphere Client), ESXi coordinates through VMware Tools: the Microsoft VSS provider on Windows, or the sync driver on Linux. Quiescing attempts to produce an application-consistent point if the guest's VSS writers complete successfully. If they do not, you get a crash-consistent or file-system-consistent snapshot instead. Quiescing is what backup products need to do a clean restore, but it also means the snapshot takes longer to create and longer to commit, because ESXi has to flush and freeze I/O across the guest stack. A quiesced snapshot on a busy SQL Server can take minutes to create, during which the VM's write latency spikes.</p>
+<h2>Why consolidation fails</h2>
+<p>Deleting a snapshot does not remove the delta. It merges the delta's contents back into its parent disk. That merge is consolidation. On a running VM, ESXi reads the delta, writes the changed grains into the parent, then drops the delta. The VM keeps serving I/O throughout, now redirected to the parent.</p>
+<p>Consolidation fails for a small set of reasons, and they are almost all storage-related. The first is free space: the active and helper redo logs can keep growing while a consolidation runs on a powered-on VM, so you need substantial headroom on the datastore, and tight free space is the most common reason consolidation fails outright. The second is a powered-off VM mid-operation. If a host loses power or the VM is killed while consolidating, the chain is left half-merged. The third is a storage path failure: if the host loses access to the LUN during the commit, the merge stalls and vCenter cannot resume it cleanly. The fourth, specific to vCenter tasks, is a timeout when consolidation runs longer than the task's internal limit against a very large delta.</p>
+<p>When any of these happen, vCenter flags the VM with a warning: "Virtual machine disks consolidation is needed." The VM keeps running, but it is now running on a chain that vCenter cannot reconcile on its own without intervention.</p>
+<p>Storage problems like this cascade into host-level symptoms too. A stalled consolidation task can drag a host's storage latency up and surface as the host disconnecting or becoming unresponsive in vCenter, which is covered in the <a href="/articles/esxi-host-disconnected-vcenter-troubleshooting.html">ESXi host disconnected troubleshooting guide</a>.</p>
+<h2>Finding every snapshot in vCenter with PowerCLI</h2>
+<p>The fastest way to find runaway snapshots is not the vSphere Client, which shows snapshots one VM at a time. PowerCLI gives you the whole estate in one pass:</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">Get-VM</span> <span class="p">|</span> <span class="nb">Get-Snapshot</span> <span class="p">|</span>
+  <span class="nb">Select-Object</span> <span class="n">VM</span><span class="p">,</span> <span class="n">Name</span><span class="p">,</span> <span class="n">Created</span><span class="p">,</span>
+    <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;AgeDays&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="no">[int]</span><span class="p">((</span><span class="nb">Get-Date</span><span class="p">)</span> <span class="p">-</span> <span class="nv">$_</span><span class="p">.</span><span class="n">Created</span><span class="p">).</span><span class="n">TotalDays</span><span class="p">}},</span>
+    <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;SizeGB&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="no">[math]</span><span class="p">::</span><span class="n">Round</span><span class="p">(</span><span class="nv">$_</span><span class="p">.</span><span class="n">SizeGB</span><span class="p">,</span><span class="n">1</span><span class="p">)}}</span> <span class="p">|</span>
+  <span class="nb">Sort-Object</span> <span class="n">AgeDays</span> <span class="n">-Descending</span> <span class="p">|</span>
+  <span class="nb">Format-Table</span> <span class="n">-AutoSize</span>
+</code></pre></div>
+
+<p><code>SizeGB</code> is the delta size on disk. <code>AgeDays</code> tells you immediately which ones were left behind by a change window three months ago. Anything older than a few days on a production VM is worth investigating. To find VMs that specifically need consolidation:</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">Get-VM</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">ExtensionData</span><span class="p">.</span><span class="n">Runtime</span><span class="p">.</span><span class="n">ConsolidationNeeded</span> <span class="p">}</span> <span class="p">|</span>
+  <span class="nb">Select-Object</span> <span class="n">Name</span><span class="p">,</span> <span class="n">PowerState</span>
+</code></pre></div>
+
+<p>PowerCLI does not expose a dedicated cmdlet for consolidation. You call the vSphere API directly on the VM's extension data:</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">$vm</span> <span class="p">=</span> <span class="nb">Get-VM</span> <span class="s2">&quot;MyVM&quot;</span>
+<span class="nv">$vm</span><span class="p">.</span><span class="n">ExtensionData</span><span class="p">.</span><span class="n">ConsolidateVMDisks_Task</span><span class="p">()</span>
+</code></pre></div>
+
+<p>Check the task in vCenter or poll it with <code>Get-Task</code> to see when the merge finishes.</p>
+<p>For a broader tour of operational PowerCLI, the <a href="/articles/vcf-powercli-complete-guide.html">VCF PowerCLI guide</a> extends these same patterns to the rest of the stack, from inventorying hosts to checking license state.</p>
+<p>The corresponding create and remove commands are the ones you run around a change window. Note that memory snapshots and quiescing serve different purposes, so split them rather than combining both flags on one snapshot:</p>
+<div class="codehilite"><pre><span></span><code><span class="c"># Application-consistent snapshot for a backup-style capture</span>
+<span class="nb">New-Snapshot</span> <span class="n">-VM</span> <span class="nv">$vm</span> <span class="n">-Name</span> <span class="s2">&quot;PrePatch-2026-08-03&quot;</span> <span class="n">-Quiesce</span>
+
+<span class="c"># Or, a memory snapshot to roll back to a live running state</span>
+<span class="nb">New-Snapshot</span> <span class="n">-VM</span> <span class="nv">$vm</span> <span class="n">-Name</span> <span class="s2">&quot;PrePatch-2026-08-03&quot;</span> <span class="n">-Memory</span>
+
+<span class="c"># Remove it once the change is validated</span>
+<span class="nb">Get-Snapshot</span> <span class="n">-VM</span> <span class="nv">$vm</span> <span class="n">-Name</span> <span class="s2">&quot;PrePatch-2026-08-03&quot;</span> <span class="p">|</span>
+  <span class="nb">Remove-Snapshot</span> <span class="n">-Confirm</span><span class="p">:</span><span class="nv">$false</span>
+</code></pre></div>
+
+<p>The <code>-Quiesce</code> flag needs VMware Tools in the guest and produces an application-consistent point when the VSS writers cooperate. The <code>-Memory</code> flag captures RAM into the .vmsn file, adding roughly the VM's configured memory size to datastore usage, but lets you revert to a live running state.</p>
+<h2>Committing a large delta without killing the datastore</h2>
+<p>When the delta is large (tens of GB or more), do not delete the snapshot during business hours on a running production VM. Schedule a window, and commit when the datastore has substantial headroom, more if the chain is multi-level and the VM stays powered on during the merge.</p>
+<p>If free space is tight, the safe sequence is to storage vMotion the VM to a datastore with headroom first, then consolidate there, then move it back if you need to. A storage vMotion with an active snapshot chain works, but it copies the whole chain, so budget time for it.</p>
+<p>Before committing anything destructive, get an independent copy of the VM's data off the datastore. Snapshotting is not a backup: the base disk and the deltas all sit on the same LUN, so a datastore failure takes the snapshot and the original with it. Offload to a real backup target. If your storage is the bottleneck on capacity or throughput, that is the time to add a dedicated backup repository or faster datastore capacity. A NAS-class box like the <a href="https://www.amazon.com/s?k=Synology+DS1522%2B&amp;tag=vmwaremadesim-20">Synology DS1522+</a> running as an iSCSI or NFS backup repository gives you a copy that survives a datastore loss, and <a href="https://www.amazon.com/s?k=Samsung+PM9A3+U.2+NVMe+SSD&amp;tag=vmwaremadesim-20">Samsung PM9A3 U.2 NVMe drives</a> in the host bring both the throughput and the free-space headroom that large deltas consume.</p>
+<h2>When a snapshot is the wrong tool</h2>
+<p>Snapshots are for short-lived change windows: patch a host, apply a guest update, make a config change, then commit. They are not backups. They are not a way to freeze a VM's state indefinitely. They are not a rollback mechanism you can rely on across reboots and weeks of churn, because the delta keeps growing and the commit keeps getting more expensive the longer you wait.</p>
+<p>If you catch yourself keeping a snapshot for weeks in case something goes wrong, the snapshot has become your backup strategy, and it is a bad one. A real backup product takes an independent copy off the host, and most of them do it by taking and committing a snapshot as a transport mechanism, then cleaning up after themselves. When that cleanup fails, you inherit the orphaned delta, which is exactly what the PowerCLI query earlier in this article is designed to catch.</p>
+<p>Testing this behavior in isolation first saves a lot of pain later. Filling a delta, pushing a datastore full, and watching a consolidation fail and recover is something you want to do once without production on the line. A <a href="/articles/best-vmware-home-lab-hardware-2026.html">home lab build</a> is the right place to run that experiment.</p>
+<p>The cost angle is worth a mention because snapshot incidents are the kind of issue that turns into a support ticket, and support is something you pay for under the current per-core subscription model. The <a href="/articles/broadcom-vmware-licensing-breakdown.html">Broadcom VMware licensing breakdown</a> covers the bundle pricing and per-core structure if you need to weigh what that ticket actually costs you.</p>
+
+    <!-- Newsletter CTA -->
+<div class="newsletter-cta" id="newsletter">
+  <h3>Stay ahead of the VMware changes</h3>
+  <p>We're publishing detailed licensing breakdowns, comparison guides, migration walkthroughs, and cost calculators. Get them in your inbox.</p>
+  <input type="email" placeholder="your@email.com" />
+  <button>Subscribe</button>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div>
+    © 2026 VMwareMadeSimple.com — Independent. Not affiliated with VMware or Broadcom.
+    <div class="aff-disclosure" style="margin-top: 0.3rem;">Some links are affiliate links. See our <a href="#">disclosure policy</a>.</div>
+  </div>
+  <div class="footer-links">
+    <a href="#">About</a>
+    <a href="mailto:contact@vmwaremadesimple.com">Contact</a>
+    <a href="/sitemap.xml">RSS</a>
+    <a href="#">Privacy</a>
+    <a href="#">Corrections</a>
+  </div>
+</footer>
+
+<script>
+function searchSite(q) {
+  if (q.length < 2) return;
+  if (event && event.key === 'Enter') {
+    window.location.href = 'https://www.google.com/search?q=site:vmwaremadesimple.com+' + encodeURIComponent(q);
+  }
+}
+</script>
+
+</body>
+</html>
+
