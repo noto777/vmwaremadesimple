@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VMware Snapshot Consolidation Stuck: How to Fix Without Data Loss | VMwareMadeSimple</title>
+<meta name="description" content="VMware snapshot consolidation stuck? Learn how to diagnose file locks, free datastore space, and consolidate deltas without data loss." />
+<meta name="keywords" content="vmware snapshot consolidation,snapshot consolidation stuck,vmware delta file lock,vmkfstools,needs consolidation" />
+<link rel="canonical" href="https://vmwaremadesimple.com/articles/vmware-snapshot-consolidation-stuck-fix-without-data-loss.html" />
+<link rel="stylesheet" href="/css/style.css" />
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2NDPP0ZTKC"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-2NDPP0ZTKC');
+</script>
+
+<!-- Open Graph -->
+<meta property="og:title" content="VMware Snapshot Consolidation Stuck: How to Fix Without Data Loss" />
+<meta property="og:description" content="VMware snapshot consolidation stuck? Learn how to diagnose file locks, free datastore space, and consolidate deltas without data loss." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://vmwaremadesimple.com/articles/vmware-snapshot-consolidation-stuck-fix-without-data-loss.html" />
+
+<!-- Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "VMware Snapshot Consolidation Stuck: How to Fix Without Data Loss",
+  "description": "VMware snapshot consolidation stuck? Learn how to diagnose file locks, free datastore space, and consolidate deltas without data loss.",
+  "author": { "@type": "Organization", "name": "VMwareMadeSimple Editorial" },
+  "publisher": { "@type": "Organization", "name": "VMwareMadeSimple" },
+  "datePublished": "2026-08-04",
+  "dateModified": "2026-08-04",
+  "mainEntityOfPage": "https://vmwaremadesimple.com/articles/vmware-snapshot-consolidation-stuck-fix-without-data-loss.html"
+}
+</script>
+</head>
+<body>
+
+<!-- Alert strip -->
+<div class="alert-strip">
+  VCF 9.1 released — <a href="/articles/vcf-9-nested-lab-setup-complete-walkthrough.html">licensing and upgrade paths changed. Here's what's new →</a>
+</div>
+
+<!-- Masthead -->
+<div class="masthead">
+  <div class="masthead-inner">
+    <h1><a href="/">VMware<span class="red">MadeSimple</span></a></h1>
+    <div class="tagline">Independent VMware analysis for IT professionals. No vendor spin.</div>
+    <div class="credibility-bar">
+      <div class="creds">
+        <span><span class="dot">●</span> Independent</span>
+        <span><span class="dot">●</span> Sources linked</span>
+        <span><span class="dot">●</span> Updated weekly</span>
+        <span><span class="dot">●</span> Not affiliated with VMware/Broadcom</span>
+      </div>
+      <div class="social">
+        <a href="/sitemap.xml">RSS</a>
+        <a href="#newsletter">Newsletter</a>
+        <a href="mailto:contact@vmwaremadesimple.com">Contact</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Category nav -->
+<div class="navbar">
+  <div class="navbar-inner">
+    <a href="/">Home</a>
+    <a href="/#licensing" class="active">Licensing</a>
+    <a href="/#migration">Migration</a>
+    <a href="/#vcf">VCF 9.1</a>
+    <a href="/#homelab">Home Lab</a>
+    <a href="/#powercli">PowerCLI</a>
+    <a href="/#alternatives">Alternatives</a>
+    <a href="/tools/price-calculator.html">Tools</a>
+    <div class="nav-search">
+      <input type="text" placeholder="Search..." onkeyup="searchSite(this.value)" />
+    </div>
+  </div>
+</div>
+
+<!-- Article header -->
+<div class="article-header">
+  <div class="breadcrumb"><a href="/">Home</a> → VMware Administration</div>
+  <div class="cat-label">VMware Administration</div>
+  <h1>VMware Snapshot Consolidation Stuck: How to Fix Without Data Loss</h1>
+  <div class="byline">
+    <span>Updated August 4, 2026</span>
+    <span>·</span>
+    <span>12 min read</span>
+    <span class="verified">Fact-checked</span>
+  </div>
+</div>
+
+<!-- Article body -->
+<div class="article-body">
+
+<h1>VMware Snapshot Consolidation Stuck: How to Fix Without Data Loss</h1>
+<p>You open vCenter and see the yellow warning icon next to a VM. "Virtual machine disks consolidation is needed." You click Consolidate, the task starts, and then it either fails immediately with a file lock error or sits at 30% for the next six hours while you sweat.</p>
+<p>I've dealt with this enough times that I have a playbook. Snapshot consolidation issues fall into a handful of failure modes, and once you can identify which one you're looking at, the fix becomes predictable instead of terrifying.</p>
+<h2>What "Needs Consolidation" Actually Means</h2>
+<p>When you delete a snapshot in vCenter, the delta file (the <code>-000001-delta.vmdk</code> that holds changes since the snapshot was taken) needs to be merged back into the parent disk. VMware calls this process consolidation. Most of the time it happens invisibly as part of the snapshot deletion. You never see the word "consolidate" at all.</p>
+<p>The "Needs Consolidation" flag appears when that merge failed partway through. VMware successfully updated the snapshot database (the <code>.vmsn</code> file and the vCenter inventory) to remove the snapshot entry, but the delta files on the datastore are still sitting there. Your VM is now running on a snapshot that vCenter doesn't think exists. Left unchecked, that delta file keeps growing until your datastore fills up. This is the same root problem I cover in the <a href="/articles/vmware-snapshots-why-vms-get-slow.html">snapshot performance article</a>, but here we're dealing with the specific case where the cleanup already failed and vCenter is telling you about it.</p>
+<p>The consolidation warning is not cosmetic. It means your VM is running on delta disks that are not in vCenter's snapshot tree. If you reboot or migrate that VM, things can get worse.</p>
+<h2>Why Consolidation Gets Stuck</h2>
+<p>There are four reasons consolidation fails, and identifying the right one determines your fix:</p>
+<p><strong>File locks.</strong> A backup product (Veeam, Nakivo, Commvault, or anything using the VADP snapshot API) took a snapshot for its backup job and then failed to release the read-only lock on the delta file. VMware can't merge a file that another process has locked. This is the single most common cause, and Broadcom documents it directly in KB 374141.</p>
+<p><strong>Insufficient datastore space.</strong> Consolidation needs working room to merge the delta into the base disk before deleting the delta. The minimum is about 1 GB of free space, but that's the floor. A VM with a 200 GB snapshot delta can't consolidate on a datastore with 5 GB free. The merge runs out of room and fails.</p>
+<p><strong>vCenter to host communication failure.</strong> If vCenter loses its connection to the ESXi host mid-task, the consolidation task hangs. The host might still be processing, or it might have given up. You can't tell from vCenter because the connection is gone. This ties into the same connectivity problems I wrote about in the <a href="/articles/esxi-host-disconnected-vcenter-troubleshooting.html">vCenter host disconnection troubleshooting guide</a>.</p>
+<p><strong>The task genuinely never finishes.</strong> Sometimes consolidation starts, appears to work, and then the task runs for 12, 24, 48 hours with no progress. The delta file timestamps stop updating. VMware's snapshot manager thinks everything is fine. Nothing is happening.</p>
+<h2>The Safe Recovery Path</h2>
+<p>Before touching anything, gather information. Panic-deleting files is how people lose VMs.</p>
+<p>Check whether consolidation is actually stuck or merely slow. SSH into the ESXi host running the VM and go to the VM's directory on the datastore:</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>/vmfs/volumes/your-datastore/your-vm-name
+ls<span class="w"> </span>-la
+</code></pre></div>
+
+<p>Look at the timestamps and sizes on the delta files (anything ending in <code>-delta.vmdk</code> on VMFS, or <code>-sesparse.vmdk</code> on newer vSphere VMFS-6 and vSAN chains). The <code>-flat.vmdk</code> is the base disk extent, not a delta, but its activity can still tell you whether writes are landing. Check again in 10 minutes. If timestamps or sizes are changing, consolidation may still be running and you need to wait. Large deltas take hours to commit. Changing files are a good sign, but not the only signal — also tail the host's <code>vmkernel.log</code> and <code>hostd.log</code> for snapshot-related entries before assuming the process is hung.</p>
+<p>If the timestamps are frozen, check the lock state. This is where most people get stuck. Run <code>vmkfstools -D</code> against the delta file to see who holds the lock:</p>
+<div class="codehilite"><pre><span></span><code>vmkfstools<span class="w"> </span>-D<span class="w"> </span>your-vm-000001-delta.vmdk
+</code></pre></div>
+
+<p>The output gives you a few important fields. Look for the <code>RO Owner</code> line, which contains a MAC address. That MAC belongs to the vmkernel adapter of the ESXi host that holds the lock. If the MAC is all zeros (<code>00:00:00:00:00:00</code>), the file is not locked, and your problem is something else (probably space). If there's a real MAC, an ESXi host has the file locked.</p>
+<p>The <code>Mode</code> field gives you a hint about the lock type, but do not rely on mode alone to decide what to kill. Match the owner MAC to a host, then to the specific world ID or process holding the file. Mode 1 is a read-write lock, typically the VMX process of a powered-on VM. Mode 2 is often a backup application holding a read-only lock, but confirm against the owner host and process rather than assuming. If you see Mode 2 and the MAC belongs to a host running your backup proxy, your backup software left a stale lock.</p>
+<p>On newer ESXi versions, <code>vmfsfilelockinfo</code> resolves ownership more directly than reading raw <code>vmkfstools -D</code> output:</p>
+<div class="codehilite"><pre><span></span><code>vmfsfilelockinfo<span class="w"> </span>-p<span class="w"> </span>/vmfs/volumes/your-datastore/your-vm-name/your-vm-000001-delta.vmdk
+</code></pre></div>
+
+<p>Cross-reference the MAC to find the host:</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">Get-VMHost</span> <span class="p">|</span> <span class="nb">Select </span><span class="n">Name</span><span class="p">,</span> <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s1">&#39;VMkernelMAC&#39;</span><span class="p">;</span><span class="n">E</span><span class="p">={(</span><span class="nb">Get-VMHostNetworkAdapter</span> <span class="n">-VMHost</span> <span class="nv">$_</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span><span class="nv">$_</span><span class="p">.</span><span class="n">ManagementTrafficEnabled</span><span class="p">}</span> <span class="p">|</span> <span class="nb">Select </span><span class="n">-First</span> <span class="n">1</span><span class="p">).</span><span class="n">Mac</span><span class="p">}}</span>
+</code></pre></div>
+
+<p>That PowerCLI snippet lists every host and its management vmkernel MAC so you can match it against the lock owner.</p>
+<h2>Clearing File Locks</h2>
+<p>If a backup product left a stale lock, the cleanest fix is to deal with it on the backup side first. Restart the backup service on the proxy server or the backup server. Veeam, for example, has a Veeam Backup Service you can restart from Services.msc. This often releases orphaned VADP handles.</p>
+<p>If that doesn't work, you need to clear the lock at the ESXi level. The safest approach:</p>
+<ol>
+<li>Shut down the VM cleanly, not a suspend.</li>
+<li>Identify the locked delta file with <code>vmkfstools -D</code>.</li>
+<li>If the lock owner is the host you're on and the VM is powered off, the lock should release automatically once the VM's <code>.vmx</code> process is gone.</li>
+<li>If the lock persists (another host holds it), log into that host and find the process holding the file: <code>lsof | grep your-vm-name</code>.</li>
+<li>Kill the orphaned process if you can identify it as a backup proxy remnant.</li>
+</ol>
+<p>I've seen cases where the only way to clear a stubborn lock is to put the ESXi host into maintenance mode and reboot it. That's heavy-handed and should be a last resort, but if a backup proxy wedged the VMFS lock and nothing else releases it, a host reboot clears it. Plan for downtime and make sure VMs can vMotion off first.</p>
+<h2>When It's a Storage Space Problem</h2>
+<p>Check your datastore free space before attempting consolidation:</p>
+<div class="codehilite"><pre><span></span><code>df<span class="w"> </span>-h<span class="w"> </span>/vmfs/volumes/your-datastore
+</code></pre></div>
+
+<p>If you're under 10% free space, consolidation will likely fail. The delta needs to merge into the base disk, and VMware needs working room to do that. The official minimum scratch space is small, but in practice the requirement scales with your snapshot size, disk format, datastore type, and how busy the VM is during the commit. A safe operational rule: have free space at least equal to your largest active delta file, plus a buffer for ongoing writes.</p>
+<p>Options to free space: delete orphaned ISOs, move other VMs to another datastore with Storage vMotion, or delete old snapshot deltas that are truly orphaned (meaning you've confirmed they're not in any VM's disk chain). Do not manually delete delta files that are part of an active chain. That destroys the VM. If datastore capacity is chronically tight, adding <a href="https://www.amazon.com/s?k=enterprise+SSD+SATA&amp;tag=vmwaremadesim-20">enterprise SSDs</a> to expand your storage pool is cheaper than losing a VM to a failed consolidation.</p>
+<p>If you can't free enough space on the current datastore, you can Storage vMotion the VM to a datastore with more room. Relocation can sometimes clean up or simplify the disk chain during the move, but it is not a guaranteed fix for an active lock or a broken chain. If locks are already cleared and the only constraint is space, this is one of the cleaner recovery options.</p>
+<h2>The "Take a New Snapshot" Trick</h2>
+<p>There's a recovery method that sounds wrong but works often enough that every VMware admin should know it. When consolidation is stuck and the normal Consolidate button does nothing or the option is greyed out:</p>
+<ol>
+<li>Shut down the VM cleanly.</li>
+<li>Take a new snapshot.</li>
+<li>Immediately delete all snapshots (Delete All, not Delete).</li>
+<li>Power the VM on and run Consolidate again.</li>
+</ol>
+<p>The logic here is that creating a new snapshot and then doing Delete All forces VMware to walk the entire snapshot chain and commit every delta in sequence. Sometimes this succeeds where the standalone consolidation failed because the snapshot manager rebuilds the chain from scratch and handles the file operations differently.</p>
+<p>This is not guaranteed and I've seen it fail when the underlying problem (a lock or a space issue) is still present. Only attempt it after you have confirmed: no consolidation task is currently running, backup locks are cleared, the datastore has enough free space for the largest delta plus buffer, and you have a current backup or restore plan. Adding another delta to a chain that is already broken makes the situation worse, not better.</p>
+<h2>The Backup Software Shortcut</h2>
+<p>If you run Veeam or a similar product, there's another approach that community forums surface repeatedly: trigger a fresh backup job against the affected VM. The backup software creates its own snapshot, completes its job, and then removes the snapshot through its own cleanup path. This can clear a stuck consolidation state because the backup product's snapshot removal runs a different code path than vCenter's Consolidate button.</p>
+<p>I would not rely on this as a first-line fix because if the backup fails again (same lock, same space issue), you've added another delta to the chain and made the situation worse. But as a recovery method after you've cleared locks and confirmed space, it's worth trying.</p>
+<h2>What Not to Do</h2>
+<p>Do not blindly cancel a consolidation task or restart services just because vCenter looks stuck. First verify whether host-side consolidation is still active by checking delta file timestamps, sizes, and ESXi logs. If ESXi is still committing the snapshot chain, interrupting it risks corrupting the disk chain. If the task is genuinely stale (timestamps frozen, no log activity), then you can proceed with the recovery steps above. Even if it takes 24 hours, patience is cheaper than a corrupt VMDK.</p>
+<p>Do not manually delete <code>-delta.vmdk</code> files from the datastore browser. Ever. If those deltas are part of the active disk chain, deleting them breaks the chain and the VM will not boot. The only safe way to remove delta files is through VMware's own consolidation process.</p>
+<p>Do not create new snapshots while consolidation is in progress. This extends the chain and can cause the consolidation logic to fail.</p>
+<p>Do not ignore the "Needs Consolidation" warning hoping it resolves itself. It won't. The delta file keeps growing and your datastore fills up.</p>
+<h2>Preventing It Next Time</h2>
+<p>The root cause is almost always a backup job failing to clean up its snapshots. Check your backup software's logs for snapshot removal failures and address those. Veeam has a built-in snapshot retention check. Make sure it runs. If you don't have a proper backup target yet, a <a href="https://www.amazon.com/s?k=Synology+DiskStation+DS923&amp;tag=vmwaremadesim-20">Synology NAS</a> with enterprise drives gives you a reliable repository that won't leave your snapshots orphaned when a job fails.</p>
+<p>Keep datastore free space above 15%. Snapshot operations need headroom, and a datastore running at 95% is a ticking bomb for consolidation failures.</p>
+<p>Set vCenter alarms for snapshot size. A VM with a delta larger than 10-15 GB is either a long-running snapshot that someone forgot or a consolidation failure in progress. Either way, you want to know about it before vCenter does.</p>
+<p>If you're dealing with chronic snapshot headaches, some teams are reevaluating whether the VMware stack is worth the operational overhead. The migration path to Proxmox eliminates the VADP lock problem entirely since Proxmox uses a different snapshot mechanism. I walk through that in the <a href="/articles/vmware-to-proxmox-migration-guide.html">Proxmox migration guide</a>. Not suggesting you jump ship over one consolidation failure, but if this is a recurring monthly incident, it's worth knowing the alternatives.</p>
+<p>For SSH access to your ESXi hosts (which you'll need for all the commands above), make sure root SSH is enabled. If you've lost that access, the <a href="/articles/how-to-reset-esxi-root-password-without-reinstalling.html">ESXi root password reset guide</a> covers recovery without wiping the host.</p>
+<h2>When to Stop and Call Broadcom Support</h2>
+<p>There is a line where blog-post troubleshooting ends and professional support begins. If the VM is business-critical, the snapshot chain has multiple deltas and the descriptors look inconsistent, or you are considering manually editing descriptor files or deleting VMDKs to repair the chain, stop and open a Broadcom support case. Manual chain repair is possible, but it carries real data-loss risk and is not something to attempt from a web tutorial. The diagnostic work above — identifying locks, checking space, reading logs — is safe and gives the support engineer exactly what they need to help you faster.</p>
+<h2>Recovering Without Losing Data</h2>
+<p>Snapshot consolidation failures are recoverable if you stop and diagnose before acting. Identify whether it's a lock, a space issue, or a hung task. Clear locks at the source. Free space. Try the new-snapshot-Delete-All trick. Let in-progress consolidations finish. And fix the backup job that created the mess so you're not back here next weekend.</p>
+
+    <!-- Newsletter CTA -->
+<div class="newsletter-cta" id="newsletter">
+  <h3>Stay ahead of the VMware changes</h3>
+  <p>We're publishing detailed licensing breakdowns, comparison guides, migration walkthroughs, and cost calculators. Get them in your inbox.</p>
+  <input type="email" placeholder="your@email.com" />
+  <button>Subscribe</button>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div>
+    © 2026 VMwareMadeSimple.com — Independent. Not affiliated with VMware or Broadcom.
+    <div class="aff-disclosure" style="margin-top: 0.3rem;">Some links are affiliate links. See our <a href="#">disclosure policy</a>.</div>
+  </div>
+  <div class="footer-links">
+    <a href="#">About</a>
+    <a href="mailto:contact@vmwaremadesimple.com">Contact</a>
+    <a href="/sitemap.xml">RSS</a>
+    <a href="#">Privacy</a>
+    <a href="#">Corrections</a>
+  </div>
+</footer>
+
+<script>
+function searchSite(q) {
+  if (q.length < 2) return;
+  if (event && event.key === 'Enter') {
+    window.location.href = 'https://www.google.com/search?q=site:vmwaremadesimple.com+' + encodeURIComponent(q);
+  }
+}
+</script>
+
+</body>
+</html>
+
