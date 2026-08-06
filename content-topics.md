@@ -20,15 +20,15 @@
 
 ## High Priority — How-To/Troubleshooting (SEO long-tail)
 
-- [ ] ESXi Host Shows Disconnected in vCenter: Full Troubleshooting Guide
+- [x] ESXi Host Shows Disconnected in vCenter: Full Troubleshooting Guide
 - [x] How to Reset ESXi Root Password Without Reinstalling *(published Jul 29)*
-- [ ] vSphere HA Admission Control Explained: When to Use and When to Disable
-- [ ] VMware Snapshot Best Practices: Why Your VMs Are Slow
+- [x] vSphere HA Admission Control Explained: When to Use and When to Disable
+- [x] VMware Snapshot Best Practices: Why Your VMs Are Slow (published as "VMware Snapshots: Why Your VMs Get Slow" — 2026-08-03)
 
 ## Medium Priority — Home Lab (affiliate gold mine)
 
 - [ ] The Ultimate VMware Home Lab Build for Under $500 in 2026
-- [ ] Best Mini PCs for VMware Home Labs: Tested and Ranked
+- [x] Best Mini PCs for VMware Home Labs: Tested and Ranked
 - [ ] How to Run VCF in a Nested Lab: Complete Walkthrough
 - [ ] Home Lab Networking for VMware: VLANs, vSwitches, and Physical Setup
 
