@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Home Lab Networking for VMware: VLANs, vSwitches, and Physical Setup | VMwareMadeSimple</title>
+<meta name="description" content="Configure VMware home lab networking: managed switches, VLAN trunks, vSwitch port groups, NIC teaming, and security policies with real commands." />
+<meta name="keywords" content="vmware home lab networking, esxi vswitch vlan, vlan trunk port esxi, nic teaming esxi home lab, esxi port group configuration" />
+<link rel="canonical" href="https://vmwaremadesimple.com/articles/home-lab-networking-vmware-vlans-vswitches-physical-setup.html" />
+<link rel="stylesheet" href="/css/style.css" />
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2NDPP0ZTKC"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-2NDPP0ZTKC');
+</script>
+
+<!-- Open Graph -->
+<meta property="og:title" content="Home Lab Networking for VMware: VLANs, vSwitches, and Physical Setup" />
+<meta property="og:description" content="Configure VMware home lab networking: managed switches, VLAN trunks, vSwitch port groups, NIC teaming, and security policies with real commands." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://vmwaremadesimple.com/articles/home-lab-networking-vmware-vlans-vswitches-physical-setup.html" />
+
+<!-- Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Home Lab Networking for VMware: VLANs, vSwitches, and Physical Setup",
+  "description": "Configure VMware home lab networking: managed switches, VLAN trunks, vSwitch port groups, NIC teaming, and security policies with real commands.",
+  "author": { "@type": "Organization", "name": "VMwareMadeSimple Editorial" },
+  "publisher": { "@type": "Organization", "name": "VMwareMadeSimple" },
+  "datePublished": "2026-08-10",
+  "dateModified": "2026-08-10",
+  "mainEntityOfPage": "https://vmwaremadesimple.com/articles/home-lab-networking-vmware-vlans-vswitches-physical-setup.html"
+}
+</script>
+</head>
+<body>
+
+<!-- Alert strip -->
+<div class="alert-strip">
+  VCF 9.1 released — <a href="/articles/vcf-9-nested-lab-setup-complete-walkthrough.html">licensing and upgrade paths changed. Here's what's new →</a>
+</div>
+
+<!-- Masthead -->
+<div class="masthead">
+  <div class="masthead-inner">
+    <h1><a href="/">VMware<span class="red">MadeSimple</span></a></h1>
+    <div class="tagline">Independent VMware analysis for IT professionals. No vendor spin.</div>
+    <div class="credibility-bar">
+      <div class="creds">
+        <span><span class="dot">●</span> Independent</span>
+        <span><span class="dot">●</span> Sources linked</span>
+        <span><span class="dot">●</span> Updated weekly</span>
+        <span><span class="dot">●</span> Not affiliated with VMware/Broadcom</span>
+      </div>
+      <div class="social">
+        <a href="/sitemap.xml">RSS</a>
+        <a href="#newsletter">Newsletter</a>
+        <a href="mailto:contact@vmwaremadesimple.com">Contact</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Category nav -->
+<div class="navbar">
+  <div class="navbar-inner">
+    <a href="/">Home</a>
+    <a href="/#licensing" class="active">Licensing</a>
+    <a href="/#migration">Migration</a>
+    <a href="/#vcf">VCF 9.1</a>
+    <a href="/#homelab">Home Lab</a>
+    <a href="/#powercli">PowerCLI</a>
+    <a href="/#alternatives">Alternatives</a>
+    <a href="/tools/price-calculator.html">Tools</a>
+    <div class="nav-search">
+      <input type="text" placeholder="Search..." onkeyup="searchSite(this.value)" />
+    </div>
+  </div>
+</div>
+
+<!-- Article header -->
+<div class="article-header">
+  <div class="breadcrumb"><a href="/">Home</a> → Home Lab</div>
+  <div class="cat-label">Home Lab</div>
+  <h1>Home Lab Networking for VMware: VLANs, vSwitches, and Physical Setup</h1>
+  <div class="byline">
+    <span>Updated August 10, 2026</span>
+    <span>·</span>
+    <span>12 min read</span>
+    <span class="verified">Fact-checked</span>
+  </div>
+</div>
+
+<!-- Article body -->
+<div class="article-body">
+
+<h2>Home lab networking for VMware: VLANs, vSwitches, and physical setup</h2>
+<p>You can build an ESXi host with a mini PC and 32 GB of RAM, plug it into an unmanaged switch, and start VMs. That works. But the moment you want to practice vMotion, segment traffic, run a nested vCenter, or reproduce something from work, the network layer is where the lab falls apart. This article covers the physical switch, VLAN design, vSwitch configuration, and NIC teaming decisions that make a home lab behave like something closer to a real environment.</p>
+<h2>The physical layer: managed switch and cabling</h2>
+<p>An unmanaged switch will carry traffic, but it cannot do 802.1Q VLAN tagging. That means no trunk ports, no traffic separation, and no way to practice the most common enterprise networking pattern in vSphere. You need a managed switch.</p>
+<p>For a lab, the <a href="https://www.amazon.com/s?k=TP-Link+TL-SG108E+managed+switch&amp;tag=vmwaremadesim-20">TP-Link TL-SG108E</a> is an 8-port gigabit managed switch around $30 that supports 802.1Q VLANs, port mirroring, and IGMP snooping. It draws about 4 watts and has no fan. If you want something closer to enterprise gear, a used HP ProCurve 2530-8G runs $40 to $60 on eBay and gives you a real CLI. Either one works for a one- or two-host lab.</p>
+<p>If your hosts have 10GbE ports, like a Minisforum MS-01 with SFP+, you will need a 10G switch or direct-attach copper (DAC) cables. A used Mikrotik CRS305 with four SFP+ ports runs about $130 and supports 802.1Q. For a two-node lab, skip the switch entirely and connect the hosts back to back with a <a href="https://www.amazon.com/s?k=10G+SFP%2B+DAC+cable&amp;tag=vmwaremadesim-20">10G SFP+ DAC cable</a> for about $12. That gives you a dedicated 10G link for vMotion and storage replication without buying a switch.</p>
+<p>The switch-port mode is the part that matters. The port connecting to your ESXi host needs to be a trunk carrying all the VLANs you plan to use. On a Cisco switch, that looks like this:</p>
+<div class="codehilite"><pre><span></span><code>interface GigabitEthernet0/1
+ description ESXi-HOST-1-UPLINK
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20,30,40
+ spanning-tree portfast trunk
+</code></pre></div>
+
+<p>Note: some Cisco platforms only support 802.1Q and do not recognize <code>switchport trunk encapsulation dot1q</code>. If the command is not available, skip it.</p>
+<p>On a web-managed switch like the TL-SG108E, make the ESXi uplink a tagged member of each VLAN you want it to carry. The terminology differs by vendor: Cisco says trunk, TP-Link says tagged, the 802.1Q standard says the egress frames carry the VLAN tag in the header. They all mean the same thing. If you intentionally use an untagged/native management VLAN, set the port's PVID to that VLAN and leave that VLAN untagged on the ESXi uplink. In most VMware labs, tagging management on the ESXi port group is cleaner and avoids PVID confusion.</p>
+<p>Pick one model for management and stick with it: either tag management as VLAN 10 on the ESXi port group and trunk/tag VLAN 10 on the switch, or leave management untagged/native on both sides. Do not set VLAN 10 on the ESXi port group while the switch sends management untagged, or you will lose access to the host on the next reboot.</p>
+<p>On Cisco, use <code>spanning-tree portfast trunk</code> on the ESXi-facing trunk. On other switches, look for an STP edge-port or port-fast setting. Without it, the switch port goes through the listening and learning phases of spanning tree, which takes about 30 seconds, during which your ESXi host has no network connectivity. In production this is often paired with BPDU Guard; in a lab, the main point is avoiding that 30-second STP delay on host uplinks.</p>
+<h2>VLAN design for a home lab</h2>
+<p>You do not need ten VLANs. A functional lab uses four to five:</p>
+<ul>
+<li>VLAN 10: Management (ESXi host VMkernel, vCenter management)</li>
+<li>VLAN 20: vMotion (dedicated VMkernel for migration traffic)</li>
+<li>VLAN 30: VM traffic (your actual virtual machines)</li>
+<li>VLAN 40: Storage / iSCSI (if you are using shared storage over IP)</li>
+<li>VLAN 99: Isolated / test (broken networks, malware analysis, things you do not want routing anywhere)</li>
+</ul>
+<p>This is enough to practice every major vSphere networking scenario without making the switch config unwieldy. You can merge VLAN 20 into VLAN 10 for a minimal one-host setup, but separating vMotion onto its own subnet is what lets you observe the traffic and understand the failover behavior.</p>
+<h2>Standard vSwitch vs distributed switch</h2>
+<p>ESXi has two virtual switch types. The standard vSwitch (VSS) is configured per host and works with every license tier including free ESXi. The distributed switch (vDS) is configured once in vCenter and pushed to all member hosts.</p>
+<p>Start with a standard vSwitch in a home lab because it works without vCenter and does not depend on Enterprise Plus licensing. For a one- or two-host lab, you will not feel its limitations.</p>
+<p>The vDS becomes worth using at three or more hosts, or when you want to practice the exact configuration model used in production environments. A vDS gives you centralized port group management, private VLANs, network I/O control, and LACP support. The tradeoff is licensing: vSphere Distributed Switch requires Enterprise Plus-level entitlement or higher. In the current Broadcom packaging, that means vSphere Enterprise Plus at about $150/core/year, VVF at about $135 to $190/core/year, or VCF at about $350/core/year. vSphere Standard at $50/core/year does not include it. For context on how those tiers break down, the <a href="/articles/broadcom-vmware-licensing-breakdown.html">Broadcom licensing breakdown</a> covers the full pricing structure.</p>
+<p>If you are running a 60-day vSphere evaluation, you get all features including vDS. After the evaluation expires, an existing vDS may continue carrying traffic, but you should not count on being able to manage or change vDS-backed networking until the environment has a vDS-capable license. Do not build your only management path on an eval-only vDS.</p>
+<h2>Port groups: separating traffic types</h2>
+<p>A port group is a named entry point on a vSwitch that has its own VLAN, security, and teaming policy. Each traffic type gets its own port group. On a standard vSwitch with the four VLANs above, you would create:</p>
+<table>
+<thead>
+<tr>
+<th>Port Group</th>
+<th>VLAN ID</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mgmt-VMkernel</td>
+<td>10</td>
+<td>ESXi management, vCenter communication</td>
+</tr>
+<tr>
+<td>vMotion-VMkernel</td>
+<td>20</td>
+<td>vMotion traffic</td>
+</tr>
+<tr>
+<td>VM-Network</td>
+<td>30</td>
+<td>Virtual machine networking</td>
+</tr>
+<tr>
+<td>iSCSI-VMkernel</td>
+<td>40</td>
+<td>iSCSI storage traffic (if applicable)</td>
+</tr>
+</tbody>
+</table>
+<p>The ESXi management VMkernel adapter (vmk0) sits on Mgmt-VMkernel. You add a second VMkernel adapter (vmk1) on vMotion-VMkernel and tag it for vMotion. The iSCSI adapter goes on its own VMkernel if you are using IP-based shared storage. VM traffic goes through the VM-Network port group, which VM NICs attach to.</p>
+<p>To create a port group from the ESXi shell:</p>
+<div class="codehilite"><pre><span></span><code>esxcli network vswitch standard portgroup add \
+  --portgroup-name=&quot;vMotion-VMkernel&quot; --vswitch-name=vSwitch0
+
+esxcli network vswitch standard portgroup set \
+  --portgroup-name=&quot;vMotion-VMkernel&quot; --vlan-id=20
+</code></pre></div>
+
+<p>To create the VMkernel adapter for vMotion:</p>
+<div class="codehilite"><pre><span></span><code><span class="nx">esxcli</span><span class="w"> </span><span class="nx">network</span><span class="w"> </span><span class="nx">ip</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="nx">add</span><span class="w"> </span>\
+<span class="w">  </span><span class="o">--</span><span class="kd">interface</span><span class="o">-</span><span class="nx">name</span><span class="p">=</span><span class="nx">vmk1</span><span class="w"> </span><span class="o">--</span><span class="nx">portgroup</span><span class="o">-</span><span class="nx">name</span><span class="p">=</span><span class="s">&quot;vMotion-VMkernel&quot;</span>
+
+<span class="nx">esxcli</span><span class="w"> </span><span class="nx">network</span><span class="w"> </span><span class="nx">ip</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="nx">ipv4</span><span class="w"> </span><span class="nx">set</span><span class="w"> </span>\
+<span class="w">  </span><span class="o">--</span><span class="kd">interface</span><span class="o">-</span><span class="nx">name</span><span class="p">=</span><span class="nx">vmk1</span><span class="w"> </span><span class="o">--</span><span class="k">type</span><span class="p">=</span><span class="nx">static</span><span class="w"> </span>\
+<span class="w">  </span><span class="o">--</span><span class="nx">ip</span><span class="p">=</span><span class="m m-Double">192.168.20.10</span><span class="w"> </span><span class="o">--</span><span class="nx">netmask</span><span class="p">=</span><span class="m m-Double">255.255.255.0</span>
+
+<span class="nx">esxcli</span><span class="w"> </span><span class="nx">network</span><span class="w"> </span><span class="nx">ip</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="nx">tag</span><span class="w"> </span><span class="nx">add</span><span class="w"> </span>\
+<span class="w">  </span><span class="o">--</span><span class="kd">interface</span><span class="o">-</span><span class="nx">name</span><span class="p">=</span><span class="nx">vmk1</span><span class="w"> </span><span class="o">--</span><span class="nx">tagname</span><span class="p">=</span><span class="nx">VMotion</span>
+</code></pre></div>
+
+<p>The last command tags vmk1 as a vMotion-capable adapter. Without it, vMotion will not use that interface. Do not add a default gateway to every VMkernel adapter. For a simple lab, keep vMotion and iSCSI on non-routed subnets. If you need routed vMotion, use the vMotion TCP/IP stack intentionally rather than dumping a gateway on vmk1.</p>
+<p>Leave MTU at 1500 unless you are deliberately testing jumbo frames. If you set 9000 for iSCSI or vMotion, set it consistently on the physical switch, vSwitch, port group or VMkernel path, and storage endpoint, then verify with <code>vmkping -d -s 8972 &lt;target-ip&gt;</code>.</p>
+<h2>VLAN tagging modes</h2>
+<p>VMware supports three VLAN tagging models: EST, VST, and VGT. Most labs use one of them and never think about it, but knowing the difference matters when something is not tagging correctly.</p>
+<p><strong>Virtual Switch Tagging (VST)</strong> is the default approach. The physical switch port is a trunk. You assign a VLAN ID to the port group, and the vSwitch strips the 802.1Q tag before handing the frame to the VM. The VM sees untagged traffic. This is how 95 percent of vSphere environments operate.</p>
+<p><strong>External Switch Tagging (EST)</strong> means the physical switch port is an access port assigned to one VLAN. No VLAN ID is set on the port group (or it is set to 0). The VM and the vSwitch never see a tag. This is what happens if you plug an ESXi host into an unmanaged switch or an access port. It works, but you cannot carry multiple VLANs over a single uplink.</p>
+<p><strong>Virtual Guest Tagging (VGT)</strong> passes the 802.1Q tag through to the guest OS, which must handle VLAN tagging internally. The port group VLAN ID is set to 4095 (trunk all). This is used for nested labs where the guest is itself an ESXi host that needs to see tagged traffic. VLAN IDs 1 through 4094 identify tagged VLANs. VLAN ID 0 means the port group sends and receives untagged traffic. VLAN ID 4095 is the special trunk or all-VLANs setting used for VGT.</p>
+<p>For the <a href="/articles/vcf-9-nested-lab-setup-complete-walkthrough.html">nested VCF lab setup</a>, you will encounter VGT because the nested ESXi host needs to receive tagged frames to distribute across its own virtual port groups.</p>
+<h2>NIC teaming and failover with limited uplinks</h2>
+<p>Most mini PCs and budget lab hosts have one or two physical NICs. This is the constraint that shapes your teaming configuration.</p>
+<p>With a single NIC, all traffic shares one uplink. You separate traffic logically using VLANs and port groups, but physically everything traverses the same cable. This is fine for learning. vMotion will compete with management traffic during migrations, but on a gigabit link in a lab that is not a practical problem.</p>
+<p>With two NICs, you have options. The common configuration for a two-NIC host is to put both adapters on the same vSwitch and set the teaming policy to active/standby. Management traffic uses vmnic0 as active with vmnic1 as standby. vMotion uses vmnic1 as active with vmnic0 as standby. This way each traffic type has a failover path without needing active/active teaming, which on a standard vSwitch does not aggregate bandwidth for a single flow and does not require switch-side configuration under the default originating-port-ID policy.</p>
+<p>To configure failover order from the shell:</p>
+<div class="codehilite"><pre><span></span><code>esxcli network vswitch standard portgroup policy failover set \
+  --portgroup-name=&quot;Mgmt-VMkernel&quot; \
+  --active-uplinks=vmnic0 --standby-uplinks=vmnic1
+
+esxcli network vswitch standard portgroup policy failover set \
+  --portgroup-name=&quot;vMotion-VMkernel&quot; \
+  --active-uplinks=vmnic1 --standby-uplinks=vmnic0
+</code></pre></div>
+
+<p>With PowerCLI, you can do the same thing across multiple hosts:</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">$vmhost</span> <span class="p">=</span> <span class="nb">Get-VMHost</span> <span class="s2">&quot;esxi-01.lab.local&quot;</span>
+
+<span class="c"># On a fresh host, vSwitch0 usually already exists. Use Get-VirtualSwitch</span>
+<span class="c"># unless you intentionally removed the default networking.</span>
+<span class="nv">$vsw</span> <span class="p">=</span> <span class="nb">Get-VirtualSwitch</span> <span class="n">-VMHost</span> <span class="nv">$vmhost</span> <span class="n">-Name</span> <span class="n">vSwitch0</span>
+
+<span class="c"># Management port group, vmnic0 active</span>
+<span class="nv">$pgMgmt</span> <span class="p">=</span> <span class="nb">New-VirtualPortGroup</span> <span class="n">-VirtualSwitch</span> <span class="nv">$vsw</span> <span class="n">-Name</span> <span class="s2">&quot;Mgmt-VMkernel&quot;</span> <span class="n">-VLanId</span> <span class="n">10</span>
+<span class="nb">Get-VirtualPortGroup</span> <span class="n">-Name</span> <span class="s2">&quot;Mgmt-VMkernel&quot;</span> <span class="n">-VMHost</span> <span class="nv">$vmhost</span> <span class="p">|</span>
+  <span class="nb">Get-NicTeamingPolicy</span> <span class="p">|</span> <span class="nb">Set-NicTeamingPolicy</span> <span class="n">-MakeActive</span> <span class="n">vmnic0</span> <span class="n">-MakeStandby</span> <span class="n">vmnic1</span>
+
+<span class="c"># vMotion port group, vmnic1 active</span>
+<span class="nv">$pgVmotion</span> <span class="p">=</span> <span class="nb">New-VirtualPortGroup</span> <span class="n">-VirtualSwitch</span> <span class="nv">$vsw</span> <span class="n">-Name</span> <span class="s2">&quot;vMotion-VMkernel&quot;</span> <span class="n">-VLanId</span> <span class="n">20</span>
+<span class="nv">$vmk</span> <span class="p">=</span> <span class="nb">New-VMHostNetworkAdapter</span> <span class="n">-VMHost</span> <span class="nv">$vmhost</span> <span class="p">`</span>
+  <span class="n">-PortGroup</span> <span class="s2">&quot;vMotion-VMkernel&quot;</span> <span class="p">`</span>
+  <span class="n">-VMotionEnabled</span> <span class="nv">$true</span> <span class="p">`</span>
+  <span class="n">-IP</span> <span class="s2">&quot;192.168.20.10&quot;</span> <span class="p">`</span>
+  <span class="n">-SubnetMask</span> <span class="s2">&quot;255.255.255.0&quot;</span>
+</code></pre></div>
+
+<p>The default load balancing policy on a standard vSwitch is "route based on originating virtual port ID." This distributes VMs across uplinks by assigning each VM to a physical NIC based on its virtual port number. It does not aggregate bandwidth for a single VM, and it does not require switch-side configuration. "Route based on IP hash" can spread multiple flows across uplinks, but a single flow still normally lands on one physical link. On a standard vSwitch, IP hash requires a static EtherChannel or static port channel on the physical switch, not LACP. LACP is only available with a vSphere Distributed Switch, and the TL-SG108E does not support LACP on all firmware versions.</p>
+<h2>Security policies: promiscuous mode and nested labs</h2>
+<p>Every port group has three security policy settings. In a standard configuration, all three are set to Reject:</p>
+<ul>
+<li>Promiscuous mode: determines whether a VM can see traffic destined for other VMs on the same port group</li>
+<li>MAC address changes: determines what happens when a VM changes its effective MAC from the initial one assigned by the vSwitch</li>
+<li>Forged transmits: determines whether the vSwitch accepts frames with a source MAC that does not match the VM's assigned adapter</li>
+</ul>
+<p>For a normal lab with VMs running web servers and databases, leave these at Reject. That is the secure default and the behavior you want to understand.</p>
+<p>For a nested lab, where your VMs are themselves ESXi hosts running their own virtual machines, you need all three set to Accept on the port group hosting the nested ESXi. The nested host generates traffic with MAC addresses it assigned to its own VMs, and the outer vSwitch will drop those frames unless forged transmits and MAC address changes are accepted. Promiscuous mode must be accepted so the nested host can see traffic for its virtual machines.</p>
+<div class="codehilite"><pre><span></span><code>esxcli network vswitch standard portgroup policy security set \
+  --portgroup-name=&quot;Nested-ESXi&quot; \
+  --promiscuous-mode=yes \
+  --mac-changes=yes \
+  --forged-transmits=yes
+</code></pre></div>
+
+<p>This is the same configuration change described in the <a href="/articles/best-vmware-home-lab-hardware-2026.html">home lab hardware guide</a>, which covers the physical host side. The networking article covers the port group side.</p>
+<h2>Verifying your configuration</h2>
+<p>Once everything is configured, verify the host can reach its gateways and that traffic is hitting the right VLANs.</p>
+<div class="codehilite"><pre><span></span><code>#<span class="w"> </span><span class="nv">List</span><span class="w"> </span><span class="nv">all</span><span class="w"> </span><span class="nv">vSwitches</span>,<span class="w"> </span><span class="nv">port</span><span class="w"> </span><span class="nv">groups</span>,<span class="w"> </span><span class="nv">and</span><span class="w"> </span><span class="nv">uplinks</span>
+<span class="nv">esxcfg</span><span class="o">-</span><span class="nv">vswitch</span><span class="w"> </span><span class="o">-</span><span class="nv">l</span>
+
+#<span class="w"> </span><span class="k">Show</span><span class="w"> </span><span class="nv">VMkernel</span><span class="w"> </span><span class="nv">adapters</span><span class="w"> </span><span class="nv">and</span><span class="w"> </span><span class="nv">their</span><span class="w"> </span><span class="nv">services</span>
+<span class="nv">esxcli</span><span class="w"> </span><span class="nv">network</span><span class="w"> </span><span class="nv">ip</span><span class="w"> </span><span class="nv">interface</span><span class="w"> </span><span class="nv">list</span>
+
+#<span class="w"> </span><span class="nv">Test</span><span class="w"> </span><span class="nv">management</span><span class="w"> </span><span class="nv">network</span><span class="w"> </span><span class="nv">connectivity</span>
+<span class="nv">vmkping</span><span class="w"> </span><span class="o">-</span><span class="nv">I</span><span class="w"> </span><span class="nv">vmk0</span><span class="w"> </span><span class="mi">192</span>.<span class="mi">168</span>.<span class="mi">10</span>.<span class="mi">1</span>
+
+#<span class="w"> </span><span class="nv">Test</span><span class="w"> </span><span class="nv">vMotion</span><span class="w"> </span><span class="nv">network</span><span class="w"> </span><span class="nv">connectivity</span>
+<span class="nv">vmkping</span><span class="w"> </span><span class="o">-</span><span class="nv">I</span><span class="w"> </span><span class="nv">vmk1</span><span class="w"> </span><span class="mi">192</span>.<span class="mi">168</span>.<span class="mi">20</span>.<span class="mi">20</span>
+</code></pre></div>
+
+<p>The <code>esxcfg-vswitch -l</code> output shows you the mapping between physical NICs, vSwitches, port groups, and VLAN IDs in one table. If a VM cannot reach the network, this is the first thing to check. The second is whether the physical switch port is actually carrying the VLAN ID assigned to that port group. A <a href="/articles/esxi-host-disconnected-vcenter-troubleshooting.html">common cause of ESXi hosts disconnecting from vCenter</a> is a misconfigured management network or a switch port that lost its trunk configuration after a reboot.</p>
+<p>For a two-host lab where you want to verify vMotion is using the right network, run <code>vmkping -I vmk1 &lt;target-vMotion-IP&gt;</code> from each host. If that fails, vMotion will fail at around 10 percent with a network connectivity error. The VMkernel adapter must be tagged for vMotion and on the correct port group with the correct VLAN for the migration traffic to flow.</p>
+
+    <!-- Newsletter CTA -->
+<div class="newsletter-cta" id="newsletter">
+  <h3>Stay ahead of the VMware changes</h3>
+  <p>We're publishing detailed licensing breakdowns, comparison guides, migration walkthroughs, and cost calculators. Get them in your inbox.</p>
+  <input type="email" placeholder="your@email.com" />
+  <button>Subscribe</button>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div>
+    © 2026 VMwareMadeSimple.com — Independent. Not affiliated with VMware or Broadcom.
+    <div class="aff-disclosure" style="margin-top: 0.3rem;">Some links are affiliate links. See our <a href="#">disclosure policy</a>.</div>
+  </div>
+  <div class="footer-links">
+    <a href="#">About</a>
+    <a href="mailto:contact@vmwaremadesimple.com">Contact</a>
+    <a href="/sitemap.xml">RSS</a>
+    <a href="#">Privacy</a>
+    <a href="#">Corrections</a>
+  </div>
+</footer>
+
+<script>
+function searchSite(q) {
+  if (q.length < 2) return;
+  if (event && event.key === 'Enter') {
+    window.location.href = 'https://www.google.com/search?q=site:vmwaremadesimple.com+' + encodeURIComponent(q);
+  }
+}
+</script>
+
+</body>
+</html>
+
