@@ -27,10 +27,10 @@
 
 ## Medium Priority — Home Lab (affiliate gold mine)
 
-- [ ] The Ultimate VMware Home Lab Build for Under $500 in 2026
+- [x] The Ultimate VMware Home Lab Build for Under $500 in 2026
 - [x] Best Mini PCs for VMware Home Labs: Tested and Ranked
-- [ ] How to Run VCF in a Nested Lab: Complete Walkthrough
-- [ ] Home Lab Networking for VMware: VLANs, vSwitches, and Physical Setup
+- [x] How to Run VCF in a Nested Lab: Complete Walkthrough *(already published as vcf-9-nested-lab-setup-complete-walkthrough)*
+- [x] Home Lab Networking for VMware: VLANs, vSwitches, and Physical Setup
 
 ## Medium Priority — Horizon/VDI (Rob's specialty)
 
