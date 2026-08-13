@@ -6,7 +6,7 @@
 
 ## High Priority — Licensing/Business (highest search volume)
 
-- [ ] How Much Does VMware Cost Now? A 2026 Pricing Calculator
+- [x] How Much Does VMware Cost Now? A 2026 Pricing Calculator
 - [x] VMware VCF Licensing Explained: Per-Core Minimums and What They Mean for Your Budget *(published Jul 21)*
 - [x] Broadcom Support Portal Guide: How to Actually Get Help After the Acquisition *(published Jul 21)*
 - [x] VMware Subscription vs Perpetual License: What Happens to Your Existing Licenses *(published Jul 21)*
