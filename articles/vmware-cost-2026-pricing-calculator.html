@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>How Much Does VMware Cost Now? A 2026 Pricing Calculator | VMwareMadeSimple</title>
+<meta name="description" content="VMware pricing in 2026: per-core list prices, the 72-core minimum, and three worked examples with a PowerCLI core-counting script." />
+<meta name="keywords" content="vmware pricing 2026, vmware cost per core, vcf pricing, vvf pricing, vmware licensing calculator" />
+<link rel="canonical" href="https://vmwaremadesimple.com/articles/vmware-cost-2026-pricing-calculator.html" />
+<link rel="stylesheet" href="/css/style.css" />
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2NDPP0ZTKC"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-2NDPP0ZTKC');
+</script>
+
+<!-- Open Graph -->
+<meta property="og:title" content="How Much Does VMware Cost Now? A 2026 Pricing Calculator" />
+<meta property="og:description" content="VMware pricing in 2026: per-core list prices, the 72-core minimum, and three worked examples with a PowerCLI core-counting script." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://vmwaremadesimple.com/articles/vmware-cost-2026-pricing-calculator.html" />
+
+<!-- Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "How Much Does VMware Cost Now? A 2026 Pricing Calculator",
+  "description": "VMware pricing in 2026: per-core list prices, the 72-core minimum, and three worked examples with a PowerCLI core-counting script.",
+  "author": { "@type": "Organization", "name": "VMwareMadeSimple Editorial" },
+  "publisher": { "@type": "Organization", "name": "VMwareMadeSimple" },
+  "datePublished": "2026-08-12",
+  "dateModified": "2026-08-12",
+  "mainEntityOfPage": "https://vmwaremadesimple.com/articles/vmware-cost-2026-pricing-calculator.html"
+}
+</script>
+</head>
+<body>
+
+<!-- Alert strip -->
+<div class="alert-strip">
+  VCF 9.1 released — <a href="/articles/vcf-9-nested-lab-setup-complete-walkthrough.html">licensing and upgrade paths changed. Here's what's new →</a>
+</div>
+
+<!-- Masthead -->
+<div class="masthead">
+  <div class="masthead-inner">
+    <h1><a href="/">VMware<span class="red">MadeSimple</span></a></h1>
+    <div class="tagline">Independent VMware analysis for IT professionals. No vendor spin.</div>
+    <div class="credibility-bar">
+      <div class="creds">
+        <span><span class="dot">●</span> Independent</span>
+        <span><span class="dot">●</span> Sources linked</span>
+        <span><span class="dot">●</span> Updated weekly</span>
+        <span><span class="dot">●</span> Not affiliated with VMware/Broadcom</span>
+      </div>
+      <div class="social">
+        <a href="/sitemap.xml">RSS</a>
+        <a href="#newsletter">Newsletter</a>
+        <a href="mailto:contact@vmwaremadesimple.com">Contact</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Category nav -->
+<div class="navbar">
+  <div class="navbar-inner">
+    <a href="/">Home</a>
+    <a href="/#licensing" class="active">Licensing</a>
+    <a href="/#migration">Migration</a>
+    <a href="/#vcf">VCF 9.1</a>
+    <a href="/#homelab">Home Lab</a>
+    <a href="/#powercli">PowerCLI</a>
+    <a href="/#alternatives">Alternatives</a>
+    <a href="/tools/price-calculator.html">Tools</a>
+    <div class="nav-search">
+      <input type="text" placeholder="Search..." onkeyup="searchSite(this.value)" />
+    </div>
+  </div>
+</div>
+
+<!-- Article header -->
+<div class="article-header">
+  <div class="breadcrumb"><a href="/">Home</a> → Licensing</div>
+  <div class="cat-label">Licensing</div>
+  <h1>How Much Does VMware Cost Now? A 2026 Pricing Calculator</h1>
+  <div class="byline">
+    <span>Updated August 12, 2026</span>
+    <span>·</span>
+    <span>9 min read</span>
+    <span class="verified">Fact-checked</span>
+  </div>
+</div>
+
+<!-- Article body -->
+<div class="article-body">
+
+<p>The pricing question I get most often from VMware administrators has no single answer, and anyone who quotes you a flat per-core number without asking about your hardware is guessing. What I can give you is the formula, the current list prices, and three worked examples you can drop your own numbers into.</p>
+<h2>The unit: per physical core, with a floor</h2>
+<p>VMware licensing under Broadcom bills by the physical core. Every core in every CPU socket across your ESXi estate gets counted, with two separate floors stacked on top.</p>
+<p>The 16-core per-socket minimum rounds each CPU up to 16 billable cores. A host with two 12-core processors has 24 physical cores but licenses as 32. This rule is active on every subscription order. I have seen it quietly inflate bills by 25 percent on estates running older hardware. A Dell R630 with two E5-2630 v4 processors (10 cores each) bills at 32 cores instead of 20.</p>
+<p>The 72-core per-order minimum is the second floor. Broadcom introduced it in April 2025. After significant customer pushback, they partially reversed it for some existing renewals late in 2025, but it still applies to new orders, subscription transitions, and tier changes. If you are a new customer or changing bundles, your order line has to reach 72 cores regardless of how few you actually run. A single dense host with 64 billable cores still triggers the minimum, and you pay for 72.</p>
+<p>If you want the full breakdown of how these minimums interact with edge cases like ROBO and stretched clusters, there is a <a href="/articles/vmware-vcf-licensing-explained-per-core-minimums.html">dedicated explainer on per-core minimums</a> that covers those scenarios.</p>
+<h2>Count your own cores first</h2>
+<p>Before looking at any price, count what you are actually licensing. Do not trust the number on a renewal quote. I watched a customer take their planned term from 712 down to roughly 630 cores simply by reconciling against a hardware refresh that had already happened. Every core removed is removed for the whole term.</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">$hosts</span> <span class="p">=</span> <span class="nb">Get-VMHost</span> <span class="p">|</span> <span class="nb">Sort-Object</span> <span class="n">Name</span>
+<span class="nv">$totalBillable</span> <span class="p">=</span> <span class="n">0</span>
+
+<span class="k">foreach</span> <span class="p">(</span><span class="nv">$esxi</span> <span class="k">in</span> <span class="nv">$hosts</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nv">$hw</span> <span class="p">=</span> <span class="nv">$esxi</span><span class="p">.</span><span class="n">ExtensionData</span><span class="p">.</span><span class="n">Hardware</span><span class="p">.</span><span class="n">CpuInfo</span>
+    <span class="nv">$sockets</span> <span class="p">=</span> <span class="nv">$hw</span><span class="p">.</span><span class="n">NumCpuPackages</span>
+    <span class="nv">$coresPerSocket</span> <span class="p">=</span> <span class="nv">$hw</span><span class="p">.</span><span class="n">NumCpuCores</span> <span class="p">/</span> <span class="nv">$sockets</span>
+    <span class="nv">$billablePerSocket</span> <span class="p">=</span> <span class="no">[Math]</span><span class="p">::</span><span class="n">Max</span><span class="p">(</span><span class="nv">$coresPerSocket</span><span class="p">,</span> <span class="n">16</span><span class="p">)</span>
+    <span class="nv">$hostBillable</span> <span class="p">=</span> <span class="nv">$sockets</span> <span class="p">*</span> <span class="nv">$billablePerSocket</span>
+    <span class="nb">Write-Host</span> <span class="s2">&quot;</span><span class="p">$(</span><span class="nv">$esxi</span><span class="p">.</span><span class="n">Name</span><span class="p">)</span><span class="s2">: $sockets sockets x $billablePerSocket billable = $hostBillable cores&quot;</span>
+    <span class="nv">$totalBillable</span> <span class="p">+=</span> <span class="nv">$hostBillable</span>
+<span class="p">}</span>
+
+<span class="nb">Write-Host</span> <span class="s2">&quot;</span><span class="se">`n</span><span class="s2">Total billable cores: $totalBillable&quot;</span>
+<span class="nb">Write-Host</span> <span class="s2">&quot;Order minimum check: </span><span class="p">$(</span><span class="k">if</span> <span class="p">(</span><span class="nv">$totalBillable</span> <span class="o">-ge</span> <span class="n">72</span><span class="p">)</span> <span class="p">{</span><span class="s1">&#39;PASS&#39;</span><span class="p">}</span> <span class="k">else</span> <span class="p">{</span><span class="s1">&#39;FAIL - floor is 72&#39;</span><span class="p">})</span><span class="s2">&quot;</span>
+</code></pre></div>
+
+<p>Run this against your vCenter and you have your primary input. You can also automate ongoing tracking with a <a href="/articles/automating-vsphere-license-compliance-powercli.html">PowerCLI license auditing script</a> rather than doing a manual one-off count every renewal cycle.</p>
+<h2>The four bundles and what they cost</h2>
+<p>Broadcom narrowed the catalog to four subscription tiers. These are partner-reported and reseller-observed figures I have seen across 2025 and 2026, cross-checked against the Rimini Street estimator, community-reported VAR quotes on r/vmware, and Broadcom documentation. Broadcom does not publish a simple universal public price sheet, so treat these as planning assumptions, not guaranteed quotes. Pricing varies by channel, contract, geography, term, customer segment, and renewal status. Every deal gets negotiated, so treat these as the ceiling, not your quote.</p>
+<table>
+<thead>
+<tr>
+<th>Bundle</th>
+<th>List price (per core/year)</th>
+<th>What you get</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VCF</td>
+<td>$350</td>
+<td>Full stack: vSphere, vSAN (1 TiB/core), NSX, Aria Enterprise, SDDC Manager</td>
+</tr>
+<tr>
+<td>VVF</td>
+<td>$135 avg ($190 1-yr, $150 3-yr)</td>
+<td>vSphere, vCenter, vSAN (0.25 TiB/core), Aria Standard</td>
+</tr>
+<tr>
+<td>vSphere Standard</td>
+<td>$50</td>
+<td>Hypervisor and basic vCenter only</td>
+</tr>
+<tr>
+<td>vSphere Enterprise Plus</td>
+<td>$150</td>
+<td>Hypervisor with advanced features, no vSAN or NSX</td>
+</tr>
+</tbody>
+</table>
+<p>VCF dropped from $700/core/year at acquisition to $350. That sounds like progress, but the $350 number replaces what was previously an a la carte menu where you bought only what you needed. If you ran vSphere plus shared NFS storage and never touched NSX, your equivalent pre-acquisition cost was well under $100/core/year including support. VCF at $350 is a real increase even after the reduction, because the bundle forces products you were not buying.</p>
+<h2>Three worked examples</h2>
+<h3>The small shop: 3 hosts, older hardware</h3>
+<p>Three Dell R630 hosts, each with two Intel Xeon E5-2630 v4 processors (10 cores each). Actual physical cores across the estate: 60. Billable cores after the 16-core floor: 2 sockets times 16 times 3 hosts equals 96.</p>
+<p>On vSphere Standard at $50/core/year: 96 x $50 = <strong>$4,800/year</strong>.</p>
+<p>That is the floor of the entire portfolio. No vSAN, no Aria, no NSX. For a shop that previously ran vSphere Essentials Plus on perpetual licenses, $4,800/year is a new recurring cost that did not exist before. The <a href="/articles/vmware-subscription-vs-perpetual-license.html">subscription versus perpetual license math</a> shows the break-even in detail, but for most small estates the subscription model is a net cost increase over the life of the hardware.</p>
+<p>The 72-core minimum does not bite here because 96 clears it. But if this shop ran only one host (32 billable cores), the order would still price at 72 cores minimum. One host on vSphere Standard: 72 x $50 = $3,600/year for a single server.</p>
+<h3>The mid-size estate: 10 hosts, modern hardware</h3>
+<p>Ten hosts with two 32-core AMD EPYC processors each. Actual cores: 640. Billable cores: 640, above the floor with no rounding.</p>
+<p>On VVF at the 3-year rate ($150/core/year): 640 x $150 = <strong>$96,000/year</strong>. The vSAN entitlement gives 640 x 0.25 TiB = 160 TiB of storage capacity, which is real value if you were buying vSAN separately. If your storage lives on a SAN and you have no use for vSAN, that capacity sits unused and you are paying for it anyway.</p>
+<p>On vSphere Enterprise Plus ($150/core/year): same 640 x $150 = <strong>$96,000/year</strong>, but without the vSAN entitlement. The pricing overlap between VVF and Enterprise Plus at $150/core means the decision is about whether the included vSAN and Aria are worth having, not about a price gap between the tiers.</p>
+<h3>The large estate: 50 hosts on VCF</h3>
+<p>Fifty hosts with two 64-core EPYC processors. Billable cores: 6,400.</p>
+<p>On VCF at list ($350/core/year): 6,400 x $350 = <strong>$2,240,000/year</strong>.</p>
+<p>Nobody with 6,400 cores pays list. Based on advisory firms tracking 35 to 50 Broadcom renewals between 2024 and 2026, committed three-year and five-year estates of this size land at effective rates between $100 and $130/core/year, representing 30 to 55 percent off list. At $120/core effective, the same estate drops to $768,000/year. The spread between list and a well-negotiated deal on 6,400 cores is roughly $1.4 million per year. That spread is the real budget for the negotiation effort.</p>
+<h2>What moves the price down</h2>
+<p>Term length is the largest standard lever. Three-year commitments cut roughly 18 to 28 percent off the one-year rate. Five-year terms reach 28 to 38 percent off. I have seen five-year terms used specifically to lock a predictable annual figure for budgeting rather than to chase the deepest discount, and for a finance team that predictability can be worth more than the marginal savings.</p>
+<p>Scale unlocks further discounting above approximately 10,000 cores, where an additional 5 to 12 points becomes available.</p>
+<p>Competitive pressure is the lever shops underuse. First Broadcom quotes have been observed opening at 2 to 4 times the prior vSphere run rate. A documented evaluation of an alternative platform, whether Nutanix AHV, Hyper-V, Proxmox VE, or OpenShift Virtualization, moves the final discount 8 to 15 points against estates that negotiate with no alternative on the table. You do not need to commit to migrating. You need a formal quote from a competitor and at least one workload identified for the scenario.</p>
+<p>This is not a bluff. Broadcom's own account teams have incentive to prevent an estate from leaving entirely, and a credible migration analysis gives them the internal justification to improve pricing. The <a href="/articles/best-vmware-alternatives-2026.html">VMware alternatives comparison for 2026</a> covers which platforms are viable substitutes depending on your workload mix.</p>
+<h2>The consolidation lever</h2>
+<p>Because the floor is per socket, fewer processors with higher core density license more efficiently than many small ones. A host with one 64-core EPYC processor licenses at 64 cores. A host with two 32-core processors also licenses at 64 cores but gives you two sockets of hardware. Four single-socket hosts with 16-core processors license at 4 x 16 = 64 cores, and you get four physical machines for that same licensing cost.</p>
+<p>The inverse hurts older estates. Two-socket hosts with sub-16-core processors pay for phantom cores they will never use. If you are due for a hardware refresh, consolidating onto denser single-socket or high-core-count dual-socket servers before your renewal quote arrives is a licensing decision, not only an infrastructure one.</p>
+<p><a href="https://www.amazon.com/s?k=Dell+PowerEdge+rack+server&amp;tag=vmwaremadesim-20">Dell PowerEdge rack servers</a> are the most common refresh target I see in production VMware estates. For lab and small-environment testing, <a href="https://www.amazon.com/s?k=intel+nuc+mini+pc&amp;tag=vmwaremadesim-20">Intel NUC-class mini PCs</a> are a viable low-end option if you are sizing a small deployment and want to avoid the 72-core floor entirely.</p>
+<h2>When the numbers point somewhere else</h2>
+<p>If your worked example lands on vSphere Standard at $4,800/year and you are a small shop running basic VMs on shared storage, the comparison against alternatives is direct. Proxmox VE 9.0, released August 5, 2025, has no per-core licensing model at all. You pay per socket on a support subscription, or you run it unsupported for free. Nutanix AHV includes the hypervisor in its infrastructure license. For a 96-core estate, the gap between $4,800/year on vSphere Standard and a free or low-cost alternative can pay for the migration effort within the first year.</p>
+<p>For the large VCF estate paying between $768,000 and $2.2 million, migration is a multi-year project with professional services costs running from $500K to over $5M. The math still works on a three-to-five-year horizon for environments that can move their workloads, but it requires committed planning, not a spreadsheet exercise.</p>
+<p>The pricing model reduces to inputs you can measure. Count your billable cores with the script above, multiply by your tier's list rate, and apply whatever discount your term length and negotiation leverage earn. The core count is one command away. The planning prices are summarized here. The discount is the variable, and it depends on how much preparation you bring to the renewal conversation.</p>
+
+    <!-- Newsletter CTA -->
+<div class="newsletter-cta" id="newsletter">
+  <h3>Stay ahead of the VMware changes</h3>
+  <p>We're publishing detailed licensing breakdowns, comparison guides, migration walkthroughs, and cost calculators. Get them in your inbox.</p>
+  <input type="email" placeholder="your@email.com" />
+  <button>Subscribe</button>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div>
+    © 2026 VMwareMadeSimple.com — Independent. Not affiliated with VMware or Broadcom.
+    <div class="aff-disclosure" style="margin-top: 0.3rem;">Some links are affiliate links. See our <a href="#">disclosure policy</a>.</div>
+  </div>
+  <div class="footer-links">
+    <a href="#">About</a>
+    <a href="mailto:contact@vmwaremadesimple.com">Contact</a>
+    <a href="/sitemap.xml">RSS</a>
+    <a href="#">Privacy</a>
+    <a href="#">Corrections</a>
+  </div>
+</footer>
+
+<script>
+function searchSite(q) {
+  if (q.length < 2) return;
+  if (event && event.key === 'Enter') {
+    window.location.href = 'https://www.google.com/search?q=site:vmwaremadesimple.com+' + encodeURIComponent(q);
+  }
+}
+</script>
+
+</body>
+</html>
+
