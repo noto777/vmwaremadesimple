@@ -36,7 +36,7 @@
 
 - [ ] Omnissa Horizon 2412: What Changed and Should You Upgrade
 - [ ] NVIDIA vGPU with Horizon: Setup Guide for L40 and T4
-- [ ] Horizon Cloud on Azure vs On-Prem: Real Cost Comparison
+- [x] Horizon Cloud on Azure vs On-Prem: Real Cost Comparison
 - [ ] Troubleshooting Horizon Connection Server Issues
 
 ## Lower Priority — Advanced
