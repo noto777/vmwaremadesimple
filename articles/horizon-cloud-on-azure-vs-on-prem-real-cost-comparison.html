@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Horizon Cloud on Azure vs on-prem: real cost comparison | VMwareMadeSimple</title>
+<meta name="description" content="Horizon Cloud on Azure vs on-prem Horizon costs: Azure compute, storage, licensing, VVF/VCF, and where each model gets expensive." />
+<meta name="keywords" content="Horizon Cloud Azure cost,Horizon on-prem cost,Omnissa Horizon,Azure Virtual Desktop pricing,VDI cost comparison" />
+<link rel="canonical" href="https://vmwaremadesimple.com/articles/horizon-cloud-on-azure-vs-on-prem-real-cost-comparison.html" />
+<link rel="stylesheet" href="/css/style.css" />
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2NDPP0ZTKC"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-2NDPP0ZTKC');
+</script>
+
+<!-- Open Graph -->
+<meta property="og:title" content="Horizon Cloud on Azure vs on-prem: real cost comparison" />
+<meta property="og:description" content="Horizon Cloud on Azure vs on-prem Horizon costs: Azure compute, storage, licensing, VVF/VCF, and where each model gets expensive." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://vmwaremadesimple.com/articles/horizon-cloud-on-azure-vs-on-prem-real-cost-comparison.html" />
+
+<!-- Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Horizon Cloud on Azure vs on-prem: real cost comparison",
+  "description": "Horizon Cloud on Azure vs on-prem Horizon costs: Azure compute, storage, licensing, VVF/VCF, and where each model gets expensive.",
+  "author": { "@type": "Organization", "name": "VMwareMadeSimple Editorial" },
+  "publisher": { "@type": "Organization", "name": "VMwareMadeSimple" },
+  "datePublished": "2026-08-17",
+  "dateModified": "2026-08-17",
+  "mainEntityOfPage": "https://vmwaremadesimple.com/articles/horizon-cloud-on-azure-vs-on-prem-real-cost-comparison.html"
+}
+</script>
+</head>
+<body>
+
+<!-- Alert strip -->
+<div class="alert-strip">
+  VCF 9.1 released — <a href="/articles/vcf-9-nested-lab-setup-complete-walkthrough.html">licensing and upgrade paths changed. Here's what's new →</a>
+</div>
+
+<!-- Masthead -->
+<div class="masthead">
+  <div class="masthead-inner">
+    <h1><a href="/">VMware<span class="red">MadeSimple</span></a></h1>
+    <div class="tagline">Independent VMware analysis for IT professionals. No vendor spin.</div>
+    <div class="credibility-bar">
+      <div class="creds">
+        <span><span class="dot">●</span> Independent</span>
+        <span><span class="dot">●</span> Sources linked</span>
+        <span><span class="dot">●</span> Updated weekly</span>
+        <span><span class="dot">●</span> Not affiliated with VMware/Broadcom</span>
+      </div>
+      <div class="social">
+        <a href="/sitemap.xml">RSS</a>
+        <a href="#newsletter">Newsletter</a>
+        <a href="mailto:contact@vmwaremadesimple.com">Contact</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Category nav -->
+<div class="navbar">
+  <div class="navbar-inner">
+    <a href="/">Home</a>
+    <a href="/#licensing" class="active">Licensing</a>
+    <a href="/#migration">Migration</a>
+    <a href="/#vcf">VCF 9.1</a>
+    <a href="/#homelab">Home Lab</a>
+    <a href="/#powercli">PowerCLI</a>
+    <a href="/#alternatives">Alternatives</a>
+    <a href="/tools/price-calculator.html">Tools</a>
+    <div class="nav-search">
+      <input type="text" placeholder="Search..." onkeyup="searchSite(this.value)" />
+    </div>
+  </div>
+</div>
+
+<!-- Article header -->
+<div class="article-header">
+  <div class="breadcrumb"><a href="/">Home</a> → Horizon</div>
+  <div class="cat-label">Horizon</div>
+  <h1>Horizon Cloud on Azure vs on-prem: real cost comparison</h1>
+  <div class="byline">
+    <span>Updated August 17, 2026</span>
+    <span>·</span>
+    <span>11 min read</span>
+    <span class="verified">Fact-checked</span>
+  </div>
+</div>
+
+<!-- Article body -->
+<div class="article-body">
+
+<p>A Horizon cost comparison gets messy fast because the expensive line item is not always Horizon. With Horizon Cloud Service - next-gen on Microsoft Azure, the control plane and brokering model are Omnissa's problem, but the desktops still burn Azure compute, Azure storage, networking, identity, monitoring, and backup dollars. With on-prem Horizon, the bill moves into hosts, SAN or vSAN capacity, Windows Server, vSphere or VCF licensing, rack power, lifecycle replacement, and staff time.</p>
+<p>For a 100-user office-hours VDI pool, cloud can win if power management is aggressive and the users tolerate pooled desktops. For 24x7 persistent desktops, on-prem usually wins after the hardware is already owned.</p>
+<p>The numbers below use East US Azure retail rates pulled from the Azure Retail Prices API on August 18, 2026, Omnissa Horizon Cloud Service next-gen documentation, Microsoft Azure Virtual Desktop pricing documentation, and the VMware pricing facts already tracked for this site. Treat the arithmetic as a model, not a quote.</p>
+<h2>What is being compared</h2>
+<p>Horizon Cloud on Azure means Omnissa Horizon Cloud Service using Microsoft Azure capacity for the desktops. It is not the same purchase as Azure Virtual Desktop by itself. AVD supplies Microsoft-managed desktop virtualization plumbing and Windows entitlement rules; Horizon Cloud adds Omnissa brokering, images, pools, gateways, monitoring, and the admin model Horizon shops already know.</p>
+<p>On-prem Horizon means Connection Servers, Unified Access Gateways, vCenter, ESXi hosts, profile storage, golden images, and desktop pools running in a local datacenter or colo. Since the EUC business moved out of VMware, Horizon is now Omnissa, but the on-prem stack still depends heavily on vSphere underneath. If the vSphere side of the design is the confusing part, the current Broadcom bundle math is covered in the site's <a href="/articles/broadcom-vmware-licensing-breakdown.html">VMware licensing breakdown</a>.</p>
+<h2>Cloud cost stack: the Azure bill is the center of gravity</h2>
+<p>Start with compute. The Azure Retail Prices API returned these East US consumption prices for Dsv5 virtual machines on August 18, 2026:</p>
+<table>
+<thead>
+<tr>
+<th>Azure VM</th>
+<th style="text-align: right;">vCPU/RAM class</th>
+<th style="text-align: right;">Linux meter</th>
+<th style="text-align: right;">Windows meter</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Standard_D4s_v5</td>
+<td style="text-align: right;">4 vCPU class</td>
+<td style="text-align: right;">$0.192/hour</td>
+<td style="text-align: right;">$0.376/hour</td>
+</tr>
+<tr>
+<td>Standard_D8s_v5</td>
+<td style="text-align: right;">8 vCPU class</td>
+<td style="text-align: right;">$0.384/hour</td>
+<td style="text-align: right;">$0.752/hour</td>
+</tr>
+</tbody>
+</table>
+<p>The Windows meter matters when Windows licensing is not covered through the correct Microsoft entitlement path. Microsoft states that Azure Virtual Desktop can be used at no extra charge for eligible Windows 10/11 Enterprise, Microsoft 365, and Windows Server licenses, but Azure infrastructure is billed separately. If a customer lacks those entitlements, the desktop economics change immediately.</p>
+<p>Assume 100 users, pooled Windows 11 multi-session desktops, 10 users per Standard_D8s_v5 session host, 10 session hosts total, East US, and 10 working hours per weekday. That is roughly 217 powered-on hours per month per host.</p>
+<div class="codehilite"><pre><span></span><code><span class="mf">10</span><span class="w"> </span><span class="n">hosts</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="err">$</span><span class="mf">0.384</span><span class="o">/</span><span class="n">hour</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="mf">217</span><span class="w"> </span><span class="n">hours</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">$</span><span class="mf">833.28</span><span class="o">/</span><span class="n">month</span>
+</code></pre></div>
+
+<p>If those hosts stay on all month, the same pool is:</p>
+<div class="codehilite"><pre><span></span><code><span class="mf">10</span><span class="w"> </span><span class="n">hosts</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="err">$</span><span class="mf">0.384</span><span class="o">/</span><span class="n">hour</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="mf">730</span><span class="w"> </span><span class="n">hours</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">$</span><span class="mf">2</span><span class="p">,</span><span class="mf">803.20</span><span class="o">/</span><span class="n">month</span>
+</code></pre></div>
+
+<p>That one scheduling decision is almost a $2,000/month swing before storage, profiles, gateways, backup, log analytics, bandwidth, or Omnissa licensing. This is why I do not accept cloud VDI cost estimates that skip power plans.</p>
+<p>For persistent one-user desktops, the curve gets worse. A 100-user fleet of Standard_D4s_v5 desktops powered on for 217 office hours is:</p>
+<div class="codehilite"><pre><span></span><code><span class="mf">100</span><span class="w"> </span><span class="n">desktops</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="err">$</span><span class="mf">0.192</span><span class="o">/</span><span class="n">hour</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="mf">217</span><span class="w"> </span><span class="n">hours</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">$</span><span class="mf">4</span><span class="p">,</span><span class="mf">166.40</span><span class="o">/</span><span class="n">month</span>
+</code></pre></div>
+
+<p>Left on 24x7, it becomes:</p>
+<div class="codehilite"><pre><span></span><code><span class="mf">100</span><span class="w"> </span><span class="n">desktops</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="err">$</span><span class="mf">0.192</span><span class="o">/</span><span class="n">hour</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="mf">730</span><span class="w"> </span><span class="n">hours</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">$</span><span class="mf">14</span><span class="p">,</span><span class="mf">016</span><span class="o">/</span><span class="n">month</span>
+</code></pre></div>
+
+<p>That is the number that surprises people. The cloud control plane may look elegant, but a persistent desktop is still a VM meter running by the hour.</p>
+<h2>Storage and profiles are not rounding errors</h2>
+<p>FSLogix profile containers are where many VDI budgets get sloppy. Azure Files Premium pricing from the Azure Retail Prices API for East US showed Premium Files meters on August 18, 2026. Premium Files ZRS burst transactions showed $0.625 per million operations in the API response; provisioned capacity, redundancy, and reservations change the rest of the storage line.</p>
+<p>For budgeting, model profile capacity separately from desktop OS disks:</p>
+<div class="codehilite"><pre><span></span><code><span class="mf">100</span><span class="w"> </span><span class="n">users</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="mf">20</span><span class="w"> </span><span class="n">GB</span><span class="w"> </span><span class="n">FSLogix</span><span class="w"> </span><span class="n">profile</span><span class="w"> </span><span class="n">target</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">2</span><span class="w"> </span><span class="n">TB</span><span class="w"> </span><span class="n">profile</span><span class="w"> </span><span class="n">capacity</span>
+<span class="mf">100</span><span class="w"> </span><span class="n">users</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="mf">30</span><span class="w"> </span><span class="n">GB</span><span class="w"> </span><span class="n">persistent</span><span class="w"> </span><span class="n">user</span><span class="w"> </span><span class="kd">data</span><span class="w"> </span><span class="n">target</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">3</span><span class="w"> </span><span class="n">TB</span><span class="w"> </span><span class="n">user</span><span class="w"> </span><span class="kd">data</span><span class="w"> </span><span class="n">capacity</span>
+</code></pre></div>
+
+<p>Then add backup retention. Profile containers churn all day: Outlook cache, Teams cache, browser cache, OneDrive sync state, and temp files all write constantly unless tuned. On-prem has the same profile problem, but the cost is bought differently. A SAN shelf or vSAN capacity tier hides the monthly profile cost until the array fills or latency shows up. Cloud makes it visible every month.</p>
+<p>For engineers building this for the first time, a small lab still helps. A used mini PC with 64 GB or 96 GB RAM will not reproduce Azure Files latency, but it will reproduce GPO, FSLogix, app layering, and image-seal mistakes. For hardware ideas, the site's <a href="/articles/ultimate-vmware-home-lab-build-under-500-2026.html">VMware home lab build guide</a> has cheaper test gear than burning Azure credits all weekend. If you need a quick test box, search Amazon for a <a href="https://www.amazon.com/s?k=64GB+mini+PC+virtualization&amp;tag=vmwaremadesim-20">64GB mini PC for virtualization</a>.</p>
+<h2>On-prem cost stack: VMware licensing changed the floor</h2>
+<p>The old on-prem Horizon math was usually hardware plus support renewal plus Horizon licensing. The 2026 version has a sharper VMware platform floor.</p>
+<p>Current canonical VMware pricing for this site:</p>
+<table>
+<thead>
+<tr>
+<th>Platform item</th>
+<th style="text-align: right;">Current list assumption</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>vSphere Standard</td>
+<td style="text-align: right;">$50/core/year</td>
+</tr>
+<tr>
+<td>vSphere Enterprise Plus</td>
+<td style="text-align: right;">$150/core/year</td>
+</tr>
+<tr>
+<td>vSphere Foundation (VVF)</td>
+<td style="text-align: right;">$135 to $190/core/year depending on term</td>
+</tr>
+<tr>
+<td>VMware Cloud Foundation (VCF)</td>
+<td style="text-align: right;">$350/core/year</td>
+</tr>
+<tr>
+<td>Per-socket minimum</td>
+<td style="text-align: right;">16 cores per CPU socket</td>
+</tr>
+<tr>
+<td>Order minimum</td>
+<td style="text-align: right;">72-core per-order minimum applies to new orders and tier changes</td>
+</tr>
+</tbody>
+</table>
+<p>A modest VDI cluster with three dual-socket hosts and 16 licensed cores per socket is already 96 licensed cores:</p>
+<div class="codehilite"><pre><span></span><code><span class="mf">3</span><span class="w"> </span><span class="n">hosts</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="mf">2</span><span class="w"> </span><span class="n">sockets</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="mf">16</span><span class="w"> </span><span class="n">cores</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">96</span><span class="w"> </span><span class="n">licensed</span><span class="w"> </span><span class="n">cores</span>
+</code></pre></div>
+
+<p>At vSphere Standard list pricing:</p>
+<div class="codehilite"><pre><span></span><code><span class="mf">96</span><span class="w"> </span><span class="n">cores</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="err">$</span><span class="mf">50</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">year</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">$</span><span class="mf">4</span><span class="p">,</span><span class="mf">800</span><span class="o">/</span><span class="n">year</span>
+</code></pre></div>
+
+<p>At VVF average list pricing:</p>
+<div class="codehilite"><pre><span></span><code><span class="mf">96</span><span class="w"> </span><span class="n">cores</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="err">$</span><span class="mf">135</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">year</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">$</span><span class="mf">12</span><span class="p">,</span><span class="mf">960</span><span class="o">/</span><span class="n">year</span>
+</code></pre></div>
+
+<p>At VCF list pricing:</p>
+<div class="codehilite"><pre><span></span><code><span class="mf">96</span><span class="w"> </span><span class="n">cores</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="err">$</span><span class="mf">350</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">year</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">$</span><span class="mf">33</span><span class="p">,</span><span class="mf">600</span><span class="o">/</span><span class="n">year</span>
+</code></pre></div>
+
+<p>That is before Horizon, Windows, storage, backup, networking, and hardware support. If the environment already has spare vSphere capacity and a current Horizon entitlement, on-prem can look cheap. If this is a net-new Horizon build, VMware licensing can be the line item that pushes the decision back to Azure or to a non-VMware platform. The per-core mechanics are covered in more detail in <a href="/articles/vmware-vcf-licensing-explained-per-core-minimums.html">VCF licensing explained</a>.</p>
+<h2>A 100-user example</h2>
+<p>Here is a stripped-down 100-user comparison using office-hours pooled desktops. I am using the base compute meter rather than the Windows-included meter because eligible AVD Windows client licensing can remove the additional Windows desktop charge while Azure infrastructure remains billable.</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th style="text-align: right;">Horizon Cloud on Azure</th>
+<th style="text-align: right;">On-prem Horizon</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Desktop compute</td>
+<td style="text-align: right;">10 x D8s_v5 x 217 hours = $833/month</td>
+<td style="text-align: right;">Bought as hosts</td>
+</tr>
+<tr>
+<td>24x7 compute variant</td>
+<td style="text-align: right;">$2,803/month</td>
+<td style="text-align: right;">Same hosts, higher power/cooling</td>
+</tr>
+<tr>
+<td>VMware platform</td>
+<td style="text-align: right;">Not for Azure desktops</td>
+<td style="text-align: right;">$4,800 to $33,600/year for 96 cores depending on bundle</td>
+</tr>
+<tr>
+<td>Profile/user storage</td>
+<td style="text-align: right;">Azure Files / managed disks / backup</td>
+<td style="text-align: right;">SAN, NAS, or vSAN capacity</td>
+</tr>
+<tr>
+<td>Control plane</td>
+<td style="text-align: right;">Omnissa Horizon Cloud subscription/control plane</td>
+<td style="text-align: right;">Omnissa Horizon subscription plus customer-managed Connection Servers/UAGs</td>
+</tr>
+<tr>
+<td>Internet egress</td>
+<td style="text-align: right;">Azure bandwidth model</td>
+<td style="text-align: right;">ISP/colo bandwidth</td>
+</tr>
+<tr>
+<td>Hardware refresh</td>
+<td style="text-align: right;">None for session hosts</td>
+<td style="text-align: right;">4-year or 5-year replacement cycle</td>
+</tr>
+</tbody>
+</table>
+<p>For only the Azure compute shown above, the pooled office-hours cloud pool is about $9,999/year. The 24x7 pooled version is about $33,638/year. Persistent D4s_v5 desktops are about $49,997/year at office-hours scheduling and $168,192/year if left running all month.</p>
+<p>That does not mean Azure is expensive in every case. It means the design pattern matters more than the label. Pooled, scheduled, non-persistent desktops can fit cloud economics. Persistent desktops that never shut down recreate the old physical PC cost problem with a meter attached.</p>
+<h2>The operational costs are different, not gone</h2>
+<p>Horizon Cloud removes some infrastructure chores. There are fewer brokers to patch, less local capacity planning, and no emergency host purchase when a department adds 40 temporary users. It adds different chores: Azure RBAC, image versions, route tables, private endpoints, identity sync, FSLogix storage, backup, monitoring, log ingestion, update rings, and conditional access.</p>
+<p>On-prem Horizon gives the VDI team direct access to vCenter, datastore latency, host counters, and packet captures without waiting on a cloud support boundary. The trade is capacity rigidity. If the cluster is full, it is full until hardware arrives.</p>
+<p>PowerCLI still helps on-prem because you can inventory what the desktop fleet is doing instead of arguing from memory:</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">Connect-VIServer</span> <span class="n">vcsa01</span><span class="p">.</span><span class="n">lab</span><span class="p">.</span><span class="n">local</span>
+<span class="nb">Get-VM</span> <span class="n">-Location</span> <span class="s2">&quot;VDI&quot;</span> <span class="p">|</span>
+  <span class="nb">Select </span><span class="n">Name</span><span class="p">,</span> <span class="n">PowerState</span><span class="p">,</span> <span class="n">NumCpu</span><span class="p">,</span> <span class="n">MemoryGB</span><span class="p">,</span>
+    <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s2">&quot;ProvisionedGB&quot;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="no">[math]</span><span class="p">::</span><span class="n">Round</span><span class="p">(</span><span class="nv">$_</span><span class="p">.</span><span class="n">ProvisionedSpaceGB</span><span class="p">,</span><span class="n">1</span><span class="p">)}},</span>
+    <span class="p">@{</span><span class="n">N</span><span class="p">=</span><span class="s2">&quot;UsedGB&quot;</span><span class="p">;</span><span class="n">E</span><span class="p">={</span><span class="no">[math]</span><span class="p">::</span><span class="n">Round</span><span class="p">(</span><span class="nv">$_</span><span class="p">.</span><span class="n">UsedSpaceGB</span><span class="p">,</span><span class="n">1</span><span class="p">)}}</span> <span class="p">|</span>
+  <span class="nb">Export-Csv</span> <span class="p">.\</span><span class="n">horizon-vdi-vm-inventory</span><span class="p">.</span><span class="n">csv</span> <span class="n">-NoTypeInformation</span>
+</code></pre></div>
+
+<p>For license exposure, adapt the PowerCLI checks in <a href="/articles/check-vmware-license-expiration-powercli.html">checking VMware license expiration with PowerCLI</a> before renewing the platform under a Horizon cluster.</p>
+<h2>Where cloud wins</h2>
+<p>Horizon Cloud on Azure is strongest when demand changes by month, users are geographically dispersed, and desktops can be pooled or powered down. Contractor pools, training labs, seasonal call centers, merger onboarding, and short-lived project desktops are good candidates.</p>
+<p>A training pool that runs eight hours per day, three weeks per quarter is a clean example. Buying on-prem hosts for that would be waste. Azure compute charges only when the desktops run, and the image can sit idle between classes.</p>
+<p>Cloud can also win when the alternative is a datacenter expansion. If the on-prem quote includes new hosts, switches, storage, backup capacity, rack power work, and a VMware subscription jump, Azure may win even with a higher monthly run rate because it avoids the upfront purchase.</p>
+<h2>Where on-prem still wins</h2>
+<p>On-prem Horizon is strongest when utilization is steady, desktops run all day, storage is already paid for, and the organization has staff who know vSphere. Healthcare workstations, manufacturing shop-floor sessions, CAD-adjacent apps without GPU cloud economics, and locked-down internal networks can fit this pattern.</p>
+<p>The persistent 24x7 case is the easiest example. One hundred Standard_D4s_v5 desktops left on all month cost about $14,016/month in East US compute alone using the Linux meter. Over three years, that is about $504,576 before storage and Omnissa. A three-host or four-host on-prem cluster is not free, but it can compete hard against that number if hardware is already owned or can be depreciated over five years.</p>
+<p>GPU desktops need their own model. Azure NV-series pricing, NVIDIA licensing, app certification, and encoder behavior can dominate the calculation. Do not reuse the Dsv5 office-worker math for designers or engineers.</p>
+<h2>How I would build the spreadsheet</h2>
+<p>Use one row per user group, not one average for the whole company:</p>
+<div class="codehilite"><pre><span></span><code><span class="nx">Group</span><span class="p">,</span><span class="w"> </span><span class="nx">Users</span><span class="p">,</span><span class="w"> </span><span class="nx">Desktop</span><span class="w"> </span><span class="k">type</span><span class="p">,</span><span class="w"> </span><span class="nx">VM</span><span class="w"> </span><span class="nx">size</span><span class="p">,</span><span class="w"> </span><span class="nx">Users</span><span class="w"> </span><span class="nx">per</span><span class="w"> </span><span class="nx">host</span><span class="p">,</span><span class="w"> </span><span class="nx">Hours</span><span class="o">/</span><span class="nx">month</span><span class="p">,</span><span class="w"> </span><span class="nx">Storage</span><span class="o">/</span><span class="nx">user</span><span class="w"> </span><span class="nx">GB</span><span class="p">,</span><span class="w"> </span><span class="nx">Retention</span><span class="w"> </span><span class="nx">days</span><span class="p">,</span><span class="w"> </span><span class="nx">GPU</span><span class="p">,</span><span class="w"> </span><span class="nx">Notes</span>
+<span class="nx">Finance</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span><span class="w"> </span><span class="nx">Pooled</span><span class="p">,</span><span class="w"> </span><span class="nx">D8s_v5</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="mi">217</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span><span class="w"> </span><span class="nx">No</span><span class="p">,</span><span class="w"> </span><span class="nx">Office</span><span class="o">-</span><span class="nx">hours</span><span class="w"> </span><span class="nx">only</span>
+<span class="nx">Developers</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="nx">Persistent</span><span class="p">,</span><span class="w"> </span><span class="nx">D4s_v5</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">730</span><span class="p">,</span><span class="w"> </span><span class="mi">80</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span><span class="w"> </span><span class="nx">No</span><span class="p">,</span><span class="w"> </span><span class="nx">Needs</span><span class="w"> </span><span class="nx">local</span><span class="w"> </span><span class="nx">admin</span><span class="w"> </span><span class="nx">exception</span><span class="w"> </span><span class="nx">review</span>
+<span class="nx">Training</span><span class="p">,</span><span class="w"> </span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="nx">Pooled</span><span class="p">,</span><span class="w"> </span><span class="nx">D8s_v5</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">60</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="nx">No</span><span class="p">,</span><span class="w"> </span><span class="nx">Quarterly</span><span class="w"> </span><span class="nx">classes</span>
+</code></pre></div>
+
+<p>Then calculate cloud compute, cloud storage, Omnissa subscription, Microsoft licensing gaps, network egress, backup, monitoring, and support. For on-prem, calculate hosts, VMware platform subscription, Horizon subscription, storage, backup, switching, rack/power, Windows licensing, and replacement cycle.</p>
+<p>Do not compare Azure's monthly bill against only last year's on-prem support renewal. Compare it against the next three years of capacity, refresh, licensing, and labor.</p>
+<h2>The decision I would make</h2>
+<p>For pooled office-worker desktops with clear idle windows, I would price Horizon Cloud on Azure first and force the design to prove it can shut machines down. For persistent desktops that run 24x7, I would price on-prem first unless the organization has no datacenter capacity, no VDI staff, or a business reason to keep desktops close to Azure-hosted apps.</p>
+<p>The wrong answer is a single blended per-user number. Horizon costs are workload-shaped. Ten training users, ten developers, and ten nurses do not consume infrastructure the same way. Build the model by group, use current Azure meter prices, use the current VMware per-core subscription floor, and make the expensive assumptions visible before anyone signs a three-year term.</p>
+<p>Sources: Azure Retail Prices API for East US Dsv5 virtual machines and Premium Files meters, Microsoft Azure Virtual Desktop pricing documentation, Omnissa Horizon Cloud Service next-gen documentation, Omnissa Horizon system requirements documentation, and VMwareMadeSimple canonical VMware pricing facts.</p>
+
+    <!-- Newsletter CTA -->
+<div class="newsletter-cta" id="newsletter">
+  <h3>Stay ahead of the VMware changes</h3>
+  <p>We're publishing detailed licensing breakdowns, comparison guides, migration walkthroughs, and cost calculators. Get them in your inbox.</p>
+  <input type="email" placeholder="your@email.com" />
+  <button>Subscribe</button>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div>
+    © 2026 VMwareMadeSimple.com — Independent. Not affiliated with VMware or Broadcom.
+    <div class="aff-disclosure" style="margin-top: 0.3rem;">Some links are affiliate links. See our <a href="#">disclosure policy</a>.</div>
+  </div>
+  <div class="footer-links">
+    <a href="#">About</a>
+    <a href="mailto:contact@vmwaremadesimple.com">Contact</a>
+    <a href="/sitemap.xml">RSS</a>
+    <a href="#">Privacy</a>
+    <a href="#">Corrections</a>
+  </div>
+</footer>
+
+<script>
+function searchSite(q) {
+  if (q.length < 2) return;
+  if (event && event.key === 'Enter') {
+    window.location.href = 'https://www.google.com/search?q=site:vmwaremadesimple.com+' + encodeURIComponent(q);
+  }
+}
+</script>
+
+</body>
+</html>
+
