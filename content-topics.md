@@ -41,7 +41,7 @@
 
 ## Lower Priority — Advanced
 
-- [ ] NSX Micro-Segmentation: Is It Worth the Complexity
+- [x] NSX Micro-Segmentation: Is It Worth the Complexity
 - [ ] vSAN 8 vs vSAN ESA: Performance Comparison
 - [ ] Automating vSphere Compliance Checks with PowerCLI
 - [ ] Building a VMware DR Strategy with SRM and Zerto
